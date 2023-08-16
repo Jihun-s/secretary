@@ -20,5 +20,4 @@ public class HomeController {
     public void redirectToNewUrl(HttpServletResponse response) throws IOException {
         response.sendRedirect("/secretary/html/index.html");
     }
-	
 }
