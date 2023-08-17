@@ -14,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 public class HomeController {
 
 	/**
-	 * 메인화면
+	 * 메인화면!
 	 */
 	@GetMapping({"", "/"})
     public void redirectToNewUrl(HttpServletResponse response) throws IOException {
