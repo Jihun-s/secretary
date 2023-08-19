@@ -23,4 +23,10 @@ public class TestLinkController {
     public String authLoginBasic() {
         return "auth-login-basic";
     }
+    
+    //Calender 테스트
+	@GetMapping("month_view")
+	public String month_view() {
+		return "testLinkView/month-view";
+	}
 }
