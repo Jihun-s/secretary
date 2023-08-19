@@ -23,4 +23,10 @@ public class TestLinkController {
     public String authLoginBasic() {
         return "auth-login-basic";
     }
+    
+    //Weather테스트
+    @GetMapping("/weathertest")
+    public String weatherTest() {
+        return "testLinkView/weatherTest";
+    }
 }
