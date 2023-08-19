@@ -25,6 +25,7 @@ repositories {
 
 
 dependencies {
+	implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.15.2'
 	implementation group: 'com.google.cloud', name: 'google-cloud-speech', version: '4.18.0'
 	implementation 'net.coobird:thumbnailator:0.4.13'
 	implementation group: 'com.google.cloud', name: 'google-cloud-vision', version: '3.21.0'
