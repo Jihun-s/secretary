@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>SNS공유기능_테스트</title>
+<script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
+<script>
+function shareKakao() {
+	  // 사용할 앱의 JavaScript 키 설정
+	  Kakao.init('34cf32c300f82852eaf0b99359732509');
+
+	  // 카카오링크 버튼 생성
+	  Kakao.Link.createDefaultButton({
+	    container: '#btnKakao', // 카카오공유버튼ID
+	    objectType: 'feed',
+	    content: {
+	      title: "생활비서 서비스", // 보여질 제목
+	      description: "생활비서 서비스입니다.", // 보여질 설명
+	      imageUrl: "http://localhost:8888/secretary/", // 콘텐츠 URL
+	      link: {
+	         mobileWebUrl: "http://localhost:8888/secretary/",
+	         webUrl: "http://localhost:8888/secretary/"
+	      }
+	    }//content
+	  });
+}
+function shareTwitter() {
+    var sendText = "생활비서"; // 전달할 텍스트
+    var sendUrl = "https://localhost:8888/secretary/"; // 전달할 URL
+    window.open("https://twitter.com/intent/tweet?text=" + sendText + "&url=" + sendUrl);
+}
+
+function shareFacebook() {
+    var sendUrl = "https://localhost:8888/secretary/"; // 전달할 URL
+    window.open("http://www.facebook.com/sharer/sharer.php?u=" + sendUrl);
+}
+
+function shareNaver() {
+	  var title = "생활비서 서비스";
+	  var url = "https://localhost:8888/secretary/";
+	  window.open("https://share.naver.com/web/shareView?url=" + url + "&title=" + title);
+}
+
+</script>
+<style>
+ /* CSS의 주석 */
+.link-icon { position: relative; display: inline-block; width: auto; font-size: 14px; font-weight: 500; color: #333; margin-right: 10px; padding-top: 50px; }
+.link-icon.twitter { background-image: url(./images/icon-twitter.png); background-repeat: no-repeat; }
+.link-icon.facebook { background-image: url(./images/icon-facebook.png); background-repeat: no-repeat; } 
+.link-icon.kakao { background-image: url(./images/icon-kakao.png); background-repeat: no-repeat; }
+.link-icon.Naver { background-image: url(./images/icon-naver.png); background-repeat: no-repeat; background-size:42px 45px; }
+
+</style>
+</head>
+<body>
+<h1>SNS공유</h1>
+<a id="btnTwitter" class="link-icon twitter" href="javascript:shareTwitter();">트위터</a>
+<a id="btnFacebook" class="link-icon facebook" href="javascript:shareFacebook();">페이스북</a>
+<a id="btnKakao" class="link-icon kakao" href="javascript:shareKakao();">카카오</a>
+<a id="btnNaver" class="link-icon Naver" href="javascript:shareNaver();">네이버</a>
+</body>
+</html>
