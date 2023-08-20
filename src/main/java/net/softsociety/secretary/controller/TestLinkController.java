@@ -24,9 +24,15 @@ public class TestLinkController {
         return "auth-login-basic";
     }
     
-    //Weather테스트
-    @GetMapping("/weathertest")
-    public String weatherTest() {
-        return "testLinkView/weatherTest";
-    }
+    //Calender 테스트
+	@GetMapping("month_view")
+	public String month_view() {
+		return "testLinkView/month-view";
+	}
+	
+	//SNS공유_API 테스트
+	@GetMapping("snsShare")
+	public String sns_Share() {
+		return "testLinkView/snsShareTest";
+	}
 }
