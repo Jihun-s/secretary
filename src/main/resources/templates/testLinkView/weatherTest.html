@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>날씨 정보</title>
+</head>
+<body>
+    <h1 id="city-name"></h1>
+    <p>온도: <span id="temperature"></span>°C</p>
+    <p>습도: <span id="humidity"></span>%</p>
+    <p>풍속: <span id="wind-speed"></span> m/s</p>
+    <p>날씨: <span id="weather-description"></span></p>
+
+    <script>
+        // 날씨 정보 가져오는 함수
+        function fetchWeather() {
+            const city = "Seoul"; // 원하는 도시 이름
+            const apiKey = "b50ea02657c7315ee1e758b1b06adf48"; // API 키
+            const url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric&lang=ko`;
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("city-name").textContent = data.name;
+                    document.getElementById("temperature").textContent = data.main.temp;
+                    document.getElementById("humidity").textContent = data.main.humidity;
+                    document.getElementById("wind-speed").textContent = data.wind.speed;
+                    document.getElementById("weather-description").textContent = data.weather[0].description;
+                })
+                .catch(error => console.error('에러 발생:', error));
+        }
+
+        // 페이지 로드 시 날씨 정보 가져오기
+        fetchWeather();   
+    </script>
+</body>
+</html>
