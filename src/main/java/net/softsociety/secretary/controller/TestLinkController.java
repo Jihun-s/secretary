@@ -35,4 +35,10 @@ public class TestLinkController {
 	public String sns_Share() {
 		return "testLinkView/snsShareTest";
 	}
+	
+    //Weather테스트
+    @GetMapping("/weathertest")
+    public String weatherTest() {
+        return "testLinkView/weatherTest";
+    }
 }
