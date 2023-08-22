@@ -1,0 +1,55 @@
+@charset "UTF-8";
+
+/*옷장보기, 코디일지 css*/
+.col-md-6 > p {
+	font-size:25px;
+}
+
+.col-md-6 > p > input {
+	font-size:10px;
+}
+
+.col-md-6 img {
+	width:200px;
+	height:200px;
+}
+
+.col-md-6 td {
+	text-align:center;
+}
+
+/* 가로스크롤 만들기*/
+.col-md-6 div.card {
+	overflow:auto; 
+	white-space: nowrap;
+}
+
+.col-md-6 div.card-body{
+	display:inline-block; 
+	align: center;
+}
+/* 옷장보기, 코디일지 css 끝*/
+
+
+
+
+
+/*나의 옷찾기*/
+.searchCloset select {
+	height:30px;
+}
+.searchCloset .searchWord{
+	height:30px;
+	width:65%;
+}
+
+/*세탁물 게이지*/
+.outerOfprogress {
+	width:375px;
+	text-align:left;
+}
+.outerOfprogress progress {
+	width:98%;
+	height:30px;
+}
+
