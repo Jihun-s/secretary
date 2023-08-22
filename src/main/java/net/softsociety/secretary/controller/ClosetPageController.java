@@ -19,17 +19,17 @@ public class ClosetPageController {
 	}
 	
 	// 옷장 상세1
-	@GetMapping("1")
+	@GetMapping("InCloset1")
 	public String closet1() {
 		
-		return "closetView/closet1";
+		return "closetView/InCloset1";
 	}
 	
 	// 옷장 상세2
-	@GetMapping("2")
+	@GetMapping("InCloset2")
 	public String closet2() {
 		
-		return "closetView/closet2";
+		return "closetView/InCloset2";
 	}
 	
 }
