@@ -16,17 +16,6 @@ public class ClosetController {
 	
 	String uploadPath = "c:/boardfile";
 	
-	@GetMapping("closetMainPage")
-	public String closetMainPage() {
-		return "closetView/closetMain";
-	}
-	
-	@GetMapping("closetTest")
-	public String closetTest() {
-		return "closetView/closetTest";
-	}
-	
-	
 	@GetMapping("insertClothes")
 	public String insertClothes() {
 		return "insertClothes";
