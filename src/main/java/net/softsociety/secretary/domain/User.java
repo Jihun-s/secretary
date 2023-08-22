@@ -21,8 +21,7 @@ public class User {
     private int enabled;
     private String rolename;
     private Long familyId;
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate birthday;
+    private String birthday;
     private int sex;
     private String verificationToken;
 }
