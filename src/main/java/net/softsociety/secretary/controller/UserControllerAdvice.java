@@ -15,7 +15,7 @@ public class UserControllerAdvice {
 	@Autowired
 	private UserService userService;
 
-	@ModelAttribute("user")
+	@ModelAttribute("loginUser")
 	public User currentUser(Principal principal) {
 		if (principal != null) {
 			return userService.findByEmail(principal.getName());
