@@ -41,4 +41,9 @@
 	    SET enabled = 1
 	    WHERE verification_token = #{token}
 	</update>
+	
+	<select id="findByEmail" resultType="User">
+    	SELECT * FROM secretary_user WHERE user_email = #{email}
+  	</select>
+	
 </mapper>

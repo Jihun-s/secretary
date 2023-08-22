@@ -5,6 +5,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import net.softsociety.secretary.dao.UserMapper;
@@ -18,8 +19,18 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private JavaMailSender javaMailSender;
+    
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
     public void register(User user, String siteURL) {
+    	
+    	// 사용자로부터 받은 평문 비밀번호를 인코딩
+        String encodedPassword = passwordEncoder.encode(user.getUserPw());
+        
+        // 인코딩된 비밀번호를 사용자 객체에 설정
+        user.setUserPw(encodedPassword);
+    	
         // 인증 토큰 생성
         String token = UUID.randomUUID().toString();
         user.setVerificationToken(token);
@@ -54,4 +65,9 @@ public class UserServiceImpl implements UserService {
         }
         return false;
     }
+
+	@Override
+	public User findByEmail(String email) {
+		return userMapper.findByEmail(email);
+	}
 }

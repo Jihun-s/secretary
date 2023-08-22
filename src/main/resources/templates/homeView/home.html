@@ -7,7 +7,13 @@
 </head>
 <body>
 	<h1>[ Home ]</h1>
-	<a th:href="@{user/login}">로그인</a>
-	<a th:href="@{user/signin}">회원가입</a>
+	
+	<p sec:authorize="isAuthenticated()">
+	<span th:text="${user.userNickname}"></span>님 로그인중
+	</p>
+	
+	<a sec:authorize="!isAuthenticated()" th:href="@{user/login}">로그인</a>
+	<a sec:authorize="!isAuthenticated()" th:href="@{user/signin}">회원가입</a>
+	<a sec:authorize="isAuthenticated()" th:href="@{user/logout}">로그아웃</a>
 </body>
 </html>
