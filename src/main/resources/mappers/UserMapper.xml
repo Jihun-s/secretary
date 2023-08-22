@@ -20,7 +20,7 @@
 	</resultMap>
 
 	<insert id="insertUser" parameterType="User">
-	    INSERT INTO "USER" (
+	    INSERT INTO secretary_user (
 	        user_id, user_email, user_name, user_nickname, user_pw, user_profileimg,
 	        enabled, family_id, birthday, sex, verification_token)
 	    VALUES (
@@ -33,11 +33,11 @@
 	</insert>
 
     <select id="findByVerificationToken" parameterType="String" resultType="User">
-        SELECT * FROM "USER" WHERE verification_token = #{token}
+        SELECT * FROM secretary_user WHERE verification_token = #{token}
     </select>
 
 	<update id="enableUser" parameterType="String">
-	    UPDATE "USER"
+	    UPDATE secretary_user
 	    SET enabled = 1
 	    WHERE verification_token = #{token}
 	</update>
