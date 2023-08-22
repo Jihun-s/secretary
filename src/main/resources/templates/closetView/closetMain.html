@@ -618,10 +618,11 @@
                   <div class="card">
                     <div class="d-flex align-items-end"></div>
                     <div class="card-body">
-                      <h5>1열</h5>
+                      <a><img th:src="@{/images/calendar.png}" width="30%"> 8월 22일 화요일 <br>&nbsp;&nbsp;&nbsp;11:00 대학로 연극보기</a>
                     </div>
                     <div class="card-body">
                       <h4>코디 추천</h4>
+                      <p>폭염입니다.<br> 벗고다시니는건 어떨까요?</p>
                     </div>
                   </div>
                 </div>
@@ -634,7 +635,20 @@
                   <div class="card">
                     <div class="d-flex align-items-end"></div>
                     <div class="card-body">
-                      <h5>2열</h5>
+					<!-- <form id =""  method ="get" th:action="@{/closet}"> -->
+					<select id="type" name = "type">
+						<option value="top" th:selected="${type} == 'top'">상의</option>
+						<option value="bottom" th:selected="${type} == 'bottom'">하의</option>
+						<option value="jacket" th:selected="${type} == 'jacket'">아우터</option>
+						<option value="dress" th:selected="${type} == 'dress'">원피스</option>
+						<option value="shoes" th:selected="${type} == 'shoes'">신발</option>
+						<option value="bag" th:selected="${type} == 'bag'">가방</option>
+						<option value="accessory" th:selected="${type} == 'accessory'">악세사리</option>
+						<option value="all" th:selected="${type} == 'all'">전체</option>
+					</select>
+					<input type="text" name="searchWord" th:value="${searchWord}">
+					<input type="button" value="검색">
+					<!-- </form> -->
                     </div>
                   </div>
 
@@ -643,7 +657,10 @@
                   <div class="card">
                     <div class="d-flex align-items-end"></div>
                     <div class="card-body">
-                      <h5>2열</h5>
+                    	<div style="width:100%; text-align:center">
+						<progress max="100" value="70" style="width:80%; height:30px">70%</progress>
+						&nbsp;&nbsp;<input type="button" value="비우기">
+						</div>
                     </div>
                   </div>
 
