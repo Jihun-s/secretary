@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class HomeController {
+	
 
 	/**
 	 * 메인화면!
@@ -13,5 +14,4 @@ public class HomeController {
 	public String home() {
 		return "homeView/home";
 	}
-
 }
