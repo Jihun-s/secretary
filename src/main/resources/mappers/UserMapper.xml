@@ -28,7 +28,7 @@
 	        #{userNickname, jdbcType=VARCHAR}, #{userPw, jdbcType=VARCHAR},
 	        #{userProfileimg, jdbcType=VARCHAR}, #{enabled, jdbcType=INTEGER},
 	        #{familyId, jdbcType=BIGINT},
-	        #{birthday, jdbcType=DATE}, #{sex, jdbcType=INTEGER},
+	        #{birthday}, #{sex, jdbcType=INTEGER},
 	        #{verificationToken, jdbcType=VARCHAR})
 	</insert>
 
