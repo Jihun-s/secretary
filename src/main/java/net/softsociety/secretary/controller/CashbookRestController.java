@@ -23,9 +23,10 @@ public class CashbookRestController {
 	CashbookDAO dao;
 	
 	
-	@GetMapping("setBudget")
-	public void setBudget(int budget) {
-		
-	}
+//	@GetMapping("setBudget")
+//	public void setBudget(int budget) {
+//		
+//	
+//	}
 	
 }

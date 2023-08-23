@@ -10,4 +10,6 @@ public interface UserMapper {
     User findByVerificationToken(String token);
 	void enableUser(String token);
 	User findByEmail(String email);
+	int countByEmail(String userEmail);
+	int countByUserId(String userId);
 }
