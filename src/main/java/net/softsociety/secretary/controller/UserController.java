@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import lombok.extern.slf4j.Slf4j;
 import net.softsociety.secretary.domain.User;
@@ -35,11 +36,38 @@ public class UserController {
 	public String login() {
 		return "userView/login";
 	}
+	
+	//비번찾기
+	@GetMapping("forgotPw")
+	public String forgotPw() {
+		return "userView/forgot-password-basic";
+	}
 
 	@PostMapping("/register")
 	public String registerUser(@ModelAttribute User user, HttpServletRequest request) {
 	    userService.register(user, getSiteURL(request));
 	    return "redirect:/user/check-email";
+	}
+	
+	@ResponseBody
+	@PostMapping("/idcheck")
+	public int checkUserId(@RequestParam String userId) {
+		log.debug("아이디 왔나요?? : {}", userId);
+	    if (userService.existsByUserId(userId)) {
+	        return 1;  // 사용중인 ID
+	    } else {
+	        return 0;  // 사용 가능한 ID
+	    }
+	}
+
+	@ResponseBody
+	@PostMapping("/emailcheck")
+	public int checkUserEmail(@RequestParam String userEmail) {
+	    if (userService.existsByEmail(userEmail)) {
+	        return 1;  // 사용중인 이메일
+	    } else {
+	        return 0;  // 사용 가능한 이메일
+	    }
 	}
 
     @GetMapping("/verify")
