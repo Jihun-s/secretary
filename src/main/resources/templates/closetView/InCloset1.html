@@ -30,7 +30,32 @@
     />
 
     <title>옷장 :: 1</title>
-
+	<script th:src="@{/js/jquery-3.7.0.js}"></script>
+	<script type="text/javascript">
+	$(document).ready(function() {
+		  $("#selectedSize").css("visibility","hidden");
+		  $("#selectedSeason").css("visibility","hidden");
+		  $('#categoryBox').change(function() {
+		    var result = $('#categoryBox option:selected').val();
+		    if (result == 'size') {
+		      $('#selectedKind').hide();
+		      $('#selectedSeason').hide();
+		      $("#selectedSize").css("visibility","visible");
+		    } else if(result == 'season'){
+		    	$('#selectedKind').hide();
+		    	$("#selectedSize").css("visibility","hidden");
+		    	$("#selectedSeason").show();
+		    } else {
+		    	$("#selectedSeason").hide();
+		    	$("#selectedSize").css("visibility","hidden");
+		    	$('#selectedKind').show();
+		    }
+		  }); 
+		}); 
+	
+	
+	</script>
+	
     <meta name="description" content="" />
 
     <!-- Favicon -->
@@ -77,7 +102,11 @@
 
     <!-- 소영 추가 CSS -->
     <link rel="stylesheet" th:href="@{/css/index.css}" />
-
+    
+    <!-- 혜린 추가 CSS -->
+	<link rel="stylesheet" th:href="@{/css/inClosetCSS1.css}">
+	
+	
     <!-- Page CSS -->
 
     <!-- Helpers -->
@@ -611,24 +640,74 @@
                   <div class="card mb-4">
                     <div class="d-flex align-items-end"></div>
                     <div class="card-body">
-                    </div>
-                  </div>
-                  <div class="card">
+					<form class="d-flex">
+					<select id="type" name = "type" class="btn btn-outline-danger" style="width:50%">
+						<option value="top" th:selected="${type} == 'top'">상의</option>
+						<option value="bottom" th:selected="${type} == 'bottom'">하의</option>
+						<option value="jacket" th:selected="${type} == 'jacket'">아우터</option>
+						<option value="dress" th:selected="${type} == 'dress'">원피스</option>
+						<option value="shoes" th:selected="${type} == 'shoes'">신발</option>
+						<option value="bag" th:selected="${type} == 'bag'">가방</option>
+						<option value="accessory" th:selected="${type} == 'accessory'">악세사리</option>
+						<option value="all" th:selected="${type} == 'all'">전체</option>
+					</select>&nbsp;&nbsp;
+       				 <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        	 			<button class="btn btn-danger" type="submit">Search</button>
+      				</form> <br>                   
+
+					
                     <div class="d-flex align-items-end"></div>
+					<span>
+						<select id="searchKind" name = "kind" class="btn btn-outline-danger">
+							<option value="top" th:selected="${kind} == 'top'">상의</option>
+							<option value="bottom" th:selected="${kind} == 'bottom'">하의</option>
+							<option value="jacket" th:selected="${kind} == 'jacket'">아우터</option>
+							<option value="dress" th:selected="${kind} == 'dress'">원피스</option>
+							<option value="shoes" th:selected="${kind} == 'shoes'">신발</option>
+							<option value="bag" th:selected="${kind} == 'bag'">가방</option>
+							<option value="accessory" th:selected="${kind} == 'accessory'">악세사리</option>
+							<option value="all" th:selected="${kind} == 'all'" selected>전체</option>
+						</select>
+					</span>					                     	
+					<span>
+						<select id="searchSize" name = "size" class="btn btn-outline-danger">
+							<option value="S" th:selected="${size} == 'S'">S</option>
+							<option value="M" th:selected="${size} == 'M'">M</option>
+							<option value="L" th:selected="${size} == 'L'">L</option>
+							<option value="XL" th:selected="${size} == 'XL'">XL</option>
+							<option value="XXL" th:selected="${size} == 'XXL'">XXL</option>
+							<option value="FREE" th:selected="${size} == 'FREE'">FREE</option>
+							<option value="all" th:selected="${size} == 'all'">전체</option>
+						</select>					
+					</span>	
+					<span>
+						<select id="searchSeason" name = "season" class="btn btn-outline-danger">
+							<option value="spring" th:selected="${season} == 'spring'">봄</option>
+							<option value="summer" th:selected="${season} == 'summer'">여름</option>
+							<option value="fall" th:selected="${season} == 'fall'">가을</option>
+							<option value="winter" th:selected="${season} == 'winter'">겨울</option>
+							<option value="etc" th:selected="${season} == 'etx'">기타</option>
+							<option value="all" th:selected="${season} == 'all'">전체</option>
+						</select>					
+					</span>									                     					                     	
                     <div class="card-body">
-                      <h5>1열</h5>
+                      <h4>의류 리스트(카테고리별 정렬)</h4>
                     </div>
-                    <div class="card-body">
-                      <h4>코디 추천</h4>
                     </div>
-                  </div>
-                </div>
+                    
+                    
+
+                </div> 
+   				</div>
+                  
+                  
+              
                 
                 
                 <!-- 2열 -->
                 <div class="col-lg-3 mb-4">
                   <!-- 2열 1행 -->
-                  <h3 class="">나의 옷 찾기</h3>
+                  <h3 class="">착용 통계</h3>
                   <div class="card">
                     <div class="d-flex align-items-end"></div>
                     <div class="card-body">
@@ -642,7 +721,11 @@
                   <h3>내 옷 등록</h3>
                   <div class="card">
                     <div class="card-body">
-                      <h5>3열</h5>
+                      <img th:src="@{/images/shirt.png}" id="shirt">
+                      <div class="insertClothes">
+                      <input class="btn btn-outline-danger" type="button" value="사진 등록" style="font-size:10px; height:25px;">
+                      <input class="btn btn-outline-danger" type="button" value="웹에서 찾기" style="font-size:10px; height:25px;">
+                      </div>
                     </div>
                   </div>
                 </div>

@@ -1,0 +1,23 @@
+@charset "UTF-8";
+
+
+.searchCloset {
+	margin-bottom:20px;
+} 
+/* 옷찾기 */
+.searchCloset select {
+	height:30px;
+}
+.searchCloset .searchWord{
+	height:30px;
+	width:75%;
+}
+
+/* 옷등록*/
+#shirt {
+	width:100%;
+}
+
+.insertClothes{
+	text-align:center;
+}
