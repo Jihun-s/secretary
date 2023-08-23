@@ -640,9 +640,8 @@
                   <div class="card">
                     <div class="d-flex align-items-end"></div>
                     <div class="card-body">
-					<!-- <form id =""  method ="get" th:action="@{/closet}"> -->
-					<div class="searchCloset">
-					<select id="type" name = "type">
+					<form class="d-flex">
+					<select id="type" name = "type" class="btn btn-outline-danger" style="width:50%">
 						<option value="top" th:selected="${type} == 'top'">상의</option>
 						<option value="bottom" th:selected="${type} == 'bottom'">하의</option>
 						<option value="jacket" th:selected="${type} == 'jacket'">아우터</option>
@@ -651,11 +650,10 @@
 						<option value="bag" th:selected="${type} == 'bag'">가방</option>
 						<option value="accessory" th:selected="${type} == 'accessory'">악세사리</option>
 						<option value="all" th:selected="${type} == 'all'">전체</option>
-					</select>
-					<input type="text" name="searchWord" th:value="${searchWord}" class="searchWord">
-					<input type="button" value="검색">
-					</div>
-					<!-- </form> -->
+					</select>&nbsp;&nbsp;
+       				 <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        	 			<button class="btn btn-danger" type="submit">Search</button>
+      				</form>
                     </div>
                   </div>
 					<br>
@@ -666,10 +664,12 @@
                     <div class="card-body">
                     	<table>
                     		<tr>
-                    			<td class="outerOfprogress">
-								<progress max="100" value="70">70%</progress>
+                    			<td>
+      							<div class="progress">
+      							  <div class="progress-bar bg-danger" role="progressbar"  aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+      							</div>
 								</td>
-								<td><input type="button" value="비우기"></td>
+								<td><input type="button" value="비우기" class="btn btn-danger" style="margin-left:5px;"></td>
 							</tr>
 						</table>
                     </div>
@@ -677,7 +677,7 @@
 					<br>
                   <!-- 2열 3행 -->
                   <div class="row">
-                    <div class="col-md-6">
+                     <div class="col-md-6">
                       <p>옷장보기 
                       		<input type="button" value="옷장 추가">
                       		<input type="button" value="옷장 편집">
@@ -700,6 +700,7 @@
                         </div>
                       </div>
                     </div>
+                    
                     <div class="col-md-6">
                       <p>코디일지 
                       		<input type="button" value="일지 추가" >
