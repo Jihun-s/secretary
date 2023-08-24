@@ -9,7 +9,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.extern.slf4j.Slf4j;
-import net.softsociety.secretary.service.UserService;
+import net.softsociety.secretary.domain.Closet;
+import net.softsociety.secretary.service.ClosetService;
 import net.softsociety.secretary.util.FileService;
 
 @Slf4j
@@ -18,12 +19,19 @@ import net.softsociety.secretary.util.FileService;
 public class ClosetController {
 	
 	@Autowired
-	UserService service;
+	ClosetService service;
 
 	@ResponseBody
 	@PostMapping("insertCloset")
 	public void insertCloset(String closetName) {
-		log.debug("전달된 값:{}", closetName);
+		Closet closet = new Closet();
+		closet.setClosetName(closetName);
+		//closet.setFamilyId(123456789000);
+		closet.setUserId("user1");
+		int n = service.insertCloset(closet);
+		if(n != 1) {
+			log.debug("옷장 추가 실패");
+		}
 	}	
 	
 	
