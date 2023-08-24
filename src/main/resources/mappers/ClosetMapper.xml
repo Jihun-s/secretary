@@ -1,0 +1,10 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.softsociety.secretary.dao.ClosetDAO">
+<insert id="insertCloset" parameterType="Closet">
+		insert into Secretary_Closet (closet_num, family_id, user_id, closet_name)
+		values (Secretary_Closet_SEQ.nextval, #{familyId}, #{userId}, #{closetName})
+</insert>
+</mapper>

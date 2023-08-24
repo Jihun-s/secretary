@@ -37,8 +37,27 @@
     });
     
     function pluscloset(){
-    	$('#ManageCloset').html('');
+    	$('#ManageCloset').html('<table><tr><td>옷장 이름</td></tr><tr><td><input type="text" id="closetName"></td></tr><tr><td><input type="button" value="추가" id="plusBtn"></td></tr></table>');
+    	$('#plusBtn').click(pluscloset2);
     };
+    
+    function pluscloset2(){
+    	let n = $('#closetName').val();
+		$.ajax({
+			url:'closet/insertCloset',
+			type:'post',
+			data:{closetName:n},
+			success:function(){
+				alert('전달');
+				document.location.reload();
+			},
+			error:function(e){
+				alert(JSON.stringify(e));
+			}
+			
+		});
+
+    }
     </script>
 
     <meta name="description" content="" />
