@@ -70,4 +70,16 @@ public class UserServiceImpl implements UserService {
 	public User findByEmail(String email) {
 		return userMapper.findByEmail(email);
 	}
+
+	//이메일 조회
+	@Override
+	public boolean existsByEmail(String userEmail) {
+		return userMapper.countByEmail(userEmail) > 0;
+	}
+
+	//아이디 조회
+	@Override
+	public boolean existsByUserId(String userId) {
+		return userMapper.countByUserId(userId) > 0;
+	}
 }
