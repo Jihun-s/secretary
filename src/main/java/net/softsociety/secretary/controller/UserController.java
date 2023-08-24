@@ -26,9 +26,9 @@ public class UserController {
     private UserService userService;
 	
 	//회원가입
-	@GetMapping("signin")
-	public String signin() {
-		return "userView/signin";
+	@GetMapping("signup")
+	public String signup() {
+		return "userView/signup";
 	}
 	
 	//로그인
@@ -37,12 +37,49 @@ public class UserController {
 		return "userView/login";
 	}
 	
-	//비번찾기
-	@GetMapping("forgotPw")
-	public String forgotPw() {
-		return "userView/forgot-password-basic";
-	}
+    @GetMapping("/forgot-password")
+    public String showForgotPasswordPage() {
+        return "userView/forgot-password-basic"; // 비밀번호 재설정 요청 페이지를 반환합니다.
+    }
 
+    @PostMapping("/forgot-password")
+    public String processForgotPassword(@RequestParam String email, Model model, HttpServletRequest request) {
+        if (!userService.existsByEmail(email)) { // 해당 이메일이 존재하는지 검사
+            model.addAttribute("errorMessage", "해당 이메일로 등록된 계정이 없습니다.");
+            return "userView/forgot-password-basic";
+        }
+
+        userService.sendPasswordResetToken(email, getSiteURL(request));
+        model.addAttribute("message", "비밀번호 재설정 링크가 이메일로 전송되었습니다.");
+        return "userView/message"; // 메시지를 표시하는 뷰로 리다이렉트
+    }
+
+    @GetMapping("/reset-password")
+    public String showResetPasswordForm(@RequestParam("token") String token, Model model) {
+        User user = userService.findByVerificationToken(token);
+        if (user == null) {
+            model.addAttribute("message", "유효하지 않은 토큰입니다.");
+            return "userView/message";
+        }
+
+        model.addAttribute("token", token);
+        return "userView/reset-password-form"; // 실제 비밀번호 재설정 폼을 반환합니다.
+    }
+
+    @PostMapping("/reset-password")
+    public String processResetPassword(@RequestParam("token") String token, @RequestParam("userPw") String newPassword, Model model) {
+        User user = userService.findByVerificationToken(token);
+        if (user == null) {
+            model.addAttribute("message", "토큰이 만료되었습니다.");
+            return "userView/message";
+        }
+
+        userService.resetPassword(user, newPassword);
+        model.addAttribute("message", "비밀번호가 성공적으로 재설정되었습니다.");
+
+        return "userView/message"; // 성공 메시지를 보여줄 템플릿을 반환합니다.
+    }
+	
 	@PostMapping("/register")
 	public String registerUser(@ModelAttribute User user, HttpServletRequest request) {
 	    userService.register(user, getSiteURL(request));

@@ -1,5 +1,6 @@
 package net.softsociety.secretary.service;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,9 +9,11 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import lombok.extern.slf4j.Slf4j;
 import net.softsociety.secretary.dao.UserMapper;
 import net.softsociety.secretary.domain.User;
 
+@Slf4j
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -34,6 +37,10 @@ public class UserServiceImpl implements UserService {
         // 인증 토큰 생성
         String token = UUID.randomUUID().toString();
         user.setVerificationToken(token);
+
+        // 토큰 유효기간 설정 (예: 24시간)
+        LocalDateTime expiryDate = LocalDateTime.now().plusHours(24);
+        user.setVerificationTokenExpiryDate(expiryDate);
 
         // 사용자 상태 설정 (인증 대기 중)
         user.setEnabled(0);
@@ -60,8 +67,11 @@ public class UserServiceImpl implements UserService {
     public boolean verify(String token) {
         User user = userMapper.findByVerificationToken(token);
         if (user != null) {
-            userMapper.enableUser(token);
-            return true;
+            // 토큰 유효기간 확인
+            if (LocalDateTime.now().isBefore(user.getVerificationTokenExpiryDate())) {
+                userMapper.enableUser(token);
+                return true;
+            }
         }
         return false;
     }
@@ -82,4 +92,47 @@ public class UserServiceImpl implements UserService {
 	public boolean existsByUserId(String userId) {
 		return userMapper.countByUserId(userId) > 0;
 	}
+    
+    @Override
+    public void sendPasswordResetToken(String userEmail, String siteURL) {
+        User user = userMapper.findByEmail(userEmail);
+
+        if (user != null) {
+            // 토큰 생성
+            String token = UUID.randomUUID().toString();
+            user.setVerificationToken(token);
+
+            // 토큰 유효기간 설정 (예: 24시간)
+            LocalDateTime expiryDate = LocalDateTime.now().plusHours(24);
+            user.setVerificationTokenExpiryDate(expiryDate);
+
+            // MyBatis를 사용하여 사용자 업데이트
+            userMapper.updateUser(user);
+
+            // 이메일 메시지 생성
+            String subject = "Password Reset Request";
+            String resetUrl = siteURL + "/user/reset-password?token=" + token;
+            String message = "To reset your password, click the link below:\n" + resetUrl;
+
+            SimpleMailMessage email = new SimpleMailMessage();
+            email.setSubject(subject);
+            email.setTo(userEmail);
+            email.setText(message);
+
+            // 이메일 전송
+            javaMailSender.send(email);
+        }
+    }
+    
+    @Override
+    public User findByVerificationToken(String token) {
+        return userMapper.findByVerificationToken(token);
+    }
+
+    @Override
+    public void resetPassword(User user, String newPassword) {
+        String encodedPassword = passwordEncoder.encode(newPassword);
+        user.setUserPw(encodedPassword);
+        userMapper.updateUserPw(user);
+    }
 }
