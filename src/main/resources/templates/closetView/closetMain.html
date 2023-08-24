@@ -48,7 +48,8 @@
 			type:'post',
 			data:{closetName:n},
 			success:function(){
-				console.log('전달')
+				alert('전달');
+				document.location.reload();
 			},
 			error:function(e){
 				alert(JSON.stringify(e));

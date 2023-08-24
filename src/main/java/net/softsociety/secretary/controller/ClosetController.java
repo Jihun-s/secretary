@@ -26,7 +26,7 @@ public class ClosetController {
 	public void insertCloset(String closetName) {
 		Closet closet = new Closet();
 		closet.setClosetName(closetName);
-		//closet.setFamilyId(123456789000);
+		closet.setFamilyId(123456780L);
 		closet.setUserId("user1");
 		int n = service.insertCloset(closet);
 		if(n != 1) {
