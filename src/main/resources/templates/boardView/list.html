@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="UTF-8">
+<title>list</title>
+<script th:src="@{/js/jquery-3.7.0.js}"></script>
+</head>
+<body>
+<h1>문의/공지/자주묻는질문</h1>
+<p><a th:href="@{/}">홈</a></p>
+<a sec:authorize="!isAuthenticated()" th:href="@{/board/write}">문의글 등록</a>
+
+</body>
+</html>
