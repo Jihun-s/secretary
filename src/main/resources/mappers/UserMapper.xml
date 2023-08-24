@@ -3,37 +3,46 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="net.softsociety.secretary.dao.UserMapper">
-	<insert id="insertUser" parameterType="User">
-	    INSERT INTO secretary_user (
-	        user_id, user_email, user_name, user_nickname, user_pw, user_profileimg,
-	        enabled, family_id, birthday, sex, verification_token)
-	    VALUES (
-	        #{userId}, #{userEmail, jdbcType=VARCHAR}, #{userName, jdbcType=VARCHAR},
-	        #{userNickname, jdbcType=VARCHAR}, #{userPw, jdbcType=VARCHAR},
-	        #{userProfileimg, jdbcType=VARCHAR}, #{enabled, jdbcType=INTEGER},
-	        #{familyId, jdbcType=BIGINT},
-	        #{birthday}, #{sex, jdbcType=INTEGER},
-	        #{verificationToken, jdbcType=VARCHAR})
-	</insert>
+    <insert id="insertUser" parameterType="User">
+        INSERT INTO secretary_user (
+            user_id, user_email, user_name, user_nickname, user_pw, user_profileimg,
+            enabled, family_id, birthday, sex, verification_token, verification_token_expiry_date)
+        VALUES (
+            #{userId}, #{userEmail, jdbcType=VARCHAR}, #{userName, jdbcType=VARCHAR},
+            #{userNickname, jdbcType=VARCHAR}, #{userPw, jdbcType=VARCHAR},
+            #{userProfileimg, jdbcType=VARCHAR}, #{enabled, jdbcType=INTEGER},
+            #{familyId, jdbcType=BIGINT}, #{birthday}, #{sex, jdbcType=INTEGER},
+            #{verificationToken, jdbcType=VARCHAR}, #{verificationTokenExpiryDate, jdbcType=TIMESTAMP})
+    </insert>
 
     <select id="findByVerificationToken" parameterType="String" resultType="User">
         SELECT * FROM secretary_user WHERE verification_token = #{token}
     </select>
-
 	<update id="enableUser" parameterType="String">
 	    UPDATE secretary_user
 	    SET enabled = 1
 	    WHERE verification_token = #{token}
 	</update>
-	
-	<select id="findByEmail" resultType="User">
-    	SELECT * FROM secretary_user WHERE user_email = #{email}
-  	</select>
-	<select id="countByEmail" resultType="int">
-	    SELECT COUNT(*) FROM secretary_user WHERE user_email = #{userEmail}
-	</select>
-	
-	<select id="countByUserId" resultType="int">
-	    SELECT COUNT(*) FROM secretary_user WHERE user_id = #{userId}
-	</select>
+    <select id="findByEmail" resultType="User">
+        SELECT * FROM secretary_user WHERE user_email = #{email}
+    </select>
+
+    <select id="countByEmail" resultType="int">
+        SELECT COUNT(*) FROM secretary_user WHERE user_email = #{userEmail}
+    </select>
+    
+    <select id="countByUserId" resultType="int">
+        SELECT COUNT(*) FROM secretary_user WHERE user_id = #{userId}
+    </select>
+    <update id="updateUser" parameterType="User">
+	    UPDATE secretary_user
+	    SET verification_token = #{verificationToken},
+	        verification_token_expiry_date = #{verificationTokenExpiryDate, jdbcType=TIMESTAMP}
+	    WHERE user_id = #{userId} OR user_email = #{userEmail}
+	</update>
+    <update id="updateUserPw" parameterType="User">
+	    UPDATE secretary_user
+	    SET user_pw = #{userPw}
+	    WHERE user_id = #{userId} OR user_email = #{userEmail}
+	</update>
 </mapper>

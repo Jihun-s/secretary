@@ -25,8 +25,9 @@ public class WebSecurityConfig {
         http.csrf().disable()
         .authorizeRequests()
         .antMatchers("/",
-        		"/user/signin",
+        		"/user/signup",
         		"/user/login",
+        		"/user/forgotPw",
         		"/user/confirm",
         		"/homeView/home",
         		"/boardView/list",

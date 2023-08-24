@@ -12,4 +12,5 @@ public interface UserMapper {
 	User findByEmail(String email);
 	int countByEmail(String userEmail);
 	int countByUserId(String userId);
+	void updateUserPw(User user);
 }

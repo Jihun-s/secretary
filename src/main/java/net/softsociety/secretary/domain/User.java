@@ -1,8 +1,6 @@
 package net.softsociety.secretary.domain;
 
-import java.time.LocalDate;
-
-import org.springframework.format.annotation.DateTimeFormat;
+import java.time.LocalDateTime;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,8 +18,9 @@ public class User {
     private String userProfileimg;
     private int enabled;
     private String rolename;
-    private Long familyId;
+    private int familyId;
     private String birthday;
     private int sex;
     private String verificationToken;
+    private LocalDateTime verificationTokenExpiryDate;
 }
