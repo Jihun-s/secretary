@@ -37,7 +37,7 @@
     <update id="updateUser" parameterType="User">
 	    UPDATE secretary_user
 	    SET verification_token = #{verificationToken},
-	        verification_token_expiry_date = #{verificationTokenExpiryDate}
+	        verification_token_expiry_date = #{verificationTokenExpiryDate, jdbcType=TIMESTAMP}
 	    WHERE user_id = #{userId} OR user_email = #{userEmail}
 	</update>
     <update id="updateUserPw" parameterType="User">
