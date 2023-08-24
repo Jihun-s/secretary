@@ -30,6 +30,16 @@
     />
 
     <title>옷장 :: 메인 페이지</title>
+    <script th:src="@{/js/jquery-3.7.0.js}"></script>
+    <script>
+    $(document).ready(function() {
+    	$('#insertCloset').click(pluscloset);
+    });
+    
+    function pluscloset(){
+    	$('#ManageCloset').html('');
+    };
+    </script>
 
     <meta name="description" content="" />
 
@@ -89,6 +99,8 @@
     <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
     <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
     <script th:src="@{/assets/js/config.js}"></script>
+    
+  
   </head>
 
   <body>
@@ -679,12 +691,12 @@
                   <div class="row">
                      <div class="col-md-6">
                       <p>옷장보기 
-                      		<input type="button" value="옷장 추가">
+                      		<input type="button" value="옷장 추가" id="insertCloset">
                       		<input type="button" value="옷장 편집">
                       </p>
                       <div class="card">
                         <div class="d-flex align-items-end"></div>
-                        <div class="card-body">
+                        <div class="card-body" id="ManageCloset">
                         <table>
                           <tr>
                           <td><a th:href="@{/closet/InCloset1}"><img th:src="@{/images/wardrobe.png}"></a></td>
