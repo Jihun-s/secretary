@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="UTF-8">
+<title>write</title>
+<script th:src="@{/js/jquery-3.7.0.js}"></script>
+<script>
+	//문의글 유효한지 확인
+	function check() {
+		let con1 = document.getElementById('boardCategory2');
+		let con2 = document.getElementById('boardTitle');
+		let con3 = document.getElementById('boardContent');
+		if (con1.value == '' || con2.value =='' || con3.value =='') {
+			alert('내용을 입력하세요');
+			return false;
+		}
+		if (con2.value.length < 2) {
+			alert('제목은 2자 이상이어야 합니다');
+			return false;
+		}
+		
+		if (con3.value.length < 10) {
+			alert('내용은 10자 이상이어야 합니다');
+			return false;
+		}
+		
+		return true;
+	}
+	 //비밀글 체크
+	 const boardIsPublicCheckbox = document.getElementById("boardIsPublic");
+	    
+	    boardIsPublicCheckbox.addEventListener("change", function() {
+	        if (this.checked) {
+	            this.value = "0"; // 값이 0으로 변경
+	        } 
+	    });
+</script>
+</head>
+<body>
+<h1>[1:1 문의글 등록]</h1>
+
+<form th:action="@{/board/write}" method="post" onsubmit="return check();">
+    카테고리<select name="boardCategory2" id="boardCategory2">
+        <option value="">카테고리 선택</option>
+        <option value="account">계정</option>
+        <option value="service">서비스</option>
+        <option value="error">오류신고</option>
+        <option value="other">기타</option>
+    </select><br>
+    
+    제목<input type="text" name="boardTitle" id="boardTitle" placeholder="제목을 입력하세요(2자 이상)"><br>
+    
+    내용<textarea name="boardContent" id="boardContent" placeholder="내용을 입력하세요(10자 이상)"></textarea><br>
+    
+    비밀글<input type="checkbox" name="boardIsPublic" id="boardIsPublic" value="1"><br>
+    <input type="submit" value="저장">   
+</form>
+<form th:action="@{/board/list}" method="get">
+	 <input type="submit" value="취소">
+</form>
+
+
+</body>
+</html>

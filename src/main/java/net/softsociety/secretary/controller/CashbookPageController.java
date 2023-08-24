@@ -9,7 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Controller
 @RequestMapping("cashbook")
-public class CashbookController {
+public class CashbookPageController {
 
 	/** 메인 */
 	@GetMapping({"", "/"})

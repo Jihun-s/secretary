@@ -32,24 +32,13 @@
 
 
 
-
-
-/*나의 옷찾기*/
-.searchCloset select {
-	height:30px;
-}
-.searchCloset .searchWord{
-	height:30px;
-	width:65%;
-}
-
 /*세탁물 게이지*/
-.outerOfprogress {
-	width:375px;
+.progress {
+	width:340px;
+	height:25px;
 	text-align:left;
 }
-.outerOfprogress progress {
-	width:98%;
-	height:30px;
+.progress div {
+	width: 75%; height:25px;
 }
 
