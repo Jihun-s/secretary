@@ -14,7 +14,7 @@ public class CashbookBudgetController {
 
 	/** 예산 입력 */
 	@PostMapping("setBudget")
-	public String setBudget(int budgetAmount) {
+	public String setBudget(long budgetAmount) {
 		log.debug("넘어온 예산:{}", budgetAmount);
 		
 		return "redirect:/cashbook/";
