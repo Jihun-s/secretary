@@ -9,4 +9,7 @@ public interface UserMapper {
     void updateUser(User user);
     User findByVerificationToken(String token);
 	void enableUser(String token);
+	User findByEmail(String email);
+	int countByEmail(String userEmail);
+	int countByUserId(String userId);
 }
