@@ -23,9 +23,10 @@
 	    SET enabled = 1
 	    WHERE verification_token = #{token}
 	</update>
-    <select id="findByEmail" resultType="User">
-        SELECT * FROM secretary_user WHERE user_email = #{email}
-    </select>
+	<select id="findByEmailOrUserId" resultType="User">
+	    SELECT * FROM secretary_user
+	    WHERE user_email = #{emailOrUserId} OR user_id = #{emailOrUserId}
+	</select>
 
     <select id="countByEmail" resultType="int">
         SELECT COUNT(*) FROM secretary_user WHERE user_email = #{userEmail}

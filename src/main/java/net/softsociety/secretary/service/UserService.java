@@ -7,7 +7,7 @@ public interface UserService {
 	
 	boolean verify(String token);
 
-	User findByEmail(String email);
+	User findByEmailOrUserId(String emailOrUserId);
 
 	boolean existsByEmail(String userEmail);
 
