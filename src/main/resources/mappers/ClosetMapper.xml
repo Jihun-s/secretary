@@ -3,8 +3,15 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="net.softsociety.secretary.dao.ClosetDAO">
+
+<!-- 옷장추가 -->
 <insert id="insertCloset" parameterType="Closet">
-		insert into Secretary_Closet (closet_num, family_id, user_id, closet_name)
-		values (Secretary_Closet_SEQ.nextval, #{familyId}, #{userId}, #{closetName})
+	insert into Secretary_Closet (closet_num, family_id, user_id, closet_name)
+	values (Secretary_Closet_SEQ.nextval, #{familyId}, #{userId}, #{closetName})
 </insert>
+
+<!-- 옷장목록 불러오기 -->
+<select id="findAllCloset" resultType="Closet">
+	select * from Secretary_Closet order by closet_num
+</select>
 </mapper>

@@ -27,6 +27,8 @@
 .col-md-6 div.card-body{
 	display:inline-block; 
 	align: center;
+	padding-left:10px;
+	height: 270px;
 }
 /* 옷장보기, 코디일지 css 끝*/
 
