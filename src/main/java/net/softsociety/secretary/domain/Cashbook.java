@@ -13,18 +13,18 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Cashbook {
 
-	int cashbookStatsId;
-	int cashbookId;
-	int familyId;
-	int cashbookStatsYear;
-	int cashbookStatsMonth;
-	int cashbookStatsDate;
-	int expendDaily;
-	int budgetDaily;
-	int expendMonthly;
-	int incomeMonthly;
-	int incomeYearly;
-	int expendYearly;
-	int assetYearly;
+	private int cashbookStatsId;
+	private int cashbookId;
+	private int familyId;
+	private int cashbookStatsYear;
+	private int cashbookStatsMonth;
+	private int cashbookStatsDate;
+	private int expendDaily;
+	private int budgetDaily;
+	private int expendMonthly;
+	private int incomeMonthly;
+	private int incomeYearly;
+	private int expendYearly;
+	private int assetYearly;
 	
 }
