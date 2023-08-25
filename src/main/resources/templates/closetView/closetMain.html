@@ -720,15 +720,8 @@
                         <div class="d-flex align-items-end"></div>
                         <div class="card-body" id="ManageCloset">
                         <table>
-                          <tr>
-                          <td><a th:href="@{/closet/InCloset1}"><img th:src="@{/images/wardrobe.png}"></a></td>
-                          <td><a th:href="@{/closet/InCloset1}"><img th:src="@{/images/wardrobe.png}"></a></td>
-                          <td><a th:href="@{/closet/InCloset1}"><img th:src="@{/images/wardrobe.png}"></a></td>
-                          </tr>
-                          <tr>
-                          <td>안방 옷장</td>
-                          <td>내 옷장</td>
-                          <td>마이 옷장</td>
+                          <tr th:each="closetItem:${closetList}">
+                          	<td><a th:href="@{/closet/InCloset1}"><img th:src="@{/images/wardrobe.png}"></a><br><p th:text="${closetItem.closetName}"></p></td>
                           </tr>
                          </table>
                         </div>
