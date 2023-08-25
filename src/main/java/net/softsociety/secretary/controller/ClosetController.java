@@ -3,6 +3,7 @@ package net.softsociety.secretary.controller;
 import java.security.Principal;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,6 +29,9 @@ public class ClosetController {
 	@Autowired
 	UserService userService;
 	
+	//파일저장 경로
+	@Value("${spring.servlet.multipart.location}")
+	String uploadPath;
 	
 	@ResponseBody
 	@PostMapping("insertCloset")
@@ -39,24 +43,13 @@ public class ClosetController {
 		}
 	}	
 	
-	
-	
-	
-	String uploadPath = "c:/boardfile";
-	
-	@GetMapping("insertClothes")
-	public String insertClothes() {
-		return "insertClothes";
-	}
-	
 	@PostMapping("insertClothes")
-	public String insertClothes(MultipartFile upload) {
+	public void insertClothes(MultipartFile upload) {
 		log.debug("매핑");
 		if(upload!=null && !upload.isEmpty()) {
 			String savedfile = FileService.saveFile(upload, uploadPath);
 			log.debug(savedfile);
 		}
-		return "insertClothes";
 	}
 	
 }

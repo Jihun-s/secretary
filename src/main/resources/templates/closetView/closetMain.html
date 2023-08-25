@@ -721,7 +721,7 @@
                         <div class="card-body" id="ManageCloset">
                         <table>
                           <tr th:each="closetItem:${closetList}">
-                          	<td><a th:href="@{/closet/InCloset1}"><img th:src="@{/images/wardrobe.png}"></a><br><p th:text="${closetItem.closetName}"></p></td>
+                          	<td><a th:href="@{/closet/InCloset(closetNum=${closetItem.closetNum})}"><img th:src="@{/images/wardrobe.png}"></a><br><p th:text="${closetItem.closetName}"></p></td>
                           </tr>
                          </table>
                         </div>
