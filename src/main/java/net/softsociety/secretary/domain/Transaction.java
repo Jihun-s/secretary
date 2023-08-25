@@ -13,16 +13,16 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Transaction {
 
-	int transId;
-	int cashbookId;
-	int userId;
-	int familyId;
-	String transDate;
-	String transType;
-	String transCategory1;
-	String transCategory2;
-	String transPayee;
-	String transMemo;
-	long transAmount;
+	private int transId;
+	private int cashbookId;
+	private String userId;
+	private int familyId;
+	private String transDate;
+	private String transType;
+	private String transCategory1;
+	private String transCategory2;
+	private String transPayee;
+	private String transMemo;
+	private long transAmount;
 	
 }

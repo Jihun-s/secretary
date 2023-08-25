@@ -2,6 +2,36 @@ $(document).ready(function() {
     
 });
 
+/** 사진 입력 버튼 */
+function inputBtImg() {
+    alert('사진입력 기다려요');
+}
+
+/** 음성 입력 버튼 */
+function inputBtVoice() {
+    alert('음성입력 기다려요');
+}
+
+/** SMS 입력 버튼 */
+function inputBtSms() {
+    alert('SMS입력 기다려요');
+}
+
+
+/** 날짜입력 기본값 현재시간으로 설정 */
+function dateToSysdate() {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = (now.getMonth() + 1).toString().padStart(2, '0');
+    const day = now.getDate().toString().padStart(2, '0');
+    const hours = now.getHours().toString().padStart(2, '0');
+    const minutes = now.getMinutes().toString().padStart(2, '0');
+
+    const dateTimeString = `${year}-${month}-${day}T${hours}:${minutes}`;
+    
+    document.getElementById('transDate').value = dateTimeString;
+}
+
 /** 내역 입력 유효성 검사 */
 function validateTransAmount() {
     alert('연결 완')

@@ -13,8 +13,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CashbookStats {
 
-	int cashbookId;
-	int familyId;
-	int userId;
+	private int cashbookId;
+	private int familyId;
+	private String userId;
 	
 }

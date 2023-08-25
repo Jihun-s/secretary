@@ -13,8 +13,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Family {
 
-	int familyId;
-	int userId;
-	String familyRole;
+	private int familyId;
+	private String userId;
+	private String familyRole;
 	
 }
