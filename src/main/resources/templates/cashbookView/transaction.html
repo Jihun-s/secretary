@@ -82,7 +82,7 @@
 
     <!-- 소영 추가 JS -->
     <script th:src="@{/js/jquery-3.7.0.js}"></script> 
-    <script th:src="@{/js/cashbook/cashbookMain.js}"></script>"
+    <script th:src="@{/js/cashbook/transaction.js}"></script>"
 
     <!-- Helpers -->
     <script th:src="@{/assets/vendor/js/helpers.js}"></script>
@@ -615,7 +615,77 @@
                   <div class="card">
                     <div class="d-flex align-items-end"></div>
                     <div class="card-body">
-                      <h5>1열</h5>
+                      <!-- 입력버튼*3 -->
+                      <label class="form-label" for="basic-default-fullname">COMPORTABLE</label>
+                      <div class="transInputBt mb-4">
+                        <button type="button" class="btn btn-outline-success">사진</button>
+                        <button type="button" class="btn btn-outline-success">음성</button>
+                        <button type="button" class="btn btn-outline-success">SMS</button>
+                      </div>
+                      <h4>직접 입력</h4>
+                      <form th:action="@{/cashbook/trans/setTrans}" method="post" onclick="return validateTransAmount()">
+                        <div class="mb-3">
+                          <label class="form-label" for="basic-default-fullname">거래일자</label>
+                          <input class="form-control" type="datetime-local" name="transDate" value="2021-06-18T12:30:00" id="html5-datetime-local-input">
+                        </div>
+                        <div class="mb-3">
+                          <label class="form-label" for="basic-default-company">내역 유형</label>
+                          <div class="col-md">
+                            <div class="form-check form-check-inline mt-3">
+                              <input class="form-check-input" type="radio" name="transType" id="inlineRadio1" value="income">
+                              <label class="form-check-label" for="inlineRadio1">수입</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                              <input class="form-check-input" type="radio" name="transType" id="inlineRadio2" value="expend">
+                              <label class="form-check-label" for="inlineRadio2">지출</label>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="mb-3">
+                          <label class="form-label" for="basic-default-email">카테고리</label>
+                          <div>
+                            <select id="transCategory1" name="transCategory1" class="form-select">
+                              <option>대분류를 입력하세요</option>
+                              <option value="1">식비</option>
+                              <option value="2">쇼핑</option>
+                              <option value="3">여가</option>
+                              <option value="4">여행</option>
+                              <option value="5">뷰티</option>
+                              <option value="6">리빙</option>
+                              <option value="7">건강</option>
+                              <option value="0">기타</option>
+                            </select>
+                            <select id="transCategory2" name="transCategory2" class="form-select">
+                              <option>소분류를 선택하세요</option>
+                              <option value="1">식사</option>
+                              <option value="2">간식</option>
+                              <option value="3">카페</option>
+                              <option value="4">술</option>
+                              <option value="5">편의점</option>
+                              <option value="0">기타</option>
+                            </select>
+                          </div>
+
+                          <!-- <div class="form-text"> You can use letters, numbers &amp; periods </div> -->
+                        </div>
+                        <div class="mb-3">
+                          <label class="form-label" for="basic-default-phone">거래내용</label>
+                          <input type="text" name="transPayee" id="basic-default-phone" class="form-control phone-mask" placeholder="거래처를 입력하세요">
+                        </div>
+                        <div class="mb-3">
+                          <label class="form-label" for="basic-default-message">메모</label>
+                          <textarea name="transMemo" id="basic-default-message" class="form-control" placeholder="(선택)"></textarea>
+                        </div>
+                        <div class="mb-3">
+                          <label class="form-label" for="basic-default-message">거래금액</label>
+                          <div class="input-group">
+                            <span class="input-group-text" id="basic-addon11">₩</span>
+                            <input type="text" name="transAmount" class="form-control" placeholder="금액을 입력하세요" aria-label="Username" aria-describedby="basic-addon11">
+                            <p id="transAmountError"></p>
+                            <button type="submit" class="btn btn-success col-3">입력</button>
+                          </div>
+                        </div>
+                      </form>
                     </div>
                   </div>
                 </div>
