@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 public class Closet {
 	private int closetNum;
-	private Long familyId;
+	private int familyId;
 	private String userId;
 	private String closetName;	
 }

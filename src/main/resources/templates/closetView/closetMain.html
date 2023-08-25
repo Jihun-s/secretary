@@ -31,22 +31,25 @@
 
     <title>옷장 :: 메인 페이지</title>
     <script th:src="@{/js/jquery-3.7.0.js}"></script>
-    <script>
+    <script th:inline="javascript">
+    /*<![CDATA[*/
     $(document).ready(function() {
     	$('#insertCloset').click(pluscloset);
     });
-    
     function pluscloset(){
-    	$('#ManageCloset').html('<table><tr><td>옷장 이름</td></tr><tr><td><input type="text" id="closetName"></td></tr><tr><td><input type="button" value="추가" id="plusBtn"></td></tr></table>');
+    	$('#ManageCloset').html('<table><tr><td>[[${loginUser.userNickname}]]님</td></tr><tr><td>옷장 이름을 적어주세요</td></tr><tr><td><input type="text" id="closetName"></td></tr><tr><td> </td></tr><tr><td><input type="button" value="추가" id="plusBtn"></td></tr></table>');
     	$('#plusBtn').click(pluscloset2);
     };
     
     function pluscloset2(){
+    	let closetnum = 0;
+    	let userid = [[${loginUser.userId}]];
+    	let familyid = [[${loginUser.familyId}]];
     	let n = $('#closetName').val();
 		$.ajax({
 			url:'closet/insertCloset',
 			type:'post',
-			data:{closetName:n},
+			data:{closetNum:closetnum, familyId: familyid, userId: userid, closetName:n},
 			success:function(){
 				alert('전달');
 				document.location.reload();
@@ -56,7 +59,7 @@
 			}
 			
 		});
-
+		 /*]]>*/
     }
     </script>
 
