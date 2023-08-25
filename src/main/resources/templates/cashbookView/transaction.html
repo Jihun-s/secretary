@@ -616,17 +616,17 @@
                     <div class="d-flex align-items-end"></div>
                     <div class="card-body">
                       <!-- 입력버튼*3 -->
-                      <label class="form-label" for="basic-default-fullname">COMPORTABLE</label>
+                      <label class="form-label" for="basic-default-fullname">빠른 입력</label>
                       <div class="transInputBt mb-4">
-                        <button type="button" class="btn btn-outline-success">사진</button>
-                        <button type="button" class="btn btn-outline-success">음성</button>
-                        <button type="button" class="btn btn-outline-success">SMS</button>
+                        <button type="button" class="btn btn-outline-success" onclick="inputBtImg()">사진</button>
+                        <button type="button" class="btn btn-outline-success" onclick="inputBtVoice()">음성</button>
+                        <button type="button" class="btn btn-outline-success" onclick="inputBtSms()">SMS</button>
                       </div>
                       <h4>직접 입력</h4>
-                      <form th:action="@{/cashbook/trans/setTrans}" method="post" onclick="return validateTransAmount()">
+                      <form th:action="@{/cashbook/trans/setTrans}" method="post" onsubmit="return validateTransAmount()">
                         <div class="mb-3">
                           <label class="form-label" for="basic-default-fullname">거래일자</label>
-                          <input class="form-control" type="datetime-local" name="transDate" value="2021-06-18T12:30:00" id="html5-datetime-local-input">
+                          <input class="form-control" type="datetime-local" name="transDate" value="2021-06-18T12:30:00" id="transDate">
                         </div>
                         <div class="mb-3">
                           <label class="form-label" for="basic-default-company">내역 유형</label>
@@ -761,6 +761,12 @@
 
     <!-- Page JS -->
     <script th:src="@{/assets/js/dashboards-analytics.js}"></script>
+
+    <!-- 소영 추가 JS -->
+    <!-- datetime 현재시간 입력 -->
+    <script>
+      document.addEventListener("DOMContentLoaded", dateToSysdate);
+    </script> 
 
     <!-- Place this tag in your head or just before your close body tag. -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
