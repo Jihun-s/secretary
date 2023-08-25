@@ -1,6 +1,8 @@
 package net.softsociety.secretary.dao;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
 import net.softsociety.secretary.domain.User;
 
 @Mapper
@@ -9,7 +11,7 @@ public interface UserMapper {
     void updateUser(User user);
     User findByVerificationToken(String token);
 	void enableUser(String token);
-	User findByEmail(String email);
+    User findByEmailOrUserId(@Param("emailOrUserId") String emailOrUserId);
 	int countByEmail(String userEmail);
 	int countByUserId(String userId);
 	void updateUserPw(User user);

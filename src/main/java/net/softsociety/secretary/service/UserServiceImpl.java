@@ -77,10 +77,10 @@ public class UserServiceImpl implements UserService {
     }
 
 	@Override
-	public User findByEmail(String email) {
-		return userMapper.findByEmail(email);
+	public User findByEmailOrUserId(String emailOrUserId) {
+		return userMapper.findByEmailOrUserId(emailOrUserId);
 	}
-
+	
 	//이메일 조회
 	@Override
 	public boolean existsByEmail(String userEmail) {
@@ -95,7 +95,7 @@ public class UserServiceImpl implements UserService {
     
     @Override
     public void sendPasswordResetToken(String userEmail, String siteURL) {
-        User user = userMapper.findByEmail(userEmail);
+        User user = userMapper.findByEmailOrUserId(userEmail);
 
         if (user != null) {
             // 토큰 생성
@@ -135,4 +135,5 @@ public class UserServiceImpl implements UserService {
         user.setUserPw(encodedPassword);
         userMapper.updateUserPw(user);
     }
+
 }

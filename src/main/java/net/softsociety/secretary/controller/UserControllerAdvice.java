@@ -18,7 +18,7 @@ public class UserControllerAdvice {
 	@ModelAttribute("loginUser")
 	public User currentUser(Principal principal) {
 		if (principal != null) {
-			return userService.findByEmail(principal.getName());
+			return userService.findByEmailOrUserId(principal.getName());
 		}
 		return null;
 	}
