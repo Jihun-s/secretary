@@ -1,5 +1,8 @@
 package net.softsociety.secretary.controller;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -48,5 +51,29 @@ public class CashbookRestController {
 		int n = service.insertTrans(trans);
 		
 	}
+	
+	/** 내역 목록 출력 */
+	@GetMapping("/trans/list")
+	public ArrayList<Transaction> list() {
+		
+		ArrayList<Transaction> result = dao.selectAllTrans();
+		log.debug("출력할 내역목록:{}", result);
+		
+		return result;
+	}
+	
+	/** 월간 내역 개수 출력 */
+	@GetMapping("/trans/cntMonth")
+	public int cntMonth() {
+		// 현재 월 구하기
+		Calendar calendar = Calendar.getInstance();
+        int curMonth = calendar.get(Calendar.MONTH) + 1;
+        
+		int result = dao.selectTransCntMonth(curMonth);
+		log.debug("출력할 내역 개수:{}", result);
+		
+		return result;
+	}
+	
 	
 }

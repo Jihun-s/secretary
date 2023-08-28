@@ -34,4 +34,34 @@
 	        )
 </insert>
 
+<!-- 내역 전체 조회 -->
+<select id="selectAllTrans" resultType="Transaction">
+	SELECT 
+    trans_id
+    , cashbook_id
+    , user_id
+    , family_id
+    , to_char(trans_date, 'YYYY-MM-DD') as transDate
+    , to_char(trans_date, 'HH24:MI') as transTime
+    , trans_type
+    , trans_category1
+    , trans_category2
+    , trans_payee
+    , trans_memo
+    , trans_amount
+	FROM
+	    Secretary_Transaction
+	ORDER BY
+		trans_date desc
+</select>
+
+<!-- 해당 월 내역 수 조회 -->
+<select id="selectTransCntMonth" parameterType="int" resultType="int">
+	SELECT 
+		COUNT(*)
+	FROM
+		Secretary_Transaction
+	WHERE 
+		EXTRACT(MONTH FROM trans_date) = #{month}
+</select>
 </mapper>

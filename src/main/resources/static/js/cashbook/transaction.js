@@ -1,5 +1,6 @@
 $(document).ready(function() {
-    $('#setTransBt').click(setTrans)
+    init();
+    $('#setTransBt').click(setTrans);
 });
 
 /** 사진 입력 버튼 */
@@ -129,6 +130,7 @@ function validateTransAmount() {
 function setTrans() {
     if(validateTrans()) {
         setTransAjax();
+        init();
     }
 }
 
@@ -143,7 +145,7 @@ function setTransAjax() {
 
     $.ajax({
         url: '/secretary/cashbook/trans/setTrans',
-        type: 'post',
+        type: 'POST',
         data: { 
             transDate: transDate.val(), 
             transAmount: transAmount.val(), 
@@ -154,13 +156,10 @@ function setTransAjax() {
             transMemo: transMemo.val() 
         },
         success: function() {
-            alert('서버 전송 성공');
-
             // 입력창 비우기 
             transDate.html("");
             transAmount.val("");
-            transCategory1.html("");
-            transCategory2.html("");
+
             $('#inlineRadio1').prop('checked', false);
             $('#inlineRadio2').prop('checked', false);
             transPayee.val("");
@@ -168,6 +167,72 @@ function setTransAjax() {
         },
         error: function() {
             alert('서버 전송 실패');
+        }
+    });
+}
+
+/** 내역 목록 불러오기 */
+function init() {
+    let transCntMonth = $('#transCntMonth');
+    let transListDiv = $('#transListDiv');
+
+    // 내역 수 가져오기 
+    $.ajax({
+        url: '/secretary/cashbook/trans/cntMonth',
+        type: 'GET',
+        dataType: 'text',
+        success: (cnt) => {
+            transCntMonth.html(cnt);
+        },
+        error: () => {
+            alert('내역 개수 전송 실패');
+        }
+    });
+
+    // 목록 가져오기 
+    $.ajax({
+        url: '/secretary/cashbook/trans/list',
+        type: 'GET',
+        dataType: 'JSON',
+        success: function(list) {
+            let table = `<table class="table">
+                            <thead>
+                                <tr>
+                                <th>카테고리</th>
+                                <th>시간</th>
+                                <th>내용</th>
+                                <th>메모</th>
+                                <th>거래금액</th>
+                                <th></th>
+                                </tr>
+                            </thead>
+                            <tbody class="table-border-bottom-0">`;
+            
+            $(list).each(function(idx, ta) {
+                table += `<tr>
+                            <td style="width: 5rem;"><span class="badge bg-label-success me-1">${ta.transCategory2}</span></td>
+                            <td style="width: 5rem;">${ta.transTime}</td>
+                            <td><i class="fab fa-react fa-lg text-info me-3"></i> <strong>${ta.transPayee}</strong></td>
+                            <td>${ta.transMemo}</td>
+                            <td style="width: 5rem;">${ta.transAmount}</td>
+                            <td>
+                            <div class="dropdown">
+                                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></button>
+                                <div class="dropdown-menu">
+                                <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-edit-alt me-2"></i> Edit</a>
+                                <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-trash me-2"></i> Delete</a>
+                                </div>
+                            </div>
+                            </td>
+                        </tr>`;
+            });
+
+            table += `</tbody></table>`;
+
+            transListDiv.html(table);
+        },
+        error: function() {
+            alert('내역 리스트 전송 실패');
         }
     });
 }

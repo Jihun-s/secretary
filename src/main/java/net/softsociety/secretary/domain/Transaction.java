@@ -18,6 +18,7 @@ public class Transaction {
 	private String userId;
 	private int familyId;
 	private String transDate;
+	private String transTime;
 	private String transType;
 	private String transCategory1;
 	private String transCategory2;

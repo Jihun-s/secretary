@@ -28,25 +28,6 @@ public class CashbookTransController {
 	@Autowired
 	UserMapper userdao;
 
-//	/** 내역 입력 */
-//	@PostMapping("setTrans")
-//	public String setBudget(Transaction trans, @AuthenticationPrincipal UserDetails user) {
-//		log.debug("넘어온 거래내역:{}", trans);
-//		
-//		// 유저id 불러오기
-//		String userId = userdao.findByEmailOrUserId(user.getUsername()).getUserId();
-//		// 유저id 입력 
-//		trans.setUserId(userId);
-//		
-//		// cashbookId, familyId 임의로 입력
-//		trans.setCashbookId(1);
-//		trans.setFamilyId(1);
-//		log.debug("입력할 거래내역:{}", trans);
-//		log.debug("입력할 cashbookId:{}", trans.getCashbookId());
-//		
-//		int n = service.insertTrans(trans);
-//		
-//		return "redirect:/cashbook/trans";
-//	}
+
 	
 }
