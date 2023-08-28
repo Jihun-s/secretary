@@ -4,12 +4,17 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
-@NoArgsConstructor
+/** 
+ * 가계부
+ * */
+
 @Data
-public class Closet {
-	private int closetNum;
+@NoArgsConstructor
+@AllArgsConstructor
+public class CashbookStats {
+
+	private int cashbookId;
 	private int familyId;
 	private String userId;
-	private String closetName;	
+	
 }
