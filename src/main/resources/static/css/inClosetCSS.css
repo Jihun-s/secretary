@@ -14,8 +14,11 @@
 }
 
 /* 옷등록*/
-#shirt {
+#imagePreview img{
 	width:100%;
+}
+#uploadIMG {
+	padding-left:32%;
 }
 
 .insertClothes{

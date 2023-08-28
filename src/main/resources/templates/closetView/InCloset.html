@@ -32,7 +32,58 @@
     <title>옷장 :: 1</title>
 	<script th:src="@{/js/jquery-3.7.0.js}"></script>
 	<script type="text/javascript">
+	$(document).ready(function(){
+		$('#editIMGbtn').css('visibility', 'hidden');
+		$('#editIMGbtn').on('click', editIMG);
+		const imageInput = document.getElementById("uploadIMG");
+		const imagePreview = document.getElementById("imagePreview");
+		
+		imageInput.addEventListener("change", function() {
+		  const selectedFile = imageInput.files[0];
 
+		  if (selectedFile) {
+		    const reader = new FileReader();
+
+		    reader.onload = function(event) {
+		      const imageUrl = event.target.result;
+		      const imageElement = document.createElement("img");
+		      imageElement.setAttribute("src", imageUrl);
+		      imageElement.setAttribute("alt", "Image Preview");
+		      imageElement.setAttribute("style", "max-width: 100%; max-height: 300px;");
+		      
+		      imagePreview.innerHTML = "";
+		      imagePreview.appendChild(imageElement);
+		    }
+
+		    reader.readAsDataURL(selectedFile);
+		    $('#editIMGbtn').css('visibility', 'visible');
+		  }
+		});
+	});
+	
+	function editIMG(){
+		alert('편집!!')
+		const imageInput = document.getElementById("uploadIMG");
+		const selectedFile = imageInput.files[0];        
+        const formData = new FormData();
+        formData.append('image', selectedFile);
+       
+        fetch('processImage', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.blob())
+        .then(blob => {
+            const imgElement = document.getElementById('imagePreview');
+            const image = new Image();
+            image.src = URL.createObjectURL(blob);
+            imagePreview.innerHTML = "";
+            imagePreview.appendChild(image);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });    
+	}
 	</script>
 	
     <meta name="description" content="" />
@@ -700,10 +751,19 @@
                   <h3>내 옷 등록</h3>
                   <div class="card">
                     <div class="card-body">
-                      <img th:src="@{/images/shirt.png}" id="shirt">
+                    <div id="imagePreview">
+                      <img th:src="@{/images/shirt.png}" id="preview">
+                    </div>  
                       <div class="insertClothes">
-                      <input type="file" value="사진 등록" id="uploadIMG" accept="image/*">
-                      <input type="button" value="웹에서 찾기">
+                      <table>
+                      	<tr> 
+                      		<td><input type="file" value="사진 등록" id="uploadIMG" accept="image/*"></td>
+                      		<td><input type="button" value="편집" id="editIMGbtn"></td>
+                      	</tr>
+                      	<tr>
+                      		<td> <input type="button" value="웹에서 찾기"> </td>
+                      	</tr>
+                      </table>
                       </div>
                     </div>
                   </div>
