@@ -22,6 +22,15 @@ public class CashbookServiceImpl implements CashbookService {
 		
 		return n;
 	}
+
+	/** 내역 삭제 */
+	@Override
+	public int deleteTrans(Transaction trans) {
+		// TODO Auto-generated method stub
+		int n = dao.deleteTrans(trans);
+		
+		return n;
+	}
 	
 	
 	
