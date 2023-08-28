@@ -32,16 +32,68 @@ function dateToSysdate() {
     document.getElementById('transDate').value = dateTimeString;
 }
 
-/** 내역 입력 유효성 검사 */
-function validateTransAmount() {
-    alert('연결 완')
 
+/** 내역 입력 유효성 검사 */
+function validateTrans() {
+    let isValid = true;
+    
+    // 하나라도 만족하지 못하면 false
+    if(!validateTransType()) isValid = false;
+    if(!validateTransPayee()) isValid = false;
+    if(!validateTransAmount()) isValid = false;
+
+    return isValid;
+}
+
+/** 거래유형 유효성 검사 */
+function validateTransType() {
+    const radios = document.getElementsByName('transType');
+    const transTypeError = document.getElementById('transTypeError');
+    
+    let isSelected = false;
+    for(let i = 0; i < radios.length; i++) {
+        if(radios[i].checked) {
+            isSelected = true;
+            break;
+        }
+    }
+    
+    // 오류 메세지 출력
+    if(!isSelected) {
+        transTypeError.textContent = "거래 유형을 선택하세요.";
+    } else {
+        transTypeError.textContent = "";
+    }
+    
+    return isSelected;
+}
+
+/** 거래내용 유효성 검사 */
+function validateTransPayee() {
+    const input = document.getElementById('basic-default-phone');
+    const transPayeeError = document.getElementById('transPayeeError');
+    const value = input.value.trim();
+    
+    const isValid = value.length > 0 && value.length < 15;
+    
+    // 오류 메세지 출력
+    if(!isValid) {
+        transPayeeError.textContent = "거래내용을 15자 이내로 입력하세요.";
+    } else {
+        transPayeeError.textContent = "";
+    }
+    
+    return isValid;
+}
+
+/** 거래금액 유효성 검사 */ 
+function validateTransAmount() {
     let transAmount = $('#transAmount').val();
     let transAmountError = $('#transAmountError');
 
     // 미입력
-    if(transAmount.length < 1 || transAmount === '' || transAmount == null) {
-        transAmountError.text('내역을 입력하세요.');
+    if(transAmount === '' || transAmount == null) {
+        transAmountError.text('거래금액을 입력하세요.');
         return false;
     }
 
