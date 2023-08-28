@@ -62,7 +62,7 @@ public class BoardController {
     @PostMapping("write")
     public String write(@AuthenticationPrincipal UserDetails user
 			            ,Board b) {
-    	User u = userservice.findByEmail(user.getUsername());    	
+    	User u = userservice.findByEmailOrUserId(user.getUsername());    	
     	
     	b.setUserId(u.getUserId());
     	
