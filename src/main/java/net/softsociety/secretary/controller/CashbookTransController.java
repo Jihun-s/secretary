@@ -42,6 +42,7 @@ public class CashbookTransController {
 		trans.setCashbookId(1);
 		trans.setFamilyId(1);
 		log.debug("입력할 거래내역:{}", trans);
+		log.debug("입력할 cashbookId:{}", trans.getCashbookId());
 		
 		int n = service.insertTrans(trans);
 		
