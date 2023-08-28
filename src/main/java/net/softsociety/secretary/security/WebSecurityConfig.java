@@ -11,6 +11,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 
 /**
  * Security 설정
@@ -38,7 +40,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 "/boardView/write",
                 "/thymeleaf",
                 "/**"
-            ).permitAll()
+                    ).permitAll()
             .antMatchers("/admin").hasRole("ADMIN")
             .anyRequest().authenticated()
             .and()
@@ -47,6 +49,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .loginProcessingUrl("/user/login").permitAll()
             .usernameParameter("emailOrUserId")
             .passwordParameter("userPw")
+            .and()
+            .rememberMe() // 여기로 이동
+            .key("uniqueAndSecret") // 암호화 키 설정
+            .tokenValiditySeconds(30 * 24 * 60 * 60) // 토큰 유효기간 (초 단위)
+            .tokenRepository(persistentTokenRepository(dataSource)) // 위에서 정의한 빈 사용
             .and()
             .logout()
             .logoutUrl("/user/logout")
@@ -66,5 +73,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    }
+    
+    @Bean
+    public PersistentTokenRepository persistentTokenRepository(DataSource dataSource) {
+        JdbcTokenRepositoryImpl tokenRepository = new JdbcTokenRepositoryImpl();
+        tokenRepository.setDataSource(dataSource);
+        return tokenRepository;
     }
 }
