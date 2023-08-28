@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -94,10 +95,17 @@ public class BoardController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
+    // 글 수정 페이지로 이동
+    @GetMapping("update/{boardId}")
+    public String showUpdateForm(@PathVariable int boardId, Model model) {
+        Board board = service.getboardContent(boardId);
+        model.addAttribute("board", board);
+        return "boardView/update"; 
+    }
     
     //글 삭제
     @GetMapping("deleteBoard")
-    public String deleteBoard(int boardId) {
+    public String deleteBoard(@RequestParam int boardId) {
     	int n = service.deleteBoard(boardId);
     	
     	 log.debug("deleteBoard:/ {}", boardId);

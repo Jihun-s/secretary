@@ -36,6 +36,6 @@ public class BoardServiceImpl implements BoardService {
 	public Board getboardContent(int boardId) {
 		return dao.read(boardId); 
 	}
-
+	
 
 }

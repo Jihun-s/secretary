@@ -5,8 +5,12 @@
 <meta charset="UTF-8">
 <title>list</title>
 <script th:src="@{/js/jquery-3.7.0.js}"></script>
-
+<script th:inline="javascript">
+    // Thymeleaf를 사용하여 현재 사용자의 ID를 포함한 loggedInUserId 변수를 정의합니다.
+    var loggedInUserId = /*[[${#authentication.name}]]*/ '';
+</script>
 <script>
+//글목록 출력 대기
 $(document).ready(function () {
      	getList();
     	
@@ -65,38 +69,21 @@ function read(event) {
         data: {boardId: boardId},
         dataType: 'json',
         success: function(readOne) {
-            if (Array.isArray(readOne)) {
-                let htmlContent2 = '';
-                readOne.forEach((item) => {
-                    htmlContent2 += `	
-                        <tr>
-                            <td>${item.boardStatus}</td>
-                            <td>${item.boardContent}</td>
-                            <td>${item.userId}</td>
-                            <td>${item.boardInputdate}</td>
-                        </tr>
-                        <tr>
-                            <td>${item.boardAnswer}</td>
-                        </tr>
-                    `;
-                });
-                $('#answer').html(htmlContent2);
-            } else if (typeof readOne === 'object') {
-                let htmlContent2 = `
-                    <tr>
-                        <td>${readOne.boardStatus}</td>
-                        <td>${readOne.boardContent}</td>
-                        <td>${readOne.userId}</td>
-                        <td>${readOne.boardInputdate}</td>
-                    </tr>
-                    <tr>
-                        <td>${readOne.boardAnswer}</td>
-                    </tr>
-                `;
-                $('#answer').html(htmlContent2);
-            } else {
-                console.error("Invalid data format received.");
-            }
+            let htmlContent = `
+                <tr>
+                    <td>${readOne.boardStatus}</td>
+                    <td>${readOne.boardContent}</td>
+                    <td>${readOne.userId}</td>
+                    <td>${readOne.boardInputdate}</td>
+                    <td><a th:if="${readOne.userId == loggedInUserId}" th:href="@{/board/update/{boardId}(boardId=${readOne.boardId})}" id="updateLink">수정</a></td>
+                    <td><a th:if="${readOne.userId == loggedInUserId}" th:href="@{/board/deleteBoard}(boardId=${readOne.boardId})}" id="deleteLink">삭제</a></td>
+                </tr>
+                <tr>
+                    <td>${readOne.boardAnswer}</td>
+                </tr>
+            `;
+
+            $('#answer').html(htmlContent);
         },
         error: function (e) {
             alert(JSON.stringify(e));
@@ -123,7 +110,9 @@ function read(event) {
             <th>답변상태</th>
             <th>제목</th>
             <th>작성자</th>
-            <th>작성일</th>
+            <th>작성일</th>	
+            
+      
         </tr>
     </thead>
     <tbody id="boardList"></tbody>
