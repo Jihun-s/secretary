@@ -62,6 +62,14 @@ public class FileService {
 			e.printStackTrace();
 		}
 		
+		//저장된 파일명 리턴
+		return savedFilename + ext;
+	}
+	
+	public static String processImg(String originalFilename, String uploadPath) {
+		
+		String originalFilePath = uploadPath + "/" + originalFilename;    //  c:/secretary/파일이름.확장자
+		String result = originalFilePath.substring(0,originalFilePath.length()-4) + "1.PNG"; // Replace with your result path
 		//누끼따기
         try {
             // Python executable command and script path
@@ -69,11 +77,9 @@ public class FileService {
             String pythonScriptPath = "C:/Visual_Studio_Code/pythonWorkspace/changeImg.py";
 
             // Additional arguments to pass to the Python script
-            String url = uploadPath+ "/" +savedFilename + ext; // Replace with your URL
-            String result = savedFilename + "1.PNG"; // Replace with your result path
             
             // Create the ProcessBuilder
-            ProcessBuilder processBuilder = new ProcessBuilder(pythonCommand, pythonScriptPath, url, result);
+            ProcessBuilder processBuilder = new ProcessBuilder(pythonCommand, pythonScriptPath, originalFilePath, result);
 
             // Redirect the error stream to the output stream
             processBuilder.redirectErrorStream(true);
@@ -87,11 +93,8 @@ public class FileService {
 
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
-        }		
-		
-		
-		//저장된 파일명 리턴
-		return savedFilename + ext;
+        }
+		return result;	
 	}
 	
 	/**
