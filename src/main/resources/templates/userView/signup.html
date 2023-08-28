@@ -380,209 +380,196 @@
                                             </g>
                                         </svg>
                                     </span>
-                                    <span class="app-brand-text demo text-body fw-bolder">Sneat</span>
+                                    <span class="app-brand-text demo text-body fw-bolder">생활비서</span>
                                 </a>
                             </div>
                             <!-- /Logo -->
-                            <h4 class="mb-2">Adventure starts here 🚀</h4>
-                            <p class="mb-4">Make your app management easy and fun!</p>
-
-                            <form
-                                id="formAuthentication"
-                                class="mb-3"
-                                th:action="@{/user/register}"
-                                method="POST"
-                                onsubmit="return validateForm()"
-                            >
-                                <!-- User ID -->
-                                <div class="mb-3">
-                                    <label for="userId" class="form-label">User ID</label>
-                                    <div class="input-group">
-                                        <input
-                                            type="text"
-                                            class="form-control"
-                                            id="userId"
-                                            name="userId"
-                                            placeholder="Enter your user ID"
-                                            maxlength="13"
-                                            autofocus
-                                            required
-                                        />
-                                        <button class="btn btn-secondary" id="checkUserIdButton">
-                                            Check Duplicate
-                                        </button>
-                                    </div>
-                                </div>
-
-                                <!-- 이메일 작성 -->
-                                <div class="mb-3">
-                                    <label for="userEmail" class="form-label">Email</label>
-                                    <div class="input-group" id="emailInputGroup">
-                                        <input
-                                            type="text"
-                                            class="form-control"
-                                            id="userEmailPrefix"
-                                            placeholder="Enter your email prefix"
-                                            maxlength="128"
-                                        />
-                                        <span class="input-group-text">@</span>
-                                        <input
-                                            type="text"
-                                            class="form-control"
-                                            id="userEmailDomain"
-                                            placeholder="Domain"
-                                            maxlength="128"
-                                        />
-                                        <select
-                                            id="emailDomainSelect"
-                                            class="form-control"
-                                            onchange="handleEmailDomainChange()"
-                                        >
-                                            <option value="custom">직접입력</option>
-                                            <option value="naver.com">naver.com</option>
-                                            <option value="gmail.com">gmail.com</option>
-                                            <option value="daum.net">daum.net</option>
-                                            <option value="icloud.com">icloud.com</option>
-                                        </select>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label
-                                            for="userEmailErrorMessage"
-                                            class="form-label"
-                                            id="userEmailErrorMessage"
-                                        ></label>
-                                    </div>
-                                </div>
-                                <!-- /이메일 작성 -->
-
-                                <!-- Name -->
-                                <div class="mb-3">
-                                    <label for="userName" class="form-label">Name</label>
-                                    <input
-                                        type="text"
-                                        class="form-control"
-                                        id="userName"
-                                        name="userName"
-                                        placeholder="Enter your name"
-                                        maxlength="10"
-                                        required
-                                    />
-                                </div>
-
-                                <!-- Nickname -->
-                                <div class="mb-3">
-                                    <label for="userNickname" class="form-label">Nickname</label>
-                                    <input
-                                        type="text"
-                                        class="form-control"
-                                        id="userNickname"
-                                        name="userNickname"
-                                        placeholder="Enter your nickname"
-                                        maxlength="10"
-                                    />
-                                </div>
-
-                                <!-- Password -->
-                                <div class="mb-3 form-password-toggle">
-                                    <label class="form-label" for="userPw">Password</label>
-                                    <div class="input-group input-group-merge">
-                                        <input
-                                            type="password"
-                                            id="userPw"
-                                            class="form-control"
-                                            name="userPw"
-                                            placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
-                                            aria-describedby="password"
-                                            maxlength="13"
-                                            required
-                                        />
-                                        <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
-                                    </div>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="userProfileimg" class="form-label">Profile Image URL</label>
-                                    <input
-                                        type="text"
-                                        class="form-control"
-                                        id="userProfileimg"
-                                        name="userProfileimg"
-                                        placeholder="Enter your profile image URL"
-                                    />
-                                </div>
-                                <div class="mb-3">
-                                    <label for="birthday" class="form-label">Birthday</label>
-                                    <input type="date" class="form-control" id="birthday" name="birthday" required />
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label">Sex</label>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio" id="female" name="sex" value="0" />
-                                        <label class="form-check-label" for="female">Female</label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio" id="male" name="sex" value="1" />
-                                        <label class="form-check-label" for="male">Male</label>
-                                    </div>
-                                </div>
-<!-- 이용약관 및 개인정보 처리 방침 모달 -->
-<div id="termsModal" style="display:none; position: fixed; top: 10%; left: 10%; width: 80%; height: 70%; background: white; padding: 20px; border: 1px solid black; z-index: 999;">
-    <h2>이용약관</h2>
-    <div id="termsSection" style="height: 34%; overflow-y: scroll;">
-        <p>
-            ... 실제 이용약관 내용 ...
-            내용..<br>
-            내용..<br>
-            내용..<br>
-            내용..<br>
-            내용..<br>
-            내용..<br>
-            내용..<br>
-            내용..<br>
-                        내용..<br>
-        </p>
-    </div>
-
-    <h2>개인정보 처리 방침</h2>
-    <div id="privacySection" style="height: 34%; overflow-y: scroll;">
-        <p>
-            ... 실제 개인정보 처리 방침 내용 ...
-            내용..<br>
-            내용..<br>
-            내용..<br>
-            내용..<br>
-            내용..<br>
-            내용..<br>
-            내용..<br>
-            내용..<br>
-                        내용..<br>
-        </p>
-    </div>
-
-    <div>
-        <input type="checkbox" id="modalTermsCheckbox" disabled>
-        <label for="modalTermsCheckbox">동의합니다.</label>
-    </div>
-
-    <button id="closeTerms" class="btn btn-secondary btn-sm mb-1">닫기</button>
-</div>
-
-<!-- 이용약관 체크박스와 모달을 띄울 버튼 -->
-<div class="mb-3">
-    <button id="showTerms" class="btn btn-secondary btn-sm mb-1">이용약관 및 개인정보 처리 방침 보기</button>
-    <label for="termsAndConditions">이용약관에 동의합니다.</label>
-    <input type="checkbox" id="termsAndConditions" name="termsAndConditions" disabled>
-    <div id="termsError" style="color: red; display: none;">이용약관에 동의해주세요.</div>
-</div>
-
-
-                                <button class="btn btn-primary d-grid w-100" id="registerButton">가입</button>
-                            </form>
-
+                            <h4 class="mb-2">환영합니다! 🚀</h4>
+                            <p class="mb-4">가정의 현황과 소식을 편리하게 다뤄보아요!</p>
+							<form
+							    id="formAuthentication"
+							    class="mb-3"
+							    th:action="@{/user/register}"
+							    method="POST"
+							    onsubmit="return validateForm()"
+							>
+							    <!-- User ID -->
+							    <div class="mb-3">
+							        <label for="userId" class="form-label">사용자 ID</label>
+							        <div class="input-group">
+							            <input
+							                type="text"
+							                class="form-control"
+							                id="userId"
+							                name="userId"
+							                placeholder="사용자 ID를 입력하세요"
+							                maxlength="13"
+							                autofocus
+							                required
+							            />
+							            <button class="btn btn-secondary" id="checkUserIdButton">
+							                중복 확인
+							            </button>
+							        </div>
+							    </div>
+							
+							    <!-- 이메일 작성 -->
+							    <div class="mb-3">
+							        <label for="userEmail" class="form-label">이메일</label>
+							        <div class="input-group" id="emailInputGroup">
+							            <input
+							                type="text"
+							                class="form-control"
+							                id="userEmailPrefix"
+							                placeholder="이메일"
+							                maxlength="128"
+							            />
+							            <span class="input-group-text">@</span>
+							            <input
+							                type="text"
+							                class="form-control"
+							                id="userEmailDomain"
+							                placeholder="도메인"
+							                maxlength="128"
+							            />
+							            <select
+							                id="emailDomainSelect"
+							                class="form-control"
+							                onchange="handleEmailDomainChange()"
+							            >
+							                <option value="custom">직접 입력</option>
+							                <option value="naver.com">naver.com</option>
+							                <option value="gmail.com">gmail.com</option>
+							                <option value="daum.net">daum.net</option>
+							                <option value="icloud.com">icloud.com</option>
+							            </select>
+							        </div>
+							        <div class="mb-3">
+							            <label
+							                for="userEmailErrorMessage"
+							                class="form-label"
+							                id="userEmailErrorMessage"
+							            ></label>
+							        </div>
+							    </div>
+							    <!-- /이메일 작성 -->
+							
+							    <!-- Name -->
+							    <div class="mb-3">
+							        <label for="userName" class="form-label">이름</label>
+							        <input
+							            type="text"
+							            class="form-control"
+							            id="userName"
+							            name="userName"
+							            placeholder="이름을 입력하세요"
+							            maxlength="10"
+							            required
+							        />
+							    </div>
+							
+							    <!-- Nickname -->
+							    <div class="mb-3">
+							        <label for="userNickname" class="form-label">닉네임</label>
+							        <input
+							            type="text"
+							            class="form-control"
+							            id="userNickname"
+							            name="userNickname"
+							            placeholder="닉네임을 입력하세요"
+							            maxlength="10"
+							        />
+							    </div>
+							
+							    <!-- Password -->
+							    <div class="mb-3 form-password-toggle">
+							        <label class="form-label" for="userPw">비밀번호</label>
+							        <div class="input-group input-group-merge">
+							            <input
+							                type="password"
+							                id="userPw"
+							                class="form-control"
+							                name="userPw"
+							                placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
+							                aria-describedby="password"
+							                maxlength="13"
+							                required
+							            />
+							            <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
+							        </div>
+							    </div>
+							    <div class="mb-3">
+							        <label for="birthday" class="form-label">생일</label>
+							        <input type="date" class="form-control" id="birthday" name="birthday" required />
+							    </div>
+							    <div class="mb-3">
+							        <label class="form-label">성별</label>
+							        <div class="form-check">
+							            <input class="form-check-input" type="radio" id="female" name="sex" value="0" />
+							            <label class="form-check-label" for="female">여성</label>
+							        </div>
+							        <div class="form-check">
+							            <input class="form-check-input" type="radio" id="male" name="sex" value="1" />
+							            <label class="form-check-label" for="male">남성</label>
+							        </div>
+							    </div>
+							<!-- 이용약관 및 개인정보 처리 방침 모달 -->
+							<div id="termsModal" style="display:none; position: fixed; top: 10%; left: 10%; width: 80%; height: 70%; background: white; padding: 20px; border: 1px solid black; z-index: 999;">
+							    <h2>이용약관</h2>
+							    <div id="termsSection" style="height: 34%; overflow-y: scroll;">
+							        <p>
+							            ... 실제 이용약관 내용 ...
+							            내용..<br>
+							            내용..<br>
+							            내용..<br>
+							            내용..<br>
+							            내용..<br>
+							            내용..<br>
+							            내용..<br>
+							            내용..<br>
+							                        내용..<br>
+							        </p>
+							    </div>
+							
+							    <h2>개인정보 처리 방침</h2>
+							    <div id="privacySection" style="height: 34%; overflow-y: scroll;">
+							        <p>
+							            ... 실제 개인정보 처리 방침 내용 ...
+							            내용..<br>
+							            내용..<br>
+							            내용..<br>
+							            내용..<br>
+							            내용..<br>
+							            내용..<br>
+							            내용..<br>
+							            내용..<br>
+							                        내용..<br>
+							        </p>
+							    </div>
+							
+							    <div>
+							        <input type="checkbox" id="modalTermsCheckbox" disabled>
+							        <label for="modalTermsCheckbox">동의합니다.</label>
+							    </div>
+							
+							    <button id="closeTerms" class="btn btn-secondary btn-sm mb-1">닫기</button>
+							</div>
+							
+							<!-- 이용약관 체크박스와 모달을 띄울 버튼 -->
+							<div class="mb-3">
+							    <button id="showTerms" class="btn btn-secondary btn-sm mb-1">이용약관 및 개인정보 처리 방침 보기</button>
+							    <label for="termsAndConditions">이용약관에 동의합니다.</label>
+							    <input type="checkbox" id="termsAndConditions" name="termsAndConditions" disabled>
+							    <div id="termsError" style="color: red; display: none;">이용약관에 동의해주세요.</div>
+							</div>
+							
+							
+							    <button class="btn btn-primary d-grid w-100" id="registerButton">가입하기</button>
+							</form>
                             <p class="text-center">
-                                <span>Already have an account?</span>
+                                <span>이미 계정이 있으신가요?</span>
                                 <a th:href="@{../user/login}">
-                                    <span>Sign in instead</span>
+                                    <span>로그인하기</span>
                                 </a>
                             </p>
                         </div>
