@@ -28,14 +28,16 @@
 		return true;
 	}
 	 //비밀글 체크
-	 const boardIsPublicCheckbox = document.getElementById("boardIsPublic");
-	    
-	    boardIsPublicCheckbox.addEventListener("change", function() {
-	        if (this.checked) {
-	            this.value = "0"; // 값이 0으로 변경
-	        } 
-	    });
-</script>
+	function checkboxChange() {
+    let boardIsPublicCheckbox = document.getElementById("boardIsPublic");
+    
+    if (boardIsPublicCheckbox.checked) {
+        console.log("Checkbox checked: 0");
+        boardIsPublicCheckbox.value = "0"; // 값이 0으로 변경
+    } 
+}
+
+ </script>
 </head>
 <body>
 <h1>[1:1 문의글 등록]</h1>
@@ -53,7 +55,7 @@
     
     내용<textarea name="boardContent" id="boardContent" placeholder="내용을 입력하세요(10자 이상)"></textarea><br>
     
-    비밀글<input type="checkbox" name="boardIsPublic" id="boardIsPublic" value="1"><br>
+    비밀글<input type="checkbox" name="boardIsPublic" id="boardIsPublic" value="1" onchange="checkboxChange()"><br>
     <input type="submit" value="저장">   
 </form>
 <form th:action="@{/board/list}" method="get">

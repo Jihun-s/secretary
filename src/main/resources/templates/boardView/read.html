@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="UTF-8">
+<title>read</title>
+<script th:src="@{/js/jquery-3.7.0.js}"></script>
+<script>
+function deleteBoard(){
+    let confirmDelete = confirm('삭제하시겠습니까?');
+    if (confirmDelete) {
+        let boardId = document.getElementById('boardId').value; 
+        location.href = 'deleteBoard?boardId=' + boardId;
+    }
+} 
+</script>
+</head>
+<body>
+<h1>[글읽기]</h1>
+<a th:href="@{/}">Home</a>
+
+<table>
+	<tr>
+		<td>답변상태</td>
+		<td th:text="${board.boardStatus}"></td>
+	</tr>
+	<tr>
+		<td>제목</td>
+		<td th:text="${board.boardTitle}"></td>
+	</tr>
+	<tr>
+		<td>작성자</td>
+		<td th:text="${board.userId}"></td>
+	</tr>
+	<tr>
+		<td>작성일</td>
+		<td th:text="${board.boardInputdate}"></td>
+	</tr>
+	<tr>
+		<td><input type="button" value="삭제" th:onclick="deleteBoard()" ></td>
+	
+	</tr>
+	
+</table>
+</body>
+
+</html>

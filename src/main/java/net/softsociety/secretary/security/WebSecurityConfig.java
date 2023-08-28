@@ -31,6 +31,7 @@ public class WebSecurityConfig {
         		"/homeView/home",
         		"/boardView/list",
         		"/boardView/write",
+        		"/boardView/read",
         		"/thymeleaf",
         		"/**"
         		).permitAll()		//설정한 리소스의 접근을 인증절차 없이 허용
