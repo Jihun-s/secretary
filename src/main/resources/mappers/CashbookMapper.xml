@@ -64,4 +64,10 @@
 	WHERE 
 		EXTRACT(MONTH FROM trans_date) = #{month}
 </select>
+
+<!-- 내역 삭제 -->
+<delete id="deleteTrans" parameterType="Transaction">
+	DELETE FROM Secretary_Transaction
+	WHERE trans_id = #{transId} AND user_id = #{userId}
+</delete>
 </mapper>

@@ -195,44 +195,94 @@ function init() {
         type: 'GET',
         dataType: 'JSON',
         success: function(list) {
-            let table = `<table class="table">
-                            <thead>
-                                <tr>
+            let groupedData = {};
+
+            // 일자별로 데이터 그룹화
+            $(list).each(function(idx, ta) {
+                let date = ta.transDate;  // 거래날짜를 가져옵니다. (예: "2023-08-28")
+                if (!groupedData[date]) {
+                    groupedData[date] = [];
+                }
+                groupedData[date].push(ta);
+            });
+
+            let table = `<table class="table">`;
+
+            // 일자별로 테이블 생성
+            for (let date in groupedData) {
+                table += `<thead>
+                            <tr>
+                                <th colspan="6">${formatDate(date)}</th>
+                            </tr>
+                            <tr>
                                 <th>카테고리</th>
                                 <th>시간</th>
                                 <th>내용</th>
                                 <th>메모</th>
                                 <th>거래금액</th>
                                 <th></th>
-                                </tr>
-                            </thead>
-                            <tbody class="table-border-bottom-0">`;
-            
-            $(list).each(function(idx, ta) {
-                table += `<tr>
-                            <td style="width: 5rem;"><span class="badge bg-label-success me-1">${ta.transCategory2}</span></td>
-                            <td style="width: 5rem;">${ta.transTime}</td>
-                            <td><i class="fab fa-react fa-lg text-info me-3"></i> <strong>${ta.transPayee}</strong></td>
-                            <td>${ta.transMemo}</td>
-                            <td style="width: 5rem;">${ta.transAmount}</td>
-                            <td>
-                            <div class="dropdown">
-                                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></button>
-                                <div class="dropdown-menu">
-                                <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-edit-alt me-2"></i> Edit</a>
-                                <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-trash me-2"></i> Delete</a>
-                                </div>
-                            </div>
-                            </td>
-                        </tr>`;
-            });
+                            </tr>
+                        </thead>
+                        <tbody class="table-border-bottom-0">`;
 
-            table += `</tbody></table>`;
+                $(groupedData[date]).each(function(idx, ta) {
+                    table += `<tr>
+                                <td style="width: 5rem;">
+                                    <span class="badge bg-label-success me-1">${ta.transCategory2}</span>
+                                    <input type="hidden" value="${ta.transId}">
+                                </td>
+                                <td style="width: 5rem;">${ta.transTime}</td>
+                                <td><i class="fab fa-react fa-lg text-info me-3"></i> <strong>${ta.transPayee}</strong></td>
+                                <td>${ta.transMemo}</td>
+                                <td style="width: 5rem;">${ta.transAmount}</td>
+                                <td>
+                                <div class="dropdown">
+                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></button>
+                                    <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="javascript:updateTrans(${ta.transId});"><i class="bx bx-edit-alt me-2"></i> 수정</a>
+                                    <a class="dropdown-item" href="javascript:deleteTrans(${ta.transId});"><i class="bx bx-trash me-2"></i> 삭제</a>
+                                    </div>
+                                </div>
+                                </td>
+                            </tr>`;
+                });
+
+                table += `</tbody>`;
+            }
+
+            table += `</table>`;
 
             transListDiv.html(table);
         },
         error: function() {
             alert('내역 리스트 전송 실패');
+        }
+    });
+}
+
+/** 날짜 형식 변환 */
+function formatDate(inputDate) {
+    // YYYY-MM-DD 형식의 문자열을 받아서 "월 일 요일" 형식으로 반환하는 함수입니다.
+    let dateObj = new Date(inputDate);
+    let month = dateObj.getMonth() + 1;
+    let date = dateObj.getDate();
+    let dayNames = ["일", "월", "화", "수", "목", "금", "토"];
+    let day = dayNames[dateObj.getDay()];
+    return `${month}월 ${date}일　　${day}`;
+}
+
+/** 내역 삭제 */
+function deleteTrans(transId) {
+
+    $.ajax({
+        url: '/secretary/cashbook/trans/deleteTrans',
+        type: 'POST',
+        data: { transId: transId },
+        success: () => {
+            init();
+        },
+        error: () => {
+            alert('내역 삭제 전송 실패');
         }
     });
 }

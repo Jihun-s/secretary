@@ -21,4 +21,7 @@ public interface CashbookDAO {
 	/** 해당 월 내역 수 조회 */
 	int selectTransCntMonth(int curMonth);
 
+	/** 내역 삭제 */
+	int deleteTrans(Transaction trans);
+
 }
