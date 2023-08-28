@@ -21,7 +21,7 @@ public class User implements UserDetails{
 	private String userNickname;
 	private String userPw;
 	private String userProfileimg;
-	private int enabled;
+	private boolean enabled;
 	private String rolename;
 	private int familyId;
 	private String birthday;
@@ -61,7 +61,6 @@ public class User implements UserDetails{
 
     @Override
     public boolean isEnabled() {
-        return enabled == 1;
+        return enabled;
     }
-    
 }

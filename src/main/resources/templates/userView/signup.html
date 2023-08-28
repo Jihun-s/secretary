@@ -71,6 +71,21 @@
         <script th:src="@{../assets/js/config.js}"></script>
         <script>
         $(document).ready(function () {
+        	
+            
+            // 1. 폼의 'submit' 이벤트를 방지
+            $('#formAuthentication').submit(function(e) {
+                e.preventDefault();
+            });
+
+            // 2. "가입하기" 버튼에 클릭 이벤트를 추가
+            $('#registerButton').click(function() {
+                if (validateForm()) {
+                    $('#formAuthentication').off('submit').submit();
+                } else {
+                    alert('모든 필드를 올바르게 입력해주세요.');
+                }
+            });
 
             function updateRegisterButtonStatus() {
                 // 이메일 유효성 검사
@@ -188,86 +203,92 @@
             return emailRegex.test(email);
         }
 
-            function validateForm() {
-                let userId = document.getElementById('userId').value;
-                let userEmailPrefix = document.getElementById('userEmailPrefix').value;
-                let userEmailDomain = document.getElementById('userEmailDomain').value; // 이 부분을 수정했습니다.
-                let userNickname = document.getElementById('userNickname').value;
-                let userName = document.getElementById('userName').value;
-                let userPw = document.getElementById('userPw').value;
-                let birthday = document.getElementById('birthday').value;
-                let sex = document.querySelector('input[name="sex"]:checked');
+        function validateForm() {
+            let userId = document.getElementById('userId').value;
+            let userEmailPrefix = document.getElementById('userEmailPrefix').value;
+            let userEmailDomain = document.getElementById('userEmailDomain').value;
+            let userNickname = document.getElementById('userNickname').value;
+            let userName = document.getElementById('userName').value;
+            let userPw = document.getElementById('userPw').value;
+            let birthday = document.getElementById('birthday').value;
+            let sex = document.querySelector('input[name="sex"]:checked');
 
-                if (userId.length < 4 || userId.length > 13) {
-                    alert('아이디는 4~13자 사이여야 합니다.');
-                    return false;
-                }
-
-                let messages = []; // 경고 메시지를 저장할 배열
-
-                // 비밀번호 복잡성 체크
-                let regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/;
-                if (!regex.test(userPw)) {
-                    messages.push('비밀번호는 대문자, 소문자, 숫자를 포함해야 합니다.');
-                }
-
-                // 비밀번호 복잡성 특수문자 체크
-                if (!/(?=.*[@$!%*?&#])/.test(userPw)) {
-                    messages.push('특수 문자 (@, $, !, %, *, ?, &, #) 중 하나를 포함해야 합니다.');
-                }
-
-                if (!(userPw.length >= 8 && userPw.length <= 20)) {
-                    messages.push('비밀번호는 8~20자 사이여야 합니다.');
-                }
-
-                // 경고 메시지가 있으면 출력하고 false를 반환
-                if (messages.length > 0) {
-                    alert(messages.join('\n')); // 배열의 모든 메시지를 줄바꿈으로 연결하여 출력
-                    return false;
-                }
-
-                if (userEmailPrefix === '' || userEmailDomain === '') {
-                    alert('이메일을 완전히 입력해주세요.');
-                    return false;
-                }
-
-                // Add a hidden input to combine the email prefix and domain
-                let fullEmail = userEmailPrefix + '@' + userEmailDomain;
-                let hiddenInput = document.createElement('input');
-                hiddenInput.setAttribute('type', 'hidden');
-                hiddenInput.setAttribute('name', 'userEmail');
-                hiddenInput.setAttribute('value', fullEmail);
-                document.getElementById('formAuthentication').appendChild(hiddenInput);
-
-                // 닉네임이 비어있으면 이름으로 설정
-                if (!userNickname) {
-                    userNickname = userName;
-                    document.getElementById('userNickname').value = userName;
-                }
-
-                // 닉네임의 길이 검사
-                if (userNickname.length < 2 || userNickname.length > 10) {
-                    alert('닉네임은 2~10자 사이여야 합니다.');
-                    return false;
-                }
-
-                if (userName.length < 2 || userName.length > 10) {
-                    alert('이름은 2~10자 사이여야 합니다.');
-                    return false;
-                }
-
-                if (!birthday) {
-                    alert('생년월일을 입력해주세요.');
-                    return false;
-                }
-
-                if (!sex) {
-                    alert('성별을 선택해주세요.');
-                    return false;
-                }
-
-                return true;
+            if (userId.length < 4 || userId.length > 13) {
+                alert('아이디는 4~13자 사이여야 합니다.');
+                return false;
             }
+
+            let messages = []; // 경고 메시지를 저장할 배열
+
+            // 비밀번호 복잡성 체크
+            let regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/;
+            if (!regex.test(userPw)) {
+                messages.push('비밀번호는 대문자, 소문자, 숫자를 포함해야 합니다.');
+            }
+
+            // 비밀번호 복잡성 특수문자 체크
+            if (!/(?=.*[@$!%*?&#])/.test(userPw)) {
+                messages.push('특수 문자 (@, $, !, %, *, ?, &, #) 중 하나를 포함해야 합니다.');
+            }
+
+            if (!(userPw.length >= 8 && userPw.length <= 20)) {
+                messages.push('비밀번호는 8~20자 사이여야 합니다.');
+            }
+
+            // 경고 메시지가 있으면 출력하고 false를 반환
+            if (messages.length > 0) {
+                alert(messages.join('\n')); // 배열의 모든 메시지를 줄바꿈으로 연결하여 출력
+                return false;
+            }
+
+            if (userEmailPrefix === '' || userEmailDomain === '') {
+                alert('이메일을 완전히 입력해주세요.');
+                return false;
+            }
+
+            // 기존에 생성된 userEmail 인풋 필드가 있다면 삭제
+            let existingEmailInput = document.querySelector('input[name="userEmail"]');
+            if (existingEmailInput) {
+                existingEmailInput.remove(); // 기존 인풋 필드 삭제
+            }
+
+            // 새로운 userEmail 인풋 필드 생성 후 폼에 추가
+            let fullEmail = userEmailPrefix + '@' + userEmailDomain;
+            let hiddenInput = document.createElement('input');
+            hiddenInput.setAttribute('type', 'hidden');
+            hiddenInput.setAttribute('name', 'userEmail');
+            hiddenInput.setAttribute('value', fullEmail);
+            document.getElementById('formAuthentication').appendChild(hiddenInput);
+
+            // 닉네임이 비어있으면 이름으로 설정
+            if (!userNickname) {
+                userNickname = userName;
+                document.getElementById('userNickname').value = userName;
+            }
+
+            // 닉네임의 길이 검사
+            if (userNickname.length < 2 || userNickname.length > 10) {
+                alert('닉네임은 2~10자 사이여야 합니다.');
+                return false;
+            }
+
+            if (userName.length < 2 || userName.length > 10) {
+                alert('이름은 2~10자 사이여야 합니다.');
+                return false;
+            }
+
+            if (!birthday) {
+                alert('생년월일을 입력해주세요.');
+                return false;
+            }
+
+            if (!sex) {
+                alert('성별을 선택해주세요.');
+                return false;
+            }
+
+            return true;
+        }
 
             function handleEmailDomainChange() {
                 const domainInputField = document.getElementById('userEmailDomain');
