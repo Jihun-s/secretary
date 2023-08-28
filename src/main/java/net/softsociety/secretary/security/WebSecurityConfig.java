@@ -38,6 +38,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 "/homeView/home",
                 "/boardView/list",
                 "/boardView/write",
+                "/cashbook/trans/setTrans",
                 "/thymeleaf",
                 "/**"
                     ).permitAll()

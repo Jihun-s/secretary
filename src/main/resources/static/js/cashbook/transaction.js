@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    
+    $('#setTransBt').click(setTrans)
 });
 
 /** 사진 입력 버튼 */
@@ -70,7 +70,7 @@ function validateTransType() {
 
 /** 거래내용 유효성 검사 */
 function validateTransPayee() {
-    const input = document.getElementById('basic-default-phone');
+    const input = document.getElementById('transPayee');
     const transPayeeError = document.getElementById('transPayeeError');
     const value = input.value.trim();
     
@@ -108,6 +108,12 @@ function validateTransAmount() {
         transAmountError.text('정수를 입력하세요.');
         return false;
     }
+    
+    // 콤마나 기타 문자가 포함되어 있는지 확인
+    if(/[^0-9]/.test(transAmount)) {
+        transAmountError.text('거래금액에는 숫자만 입력하세요.');
+        return false;
+    }
 
     // 범위 오류 (음수 or 12자리 이상)
     if(parseInt(transAmount) < 0 || transAmount.length > 12) {
@@ -117,4 +123,51 @@ function validateTransAmount() {
     transAmountError.text('');
     
     return true;
+}
+
+
+function setTrans() {
+    if(validateTrans()) {
+        setTransAjax();
+    }
+}
+
+function setTransAjax() {
+    let transDate = $('#transDate');
+    let transAmount = $('#transAmount');
+    let transCategory1 = $('#transCategory1');
+    let transCategory2 = $('#transCategory2');
+    let transType = $("input[name='transType']:checked"); 
+    let transPayee = $('#transPayee');
+    let transMemo = $('#transMemo');
+
+    $.ajax({
+        url: '/secretary/cashbook/trans/setTrans',
+        type: 'post',
+        data: { 
+            transDate: transDate.val(), 
+            transAmount: transAmount.val(), 
+            transCategory1: transCategory1.val(), 
+            transCategory2: transCategory2.val(),
+            transType: transType.val(), 
+            transPayee: transPayee.val(),
+            transMemo: transMemo.val() 
+        },
+        success: function() {
+            alert('서버 전송 성공');
+
+            // 입력창 비우기 
+            transDate.html("");
+            transAmount.val("");
+            transCategory1.html("");
+            transCategory2.html("");
+            $('#inlineRadio1').prop('checked', false);
+            $('#inlineRadio2').prop('checked', false);
+            transPayee.val("");
+            transMemo.val("");
+        },
+        error: function() {
+            alert('서버 전송 실패');
+        }
+    });
 }
