@@ -80,6 +80,9 @@
 
     <!-- Page CSS -->
 
+    <!-- 소영 추가 JS -->
+    <script th:src="@{/js/jquery-3.7.0.js}"></script> 
+
     <!-- Helpers -->
     <script th:src="@{/assets/vendor/js/helpers.js}"></script>
 
@@ -342,7 +345,7 @@
                   </a>
                 </li>
                 <li class="menu-item">
-                  <a th:href="@{/cashbook/transaction}" class="menu-link">
+                  <a th:href="@{/cashbook/trans}" class="menu-link">
                     <div data-i18n="Alerts">내역 보기</div>
                   </a>
                 </li>
@@ -601,7 +604,7 @@
                   <!-- 메뉴이름 -->
                   <h1 style="display: inline; vertical-align: middle">예산 보기</h1>
                 </span>
-              </div>
+              </div> 
 
               <!-- 컨텐츠 -->
               <div class="row">

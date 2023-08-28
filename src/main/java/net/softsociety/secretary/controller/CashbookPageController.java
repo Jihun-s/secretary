@@ -9,7 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Controller
 @RequestMapping("cashbook")
-public class CashbookController {
+public class CashbookPageController {
 
 	/** 메인 */
 	@GetMapping({"", "/"})
@@ -19,7 +19,7 @@ public class CashbookController {
 	}
 	
 	/** 내역 */
-	@GetMapping("transaction")
+	@GetMapping("trans")
 	public String cashbookTransaction() {
 		
 		return "cashbookView/transaction";

@@ -21,3 +21,8 @@
 .insertClothes{
 	text-align:center;
 }
+
+.insertClothes input {
+	text-align:center;
+	font-size:10px; 
+}

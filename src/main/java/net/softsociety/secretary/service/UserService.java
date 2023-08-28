@@ -7,9 +7,15 @@ public interface UserService {
 	
 	boolean verify(String token);
 
-	User findByEmail(String email);
+	User findByEmailOrUserId(String emailOrUserId);
 
 	boolean existsByEmail(String userEmail);
 
 	boolean existsByUserId(String userId);
+	
+    void sendPasswordResetToken(String userEmail, String siteURL);
+    
+    User findByVerificationToken(String token);
+    
+    void resetPassword(User user, String newPassword);
 }

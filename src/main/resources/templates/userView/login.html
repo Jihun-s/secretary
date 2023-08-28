@@ -155,61 +155,61 @@
                                             </g>
                                         </svg>
                                     </span>
-                                    <span class="app-brand-text demo text-body fw-bolder">Sneat</span>
+                                    <span class="app-brand-text demo text-body fw-bolder">생활비서</span>
                                 </a>
                             </div>
                             <!-- /Logo -->
-                            <h4 class="mb-2">Welcome to Sneat! 👋</h4>
-                            <p class="mb-4">Please sign-in to your account and start the adventure</p>
-
-                            <form id="formAuthentication" class="mb-3" th:action="@{/user/login}" method="POST">
-                                <div class="mb-3">
-                                    <label for="email" class="form-label">Email or Username</label>
-                                    <input
-                                        type="text"
-                                        class="form-control"
-                                        id="email"
-                                        name="userEmail"
-                                        placeholder="Enter your email or username"
-                                        autofocus
-                                    />
-                                </div>
-                                <div class="mb-3 form-password-toggle">
-                                    <div class="d-flex justify-content-between">
-                                        <label class="form-label" for="password">Password</label>
-                                        <a th:href="@{/user/forgotPw}">
-                                            <small>Forgot Password?</small>
-                                        </a>
-                                    </div>
-                                    <div class="input-group input-group-merge">
-                                        <input
-                                            type="password"
-                                            id="password"
-                                            class="form-control"
-                                            name="userPw"
-                                            placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
-                                            aria-describedby="password"
-                                        />
-                                        <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
-                                    </div>
-                                </div>
-                                <div class="mb-3">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="remember-me" />
-                                        <label class="form-check-label" for="remember-me"> Remember Me </label>
-                                    </div>
-                                </div>
-                                <div class="mb-3">
-                                    <button class="btn btn-primary d-grid w-100" type="submit">Sign in</button>
-                                </div>
-                            </form>
-
-                            <p class="text-center">
-                                <span>New on our platform?</span>
-                                <a href="auth-register-basic.html">
-                                    <span>Create an account</span>
-                                </a>
-                            </p>
+							<h4 class="mb-2">생활비서에 오신 것을 환영합니다!</h4>
+							<p class="mb-4">계정에 로그인하고 경험해보세요!</p>
+							
+							<form id="formAuthentication" class="mb-3" th:action="@{/user/login}" method="POST">
+							    <div class="mb-3">
+							        <label for="email" class="form-label">이메일 또는 사용자명</label>
+							        <input
+							            type="text"
+							            class="form-control"
+							            id="email"
+							            name="emailOrUserId"
+							            placeholder="이메일 또는 사용자명을 입력하세요"
+							            autofocus
+							        />
+							    </div>
+							    <div class="mb-3 form-password-toggle">
+							        <div class="d-flex justify-content-between">
+							            <label class="form-label" for="password">비밀번호</label>
+							            <a th:href="@{/user/forgot-password}">
+							                <small>비밀번호를 잊으셨나요?</small>
+							            </a>
+							        </div>
+							        <div class="input-group input-group-merge">
+							            <input
+							                type="password"
+							                id="password"
+							                class="form-control"
+							                name="userPw"
+							                placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
+							                aria-describedby="password"
+							            />
+							            <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
+							        </div>
+							    </div>
+							    <div class="mb-3">
+							        <div class="form-check">
+							            <input class="form-check-input" type="checkbox" id="remember-me" name="remember-me" />
+							            <label class="form-check-label" for="remember-me"> 로그인 유지 </label>
+							        </div>
+							    </div>
+							    <div class="mb-3">
+							        <button class="btn btn-primary d-grid w-100" type="submit">로그인</button>
+							    </div>
+							</form>
+							
+							<p class="text-center">
+							    <span>플랫폼에 처음 오셨나요?</span>
+							    <a th:href="@{../user/signup}">
+							        <span>계정 생성하기</span>
+							    </a>
+							</p>
                         </div>
                     </div>
                     <!-- /Register -->

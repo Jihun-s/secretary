@@ -32,28 +32,7 @@
     <title>옷장 :: 1</title>
 	<script th:src="@{/js/jquery-3.7.0.js}"></script>
 	<script type="text/javascript">
-	$(document).ready(function() {
-		  $("#selectedSize").css("visibility","hidden");
-		  $("#selectedSeason").css("visibility","hidden");
-		  $('#categoryBox').change(function() {
-		    var result = $('#categoryBox option:selected').val();
-		    if (result == 'size') {
-		      $('#selectedKind').hide();
-		      $('#selectedSeason').hide();
-		      $("#selectedSize").css("visibility","visible");
-		    } else if(result == 'season'){
-		    	$('#selectedKind').hide();
-		    	$("#selectedSize").css("visibility","hidden");
-		    	$("#selectedSeason").show();
-		    } else {
-		    	$("#selectedSeason").hide();
-		    	$("#selectedSize").css("visibility","hidden");
-		    	$('#selectedKind').show();
-		    }
-		  }); 
-		}); 
-	
-	
+
 	</script>
 	
     <meta name="description" content="" />
@@ -104,7 +83,7 @@
     <link rel="stylesheet" th:href="@{/css/index.css}" />
     
     <!-- 혜린 추가 CSS -->
-	<link rel="stylesheet" th:href="@{/css/inClosetCSS1.css}">
+	<link rel="stylesheet" th:href="@{/css/inClosetCSS.css}">
 	
 	
     <!-- Page CSS -->
@@ -723,8 +702,8 @@
                     <div class="card-body">
                       <img th:src="@{/images/shirt.png}" id="shirt">
                       <div class="insertClothes">
-                      <input class="btn btn-outline-danger" type="button" value="사진 등록" style="font-size:10px; height:25px;">
-                      <input class="btn btn-outline-danger" type="button" value="웹에서 찾기" style="font-size:10px; height:25px;">
+                      <input type="file" value="사진 등록" id="uploadIMG" accept="image/*">
+                      <input type="button" value="웹에서 찾기">
                       </div>
                     </div>
                   </div>

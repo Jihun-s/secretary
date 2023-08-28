@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+
+<!-- =========================================================
+* Sneat - Bootstrap 5 HTML Admin Template - Pro | v1.0.0
+==============================================================
+
+* Product Page: https://themeselection.com/products/sneat-bootstrap-html-admin-template/
+* Created by: ThemeSelection
+* License: You must have a valid license purchased in order to legally use the theme for your project.
+* Copyright ThemeSelection (https://themeselection.com)
+
+=========================================================
+ -->
+<!-- beautify ignore:start -->
+<html
+    lang="en"
+    class="light-style customizer-hide"
+    dir="ltr"
+    data-theme="theme-default"
+    th:data-assets-path="@{../assets/}"
+    data-template="vertical-menu-template-free"
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
+    <head>
+        <meta charset="utf-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
+        />
+
+        <title>Register Basic - Pages | Sneat - Bootstrap 5 HTML Admin Template - Pro</title>
+
+        <meta name="description" content="" />
+
+        <!-- Favicon -->
+        <link rel="icon" type="image/x-icon" th:href="@{../assets/img/favicon/favicon.ico}" />
+
+        <!-- Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+            rel="stylesheet"
+        />
+
+        <!-- Icons. Uncomment required icon fonts -->
+        <link rel="stylesheet" th:href="@{../assets/vendor/fonts/boxicons.css}" />
+
+        <!-- Core CSS -->
+        <link rel="stylesheet" th:href="@{../assets/vendor/css/core.css}" class="template-customizer-core-css" />
+        <link
+            rel="stylesheet"
+            th:href="@{../assets/vendor/css/theme-default.css}"
+            class="template-customizer-theme-css"
+        />
+        <link rel="stylesheet" th:href="@{../assets/css/demo.css}" />
+
+        <!-- Vendors CSS -->
+        <link rel="stylesheet" th:href="@{../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css}" />
+
+        <!-- Page CSS -->
+        <!-- Page -->
+        <link rel="stylesheet" th:href="@{../assets/vendor/css/pages/page-auth.css}" />
+        <!-- Helpers -->
+        <script th:src="@{../assets/vendor/js/helpers.js}"></script>
+
+        <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
+        <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
+        <script th:src="@{../assets/vendor/libs/jquery/jquery.js}"></script>
+        <script th:src="@{../assets/js/config.js}"></script>
+        <script>
+        $(document).ready(function () {
+        	
+            
+            // 1. 폼의 'submit' 이벤트를 방지
+            $('#formAuthentication').submit(function(e) {
+                e.preventDefault();
+            });
+
+            // 2. "가입하기" 버튼에 클릭 이벤트를 추가
+            $('#registerButton').click(function() {
+                if (validateForm()) {
+                    $('#formAuthentication').off('submit').submit();
+                } else {
+                    alert('모든 필드를 올바르게 입력해주세요.');
+                }
+            });
+
+            function updateRegisterButtonStatus() {
+                // 이메일 유효성 검사
+                var userEmail = $('#userEmailPrefix').val() + '@' + $('#userEmailDomain').val();
+                var isEmailValid = validateEmail(userEmail);
+
+                // 이용약관 동의 여부 검사
+                var isTermsChecked = $('#termsAndConditions').prop('checked');
+
+                // 두 조건 모두 만족하는 경우에만 "가입" 버튼 활성화
+                if (isEmailValid && isTermsChecked) {
+                    $('#registerButton').attr('disabled', false);
+                } else {
+                    $('#registerButton').attr('disabled', true);
+                }
+            }
+
+            $('#checkUserIdButton').click(function (event) {
+                event.preventDefault(); // 폼의 제출을 막음
+
+                var userId = $('#userId').val();
+                // 아이디 길이 검사
+                if (userId.length < 4 || userId.length > 13) {
+                    alert('아이디는 4~13자 사이여야 합니다.');
+                    return;
+                }
+
+                // AJAX 요청을 통해 아이디 중복 여부 확인
+                $.ajax({
+                    url: '/secretary/user/idcheck', // 실제 URL로 수정해야 함
+                    method: 'POST',
+                    data: { userId: userId },
+                    success: function (response) {
+                        if (response === 1) {
+                            // 중복인 경우
+                            alert('이미 사용 중인 아이디입니다.');
+                        } else if (response === 0) {
+                            // 중복이 아닌 경우
+                            alert('사용 가능한 아이디입니다.');
+                            $('#userId').prop('readonly', true); // 아이디 입력 필드를 읽기 전용으로 설정
+                        } else {
+                            alert('서버 오류가 발생했습니다.');
+                        }
+                    },
+                    error: function () {
+                        alert('AJAX 요청 중 오류가 발생했습니다.');
+                    },
+                });
+            });
+
+            $('#userEmailPrefix, #userEmailDomain').blur(function () {
+                var userEmail = $('#userEmailPrefix').val() + '@' + $('#userEmailDomain').val();
+
+                if (!validateEmail(userEmail)) {
+                    $('#userEmailErrorMessage').text('유효하지 않은 이메일 형식입니다.').css('color', 'red');
+                    return;
+                }
+
+                $.ajax({
+                    url: '/secretary/user/emailcheck',
+                    method: 'post',
+                    data: { userEmail: userEmail },
+                    success: function (response) {
+                        if (response == 1) {
+                            $('#userEmailErrorMessage').text('이미 사용중인 이메일입니다.').css('color', 'red');
+                        } else {
+                            $('#userEmailErrorMessage').text('사용 가능한 이메일입니다.').css('color', 'blue');
+                        }
+                        updateRegisterButtonStatus();
+                    },
+                });
+            });
+
+            $('#userEmailPrefix, #userEmailDomain').focus(function () {
+                $('#userEmailErrorMessage').text(''); // 이메일 입력창에 다시 포커스되면 에러 메시지를 초기화
+            });
+
+            $('#termsAndConditions').change(updateRegisterButtonStatus); // 이용약관 체크박스 상태 변경 시 "가입" 버튼 상태 업데이트
+
+            // 이용약관 버튼 클릭 이벤트
+            $('#showTerms').click(function (event) {
+                event.preventDefault();
+                $('#termsModal').show();
+                $('#termsModal').focus(); // 모달창으로 포커스 이동
+            });
+
+            // 모달창 닫기 버튼 클릭 이벤트
+            $('#closeTerms').click(function () {
+                $('#termsModal').hide();
+                $('#showTerms').focus(); // 원래의 '이용약관 보기' 버튼으로 포커스 이동
+            });
+
+            // 모달 내의 체크박스 상태 변경을 메인 페이지의 체크박스에 반영
+            $('#modalTermsCheckbox').change(function() {
+                if ($(this).prop('checked')) {
+                    $('#termsAndConditions').prop('checked', true);
+                    updateRegisterButtonStatus(); // 기존에 작성했던 "가입" 버튼 상태 업데이트 함수 호출
+                }
+            });
+            
+            $('#termsSection, #privacySection').scroll(function() {
+                // 스크롤이 끝에 거의 도달했는지 확인
+                if (checkScrollEnd($('#termsSection'), 5) && checkScrollEnd($('#privacySection'), 5)) {
+                    $('#modalTermsCheckbox').prop('disabled', false);
+                }
+            });
+
+            function checkScrollEnd($element, buffer = 0) {
+                return $element.scrollTop() + $element.innerHeight() + buffer >= $element[0].scrollHeight;
+            }
+        });
+
+        function validateEmail(email) {
+            var emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+            return emailRegex.test(email);
+        }
+
+        function validateForm() {
+            let userId = document.getElementById('userId').value;
+            let userEmailPrefix = document.getElementById('userEmailPrefix').value;
+            let userEmailDomain = document.getElementById('userEmailDomain').value;
+            let userNickname = document.getElementById('userNickname').value;
+            let userName = document.getElementById('userName').value;
+            let userPw = document.getElementById('userPw').value;
+            let birthday = document.getElementById('birthday').value;
+            let sex = document.querySelector('input[name="sex"]:checked');
+
+            if (userId.length < 4 || userId.length > 13) {
+                alert('아이디는 4~13자 사이여야 합니다.');
+                return false;
+            }
+
+            let messages = []; // 경고 메시지를 저장할 배열
+
+            // 비밀번호 복잡성 체크
+            let regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/;
+            if (!regex.test(userPw)) {
+                messages.push('비밀번호는 대문자, 소문자, 숫자를 포함해야 합니다.');
+            }
+
+            // 비밀번호 복잡성 특수문자 체크
+            if (!/(?=.*[@$!%*?&#])/.test(userPw)) {
+                messages.push('특수 문자 (@, $, !, %, *, ?, &, #) 중 하나를 포함해야 합니다.');
+            }
+
+            if (!(userPw.length >= 8 && userPw.length <= 20)) {
+                messages.push('비밀번호는 8~20자 사이여야 합니다.');
+            }
+
+            // 경고 메시지가 있으면 출력하고 false를 반환
+            if (messages.length > 0) {
+                alert(messages.join('\n')); // 배열의 모든 메시지를 줄바꿈으로 연결하여 출력
+                return false;
+            }
+
+            if (userEmailPrefix === '' || userEmailDomain === '') {
+                alert('이메일을 완전히 입력해주세요.');
+                return false;
+            }
+
+            // 기존에 생성된 userEmail 인풋 필드가 있다면 삭제
+            let existingEmailInput = document.querySelector('input[name="userEmail"]');
+            if (existingEmailInput) {
+                existingEmailInput.remove(); // 기존 인풋 필드 삭제
+            }
+
+            // 새로운 userEmail 인풋 필드 생성 후 폼에 추가
+            let fullEmail = userEmailPrefix + '@' + userEmailDomain;
+            let hiddenInput = document.createElement('input');
+            hiddenInput.setAttribute('type', 'hidden');
+            hiddenInput.setAttribute('name', 'userEmail');
+            hiddenInput.setAttribute('value', fullEmail);
+            document.getElementById('formAuthentication').appendChild(hiddenInput);
+
+            // 닉네임이 비어있으면 이름으로 설정
+            if (!userNickname) {
+                userNickname = userName;
+                document.getElementById('userNickname').value = userName;
+            }
+
+            // 닉네임의 길이 검사
+            if (userNickname.length < 2 || userNickname.length > 10) {
+                alert('닉네임은 2~10자 사이여야 합니다.');
+                return false;
+            }
+
+            if (userName.length < 2 || userName.length > 10) {
+                alert('이름은 2~10자 사이여야 합니다.');
+                return false;
+            }
+
+            if (!birthday) {
+                alert('생년월일을 입력해주세요.');
+                return false;
+            }
+
+            if (!sex) {
+                alert('성별을 선택해주세요.');
+                return false;
+            }
+
+            return true;
+        }
+
+            function handleEmailDomainChange() {
+                const domainInputField = document.getElementById('userEmailDomain');
+                const selectedDomain = document.getElementById('emailDomainSelect').value;
+
+                if (selectedDomain === 'custom') {
+                    domainInputField.value = '';
+                    domainInputField.removeAttribute('readonly');
+                    domainInputField.placeholder = 'Domain';
+                } else {
+                    domainInputField.value = selectedDomain;
+                    domainInputField.setAttribute('readonly', true);
+                }
+
+                const userEmail = $('#userEmailPrefix').val() + '@' + $('#userEmailDomain').val();
+                if (!validateEmail(userEmail)) {
+                    $('#userEmailErrorMessage').text('유효하지 않은 이메일 형식입니다.').css('color', 'red');
+                    $('#registerButton').attr('disabled', true);
+                } else {
+                    // 유효한 이메일 형식인 경우 추가적인 중복 검사를 수행하거나 원하는 로직을 추가
+                    $('#userEmailErrorMessage').text('사용 가능한 이메일입니다.').css('color', 'blue');
+                    $('#registerButton').attr('disabled', false);
+                }
+            }
+        </script>
+    </head>
+
+    <body>
+        <!-- Content -->
+
+        <div class="container-xxl">
+            <div class="authentication-wrapper authentication-basic container-p-y">
+                <div class="authentication-inner">
+                    <!-- Register Card -->
+                    <div class="card">
+                        <div class="card-body">
+                            <!-- Logo -->
+                            <div class="app-brand justify-content-center">
+                                <a href="index.html" class="app-brand-link gap-2">
+                                    <span class="app-brand-logo demo">
+                                        <svg
+                                            width="25"
+                                            viewBox="0 0 25 42"
+                                            version="1.1"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            xmlns:xlink="http://www.w3.org/1999/xlink"
+                                        >
+                                            <defs>
+                                                <path
+                                                    d="M13.7918663,0.358365126 L3.39788168,7.44174259 C0.566865006,9.69408886 -0.379795268,12.4788597 0.557900856,15.7960551 C0.68998853,16.2305145 1.09562888,17.7872135 3.12357076,19.2293357 C3.8146334,19.7207684 5.32369333,20.3834223 7.65075054,21.2172976 L7.59773219,21.2525164 L2.63468769,24.5493413 C0.445452254,26.3002124 0.0884951797,28.5083815 1.56381646,31.1738486 C2.83770406,32.8170431 5.20850219,33.2640127 7.09180128,32.5391577 C8.347334,32.0559211 11.4559176,30.0011079 16.4175519,26.3747182 C18.0338572,24.4997857 18.6973423,22.4544883 18.4080071,20.2388261 C17.963753,17.5346866 16.1776345,15.5799961 13.0496516,14.3747546 L10.9194936,13.4715819 L18.6192054,7.984237 L13.7918663,0.358365126 Z"
+                                                    id="path-1"
+                                                ></path>
+                                                <path
+                                                    d="M5.47320593,6.00457225 C4.05321814,8.216144 4.36334763,10.0722806 6.40359441,11.5729822 C8.61520715,12.571656 10.0999176,13.2171421 10.8577257,13.5094407 L15.5088241,14.433041 L18.6192054,7.984237 C15.5364148,3.11535317 13.9273018,0.573395879 13.7918663,0.358365126 C13.5790555,0.511491653 10.8061687,2.3935607 5.47320593,6.00457225 Z"
+                                                    id="path-3"
+                                                ></path>
+                                                <path
+                                                    d="M7.50063644,21.2294429 L12.3234468,23.3159332 C14.1688022,24.7579751 14.397098,26.4880487 13.008334,28.506154 C11.6195701,30.5242593 10.3099883,31.790241 9.07958868,32.3040991 C5.78142938,33.4346997 4.13234973,34 4.13234973,34 C4.13234973,34 2.75489982,33.0538207 2.37032616e-14,31.1614621 C-0.55822714,27.8186216 -0.55822714,26.0572515 -4.05231404e-15,25.8773518 C0.83734071,25.6075023 2.77988457,22.8248993 3.3049379,22.52991 C3.65497346,22.3332504 5.05353963,21.8997614 7.50063644,21.2294429 Z"
+                                                    id="path-4"
+                                                ></path>
+                                                <path
+                                                    d="M20.6,7.13333333 L25.6,13.8 C26.2627417,14.6836556 26.0836556,15.9372583 25.2,16.6 C24.8538077,16.8596443 24.4327404,17 24,17 L14,17 C12.8954305,17 12,16.1045695 12,15 C12,14.5672596 12.1403557,14.1461923 12.4,13.8 L17.4,7.13333333 C18.0627417,6.24967773 19.3163444,6.07059163 20.2,6.73333333 C20.3516113,6.84704183 20.4862915,6.981722 20.6,7.13333333 Z"
+                                                    id="path-5"
+                                                ></path>
+                                            </defs>
+                                            <g
+                                                id="g-app-brand"
+                                                stroke="none"
+                                                stroke-width="1"
+                                                fill="none"
+                                                fill-rule="evenodd"
+                                            >
+                                                <g id="Brand-Logo" transform="translate(-27.000000, -15.000000)">
+                                                    <g id="Icon" transform="translate(27.000000, 15.000000)">
+                                                        <g id="Mask" transform="translate(0.000000, 8.000000)">
+                                                            <mask id="mask-2" fill="white">
+                                                                <use xlink:href="#path-1"></use>
+                                                            </mask>
+                                                            <use fill="#696cff" xlink:href="#path-1"></use>
+                                                            <g id="Path-3" mask="url(#mask-2)">
+                                                                <use fill="#696cff" xlink:href="#path-3"></use>
+                                                                <use
+                                                                    fill-opacity="0.2"
+                                                                    fill="#FFFFFF"
+                                                                    xlink:href="#path-3"
+                                                                ></use>
+                                                            </g>
+                                                            <g id="Path-4" mask="url(#mask-2)">
+                                                                <use fill="#696cff" xlink:href="#path-4"></use>
+                                                                <use
+                                                                    fill-opacity="0.2"
+                                                                    fill="#FFFFFF"
+                                                                    xlink:href="#path-4"
+                                                                ></use>
+                                                            </g>
+                                                        </g>
+                                                        <g
+                                                            id="Triangle"
+                                                            transform="translate(19.000000, 11.000000) rotate(-300.000000) translate(-19.000000, -11.000000) "
+                                                        >
+                                                            <use fill="#696cff" xlink:href="#path-5"></use>
+                                                            <use
+                                                                fill-opacity="0.2"
+                                                                fill="#FFFFFF"
+                                                                xlink:href="#path-5"
+                                                            ></use>
+                                                        </g>
+                                                    </g>
+                                                </g>
+                                            </g>
+                                        </svg>
+                                    </span>
+                                    <span class="app-brand-text demo text-body fw-bolder">생활비서</span>
+                                </a>
+                            </div>
+                            <!-- /Logo -->
+                            <h4 class="mb-2">환영합니다! 🚀</h4>
+                            <p class="mb-4">가정의 현황과 소식을 편리하게 다뤄보아요!</p>
+							<form
+							    id="formAuthentication"
+							    class="mb-3"
+							    th:action="@{/user/register}"
+							    method="POST"
+							    onsubmit="return validateForm()"
+							>
+							    <!-- User ID -->
+							    <div class="mb-3">
+							        <label for="userId" class="form-label">사용자 ID</label>
+							        <div class="input-group">
+							            <input
+							                type="text"
+							                class="form-control"
+							                id="userId"
+							                name="userId"
+							                placeholder="사용자 ID를 입력하세요"
+							                maxlength="13"
+							                autofocus
+							                required
+							            />
+							            <button class="btn btn-secondary" id="checkUserIdButton">
+							                중복 확인
+							            </button>
+							        </div>
+							    </div>
+							
+							    <!-- 이메일 작성 -->
+							    <div class="mb-3">
+							        <label for="userEmail" class="form-label">이메일</label>
+							        <div class="input-group" id="emailInputGroup">
+							            <input
+							                type="text"
+							                class="form-control"
+							                id="userEmailPrefix"
+							                placeholder="이메일"
+							                maxlength="128"
+							            />
+							            <span class="input-group-text">@</span>
+							            <input
+							                type="text"
+							                class="form-control"
+							                id="userEmailDomain"
+							                placeholder="도메인"
+							                maxlength="128"
+							            />
+							            <select
+							                id="emailDomainSelect"
+							                class="form-control"
+							                onchange="handleEmailDomainChange()"
+							            >
+							                <option value="custom">직접 입력</option>
+							                <option value="naver.com">naver.com</option>
+							                <option value="gmail.com">gmail.com</option>
+							                <option value="daum.net">daum.net</option>
+							                <option value="icloud.com">icloud.com</option>
+							            </select>
+							        </div>
+							        <div class="mb-3">
+							            <label
+							                for="userEmailErrorMessage"
+							                class="form-label"
+							                id="userEmailErrorMessage"
+							            ></label>
+							        </div>
+							    </div>
+							    <!-- /이메일 작성 -->
+							
+							    <!-- Name -->
+							    <div class="mb-3">
+							        <label for="userName" class="form-label">이름</label>
+							        <input
+							            type="text"
+							            class="form-control"
+							            id="userName"
+							            name="userName"
+							            placeholder="이름을 입력하세요"
+							            maxlength="10"
+							            required
+							        />
+							    </div>
+							
+							    <!-- Nickname -->
+							    <div class="mb-3">
+							        <label for="userNickname" class="form-label">닉네임</label>
+							        <input
+							            type="text"
+							            class="form-control"
+							            id="userNickname"
+							            name="userNickname"
+							            placeholder="닉네임을 입력하세요"
+							            maxlength="10"
+							        />
+							    </div>
+							
+							    <!-- Password -->
+							    <div class="mb-3 form-password-toggle">
+							        <label class="form-label" for="userPw">비밀번호</label>
+							        <div class="input-group input-group-merge">
+							            <input
+							                type="password"
+							                id="userPw"
+							                class="form-control"
+							                name="userPw"
+							                placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
+							                aria-describedby="password"
+							                maxlength="13"
+							                required
+							            />
+							            <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
+							        </div>
+							    </div>
+							    <div class="mb-3">
+							        <label for="birthday" class="form-label">생일</label>
+							        <input type="date" class="form-control" id="birthday" name="birthday" required />
+							    </div>
+							    <div class="mb-3">
+							        <label class="form-label">성별</label>
+							        <div class="form-check">
+							            <input class="form-check-input" type="radio" id="female" name="sex" value="0" />
+							            <label class="form-check-label" for="female">여성</label>
+							        </div>
+							        <div class="form-check">
+							            <input class="form-check-input" type="radio" id="male" name="sex" value="1" />
+							            <label class="form-check-label" for="male">남성</label>
+							        </div>
+							    </div>
+							<!-- 이용약관 및 개인정보 처리 방침 모달 -->
+							<div id="termsModal" style="display:none; position: fixed; top: 10%; left: 10%; width: 80%; height: 70%; background: white; padding: 20px; border: 1px solid black; z-index: 999;">
+							    <h2>이용약관</h2>
+							    <div id="termsSection" style="height: 34%; overflow-y: scroll;">
+							        <p>
+							            ... 실제 이용약관 내용 ...
+							            내용..<br>
+							            내용..<br>
+							            내용..<br>
+							            내용..<br>
+							            내용..<br>
+							            내용..<br>
+							            내용..<br>
+							            내용..<br>
+							                        내용..<br>
+							        </p>
+							    </div>
+							
+							    <h2>개인정보 처리 방침</h2>
+							    <div id="privacySection" style="height: 34%; overflow-y: scroll;">
+							        <p>
+							            ... 실제 개인정보 처리 방침 내용 ...
+							            내용..<br>
+							            내용..<br>
+							            내용..<br>
+							            내용..<br>
+							            내용..<br>
+							            내용..<br>
+							            내용..<br>
+							            내용..<br>
+							                        내용..<br>
+							        </p>
+							    </div>
+							
+							    <div>
+							        <input type="checkbox" id="modalTermsCheckbox" disabled>
+							        <label for="modalTermsCheckbox">동의합니다.</label>
+							    </div>
+							
+							    <button id="closeTerms" class="btn btn-secondary btn-sm mb-1">닫기</button>
+							</div>
+							
+							<!-- 이용약관 체크박스와 모달을 띄울 버튼 -->
+							<div class="mb-3">
+							    <button id="showTerms" class="btn btn-secondary btn-sm mb-1">이용약관 및 개인정보 처리 방침 보기</button>
+							    <label for="termsAndConditions">이용약관에 동의합니다.</label>
+							    <input type="checkbox" id="termsAndConditions" name="termsAndConditions" disabled>
+							    <div id="termsError" style="color: red; display: none;">이용약관에 동의해주세요.</div>
+							</div>
+							
+							
+							    <button class="btn btn-primary d-grid w-100" id="registerButton">가입하기</button>
+							</form>
+                            <p class="text-center">
+                                <span>이미 계정이 있으신가요?</span>
+                                <a th:href="@{../user/login}">
+                                    <span>로그인하기</span>
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                    <!-- Register Card -->
+                </div>
+            </div>
+        </div>
+
+        <!-- / Content -->
+
+        <!-- Core JS -->
+        <!-- build:js assets/vendor/js/core.js -->
+        <script th:src="@{../assets/vendor/libs/popper/popper.js}"></script>
+        <script th:src="@{../assets/vendor/js/bootstrap.js}"></script>
+        <script th:src="@{../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js}"></script>
+
+        <script th:src="@{../assets/vendor/js/menu.js}"></script>
+        <!-- endbuild -->
+
+        <!-- Vendors JS -->
+
+        <!-- Main JS -->
+        <script th:src="@{../assets/js/main.js}"></script>
+
+        <!-- Page JS -->
+
+        <!-- Place this tag in your head or just before your close body tag. -->
+        <script async defer src="https://buttons.github.io/buttons.js"></script>
+    </body>
+</html>
