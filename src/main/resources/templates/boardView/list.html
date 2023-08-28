@@ -5,11 +5,129 @@
 <meta charset="UTF-8">
 <title>list</title>
 <script th:src="@{/js/jquery-3.7.0.js}"></script>
+
+<script>
+$(document).ready(function () {
+     	getList();
+    	
+    // 카테고리 선택이 변경될 때마다 검색 수행
+    document.getElementById('boardCategory1').addEventListener('change', getList);
+});
+
+function getList() {	
+    // 카테고리 선택에 따른 필터링
+    const selectedCategory = document.getElementById('boardCategory1').value; 
+
+    $.ajax({
+        url: 'getList',
+	    type: 'get',
+	    //data: {boardCategory1: selectedCategory},
+	    dataType: 'json',
+	    success: function (list) {
+	    	 
+            let filteredList = list;
+				 
+            // 카테고리 선택에 따른 필터링
+            if (selectedCategory !== 'all') {
+                filteredList = list.filter((item) => item.boardCategory1 === selectedCategory);
+            }
+            // 결과를 테이블에 표시    
+            let htmlContent = '';
+            filteredList.forEach((item) => {
+                htmlContent += `
+                    <tr>
+                        <td>${item.boardStatus}</td>
+                        <td><p id="read${item.boardId}">${item.boardTitle}</p></td>
+                        <td>${item.userId}</td>		       
+                        <td>${item.boardInputdate}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="4"><table id="print${item.boardId}"></table></td>
+                    </tr>
+                `;
+            });
+            $('#boardList').html(htmlContent);
+            $('[id^="read"]').click(read);
+        },
+        error: function (e) {
+            alert(JSON.stringify(e));
+        },
+    });
+}
+
+function read(event) {
+    console.log(1);
+    const clickedRow = event.currentTarget.parentNode.parentNode;
+    const boardId = clickedRow.querySelector('p').id.substring(4);
+    $.ajax({
+        url: "read",
+        type: "get",
+        data: {boardId: boardId},
+        dataType: 'json',
+        success: function(readOne) {
+            if (Array.isArray(readOne)) {
+                let htmlContent2 = '';
+                readOne.forEach((item) => {
+                    htmlContent2 += `	
+                        <tr>
+                            <td>${item.boardStatus}</td>
+                            <td>${item.boardContent}</td>
+                            <td>${item.userId}</td>
+                            <td>${item.boardInputdate}</td>
+                        </tr>
+                        <tr>
+                            <td>${item.boardAnswer}</td>
+                        </tr>
+                    `;
+                });
+                $('#answer').html(htmlContent2);
+            } else if (typeof readOne === 'object') {
+                let htmlContent2 = `
+                    <tr>
+                        <td>${readOne.boardStatus}</td>
+                        <td>${readOne.boardContent}</td>
+                        <td>${readOne.userId}</td>
+                        <td>${readOne.boardInputdate}</td>
+                    </tr>
+                    <tr>
+                        <td>${readOne.boardAnswer}</td>
+                    </tr>
+                `;
+                $('#answer').html(htmlContent2);
+            } else {
+                console.error("Invalid data format received.");
+            }
+        },
+        error: function (e) {
+            alert(JSON.stringify(e));
+        }
+    });
+}
+</script>
 </head>
 <body>
-<h1>문의/공지/자주묻는질문</h1>
 <p><a th:href="@{/}">홈</a></p>
-<a sec:authorize="!isAuthenticated()" th:href="@{/board/write}">문의글 등록</a>
+<a th:href="@{/board/write}">문의글 등록</a>
+<a>내Q&A만 보기</a>
 
+<select name="boardCategory1" id="boardCategory1">
+    <option value="all">전체</option>
+    <option value="notification">공지</option>
+    <option value="frequently">자주묻는질문</option>
+    <option value="inquiry">1:1문의</option>
+</select>
+
+<table>
+    <thead>
+        <tr>
+            <th>답변상태</th>
+            <th>제목</th>
+            <th>작성자</th>
+            <th>작성일</th>
+        </tr>
+    </thead>
+    <tbody id="boardList"></tbody>
+    <tbody id="answer"></tbody>
+</table>
 </body>
 </html>

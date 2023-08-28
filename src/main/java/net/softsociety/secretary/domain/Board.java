@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Board {
-	String boardId;
+	int boardId;
 	String userId;
 	String boardContent;
 	String boardAnswer;
@@ -19,5 +19,6 @@ public class Board {
 	String boardCategory1;
 	String boardCategory2;
 	int boardHits;
+	String inputdate;
 	
 }
