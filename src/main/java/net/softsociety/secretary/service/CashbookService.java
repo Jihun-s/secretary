@@ -13,7 +13,7 @@ public interface CashbookService {
 	/** 내역 삭제 */
 	int deleteTrans(Transaction trans);
 
-	/** 카테고리 불러오기 */
+	/** 커스텀 카테고리 불러오기 */
 	HashMap<String, ArrayList<String>> getAllCategories(String userId);
 
 }

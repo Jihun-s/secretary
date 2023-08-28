@@ -93,10 +93,13 @@ public class CashbookTransRestController {
 		
 	}
 	
-	/** 카테고리 불러오기 */
-	@GetMapping("getAllCategories")
+	/** 커스텀 카테고리 불러오기 */
+	@GetMapping("getCustomCategories")
 	public HashMap<String, ArrayList<String>> getAllCategories(@AuthenticationPrincipal UserDetails user) {
-	    HashMap<String, ArrayList<String>> result = service.getAllCategories(user.getUsername());
+		// 유저id 불러오기
+		String userId = userdao.findByEmailOrUserId(user.getUsername()).getUserId();
+	    HashMap<String, ArrayList<String>> result = service.getAllCategories(userId);
+	    
 	    log.debug("출력할 새 카테고리들:{}", result);
 	    
 	    return result;

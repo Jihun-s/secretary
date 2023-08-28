@@ -1,9 +1,9 @@
 $(document).ready(function() {
+    // 카테고리 불러오기
+    getCustomCategories();
+
     // 목록 불러오기
     init();
-
-    // 카테고리 불러오기
-    getAllCategories();
 
     // 내역 검증 후 입력
     $('#setTransBt').click(setTrans);
@@ -14,6 +14,7 @@ $(document).ready(function() {
     // 소분류 카테고리 추가
     $('#transCategory2').change(handleCategoryChange);
 });
+
 
 /** 사진 입력 버튼 */
 function inputBtImg() {
@@ -58,6 +59,7 @@ function validateTrans() {
     return isValid;
 }
 
+
 /** 거래유형 유효성 검사 */
 function validateTransType() {
     const radios = document.getElementsByName('transType');
@@ -81,6 +83,7 @@ function validateTransType() {
     return isSelected;
 }
 
+
 /** 거래내용 유효성 검사 */
 function validateTransPayee() {
     const input = document.getElementById('transPayee');
@@ -98,6 +101,7 @@ function validateTransPayee() {
     
     return isValid;
 }
+
 
 /** 거래금액 유효성 검사 */ 
 function validateTransAmount() {
@@ -138,6 +142,7 @@ function validateTransAmount() {
     return true;
 }
 
+
 /** 내역 입력 */
 function setTrans() {
     if(validateTrans()) {
@@ -145,6 +150,7 @@ function setTrans() {
         init();
     }
 }
+
 
 /** 내역 입력 Ajax 호출 */
 function setTransAjax() {
@@ -170,7 +176,7 @@ function setTransAjax() {
         },
         success: function() {
             init();
-            getAllCategories();
+            getCustomCategories();
 
             // 입력창 비우기 
             transDate.html("");
@@ -187,6 +193,7 @@ function setTransAjax() {
         }
     });
 }
+
 
 /** 내역 목록 불러오기 */
 function init() {
@@ -277,6 +284,7 @@ function init() {
     });
 }
 
+
 /** 날짜 형식 변환 */
 function formatDate(inputDate) {
     // YYYY-MM-DD 형식의 문자열을 받아서 "월 일 요일" 형식으로 반환하는 함수입니다.
@@ -287,6 +295,7 @@ function formatDate(inputDate) {
     let day = dayNames[dateObj.getDay()];
     return `${month}월 ${date}일　　${day}`;
 }
+
 
 /** 내역 삭제 */
 function deleteTrans(transId) {
@@ -304,6 +313,7 @@ function deleteTrans(transId) {
     });
 }
 
+
 /** 카테고리 추가 */
 function handleCategoryChange() {
     if (this.value === "0") {
@@ -320,36 +330,39 @@ function handleCategoryChange() {
     }
 }
 
-/** 카테고리 불러오기 */
-function getAllCategories() {
+
+/** 커스텀 카테고리 불러오기 */
+function getCustomCategories() {
     alert('카테고리 이리와');
 
     $.ajax({
-        url: '/secretary/cashbook/trans/getAllCategories',
+        url: '/secretary/cashbook/trans/getCustomCategories',
         type: 'GET',
         dataType: 'JSON',
         success: (data) => {
             alert('카테고리 보내줄게');
-            // 대분류 카테고리 <option>들 생성
+            
+            // 여기서 불러온 카테고리들 select에 추가
             var primarySelect = $("#transCategory1");
-            primarySelect.empty();
-            data["primary"].forEach(function(category) {
-                var option = $("<option>").val(category).text(category);
-                primarySelect.append(option);
-            });
-            primarySelect.append($("<option>").val("0").text("기타"));
-
-            // 소분류 카테고리 <option>들 생성
             var secondarySelect = $("#transCategory2");
-            secondarySelect.empty();
-            data["secondary"].forEach(function(category) {
-                var option = $("<option>").val(category).text(category);
-                secondarySelect.append(option);
-            });
-            secondarySelect.append($("<option>").val("0").text("기타"));
+            
+            if (Array.isArray(data["primary"])) {
+                data["primary"].forEach(function(category) {
+                    var option = $("<option>").val(category).text(category);
+                    primarySelect.find("option[value='0']").before(option);
+                });
+            }
+            
+            if (Array.isArray(data["secondary"])) {
+                data["secondary"].forEach(function(category) {
+                    var option = $("<option>").val(category).text(category);
+                    secondarySelect.find("option[value='0']").before(option);
+                });
+            }
         },
         error: () => {
             alert('카테고리 목록 전송 실패');
         }
     });
 }
+
