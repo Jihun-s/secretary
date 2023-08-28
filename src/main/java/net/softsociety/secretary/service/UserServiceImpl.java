@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserService {
         user.setVerificationTokenExpiryDate(expiryDate);
 
         // 사용자 상태 설정 (인증 대기 중)
-        user.setEnabled(0);
+        user.setEnabled(false);
 
         // MyBatis를 사용하여 사용자 삽입
         userMapper.insertUser(user); // 변경된 부분

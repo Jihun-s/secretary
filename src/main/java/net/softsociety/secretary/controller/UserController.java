@@ -82,6 +82,8 @@ public class UserController {
 	
 	@PostMapping("/register")
 	public String registerUser(@ModelAttribute User user, HttpServletRequest request) {
+	    log.debug("Direct userEmail from HttpServletRequest: {}", request.getParameter("userEmail"));
+		log.debug("User객체 어떻게 받나요? : {}",user);
 	    userService.register(user, getSiteURL(request));
 	    return "redirect:/user/check-email";
 	}
