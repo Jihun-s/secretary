@@ -70,4 +70,24 @@
 	DELETE FROM Secretary_Transaction
 	WHERE trans_id = #{transId} AND user_id = #{userId}
 </delete>
+
+<!-- 대분류 불러오기 -->
+<select id="selectAllCategory1" parameterType="String" resultType="String">
+	SELECT
+		DISTINCT trans_category1
+	FROM
+		Secretary_Transaction
+	WHERE
+		user_id = #{userId}
+</select>
+
+<!-- 소분류 불러오기 -->
+<select id="selectAllCategory2" parameterType="String" resultType="String">
+	SELECT
+		DISTINCT trans_category2
+	FROM
+		Secretary_Transaction
+	WHERE
+		user_id = #{userId}
+</select>
 </mapper>

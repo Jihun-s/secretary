@@ -24,4 +24,9 @@ public interface CashbookDAO {
 	/** 내역 삭제 */
 	int deleteTrans(Transaction trans);
 
+	/** 대분류 불러오기 */
+	ArrayList<String> selectAllCategory1(String userId);
+
+	/** 소분류 불러오기 */
+	ArrayList<String> selectAllCategory2(String userId);
 }
