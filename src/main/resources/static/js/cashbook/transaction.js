@@ -1,6 +1,18 @@
 $(document).ready(function() {
+    // 목록 불러오기
     init();
+
+    // 카테고리 불러오기
+    getAllCategories();
+
+    // 내역 검증 후 입력
     $('#setTransBt').click(setTrans);
+
+    // 대분류 카테고리 추가
+    $('#transCategory1').change(handleCategoryChange);
+
+    // 소분류 카테고리 추가
+    $('#transCategory2').change(handleCategoryChange);
 });
 
 /** 사진 입력 버튼 */
@@ -126,7 +138,7 @@ function validateTransAmount() {
     return true;
 }
 
-
+/** 내역 입력 */
 function setTrans() {
     if(validateTrans()) {
         setTransAjax();
@@ -134,6 +146,7 @@ function setTrans() {
     }
 }
 
+/** 내역 입력 Ajax 호출 */
 function setTransAjax() {
     let transDate = $('#transDate');
     let transAmount = $('#transAmount');
@@ -156,10 +169,14 @@ function setTransAjax() {
             transMemo: transMemo.val() 
         },
         success: function() {
+            init();
+            getAllCategories();
+
             // 입력창 비우기 
             transDate.html("");
             transAmount.val("");
-
+            $('#transCategory1').val('대분류를 입력하세요');
+            $('#transCategory2').val('소분류를 선택하세요');
             $('#inlineRadio1').prop('checked', false);
             $('#inlineRadio2').prop('checked', false);
             transPayee.val("");
@@ -283,6 +300,56 @@ function deleteTrans(transId) {
         },
         error: () => {
             alert('내역 삭제 전송 실패');
+        }
+    });
+}
+
+/** 카테고리 추가 */
+function handleCategoryChange() {
+    if (this.value === "0") {
+        var customCategoryName = prompt("새로운 카테고리 이름을 입력하세요:");
+        
+        if (customCategoryName && customCategoryName.trim() !== "") {
+            var newOption = document.createElement("option");
+            newOption.value = customCategoryName;
+            newOption.textContent = customCategoryName;
+            newOption.selected = true;  // 새로 추가된 옵션을 선택 상태로 설정
+
+            this.appendChild(newOption);
+        }
+    }
+}
+
+/** 카테고리 불러오기 */
+function getAllCategories() {
+    alert('카테고리 이리와');
+
+    $.ajax({
+        url: '/secretary/cashbook/trans/getAllCategories',
+        type: 'GET',
+        dataType: 'JSON',
+        success: (data) => {
+            alert('카테고리 보내줄게');
+            // 대분류 카테고리 <option>들 생성
+            var primarySelect = $("#transCategory1");
+            primarySelect.empty();
+            data["primary"].forEach(function(category) {
+                var option = $("<option>").val(category).text(category);
+                primarySelect.append(option);
+            });
+            primarySelect.append($("<option>").val("0").text("기타"));
+
+            // 소분류 카테고리 <option>들 생성
+            var secondarySelect = $("#transCategory2");
+            secondarySelect.empty();
+            data["secondary"].forEach(function(category) {
+                var option = $("<option>").val(category).text(category);
+                secondarySelect.append(option);
+            });
+            secondarySelect.append($("<option>").val("0").text("기타"));
+        },
+        error: () => {
+            alert('카테고리 목록 전송 실패');
         }
     });
 }
