@@ -2,7 +2,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="net.softsociety.secretary.dao.CashbookMapper">
+<mapper namespace="net.softsociety.secretary.dao.CashbookDAO">
 
 <!-- 내역 입력 -->
 <insert id="insertTrans" parameterType="Transaction">
@@ -10,7 +10,7 @@
 	        Secretary_Transaction
 	        (trans_id
 	        , cashbook_id
-	        , user_email
+	        , user_id
 	        , family_id
 	        , trans_date
 	        , trans_type
@@ -21,16 +21,16 @@
 	        , trans_amount)
 	    VALUES 
 	        (Secretary_Trans_SEQ.nextval
-	        , #{cashbook_id}
-	        , #{user_id}
-	        , #{family_id}
-	        , #{trans_date}
-	        , #{trans_type}
-	        , #{trans_category1}
-	        , #{trans_category2}
-	        , #{trans_payee}
-	        , #{trans_memo}
-	        , #{trans_amount}
+	        , #{cashbookId}
+	        , #{userId}
+	        , #{familyId}
+	        , TO_DATE(#{transDate}, 'YYYY-MM-DD"T"HH24:MI')
+	        , #{transType}
+	        , #{transCategory1}
+	        , #{transCategory2}
+	        , #{transPayee}
+	        , #{transMemo}
+	        , #{transAmount}
 	        )
 </insert>
 
