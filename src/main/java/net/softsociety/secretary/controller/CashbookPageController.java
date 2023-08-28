@@ -19,7 +19,7 @@ public class CashbookPageController {
 	}
 	
 	/** 내역 */
-	@GetMapping("transaction")
+	@GetMapping("trans")
 	public String cashbookTransaction() {
 		
 		return "cashbookView/transaction";

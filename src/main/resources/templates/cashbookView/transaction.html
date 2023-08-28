@@ -346,7 +346,7 @@
                   </a>
                 </li>
                 <li class="menu-item">
-                  <a th:href="@{/cashbook/transaction}" class="menu-link">
+                  <a th:href="@{/cashbook/trans}" class="menu-link">
                     <div data-i18n="Alerts">내역 보기</div>
                   </a>
                 </li>
@@ -616,20 +616,20 @@
                     <div class="d-flex align-items-end"></div>
                     <div class="card-body">
                       <!-- 입력버튼*3 -->
-                      <label class="form-label" for="basic-default-fullname">빠른 입력</label>
+                      <label class="form-label" for="basic-default-apiInput">빠른 입력</label>
                       <div class="transInputBt mb-4">
                         <button type="button" class="btn btn-outline-success" onclick="inputBtImg()">사진</button>
                         <button type="button" class="btn btn-outline-success" onclick="inputBtVoice()">음성</button>
                         <button type="button" class="btn btn-outline-success" onclick="inputBtSms()">SMS</button>
                       </div>
                       <h4>직접 입력</h4>
-                      <form th:action="@{/cashbook/trans/setTrans}" method="post" onsubmit="return validateTransAmount()">
+                      <form th:action="@{/cashbook/trans/setTrans}" method="post" onsubmit="return validateTrans()">
                         <div class="mb-3">
-                          <label class="form-label" for="basic-default-fullname">거래일자</label>
+                          <label class="form-label" for="basic-default-transDate">거래일자</label>
                           <input class="form-control" type="datetime-local" name="transDate" value="2021-06-18T12:30:00" id="transDate">
                         </div>
                         <div class="mb-3">
-                          <label class="form-label" for="basic-default-company">내역 유형</label>
+                          <label class="form-label" for="basic-default-transType">내역 유형</label>
                           <div class="col-md">
                             <div class="form-check form-check-inline mt-3">
                               <input class="form-check-input" type="radio" name="transType" id="inlineRadio1" value="income">
@@ -640,9 +640,12 @@
                               <label class="form-check-label" for="inlineRadio2">지출</label>
                             </div>
                           </div>
+                          <div>
+                            <p id="transTypeError"></p>
+                          </div>
                         </div>
                         <div class="mb-3">
-                          <label class="form-label" for="basic-default-email">카테고리</label>
+                          <label class="form-label" for="basic-default-transCategory">카테고리</label>
                           <div>
                             <select id="transCategory1" name="transCategory1" class="form-select">
                               <option>대분류를 입력하세요</option>
@@ -665,24 +668,34 @@
                               <option value="0">기타</option>
                             </select>
                           </div>
-
+                          <div>
+                            <p id="transCategoryError"></p>
+                          </div>
                           <!-- <div class="form-text"> You can use letters, numbers &amp; periods </div> -->
                         </div>
                         <div class="mb-3">
-                          <label class="form-label" for="basic-default-phone">거래내용</label>
+                          <label class="form-label" for="basic-default-trans">거래내용</label>
                           <input type="text" name="transPayee" id="basic-default-phone" class="form-control phone-mask" placeholder="거래처를 입력하세요">
+                          <div>
+                            <p id="transPayeeError"></p>
+                          </div>
                         </div>
                         <div class="mb-3">
                           <label class="form-label" for="basic-default-message">메모</label>
                           <textarea name="transMemo" id="basic-default-message" class="form-control" placeholder="(선택)"></textarea>
+                          <div>
+                            <p id="transMemoError"></p>
+                          </div>
                         </div>
                         <div class="mb-3">
                           <label class="form-label" for="basic-default-message">거래금액</label>
-                          <div class="input-group">
+                          <div class="input-group mb-3">
                             <span class="input-group-text" id="basic-addon11">₩</span>
-                            <input type="text" name="transAmount" class="form-control" placeholder="금액을 입력하세요" aria-label="Username" aria-describedby="basic-addon11">
-                            <p id="transAmountError"></p>
+                            <input type="text" name="transAmount" id="transAmount" class="form-control" placeholder="금액을 입력하세요" aria-label="Username" aria-describedby="basic-addon11">
                             <button type="submit" class="btn btn-success col-3">입력</button>
+                          </div>
+                          <div>
+                            <p id="transAmountError"></p>
                           </div>
                         </div>
                       </form>
