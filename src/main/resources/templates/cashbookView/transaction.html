@@ -626,7 +626,7 @@
                       <form th:action="@{/cashbook/trans/setTrans}" method="post" onsubmit="return validateTrans()">
                         <div class="mb-3">
                           <label class="form-label" for="basic-default-transDate">거래일자</label>
-                          <input class="form-control" type="datetime-local" name="transDate" value="2021-06-18T12:30:00" id="transDate">
+                          <input class="form-control" type="datetime-local" id="transDate" name="transDate" value="2021-06-18T12:30:00" id="transDate">
                         </div>
                         <div class="mb-3">
                           <label class="form-label" for="basic-default-transType">내역 유형</label>
@@ -675,14 +675,14 @@
                         </div>
                         <div class="mb-3">
                           <label class="form-label" for="basic-default-trans">거래내용</label>
-                          <input type="text" name="transPayee" id="basic-default-phone" class="form-control phone-mask" placeholder="거래처를 입력하세요">
+                          <input type="text" name="transPayee" id="transPayee" class="form-control phone-mask" placeholder="거래처를 입력하세요">
                           <div>
                             <p id="transPayeeError"></p>
                           </div>
                         </div>
                         <div class="mb-3">
                           <label class="form-label" for="basic-default-message">메모</label>
-                          <textarea name="transMemo" id="basic-default-message" class="form-control" placeholder="(선택)"></textarea>
+                          <textarea name="transMemo" id="transMemo" class="form-control" placeholder="(선택)"></textarea>
                           <div>
                             <p id="transMemoError"></p>
                           </div>

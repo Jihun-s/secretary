@@ -118,3 +118,27 @@ function validateTransAmount() {
     
     return true;
 }
+
+function setTrans() {
+    let transDate = $('#transDate').val();
+    let transAmount = $('#transAmount').val();
+    let transCategory1 = $('#transCategory1').val();
+    let transCategory2 = $('#transCategory2').val();
+    let transType = $('#transType').val();
+    let transPayee = $('#transPayee').val();
+    let transMemo = $('#transMemo').val();
+
+    $.ajax({
+        url: '/trans/setTrans',
+        type: 'post',
+        data: { transDate: transDate, transAmount: transAmount, transCategory1:transCategory1, transCategory2:transCategory2,
+        transType:transType, trnasPayee:transPayee, transMemo:transMemo },
+        success: function() {
+            alert('서버 전송 성공');
+        },
+        error: function() {
+            alert('서버 전송 실패');
+        }
+    });
+    
+}
