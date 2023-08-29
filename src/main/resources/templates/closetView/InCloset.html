@@ -34,6 +34,7 @@
 	<script th:inline="javascript">
     /*<![CDATA[*/
 	$(document).ready(function(){
+		$('#insertClothesbtn').css('visibility','hidden'); //옷 등록버튼 숨기기
 		$('#insertClothesbtn').on('click', insertClothes);
 		$('#shoesSize').hide(); //신발사이즈 안보이게
 		$('#clothesCategory').change(function(){
@@ -47,13 +48,13 @@
 			}
 		}) //분류에서 신발 카테고리 영역을 선택하면 옷사이즈 사라지고 신발사이즈가 보임 
 		
-		$('#editIMGbtn').on('click', editIMG);
+		$('#editIMGbtn').on('click', editIMG); //편집버튼 누르면 editIMG함수 실행
+		
 		const imageInput = document.getElementById("uploadIMG");
 		const imagePreview = document.getElementById("imagePreview");
-		
+		let blobIMG; // 이미지 담을 변수
 		imageInput.addEventListener("change", function() {
 		  const selectedFile = imageInput.files[0];
-
 		  if (selectedFile) {
 		    const reader = new FileReader();
 
@@ -66,12 +67,13 @@
 		      
 		      imagePreview.innerHTML = "";
 		      imagePreview.appendChild(imageElement);
+		      $('#insertClothesbtn').css('visibility','visible'); //의류등록버튼 나타나기
 		    }
 
 		    reader.readAsDataURL(selectedFile);
-		  }
+		  } 
 		});
-	});
+	});//document.ready 끝
 	
 	function editIMG(){
 		const imageInput = document.getElementById("uploadIMG");
@@ -93,6 +95,8 @@
             image.src = URL.createObjectURL(blob);
             imagePreview.innerHTML = "";
             imagePreview.appendChild(image);
+            
+            blobIMG = blob;
         })
         .catch(error => {
             console.error('Error:', error);
@@ -100,6 +104,10 @@
 	}
 	
 	function insertClothes(){
+		
+		if(typeof blobIMG === 'undefined'){
+			blobIMG = document.getElementById("uploadIMG").files[0];
+		};
 		let category = $('#clothesCategory option:selected').val();
 		let material = $('#materialList option:selected').val();
 
@@ -117,15 +125,43 @@
 			size = $("input[name='shoesSize']").val();
 		} //옷이면 옷사이즈, 신발이면 신발사이즈 가져오기
 		
+		//폼데이터에 넣을 key-value값들
+		const clothesObj = {
+			familyId : '[[${loginUser.familyId}]]',
+			closetNum : '[[${closetNum}]]',
+			clothesMaterial : material,
+			clothesCategory	: category,
+			clothesSeasons : seasonArr,
+			clothesSize : size,
+			clothesIMG : blobIMG,
+		}
+		
 		let formData = new FormData();
-		formData.append('closetNum', '[[${closetNum}]]');
-		formData.append('clothesIMG', '아놔');
+		//for문으로 폼데이터에 값 전달
+		for (let key in clothesObj){
+			formData.append(key, clothesObj[key])			
+		}
 		
 		//formData값 콘솔로 확인
 		let entries = formData.entries();
 		for (const pair of entries) {
 		    console.log(pair[0]+ ', ' + pair[1]); 
 		}
+		
+		fetch('insertClothes',{
+			method:'POST',
+			body: formData
+		})
+		.then(response => response.json())
+        .then(data => {
+			alert('코딩코딩코딩');
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });  
+		
+		location.reload(true); //옷등록 완료했으면 새로고침
+		
 		
 	}
 	 /*]]>*/

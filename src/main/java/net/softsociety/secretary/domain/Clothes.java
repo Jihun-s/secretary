@@ -15,6 +15,7 @@ public class Clothes {
 	String clothesCategory;
 	String clothesSeasons;
 	String clothesSize;
+	String clothesImg;
 	boolean clothesLaundry;
 	int clothesPutoncnt;
 }
