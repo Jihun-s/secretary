@@ -3,6 +3,7 @@ package net.softsociety.secretary.service;
 import java.util.ArrayList;
 
 import net.softsociety.secretary.domain.Closet;
+import net.softsociety.secretary.domain.Clothes;
 
 public interface ClosetService {
 
@@ -10,5 +11,8 @@ public interface ClosetService {
 	
 	//옷장정보 불러오기
 	ArrayList<Closet> findAllCloset();
+	
+	//옷장에 의류등록
+	void insertClothes(Clothes clothes);
 
 }

@@ -23,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import lombok.extern.slf4j.Slf4j;
 import net.softsociety.secretary.domain.Closet;
+import net.softsociety.secretary.domain.Clothes;
 import net.softsociety.secretary.service.ClosetService;
 import net.softsociety.secretary.service.UserService;
 import net.softsociety.secretary.util.FileService;
@@ -53,6 +54,7 @@ public class ClosetController {
 		}
 	}	
 	
+	//사진 편집
 	@ResponseBody
 	@PostMapping(value="processImage", produces = MediaType.IMAGE_PNG_VALUE)
 	public ResponseEntity<byte[]> processImage(MultipartFile image) throws IOException {
@@ -66,6 +68,19 @@ public class ClosetController {
 		byte[] imageBytes = Files.readAllBytes(path);
 
 		return ResponseEntity.ok(imageBytes);
+	}
+	
+	@ResponseBody
+	@PostMapping("insertClothes")
+	public void insertClothes(Clothes clothes, MultipartFile clothesIMG) {
+		log.debug("옷등록 매핑");
+		log.debug("옷 객체:{}", clothes);
+		if(clothesIMG !=null && !clothesIMG.isEmpty()) {
+			String savedfile = FileService.saveFile(clothesIMG, uploadPath);
+			clothes.setClothesImg(savedfile);
+		}
+		log.debug("옷 파일:{}", clothesIMG);
+		service.insertClothes(clothes);
 	}
 	
 }

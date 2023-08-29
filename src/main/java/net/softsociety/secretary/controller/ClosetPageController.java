@@ -33,7 +33,7 @@ public class ClosetPageController {
 	@GetMapping("InCloset")
 	public String InclosetPage(@RequestParam(name="closetNum") int closetNum
 								, Model model) {
-		
+		model.addAttribute("closetNum", closetNum);
 		return "closetView/InCloset";
 	}
 	

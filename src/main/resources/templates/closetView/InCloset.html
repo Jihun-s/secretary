@@ -31,16 +31,30 @@
 
     <title>옷장 :: 1</title>
 	<script th:src="@{/js/jquery-3.7.0.js}"></script>
-	<script type="text/javascript">
+	<script th:inline="javascript">
+    /*<![CDATA[*/
 	$(document).ready(function(){
-		$('#editIMGbtn').css('visibility', 'hidden');
-		$('#editIMGbtn').on('click', editIMG);
+		$('#insertClothesbtn').css('visibility','hidden'); //옷 등록버튼 숨기기
+		$('#insertClothesbtn').on('click', insertClothes);
+		$('#shoesSize').hide(); //신발사이즈 안보이게
+		$('#clothesCategory').change(function(){
+			var result = $('#clothesCategory option:selected').val();
+			if (result == 'sneakers' || result == 'shoes' || result == 'boots' || result == 'sandals'){
+				$('#clothesSize').hide();
+				$('#shoesSize').show();
+			} else {
+				$('#clothesSize').show();
+				$('#shoesSize').hide();
+			}
+		}) //분류에서 신발 카테고리 영역을 선택하면 옷사이즈 사라지고 신발사이즈가 보임 
+		
+		$('#editIMGbtn').on('click', editIMG); //편집버튼 누르면 editIMG함수 실행
+		
 		const imageInput = document.getElementById("uploadIMG");
 		const imagePreview = document.getElementById("imagePreview");
-		
+		let blobIMG; // 이미지 담을 변수
 		imageInput.addEventListener("change", function() {
 		  const selectedFile = imageInput.files[0];
-
 		  if (selectedFile) {
 		    const reader = new FileReader();
 
@@ -53,18 +67,21 @@
 		      
 		      imagePreview.innerHTML = "";
 		      imagePreview.appendChild(imageElement);
+		      $('#insertClothesbtn').css('visibility','visible'); //의류등록버튼 나타나기
 		    }
 
 		    reader.readAsDataURL(selectedFile);
-		    $('#editIMGbtn').css('visibility', 'visible');
-		  }
+		  } 
 		});
-	});
+	});//document.ready 끝
 	
 	function editIMG(){
-		alert('편집!!')
 		const imageInput = document.getElementById("uploadIMG");
-		const selectedFile = imageInput.files[0];        
+		const selectedFile = imageInput.files[0];
+		if (!selectedFile) {
+			alert("사진을 등록해주세요");
+			return;
+		}
         const formData = new FormData();
         formData.append('image', selectedFile);
        
@@ -74,16 +91,80 @@
         })
         .then(response => response.blob())
         .then(blob => {
-            const imgElement = document.getElementById('imagePreview');
             const image = new Image();
             image.src = URL.createObjectURL(blob);
             imagePreview.innerHTML = "";
             imagePreview.appendChild(image);
+            
+            blobIMG = blob;
         })
         .catch(error => {
             console.error('Error:', error);
         });    
 	}
+	
+	function insertClothes(){
+		
+		if(typeof blobIMG === 'undefined'){
+			blobIMG = document.getElementById("uploadIMG").files[0];
+		};
+		let category = $('#clothesCategory option:selected').val();
+		let material = $('#materialList option:selected').val();
+
+		const seasonArr = [];
+		var seasonChecked = $("input:checkbox[name='seasons']:checked");
+		$(seasonChecked).each(function(){
+			seasonArr.push($(this).val());
+		});  //계절 배열변수에 담기
+		
+		let size;
+		var result = $('#clothesCategory option:selected').val();
+		if (!(result == 'sneakers') && !(result == 'shoes') && !(result == 'boots') && !(result == 'sandals')){
+			size = 	$("select[name='clothesSize'] option:selected").val();
+		} else {
+			size = $("input[name='shoesSize']").val();
+		} //옷이면 옷사이즈, 신발이면 신발사이즈 가져오기
+		
+		//폼데이터에 넣을 key-value값들
+		const clothesObj = {
+			familyId : '[[${loginUser.familyId}]]',
+			closetNum : '[[${closetNum}]]',
+			clothesMaterial : material,
+			clothesCategory	: category,
+			clothesSeasons : seasonArr,
+			clothesSize : size,
+			clothesIMG : blobIMG,
+		}
+		
+		let formData = new FormData();
+		//for문으로 폼데이터에 값 전달
+		for (let key in clothesObj){
+			formData.append(key, clothesObj[key])			
+		}
+		
+		//formData값 콘솔로 확인
+		let entries = formData.entries();
+		for (const pair of entries) {
+		    console.log(pair[0]+ ', ' + pair[1]); 
+		}
+		
+		fetch('insertClothes',{
+			method:'POST',
+			body: formData
+		})
+		.then(response => response.json())
+        .then(data => {
+			alert('코딩코딩코딩');
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });  
+		
+		location.reload(true); //옷등록 완료했으면 새로고침
+		
+		
+	}
+	 /*]]>*/
 	</script>
 	
     <meta name="description" content="" />
@@ -757,11 +838,122 @@
                       <div class="insertClothes">
                       <table>
                       	<tr> 
-                      		<td><input type="file" value="사진 등록" id="uploadIMG" accept="image/*"></td>
+                      		<td><label for="uploadIMG" id="cssuploadIMG"><span>사진 등록</span></label>
+                      			<input type="file" value="사진 등록" id="uploadIMG" accept="image/*"></td>
                       		<td><input type="button" value="편집" id="editIMGbtn"></td>
+                      		<td><input type="button" value="웹에서 찾기"> </td>
                       	</tr>
                       	<tr>
-                      		<td> <input type="button" value="웹에서 찾기"> </td>
+                      		<td>
+                      		<label for="clothesCategory">분류</label>
+                      		</td>
+                      		<td colspan="2">
+                      		<select id="clothesCategory">
+                      			<optgroup label="상의">
+                      				<option value="Tshirt">티셔츠</option>
+                      				<option value="blouse">블라우스/셔츠</option>
+                      				<option value="sweatshirt">맨투맨/후디</option>
+                      				<option value="knitwear">니트</option>
+                      			</optgroup>
+                      			<optgroup label="하의">
+                      				<option value="skirt">치마</option>
+                      				<option value="pants">바지</option>
+                      				<option value="jeans">청바지</option>
+                      				<option value="trainingPants">트레이닝/조거</option>
+                      			</optgroup>
+                      			<optgroup label="아우터">
+                      				<option value="coat">코트</option>
+                      				<option value="jacket">자켓/점퍼</option>
+                      				<option value="paddedJacket">패딩</option>                      			
+                      				<option value="zipupHoodie">후드집업</option>                      			
+                      				<option value="cardigan">가디건/베스트</option>                      			
+                      			</optgroup>
+								<optgroup label="원피스">
+									<option value="miniDress">미니원피스</option>
+									<option value="longDress">롱원피스</option>
+								</optgroup>
+                      			<optgroup label="신발">	                     			
+                      				<option value="sneakers">운동화</option>                     			
+                      				<option value="shoes">구두</option>                     			
+                      				<option value="boots">부츠</option>
+                      				<option value="sandals">샌들</option>
+                      			</optgroup>
+                      			<optgroup label="가방">
+                      				<option value="backpack">백팩</option>
+                      				<option value="totebag">숄더/토트백</option>
+                      				<option value="crossbodybag">크로스백</option>
+                      				<option value="clutchbag">클러치</option>
+                      			</optgroup>
+                      			<optgroup label="악세사리">
+                      				<option value="hat">모자</option>
+                      				<option value="socks">양말</option>
+                      				<option value="jewelryOrWatch">쥬얼리/시계</option>
+                      				<option value="scarf">머플러/스카프</option>
+                      				<option value="belt">벨트</option>
+                      				<option value="accessoryEtc">기타</option>
+                      			</optgroup>
+                      			<optgroup label="기타">
+                      				<option value="innerwear">이너웨어</option>
+                      				<option value="sleepwear">잠옷</option>
+                      				<option value="swimsuit">수영복</option>
+                      			</optgroup>                      				                       				                     			
+                      		</select>
+                      		</td>
+                      	</tr>
+                      	<tr>
+                      		<td><label for="materialList">소재</label></td>
+                      		<td colspan="2">
+								<select id=materialList>
+									<option value="none">해당 없음</option>
+									<option value="cotton">면</option>
+									<option value="linen">린넨</option>
+									<option value="polyester">폴리에스테르</option>
+									<option value="denim">데님</option>
+									<option value="knit">니트</option>
+									<option value="wool">울</option>
+									<option value="acryl">아크릴</option>
+									<option value="corduroy">코듀로이</option>
+									<option value="silk">실크</option>
+									<option value="woolen">모직</option>
+									<option value="nylon">나일론</option>
+									<option value="suede">스웨이드</option>
+									<option value="leather">가죽</option>
+									<option value="rayon">레이온</option>
+									<option value="oxford">옥스퍼드</option>
+									<option value="napping">기모</option>
+								</select>
+                      		</td>
+                      	</tr>
+                      	<tr>
+                      		<td>계절</td>
+                      		<td colspan="2"><input type="checkbox" name="seasons" value="spring"><label for="spirng"><small>봄</small></label>
+                      			<input type="checkbox" name="seasons" value="summer"><label for="summer"><small>여름</small></label>
+                      			<input type="checkbox" name="seasons" value="fall"><label for="fall"><small>가을</small></label>
+                      			<input type="checkbox" name="seasons" value="winter"><label for="winter"><small>겨울</small></label></td>
+                      	</tr>
+                      	<tr id = "clothesSize">
+                      		<td><label for="clothesSize">사이즈</label></td>
+                      		<td colspan="2">
+                      			<select name="clothesSize">
+                      					<option value="none">해당없음</option>
+                      					<option value="free">FREE</option>
+                      					<option value="XS">XS</option>
+                      					<option value="S">S</option>
+                      					<option value="M">M</option>
+                      					<option value="L">L</option>
+                      					<option value="XL">XL</option>
+                      					<option value="XXL">XXL</option>
+                      			</select>
+                      		</td>
+                      	</tr>
+                      	<tr id="shoesSize">
+                      		<td><label for="shoesSize">신발사이즈</label></td>
+                      		<td colspan="2">
+                      			<input type="number" name="shoesSize" value="210" min="210" max="300" step="5">
+                      		</td>
+                      	</tr>
+                      	<tr>
+                      	<td colspan="3" style="padding-left:100px"><input type="button" value="등록" id="insertClothesbtn"></td>
                       	</tr>
                       </table>
                       </div>

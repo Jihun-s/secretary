@@ -14,4 +14,15 @@
 <select id="findAllCloset" resultType="Closet">
 	select * from Secretary_Closet order by closet_num
 </select>
+
+<insert id="insertClothes" parameterType="Clothes">
+	insert into Secretary_clothes (clothes_num, family_id, closet_num, 
+								clothes_material, clothes_category,
+								clothes_seasons,  clothes_size,
+								clothes_img)
+	values (Secretary_Clothes_SEQ.nextval, #{familyId}, #{closetNum},
+			 	#{clothesMaterial}, #{clothesCategory},
+			 	#{clothesSeasons}, #{clothesSize},
+				#{clothesImg})	
+</insert>
 </mapper>
