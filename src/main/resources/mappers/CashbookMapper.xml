@@ -71,7 +71,7 @@
 	WHERE trans_id = #{transId} AND user_id = #{userId}
 </delete>
 
-<!-- 대분류 불러오기 -->
+<!-- 커스텀 대분류 불러오기 -->
 <select id="selectCustomCategory1" parameterType="String" resultType="String">
 	SELECT
 		DISTINCT trans_category1
@@ -81,7 +81,7 @@
 		user_id = #{userId} and cate1_custom = 1
 </select>
 
-<!-- 소분류 불러오기 -->
+<!-- 커스텀 소분류 불러오기 -->
 <select id="selectCustomCategory2" parameterType="String" resultType="String">
 	SELECT
 		DISTINCT trans_category2

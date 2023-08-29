@@ -48,8 +48,8 @@ public class CashbookServiceImpl implements CashbookService {
 		log.debug("result1 대분류:{}", result1);
 		log.debug("result2 소분류:{}", result2);
 
-		result.put("transCategory1List", result1);
-		result.put("transCategory2List", result2);
+		result.put("cate1custom", result1);
+		result.put("cate2custom", result2);
 		
 		return result;
 	}

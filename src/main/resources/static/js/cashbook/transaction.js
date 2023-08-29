@@ -8,11 +8,9 @@ $(document).ready(function() {
     // 내역 검증 후 입력
     $('#setTransBt').click(setTrans);
 
-    // 대분류 카테고리 추가
-    $('#transCategory1').change(handleCategoryChange);
-
-    // 소분류 카테고리 추가
-    $('#transCategory2').change(handleCategoryChange);
+    // 대분류 및 소분류 커스텀 카테고리 추가
+    $(document).on('change', '#transCategory1', handleCategoryChange);
+    $(document).on('change', '#transCategory2', handleCategoryChange);
 });
 
 
@@ -282,6 +280,10 @@ function init() {
             alert('내역 리스트 전송 실패');
         }
     });
+    
+    // 카테고리 새로고침
+    getCustomCategories();
+    
 }
 
 
@@ -335,6 +337,12 @@ function handleCategoryChange() {
 function getCustomCategories() {
     alert('카테고리 이리와');
 
+    let cate1;
+    let cate2;
+
+    let transCategory1Div = $('#transCategory1Div');
+    let transCategory2Div = $('#transCategory2Div');
+
     $.ajax({
         url: '/secretary/cashbook/trans/getCustomCategories',
         type: 'GET',
@@ -342,23 +350,43 @@ function getCustomCategories() {
         success: (data) => {
             alert('카테고리 보내줄게');
             
-            // 여기서 불러온 카테고리들 select에 추가
-            var primarySelect = $("#transCategory1");
-            var secondarySelect = $("#transCategory2");
+            // 대분류 추가
+            cate1 += `<select id="transCategory1" name="transCategory1" class="form-select">
+            <option>대분류를 입력하세요</option>
+            <option value="식비">식비</option>
+            <option value="쇼핑">쇼핑</option>
+            <option value="여가">여가</option>
+            <option value="여행">여행</option>
+            <option value="뷰티">뷰티</option>
+            <option value="리빙">리빙</option>
+            <option value="건강">건강</option>`;
+          
+            $.each(data.cate1custom, function(idx, category1) {
+                cate1 += `<option value="${category1}">${category1}</option>`;
+            }) 
+
+            cate1 += `<option value="0">기타</option>
+                    </select>`;  
             
-            if (Array.isArray(data["primary"])) {
-                data["primary"].forEach(function(category) {
-                    var option = $("<option>").val(category).text(category);
-                    primarySelect.find("option[value='0']").before(option);
-                });
-            }
-            
-            if (Array.isArray(data["secondary"])) {
-                data["secondary"].forEach(function(category) {
-                    var option = $("<option>").val(category).text(category);
-                    secondarySelect.find("option[value='0']").before(option);
-                });
-            }
+            // 소분류 추가
+            cate2 += `<select id="transCategory2" name="transCategory2" class="form-select">
+            <option>소분류를 선택하세요</option>
+            <option value="식사">식사</option>
+            <option value="간식">간식</option>
+            <option value="카페">카페</option>
+            <option value="술">술</option>
+            <option value="편의점">편의점</option>`;
+          
+            $.each(data.cate2custom, function(idx, category2) {
+                cate2 += `<option value="${category2}">${category2}</option>`;
+            }) 
+
+            cate2 += `<option value="0">기타</option>
+                    </select>`;  
+
+            // 출력
+            transCategory1Div.html(cate1);
+            transCategory2Div.html(cate2);
         },
         error: () => {
             alert('카테고리 목록 전송 실패');
