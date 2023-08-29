@@ -18,7 +18,9 @@
 	        , trans_category2
 	        , trans_payee
 	        , trans_memo
-	        , trans_amount)
+	        , trans_amount
+	        , cate1_custom
+	        , cate2_custom)
 	    VALUES 
 	        (Secretary_Trans_SEQ.nextval
 	        , #{cashbookId}
@@ -31,6 +33,8 @@
 	        , #{transPayee}
 	        , #{transMemo}
 	        , #{transAmount}
+	        , #{cate1Custom}
+	        , #{cate2Custom}
 	        )
 </insert>
 
@@ -52,7 +56,7 @@
 	FROM
 	    Secretary_Transaction
 	ORDER BY
-		trans_date desc
+		trans_date DESC
 </select>
 
 <!-- 해당 월 내역 수 조회 -->

@@ -159,6 +159,8 @@ function setTransAjax() {
     let transType = $("input[name='transType']:checked"); 
     let transPayee = $('#transPayee');
     let transMemo = $('#transMemo');
+    let cate1Custom = $('#cate1CustomInput');
+    let cate2Custom = $('#cate2CustomInput');
 
     $.ajax({
         url: '/secretary/cashbook/trans/setTrans',
@@ -170,11 +172,12 @@ function setTransAjax() {
             transCategory2: transCategory2.val(),
             transType: transType.val(), 
             transPayee: transPayee.val(),
-            transMemo: transMemo.val() 
+            transMemo: transMemo.val(),
+            cate1Custom: cate1Custom.val(),
+            cate2Custom: cate2Custom.val(),
         },
         success: function() {
             init();
-            getCustomCategories();
 
             // 입력창 비우기 
             transDate.html("");
@@ -281,9 +284,6 @@ function init() {
         }
     });
     
-    // 카테고리 새로고침
-    getCustomCategories();
-    
 }
 
 
@@ -318,27 +318,63 @@ function deleteTrans(transId) {
 
 /** 카테고리 추가 */
 function handleCategoryChange() {
+    let cate1Custom = 0, cate2Custom = 0;
+
     if (this.value === "0") {
         var customCategoryName = prompt("새로운 카테고리 이름을 입력하세요:");
-        
+
+        // 1. 한글, 영문, 숫자만 사용
+        const regex = /^[가-힣A-Za-z0-9]+$/;
+
+        // 2. 연속된 공백 제한
+        if (/\s{2,}/.test(customCategoryName)) {
+            alert("카테고리 이름에 연속된 공백을 포함할 수 없습니다.");
+            return;
+        }
+
+        // 3. 중복 제한
+        const isDuplicate = [...this.options].some(option => option.value === customCategoryName);
+        if (isDuplicate) {
+            alert("이미 존재하는 카테고리 이름입니다.");
+            return;
+        }
+
+        // 4. 길이는 한글 기준 10자 이내(30BYTE)로 제한
+        if (!regex.test(customCategoryName) || new Blob([customCategoryName]).size > 30) {
+            alert("카테고리 이름은 한글, 영문, 숫자만 포함하여 30바이트(한글 10자) 이내로 입력해야 합니다.");
+            return;
+        }
+
         if (customCategoryName && customCategoryName.trim() !== "") {
             var newOption = document.createElement("option");
             newOption.value = customCategoryName;
             newOption.textContent = customCategoryName;
+
+            // "직접입력" 옵션 찾기
+            var etcOption = this.querySelector('option[value="0"]');
+
+            // "직접입력" 옵션 바로 앞에 새 옵션 삽입
+            this.insertBefore(newOption, etcOption);
             newOption.selected = true;  // 새로 추가된 옵션을 선택 상태로 설정
 
-            this.appendChild(newOption);
+            // transCategory1 혹은 transCategory2에 따라 cate1Custom 혹은 cate2Custom 값을 변경
+            if (this.id === "transCategory1") {
+                cate1Custom = 1;
+                document.getElementById("cate1CustomInput").value = "1";
+            } else if (this.id === "transCategory2") {
+                cate2Custom = 1;
+                document.getElementById("cate2CustomInput").value = "1";
+            }
         }
     }
 }
 
 
+
 /** 커스텀 카테고리 불러오기 */
 function getCustomCategories() {
-    alert('카테고리 이리와');
-
-    let cate1;
-    let cate2;
+    let cate1 = "";
+    let cate2 = "";
 
     let transCategory1Div = $('#transCategory1Div');
     let transCategory2Div = $('#transCategory2Div');
@@ -347,9 +383,7 @@ function getCustomCategories() {
         url: '/secretary/cashbook/trans/getCustomCategories',
         type: 'GET',
         dataType: 'JSON',
-        success: (data) => {
-            alert('카테고리 보내줄게');
-            
+        success: (data) => {           
             // 대분류 추가
             cate1 += `<select id="transCategory1" name="transCategory1" class="form-select">
             <option>대분류를 입력하세요</option>
@@ -365,7 +399,7 @@ function getCustomCategories() {
                 cate1 += `<option value="${category1}">${category1}</option>`;
             }) 
 
-            cate1 += `<option value="0">기타</option>
+            cate1 += `<option value="0">직접입력</option>
                     </select>`;  
             
             // 소분류 추가
@@ -381,7 +415,7 @@ function getCustomCategories() {
                 cate2 += `<option value="${category2}">${category2}</option>`;
             }) 
 
-            cate2 += `<option value="0">기타</option>
+            cate2 += `<option value="0">직접입력</option>
                     </select>`;  
 
             // 출력
