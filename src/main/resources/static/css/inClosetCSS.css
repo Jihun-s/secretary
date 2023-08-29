@@ -17,12 +17,23 @@
 #imagePreview img{
 	width:100%;
 }
+
+/*input file태그 안보이게하기*/
 #uploadIMG {
-	padding-left:32%;
+	display:none;
+}
+#cssuploadIMG {
+	/*사진등록 라벨 */
+	text-align:center;
+	font-size:10px;
+	width:80px;
+  	border: 1px solid rgb(77,77,77);
+  	border-radius: 5px;	
 }
 
-.insertClothes{
+.insertClothes > lable {
 	text-align:center;
+	font-size:10px;
 }
 
 .insertClothes input {

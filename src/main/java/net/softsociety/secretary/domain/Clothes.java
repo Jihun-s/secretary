@@ -13,7 +13,6 @@ public class Clothes {
 	int closetNum;
 	String clothesMaterial;
 	String clothesCategory;
-	String clothesSubCategory;
 	String clothesSeasons;
 	String clothesSize;
 	boolean clothesLaundry;
