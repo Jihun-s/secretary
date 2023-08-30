@@ -63,6 +63,22 @@ $(document).ready(function() {
         }
     });
 
+    // 1000단위 콤마 찍기
+    $('#transAmount').on('input', function() {
+        let amount = $(this).val().replace(/,/g, '');  // 현재 입력된 값에서 콤마를 제거합니다.
+        
+        if (!amount) {  // 입력값이 없는 경우
+            return;
+        }
+        
+        let parsedAmount = parseFloat(amount);
+        
+        if (isNaN(parsedAmount)) {  // 숫자로 변환할 수 없는 경우
+            $(this).val('');  // 입력란을 비웁니다.
+        } else {
+            $(this).val(parsedAmount.toLocaleString('en-US'));  // 값을 천 단위로 콤마로 구분하여 다시 설정합니다.
+        }
+    });   
     
 });
 
@@ -157,7 +173,8 @@ function validateTransPayee() {
 
 /** 거래금액 유효성 검사 */ 
 function validateTransAmount() {
-    let transAmount = $('#transAmount').val();
+    // ',' 제거
+    let transAmount = $('#transAmount').val().replace(/,/g, '');  
     let transAmountError = $('#transAmountError');
 
     // 미입력
@@ -214,7 +231,7 @@ function setTransAjax() {
     let cate2Name = $('#cate2Name');
     let transPayee = $('#transPayee');
     let transMemo = $('#transMemo');
-    let transAmount = $('#transAmount');
+    let transAmount = $('#transAmount').val().replace(/,/g, '');
 
     $.ajax({
         url: '/secretary/cashbook/trans/setTrans',
@@ -228,14 +245,14 @@ function setTransAjax() {
             cate2Name: cate2Name.val(),
             transPayee: transPayee.val(),
             transMemo: transMemo.val(),
-            transAmount: transAmount.val()
+            transAmount: transAmount
         },
         success: function() {
             init();
 
             // 입력창 비우기 
             transDate.html("");
-            transAmount.val("");
+            $('#transAmount').val("");
             cate1Name.val('대분류를 입력하세요');
             cate2Name.val('소분류를 선택하세요');
             $('#inlineRadio1').prop('checked', false);
@@ -316,7 +333,7 @@ function init() {
                                 <td style="width: 5rem;">${ta.transTime}</td>
                                 <td><i class="fab fa-react fa-lg text-info me-3"></i> <strong>${ta.transPayee}</strong></td>
                                 <td>${ta.transMemo}</td>
-                                <td style="width: 5rem;">${ta.transAmount}</td>
+                                <td style="width: 5rem;">${parseInt(ta.transAmount).toLocaleString('en-US')}</td>
                                 <td>
                                 <div class="dropdown">
                                     <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></button>
@@ -426,8 +443,9 @@ function loadSubCategories(cate1Name) {
                 cate2List.forEach(cate2 => {
                     options += `<option value="${cate2.cate2Name}">${cate2.cate2Name}</option>`;
                 });
+                options += `<option value="직접입력" onclick="setCustomCategory2()">직접입력</option>`;
             } else { // 소분류 리스트가 비어있을 경우
-                options = '<option>소분류를 선택하세요</option><option>직접입력</option>';
+                options = '<option>소분류를 선택하세요</option><option value="직접입력" onclick="setCustomCategory2()">직접입력</option>';
             }
             $("#cate2Name").html(options);
         },
@@ -488,15 +506,18 @@ function setCustomCategory1() {
             const newOption = document.createElement("option");
             newOption.value = customCate1Name; // value와 textContent를 입력받은 값으로 통일
             newOption.textContent = customCate1Name;
-
+    
             // '직접입력' 옵션 찾기
-            const etcOption = document.querySelector('#cate1Name option[value="직접입력"]'); // value가 '직접입력'인 옵션 태그를 찾아야 하므로 적절한 값을 지정해주세요.
-
-            // '직접입력' 옵션 바로 앞에 새 옵션 삽입
-            etcOption.parentNode.insertBefore(newOption, etcOption);
-
-            newOption.selected = true;  // 새로 추가된 옵션을 선택 상태로 설정
-
+            const etcOptions = Array.from(document.querySelectorAll('#cate1Name option')).filter(option => option.textContent.trim() === '직접입력');
+            const etcOption = etcOptions.length > 0 ? etcOptions[0] : null;
+    
+            if (etcOption) {
+                // '직접입력' 옵션 바로 앞에 새 옵션 삽입
+                etcOption.parentNode.insertBefore(newOption, etcOption);
+                newOption.selected = true;  // 새로 추가된 옵션을 선택 상태로 설정
+            } else {
+                alert("'직접입력' 옵션이 찾아지지 않습니다.");
+            }
         },
         error: () => {
             alert('대분류 추가 전송 실패');
@@ -559,13 +580,17 @@ function setCustomCategory2() {
             newOption.textContent = customCate2Name;
 
             // '직접입력' 옵션 찾기
-            const etcOption = document.querySelector('#cate2Name option[value="직접입력"]'); // value가 '직접입력'인 옵션 태그를 찾아야 하므로 적절한 값을 지정해주세요.
+            const etcOptions = Array.from(document.querySelectorAll('#cate2Name option')).filter(option => option.textContent.trim() === '직접입력');
+            const etcOption = etcOptions.length > 0 ? etcOptions[0] : null;
 
-            // '직접입력' 옵션 바로 앞에 새 옵션 삽입
-            etcOption.parentNode.insertBefore(newOption, etcOption);
+            if (etcOption) {
+                // '직접입력' 옵션 바로 앞에 새 옵션 삽입
+                etcOption.parentNode.insertBefore(newOption, etcOption);
 
-            newOption.selected = true;  // 새로 추가된 옵션을 선택 상태로 설정
-
+                newOption.selected = true;  // 새로 추가된 옵션을 선택 상태로 설정
+            } else {
+                alert("'직접입력' 옵션이 찾아지지 않습니다.");
+            }
         },
         error: () => {
             alert('소분류 추가 전송 실패');
