@@ -43,6 +43,9 @@ public class ClosetController {
 	@Value("${spring.servlet.multipart.location}")
 	String uploadPath;
 	
+	//편집된 사진경로 담을 변수
+	String returnfile = "";
+	
 	//옷장추가
 	@ResponseBody
 	@PostMapping("insertCloset")
@@ -58,8 +61,7 @@ public class ClosetController {
 	@ResponseBody
 	@PostMapping(value="processImage", produces = MediaType.IMAGE_PNG_VALUE)
 	public ResponseEntity<byte[]> processImage(MultipartFile image) throws IOException {
-		log.debug("매핑!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-		String returnfile = "";
+		log.debug("processImage 매핑!!!!!!!");
 		String savedfile = FileService.saveFile(image, uploadPath);
 		returnfile = FileService.processImg(savedfile, uploadPath);
 		log.debug("파일경로:{}",returnfile);
@@ -72,14 +74,20 @@ public class ClosetController {
 	
 	@ResponseBody
 	@PostMapping("insertClothes")
-	public void insertClothes(Clothes clothes, MultipartFile clothesIMG) {
+	public void insertClothes(Clothes clothes, MultipartFile clothesIMG, boolean clothesEditcheck) {
 		log.debug("옷등록 매핑");
 		log.debug("옷 객체:{}", clothes);
-		if(clothesIMG !=null && !clothesIMG.isEmpty()) {
+		log.debug("옷이미지 파일 :{}", clothesIMG);
+		log.debug("편집여부 :{}", clothesEditcheck);
+		
+		if(clothesEditcheck) {
+			clothes.setClothesImg(returnfile);
+			log.debug("옷 객체:{}", clothes);
+		} else {
 			String savedfile = FileService.saveFile(clothesIMG, uploadPath);
 			clothes.setClothesImg(savedfile);
+			log.debug("저장된 파일:{}", savedfile);
 		}
-		log.debug("옷 파일:{}", clothesIMG);
 		service.insertClothes(clothes);
 	}
 	

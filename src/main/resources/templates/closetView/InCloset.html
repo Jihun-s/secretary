@@ -52,7 +52,7 @@
 		
 		const imageInput = document.getElementById("uploadIMG");
 		const imagePreview = document.getElementById("imagePreview");
-		let blobIMG; // 이미지 담을 변수
+		
 		imageInput.addEventListener("change", function() {
 		  const selectedFile = imageInput.files[0];
 		  if (selectedFile) {
@@ -75,6 +75,9 @@
 		});
 	});//document.ready 끝
 	
+	
+	let imgEditCheck = 0;
+	
 	function editIMG(){
 		const imageInput = document.getElementById("uploadIMG");
 		const selectedFile = imageInput.files[0];
@@ -95,19 +98,21 @@
             image.src = URL.createObjectURL(blob);
             imagePreview.innerHTML = "";
             imagePreview.appendChild(image);
-            
-            blobIMG = blob;
         })
         .catch(error => {
             console.error('Error:', error);
-        });    
+        });
+        
+        imgEditCheck = 1;
 	}
-	
+	console.log(imgEditCheck);
 	function insertClothes(){
 		
-		if(typeof blobIMG === 'undefined'){
+		let blobIMG;
+		if(!imgEditCheck){
 			blobIMG = document.getElementById("uploadIMG").files[0];
-		};
+		}
+		
 		let category = $('#clothesCategory option:selected').val();
 		let material = $('#materialList option:selected').val();
 
@@ -134,6 +139,7 @@
 			clothesSeasons : seasonArr,
 			clothesSize : size,
 			clothesIMG : blobIMG,
+			clothesEditcheck : imgEditCheck,
 		}
 		
 		let formData = new FormData();
