@@ -44,4 +44,9 @@ public class ClosetPageController {
 		return "closetView/InCloset2";
 	}
 	
+	@GetMapping("webSearch")
+	public String webSearch() {
+		return "closetView/webSearch";
+	}
+	
 }

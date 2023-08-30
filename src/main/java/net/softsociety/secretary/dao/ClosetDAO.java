@@ -18,4 +18,7 @@ public interface ClosetDAO {
 	//옷장에 옷 추가
 	void insertClothes(Clothes clothes);
 
+	//옷장에 의류목록 출력
+	ArrayList<Clothes> findClothes(int closetNum);
+
 }

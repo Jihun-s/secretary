@@ -15,6 +15,7 @@
 	select * from Secretary_Closet order by closet_num
 </select>
 
+<!-- 옷장에 의류추가 -->
 <insert id="insertClothes" parameterType="Clothes">
 	insert into Secretary_clothes (clothes_num, family_id, closet_num, 
 								clothes_material, clothes_category,
@@ -25,4 +26,9 @@
 			 	#{clothesSeasons}, #{clothesSize},
 				#{clothesImg})	
 </insert>
+
+<!-- 옷장안 의류목록 출력 -->
+<select id="findClothes" parameterType="int">
+	select * from Secretary_clothes where clothes_num = #{closetNum}
+</select>
 </mapper>

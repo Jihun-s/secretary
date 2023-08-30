@@ -35,6 +35,13 @@ public class ClosetServiceImpl implements ClosetService {
 		log.debug("옷 객체:{}",clothes);
 		dao.insertClothes(clothes);
 	}
+
+	//옷장안에 의류목록 출력
+	@Override
+	public ArrayList<Clothes> findClothes(int closetNum) {
+		return dao.findClothes(closetNum);
+	}
+	
 	
 	
 }
