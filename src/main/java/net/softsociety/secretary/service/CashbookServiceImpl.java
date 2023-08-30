@@ -9,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.extern.slf4j.Slf4j;
 import net.softsociety.secretary.dao.CashbookDAO;
+import net.softsociety.secretary.domain.Category1;
+import net.softsociety.secretary.domain.Category2;
 import net.softsociety.secretary.domain.Transaction;
 
 @Slf4j
@@ -23,6 +25,13 @@ public class CashbookServiceImpl implements CashbookService {
 	@Override
 	public int insertTrans(Transaction trans) {
 		// TODO Auto-generated method stub
+		// cate1_id 찾기
+		String cate1Name = trans.getCate1Name();
+		int cate1Id = dao.selectCate1Id(cate1Name);
+		log.debug("서비스에서 찾아온 대카테명:{}, 대카테id:{}", cate1Name, cate1Id);
+		
+		// trans에 넣어서 보내기
+		trans.setCate1Id(cate1Id);
 		int n = dao.insertTrans(trans);
 		
 		return n;
@@ -37,22 +46,30 @@ public class CashbookServiceImpl implements CashbookService {
 		return n;
 	}
 
-//	/** 커스텀 카테고리 불러오기 */
-//	@Override
-//	public HashMap<String, ArrayList<String>> getAllCategories(String userId) {
-//		// TODO Auto-generated method stub
-//		HashMap<String, ArrayList<String>> result = new HashMap<>();
-//		
-//		ArrayList<String> result1 = dao.selectCustomCategory1(userId);
-//		ArrayList<String> result2 = dao.selectCustomCategory2(userId);
-//		log.debug("result1 대분류:{}", result1);
-//		log.debug("result2 소분류:{}", result2);
-//
-//		result.put("cate1custom", result1);
-//		result.put("cate2custom", result2);
-//		
-//		return result;
-//	}
+	/** 커스텀 대분류 추가 */
+	@Override
+	public int addCustomCate1(Category1 cate1) {
+		// TODO Auto-generated method stub		
+		int n = dao.insertCustomCate1(cate1);
+		
+		return n;
+	}
+
+	/** 커스텀 소분류 추가 */
+	@Override
+	public int addCustomCate2(Category2 cate2, String cate1Name) {
+		// TODO Auto-generated method stub
+		// 대분류 id 찾기
+		int cate1Id = dao.selectCate1Id(cate1Name);
+		log.debug("서비스에서 찾아온 대카테명:{}, 대카테id:{}", cate1Name, cate1Id);
+		cate2.setCate1Id(cate1Id);
+		
+		int n = dao.insertCustomCate2(cate2);
+		
+		return n;
+	}
+
+
 	
 	
 	

@@ -39,4 +39,13 @@ public interface CashbookDAO {
 	/* 소분류 불러오기 */
 	ArrayList<Category2> selectCate2(String cate1Name);
 
+	/** 커스텀 대분류 추가 */
+	int insertCustomCate1(Category1 cate1);
+
+	/** 대분류 name으로 id 찾기 */
+	int selectCate1Id(String cate1Name);
+
+	/** 커스텀 소분류 추가 */
+	int insertCustomCate2(Category2 cate2);
+
 }

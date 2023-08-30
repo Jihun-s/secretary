@@ -107,5 +107,54 @@ INSERT INTO
 	FROM Secretary_Trans_Category2 C2
 	INNER JOIN Secretary_Trans_Category1 C1 ON C2.cate1_id = C1.cate1_id
 	WHERE C1.cate1_name = #{cate1Name}
+	ORDER BY cate2_id
+</select>
+
+<!-- 커스텀 대분류 추가 -->
+<insert id="insertCustomCate1" parameterType="Category1">
+	INSERT INTO
+	    Secretary_Trans_Category1
+	        (cate1_id
+	        , cate1_name
+	        , is_custom
+	        , trans_type
+	        , family_id
+	        , user_id)
+	    VALUES
+	        (Secretary_Trans_Category1_SEQ.nextval
+	        , #{cate1Name}
+	        , 1
+	        , #{transType}
+	        , #{familyId}
+	        , #{userId})
+</insert>
+
+<!-- 커스텀 소분류 추가 -->
+<insert id="insertCustomCate2" parameterType="Category1">
+	INSERT INTO
+	    Secretary_Trans_Category2
+	        (cate2_id
+	        , cate1_id
+	        , cate2_name
+	        , is_custom
+	        , family_id
+	        , user_id)
+	    VALUES
+	        (Secretary_Trans_Category2_SEQ.nextval
+	        , #{cate1Id}
+	        , #{cate2Name}
+	        , 1
+	        , #{familyId}
+	        , #{userId})
+</insert>
+
+<!-- 대분류 name으로 id 찾기 -->
+<select id="selectCate1Id" parameterType="string" resultType="int">
+	SELECT
+		cate1_id
+	FROM
+		Secretary_Trans_Category1
+	WHERE
+		cate1_name = #{cate1Name}
 </select>
 </mapper>

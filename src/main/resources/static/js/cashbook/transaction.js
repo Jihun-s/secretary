@@ -1,22 +1,19 @@
 $(document).ready(function() {
     // 목록 불러오기
     init();
+    $("#transCategoriesDiv").hide();
 
     // 내역 검증 후 입력
     $('#setTransBt').click(setTrans);
 
-   // 라디오 버튼 클릭 이벤트
-   $("#transCategoriesDiv").hide();
-//    $("input[name='transType']").change(showTransCategoriesDiv);
-//    $("input[name='transType']").change(loadMainCategories);
+   // 거래유형 클릭 이벤트 (대분류 출력)
    $("input[name='transType']").change(function() {
     showTransCategoriesDiv();
     loadMainCategories($(this).val());
    });
 
+   // 대분류 선택 이벤트 (소분류 출력 or 기본값)
    $("#cate1Name").change(function() {
-       setCategoryDefault();
-        // 선택된 대분류 이름을 가져와서 loadSubCategories 함수를 호출합니다.
         const selectedCate1Name = $(this).val();
         if (selectedCate1Name !== "대분류를 선택하세요") {
             loadSubCategories(selectedCate1Name);
@@ -26,7 +23,7 @@ $(document).ready(function() {
         }
    });
 
-    // 소분류 카테고리 클릭 이벤트
+    // 소분류 선택 이벤트 (소분류 먼저 선택할 수 없음)
     $("#cate2Name").click(function() {
         if ($("input[name='transType']:checked").length === 0) {
             alert("거래 유형을 먼저 선택하세요.");
@@ -37,20 +34,35 @@ $(document).ready(function() {
         }
     });
 
-
     // 대분류 커스텀 카테고리 추가
-    $(document).on('change', '#cate1Name', function() {
-        if ($(this).val() === "0") {
-            setCustomCategory();
+    $('#cate1Name').change(function() {
+        const selectedOptionText = $(this).find("option:selected").text();
+
+        // 입력한 선택지가 '직접입력'인 경우
+        if (selectedOptionText === "직접입력") {
+            setCustomCategory1();
         }
     });
-    
+
     // 소분류 커스텀 카테고리 추가
-    $(document).on('change', '#cate2Name', function() {
-        if ($(this).val() === "0") {
-            setCustomCategory();
+    // $('#cate2Name').change(function() {
+    //     const selectedOptionText = $(this).find("option:selected").text();
+
+    //     // 입력한 선택지가 '직접입력'인 경우
+    //     if (selectedOptionText === "직접입력") {
+    //         setCustomCategory2();
+    //     }
+    // });
+    // body 요소에 이벤트 위임
+    $('body').on('change', '#cate2Name', function() {
+        const selectedOptionText = $(this).find("option:selected").text();
+    
+        // 입력한 선택지가 '직접입력'인 경우
+        if (selectedOptionText === "직접입력") {
+            setCustomCategory2();
         }
     });
+
     
 });
 
@@ -378,18 +390,6 @@ function showTransCategoriesDiv() {
 }
 
 
-/** 대분류 기본값 -> 소분류 기본값 */
-function setCategoryDefault() {
-    const selectedValue = $('#cate1Name').val();
-    if (selectedValue && selectedValue === "대분류를 선택하세요") {
-        $("#cate2Name").html('<option>소분류를 선택하세요</option>');
-    } else {
-        loadSubCategories(selectedValue);
-    }
-}
-
-
-
 /** 대분류 불러오기 */
 function loadMainCategories(transType) {
 
@@ -419,10 +419,16 @@ function loadSubCategories(cate1Name) {
         type: 'GET',
         data: { cate1Name: cate1Name },
         success: function(cate2List) {
-            let options = '<option>소분류를 선택하세요</option>';
-            cate2List.forEach(cate2 => {
-                options += `<option value="${cate2.cate2Name}">${cate2.cate2Name}</option>`;
-            });
+            let options;
+
+            if (cate2List.length > 0) { // 소분류 리스트가 있을 경우
+                options = '<option>소분류를 선택하세요</option>';
+                cate2List.forEach(cate2 => {
+                    options += `<option value="${cate2.cate2Name}">${cate2.cate2Name}</option>`;
+                });
+            } else { // 소분류 리스트가 비어있을 경우
+                options = '<option>소분류를 선택하세요</option><option>직접입력</option>';
+            }
             $("#cate2Name").html(options);
         },
         error: function() {
@@ -431,47 +437,140 @@ function loadSubCategories(cate1Name) {
     });
 }
 
-/** 커스텀 카테고리 추가 */
-function setCustomCategory() {
-    let customCategoryName = prompt("새로운 대분류명을 입력하세요:");
+/** 커스텀 대분류 카테고리 추가 */
+function setCustomCategory1() {
+    let familyId = $('#familyId').val();
+    let transType = $("input[name='transType']:checked").val();
+    let customCate1Name = prompt("새로운 대분류명을 입력하세요:");
+    
+        // '취소' 버튼 클릭
+        if (customCate1Name === null) {
+            return;
+        }
 
-    // 1. 한글, 영문, 숫자만 사용
+    // 미입력
+    if (customCate1Name === "") {
+        alert("카테고리명을 입력하세요.");
+        return setCustomCategory1();
+    }
+
+    // 한글, 영문, 숫자만 사용
     const regex = /^[가-힣A-Za-z0-9]+$/;
 
-    // 2. 연속된 공백 제한
-    if (/\s{2,}/.test(customCategoryName)) {
+    // 연속 공백 제한
+    if (/\s{2,}/.test(customCate1Name)) {
         alert("카테고리 이름에 연속된 공백을 포함할 수 없습니다.");
 
-        return;
+        return setCustomCategory1();
     }
 
-    // 3. 중복 제한
-    const isDuplicate = [...this.options].some(option => option.value === customCategoryName);
+    // 중복 제한
+    const isDuplicate = [...$("#cate1Name option")].some(option => option.textContent === customCate1Name);
     if (isDuplicate) {
         alert("이미 존재하는 카테고리 이름입니다.");
-
-        return;
+        
+        return setCustomCategory1();
     }
 
-    // 4. 길이는 한글 기준 10자 이내(30BYTE)로 제한
-    if (!regex.test(customCategoryName) || new Blob([customCategoryName]).size > 30) {
+    // 길이는 한글 기준 10자 이내(30BYTE)
+    if (!regex.test(customCate1Name) || new Blob([customCate1Name]).size > 30) {
         alert("카테고리 이름은 한글, 영문, 숫자만 포함하여 30Byte(한글 10자) 이내로 입력해야 합니다.");
         
-        return;
+        return setCustomCategory1();
     }
 
-    if (customCategoryName && customCategoryName.trim() !== "") {
-        var newOption = document.createElement("option");
-        newOption.value = 555;
-        newOption.textContent = customCategoryName;
+    $.ajax({
+        url: '/secretary/cashbook/trans/addCate1',
+        type: 'POST',
+        data: { cate1Name: customCate1Name, transType: transType, familyId:familyId },
+        success: () => {
+            // '직접입력' 옵션 바로 앞에 새 옵션 삽입
+            const newOption = document.createElement("option");
+            newOption.value = customCate1Name; // value와 textContent를 입력받은 값으로 통일
+            newOption.textContent = customCate1Name;
 
-        // "직접입력" 옵션 찾기
-        var etcOption = this.querySelector('option[value="0"]');
+            // '직접입력' 옵션 찾기
+            const etcOption = document.querySelector('#cate1Name option[value="직접입력"]'); // value가 '직접입력'인 옵션 태그를 찾아야 하므로 적절한 값을 지정해주세요.
 
-        // "직접입력" 옵션 바로 앞에 새 옵션 삽입
-        this.insertBefore(newOption, etcOption);
-        newOption.selected = true;  // 새로 추가된 옵션을 선택 상태로 설정
+            // '직접입력' 옵션 바로 앞에 새 옵션 삽입
+            etcOption.parentNode.insertBefore(newOption, etcOption);
+
+            newOption.selected = true;  // 새로 추가된 옵션을 선택 상태로 설정
+
+        },
+        error: () => {
+            alert('대분류 추가 전송 실패');
+        }
+    });
+
+}
+
+
+/** 커스텀 소분류 카테고리 추가 */
+function setCustomCategory2() {
+    let familyId = $('#familyId').val();
+    let cate1Name = $('#cate1Name').val();
+    let customCate2Name = prompt("새로운 소분류명을 입력하세요:");
+    
+        // '취소' 버튼 클릭
+        if (customCate2Name === null) {
+            return;
+        }
+
+    // 미입력
+    if (customCate2Name === "") {
+        alert("카테고리명을 입력하세요.");
+        return setCustomCategory2();
     }
+
+    // 한글, 영문, 숫자만 사용
+    const regex = /^[가-힣A-Za-z0-9]+$/;
+
+    // 연속 공백 제한
+    if (/\s{2,}/.test(customCate2Name)) {
+        alert("카테고리 이름에 연속된 공백을 포함할 수 없습니다.");
+
+        return setCustomCategory2();
+    }
+
+    // 중복 제한
+    const isDuplicate = [...$("#cate2Name option")].some(option => option.textContent === customCate2Name);
+    if (isDuplicate) {
+        alert("이미 존재하는 카테고리 이름입니다.");
+        
+        return setCustomCategory2();
+    }
+
+    // 길이는 한글 기준 10자 이내(30BYTE)
+    if (!regex.test(customCate2Name) || new Blob([customCate2Name]).size > 30) {
+        alert("카테고리 이름은 한글, 영문, 숫자만 포함하여 30Byte(한글 10자) 이내로 입력해야 합니다.");
+        
+        return setCustomCategory2();
+    }
+
+    $.ajax({
+        url: '/secretary/cashbook/trans/addCate2',
+        type: 'POST',
+        data: { cate2Name: customCate2Name, cate1Name: cate1Name, familyId:familyId },
+        success: () => {
+            // '직접입력' 옵션 바로 앞에 새 옵션 삽입
+            const newOption = document.createElement("option");
+            newOption.value = customCate2Name; // value와 textContent를 입력받은 값으로 통일
+            newOption.textContent = customCate2Name;
+
+            // '직접입력' 옵션 찾기
+            const etcOption = document.querySelector('#cate2Name option[value="직접입력"]'); // value가 '직접입력'인 옵션 태그를 찾아야 하므로 적절한 값을 지정해주세요.
+
+            // '직접입력' 옵션 바로 앞에 새 옵션 삽입
+            etcOption.parentNode.insertBefore(newOption, etcOption);
+
+            newOption.selected = true;  // 새로 추가된 옵션을 선택 상태로 설정
+
+        },
+        error: () => {
+            alert('소분류 추가 전송 실패');
+        }
+    });
 
 }
 

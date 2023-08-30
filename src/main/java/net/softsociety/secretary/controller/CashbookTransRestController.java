@@ -125,16 +125,33 @@ public class CashbookTransRestController {
 		return result;
 	}
 	
-//	
-//	/** 커스텀 카테고리 불러오기 */
-//	@GetMapping("getCustomCategories")
-//	public HashMap<String, ArrayList<String>> getAllCategories(@AuthenticationPrincipal UserDetails user) {
-//		// 유저id 불러오기
-//		String userId = userdao.findByEmailOrUserId(user.getUsername()).getUserId();
-//	    HashMap<String, ArrayList<String>> result = service.getAllCategories(userId);
-//	    
-//	    log.debug("출력할 새 카테고리들:{}", result);
-//	    
-//	    return result;
-//	}
+	/** 커스텀 대분류 추가하기 */
+	@PostMapping("addCate1")
+	public void addCate1(Category1 cate1, @AuthenticationPrincipal UserDetails user) {
+		log.debug("넘어온 커스텀 대분류:{}", cate1);
+		
+		// 유저id 불러오기
+		String userId = userdao.findByEmailOrUserId(user.getUsername()).getUserId();
+		// 유저id 입력 
+		cate1.setUserId(userId);
+		log.debug("입력할 커스텀 대분류:{}", cate1);
+		
+		int n = service.addCustomCate1(cate1);
+	}
+
+	/** 커스텀 소분류 추가하기 */
+	@PostMapping("addCate2")
+	public void addCate2(Category2 cate2, String cate1Name, @AuthenticationPrincipal UserDetails user) {
+		log.debug("넘어온 커스텀 소분류:{}, 대분류:{}", cate2, cate1Name);
+		
+		// 유저id 불러오기
+		String userId = userdao.findByEmailOrUserId(user.getUsername()).getUserId();
+		// 유저id 입력 
+		cate2.setUserId(userId);
+		log.debug("입력할 커스텀 소분류:{}", cate2);
+		
+		int n = service.addCustomCate2(cate2, cate1Name);
+	}
+	
+
 }
