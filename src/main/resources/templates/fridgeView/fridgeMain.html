@@ -83,6 +83,9 @@
         </style>
         <script>
             $(document).ready(function () {
+                // 페이지 로드 시 냉장고 목록 가져오기
+                loadFridges();
+                //냉동실/ 냉장실 전환
                 function updateButtonText(text, buttonId) {
                     document.getElementById(buttonId).textContent = text;
                 }
@@ -98,9 +101,110 @@
                         button.classList.add('btn-info');
                     }
                 });
+                //</ 냉동실/ 냉장실 전환
+
+                //냉장고 추가!
+                let isEditMode = false; // 편집 모드 상태를 추적하는 변수
+
+                $('#editButton').on('click', function () {
+                    // PlusButton 이미지 추가
+                    const addButton = `<img src="fridgeimg/PlusButton.png" alt="추가버튼" style="width: 100px; height: 100px" id="addFridgeImage">`;
+                    if (isEditMode) {
+                        // 편집 모드라면
+                        $('#addFridgeImage').remove(); // PlusButton.png 제거
+                        isEditMode = false;
+                    } else {
+                        // 편집 모드가 아니라면
+                        const addButton = `<img src="fridgeimg/PlusButton.png" alt="추가버튼" style="width: 100px; height: 100px" id="addFridgeImage">`;
+                        $('#fridgeContainer').append(addButton);
+                        isEditMode = true;
+                    }
+                });
+
+                $(document).on('click', '#addFridgeImage', function () {
+                    $(this).attr('src', 'fridgeimg/노랑냉장고.jpg');
+                    const inputField = `
+                        <input type="text" placeholder="냉장고 이름을 입력하세요!" id="fridgeNameInput">
+                        <button type="button" id="addConfirmButton">추가</button>
+                        <button type="button" id="addCancelButton">취소</button>
+                    `;
+                    $(this).after(inputField);
+                });
+
+                $(document).on('click', '#addConfirmButton', function () {
+                    const fridgeName = $('#fridgeNameInput').val();
+                    if (fridgeName) {
+                        const fridgeElement = `
+                            <div>
+                                <img src="fridgeimg/노랑냉장고.jpg" alt="냉장고" style="width: 100px; height: 100px">
+                                <p>${fridgeName}</p>
+                            </div>
+                        `;
+                        $('#addFridgeImage').replaceWith(fridgeElement);
+
+                        // 데이터베이스에 냉장고 정보 저장
+                        $.ajax({
+                            url: 'fridge/addFridge',
+                            type: 'POST',
+                            data: JSON.stringify({ fridgeName: fridgeName }),
+                            contentType: 'application/json',
+                            success: function (data) {
+                                console.log('냉장고가 추가되었습니다.', data);
+                                $('#fridgeNameInput').remove();
+                                $('#addConfirmButton').remove();
+                                $('#addCancelButton').remove();
+                            },
+                            error: function (error) {
+                                console.error('냉장고 추가 중 오류 발생:', error);
+                            },
+                        });
+                    } else {
+                        alert('냉장고 이름을 입력하세요!');
+                    }
+                });
+
+                $(document).on('click', '#addCancelButton', function () {
+                    $('#addFridgeImage').remove();
+                    $('#fridgeNameInput').remove();
+                    $(this).remove();
+                    $('#addConfirmButton').remove();
+                });
+                //</ 냉장고 추가!
             });
             function updateButtonText(text, buttonId) {
                 document.getElementById(buttonId).textContent = text;
+            }
+
+            function loadFridges() {
+                $.ajax({
+                    url: 'fridge/getAllFridges', // Controller의 해당 URL
+                    type: 'GET',
+                    success: function (data) {
+                        // 가져온 냉장고 데이터를 화면에 뿌려주는 로직
+
+                        // 냉장고 컨테이너 초기화
+                        $('#fridgeContainer').empty();
+
+                        // 가져온 냉장고 데이터를 순회하면서 화면에 추가
+                        data.forEach(function (fridge) {
+                            // 각 냉장고의 이미지와 이름을 포함하는 HTML 생성
+                            var fridgeElement = `
+                                <div class="fridgeItem">
+                                    <a href="/fridge/${fridge.fridgeId}">
+                                        <img src="fridgeimg/노랑냉장고.jpg" alt="냉장고" style="width: 100px; height: 100px">
+                                    </a>
+                                    <div class="fridgeName">${fridge.fridgeName}</div>
+                                </div>
+                            `;
+
+                            // 생성한 HTML을 냉장고 컨테이너에 추가
+                            $('#fridgeContainer').append(fridgeElement);
+                        });
+                    },
+                    error: function (error) {
+                        console.error('냉장고 목록을 가져오는 중 오류 발생: ', error);
+                    },
+                });
             }
         </script>
     </head>
@@ -580,12 +684,12 @@
 
                                     <!-- 1열 2행 -->
                                     <div class="d-flex align-items-center">
-                                        <h3 class="mt-3 mb-3" style="margin-right: 5px">나의 냉장실</h3>
-                                        <button type="button" class="btn btn-sm btn-info">편집</button>
+                                        <h3 class="mt-3 mb-3" style="margin-right: 5px">나의 냉장고</h3>
+                                        <button type="button" class="btn btn-sm btn-info" id="editButton">편집</button>
                                     </div>
                                     <div class="card mb-4">
-                                        <div class="card-body">
-                                            <h5>1열 2행</h5>
+                                        <div class="card-body" id="fridgeContainer">
+                                            <!-- 냉장고 이미지들이 이곳에 추가됩니다. -->
                                         </div>
                                     </div>
                                 </div>
