@@ -80,6 +80,18 @@
             .no-wrap-text {
                 white-space: nowrap;
             }
+            .fridgeItem {
+                width: 50%;
+                box-sizing: border-box;
+                float: left;
+            }
+            .fridgeName {
+                width: 90	px; /* 이미지의 너비 + 10px 설정 */
+                overflow: hidden; /* 텍스트가 컨테이너를 벗어나면 숨김 */
+                text-overflow: ellipsis; /* 텍스트가 너무 길면 ...으로 표시 */
+                white-space: nowrap; /* 텍스트를 한 줄로 표시 */
+                font-size: 12px; /* 원하는 폰트 크기로 설정 */
+            }
         </style>
         <script>
             $(document).ready(function () {
@@ -91,14 +103,14 @@
                 }
                 document.getElementById('toggleButton').addEventListener('click', function () {
                     const button = this;
-                    if (button.textContent === '냉동실 보기') {
-                        button.textContent = '냉장실 보기';
-                        button.classList.remove('btn-info');
-                        button.classList.add('btn-primary');
-                    } else {
+                    if (button.textContent === '냉장실 보기') {
                         button.textContent = '냉동실 보기';
                         button.classList.remove('btn-primary');
                         button.classList.add('btn-info');
+                    } else {
+                        button.textContent = '냉장실 보기';
+                        button.classList.remove('btn-info');
+                        button.classList.add('btn-primary');
                     }
                 });
                 //</ 냉동실/ 냉장실 전환
@@ -108,14 +120,14 @@
 
                 $('#editButton').on('click', function () {
                     // PlusButton 이미지 추가
-                    const addButton = `<img src="fridgeimg/PlusButton.png" alt="추가버튼" style="width: 100px; height: 100px" id="addFridgeImage">`;
+                    const addButton = `<img src="fridgeimg/PlusButton.png" alt="추가버튼" style="width: 90px; height: 90px" id="addFridgeImage">`;
                     if (isEditMode) {
                         // 편집 모드라면
                         $('#addFridgeImage').remove(); // PlusButton.png 제거
                         isEditMode = false;
                     } else {
                         // 편집 모드가 아니라면
-                        const addButton = `<img src="fridgeimg/PlusButton.png" alt="추가버튼" style="width: 100px; height: 100px" id="addFridgeImage">`;
+                        const addButton = `<img src="fridgeimg/PlusButton.png" alt="추가버튼" style="width: 90px; height: 90px" id="addFridgeImage">`;
                         $('#fridgeContainer').append(addButton);
                         isEditMode = true;
                     }
@@ -135,10 +147,12 @@
                     const fridgeName = $('#fridgeNameInput').val();
                     if (fridgeName) {
                         const fridgeElement = `
-                            <div>
-                                <img src="fridgeimg/노랑냉장고.jpg" alt="냉장고" style="width: 100px; height: 100px">
-                                <p>${fridgeName}</p>
-                            </div>
+                        <div class="fridgeItem">
+                            <a href="">
+                                <img src="fridgeimg/노랑냉장고.jpg" alt="냉장고" style="width: 90px; height: 90px">
+                            </a>
+                            <div class="fridgeName">${fridgeName}</div>
+                        </div>	
                         `;
                         $('#addFridgeImage').replaceWith(fridgeElement);
 
@@ -170,6 +184,17 @@
                     $('#addConfirmButton').remove();
                 });
                 //</ 냉장고 추가!
+                
+                //냉장고 이름 글자 수 제한!
+                const MAX_NAME_LENGTH = 8; // 원하는 글자 수로 설정
+
+                $(document).on('input', '#fridgeNameInput', function() {
+                    if ($(this).val().length > MAX_NAME_LENGTH) {
+                        $(this).val($(this).val().substr(0, MAX_NAME_LENGTH));
+                        alert(`냉장고 이름은 ${MAX_NAME_LENGTH}자 이하여야 합니다.`);
+                    }
+                });
+                //</냉장고 이름 글자 수 제한!
             });
             function updateButtonText(text, buttonId) {
                 document.getElementById(buttonId).textContent = text;
@@ -191,7 +216,7 @@
                             var fridgeElement = `
                                 <div class="fridgeItem">
                                     <a href="/fridge/${fridge.fridgeId}">
-                                        <img src="fridgeimg/노랑냉장고.jpg" alt="냉장고" style="width: 100px; height: 100px">
+                                        <img src="fridgeimg/노랑냉장고.jpg" alt="냉장고" style="width: 90px; height: 90px">
                                     </a>
                                     <div class="fridgeName">${fridge.fridgeName}</div>
                                 </div>
@@ -663,8 +688,8 @@
                                         th:src="@{/images/ck8.png}"
                                         style="height: 4rem; width: 4rem; vertical-align: middle"
                                     />
-                                    <h1 style="display: inline; vertical-align: middle">냉장고</h1>
-                                    <button id="toggleButton" class="btn btn-info" style="margin-left: 3px">
+                                    <h1 style="display: inline; vertical-align: middle">전체 냉장고</h1>
+                                    <button id="toggleButton" class="btn btn-sm btn-info" style="margin-left: 3px; display: inline; vertical-align: middle;">
                                         냉동실 보기
                                     </button>
                                 </span>
@@ -726,7 +751,7 @@
                                         <div class="btn-group" style="margin-right: 1rem">
                                             <button
                                                 type="button"
-                                                class="btn btn-info no-wrap-text"
+                                                class="btn btn-sm btn-info no-wrap-text"
                                                 style="width: 120px; pointer-events: none"
                                                 id="infoButton1"
                                             >
@@ -734,7 +759,7 @@
                                             </button>
                                             <button
                                                 type="button"
-                                                class="btn btn-info dropdown-toggle dropdown-toggle-split"
+                                                class="btn btn-sm btn-info dropdown-toggle dropdown-toggle-split"
                                                 data-bs-toggle="dropdown"
                                                 aria-expanded="false"
                                             >
@@ -781,7 +806,7 @@
                                         <div class="btn-group">
                                             <button
                                                 type="button"
-                                                class="btn btn-info no-wrap-text"
+                                                class="btn btn-sm btn-info no-wrap-text"
                                                 style="width: 120px; pointer-events: none"
                                                 id="infoButton2"
                                             >
@@ -789,7 +814,7 @@
                                             </button>
                                             <button
                                                 type="button"
-                                                class="btn btn-info dropdown-toggle dropdown-toggle-split"
+                                                class="btn btn-sm btn-info dropdown-toggle dropdown-toggle-split"
                                                 data-bs-toggle="dropdown"
                                                 aria-expanded="false"
                                             >
