@@ -1,0 +1,24 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.softsociety.secretary.dao.FridgeDAO">
+	<select id="getAllFridges" resultType="Fridge">
+        SELECT * FROM Secretary_Fridge WHERE family_id = #{familyId} and fridge_category = '냉장실'
+    </select>
+
+    <insert id="addFridge">
+        INSERT INTO Secretary_Fridge (fridge_id, family_id, fridge_name, fridge_category)
+        VALUES (Secretary_Fridge_SEQ.NEXTVAL, #{familyId}, #{fridgeName}, #{fridgeCategory})
+    </insert>
+
+    <update id="updateFridge">
+        UPDATE Secretary_Fridge
+        SET fridge_name = #{fridgeName}, fridge_category = #{fridgeCategory}
+        WHERE fridge_id = #{fridgeId}
+    </update>
+
+    <delete id="deleteFridge">
+        DELETE FROM Secretary_Fridge WHERE fridge_id = #{fridgeId}
+    </delete>
+</mapper>
