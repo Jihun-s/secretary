@@ -2,6 +2,7 @@ package net.softsociety.secretary.controller;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -92,4 +93,15 @@ public class CashbookTransRestController {
 		
 	}
 	
+	/** 커스텀 카테고리 불러오기 */
+	@GetMapping("getCustomCategories")
+	public HashMap<String, ArrayList<String>> getAllCategories(@AuthenticationPrincipal UserDetails user) {
+		// 유저id 불러오기
+		String userId = userdao.findByEmailOrUserId(user.getUsername()).getUserId();
+	    HashMap<String, ArrayList<String>> result = service.getAllCategories(userId);
+	    
+	    log.debug("출력할 새 카테고리들:{}", result);
+	    
+	    return result;
+	}
 }

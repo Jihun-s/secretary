@@ -25,5 +25,7 @@ public class Transaction {
 	private String transPayee;
 	private String transMemo;
 	private long transAmount;
+	private int cate1Custom;
+	private int cate2Custom;
 	
 }

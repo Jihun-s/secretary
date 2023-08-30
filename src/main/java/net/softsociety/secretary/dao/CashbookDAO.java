@@ -24,4 +24,9 @@ public interface CashbookDAO {
 	/** 내역 삭제 */
 	int deleteTrans(Transaction trans);
 
+	/** 커스텀 대분류 불러오기 */
+	ArrayList<String> selectCustomCategory1(String userId);
+
+	/** 커스텀 소분류 불러오기 */
+	ArrayList<String> selectCustomCategory2(String userId);
 }
