@@ -1,17 +1,59 @@
 $(document).ready(function() {
-    // 카테고리 불러오기
-    getCustomCategories();
-
     // 목록 불러오기
     init();
 
     // 내역 검증 후 입력
     $('#setTransBt').click(setTrans);
 
-    // 대분류 및 소분류 커스텀 카테고리 추가
-    $(document).on('change', '#transCategory1', handleCategoryChange);
-    $(document).on('change', '#transCategory2', handleCategoryChange);
+   // 라디오 버튼 클릭 이벤트
+   $("#transCategoriesDiv").hide();
+//    $("input[name='transType']").change(showTransCategoriesDiv);
+//    $("input[name='transType']").change(loadMainCategories);
+   $("input[name='transType']").change(function() {
+    showTransCategoriesDiv();
+    loadMainCategories($(this).val());
+   });
+
+   $("#cate1Name").change(function() {
+       setCategoryDefault();
+        // 선택된 대분류 이름을 가져와서 loadSubCategories 함수를 호출합니다.
+        const selectedCate1Name = $(this).val();
+        if (selectedCate1Name !== "대분류를 선택하세요") {
+            loadSubCategories(selectedCate1Name);
+        } else {
+            // 대분류가 초기 상태로 변경된 경우, 소분류도 초기 상태로 변경합니다.
+            $("#cate2Name").html('<option>소분류를 선택하세요</option>');
+        }
+   });
+
+    // 소분류 카테고리 클릭 이벤트
+    $("#cate2Name").click(function() {
+        if ($("input[name='transType']:checked").length === 0) {
+            alert("거래 유형을 먼저 선택하세요.");
+            return;
+        }
+        if ($("#cate1Name").val() === "대분류를 선택하세요") {
+            alert("대분류를 먼저 선택하세요.");
+        }
+    });
+
+
+    // 대분류 커스텀 카테고리 추가
+    $(document).on('change', '#cate1Name', function() {
+        if ($(this).val() === "0") {
+            setCustomCategory();
+        }
+    });
+    
+    // 소분류 커스텀 카테고리 추가
+    $(document).on('change', '#cate2Name', function() {
+        if ($(this).val() === "0") {
+            setCustomCategory();
+        }
+    });
+    
 });
+
 
 
 /** 사진 입력 버튼 */
@@ -152,29 +194,29 @@ function setTrans() {
 
 /** 내역 입력 Ajax 호출 */
 function setTransAjax() {
+    let familyId = $('#familyId');
+    let cashbookId = $('#cashbookId');
     let transDate = $('#transDate');
-    let transAmount = $('#transAmount');
-    let transCategory1 = $('#transCategory1');
-    let transCategory2 = $('#transCategory2');
     let transType = $("input[name='transType']:checked"); 
+    let cate1Name = $('#cate1Name');
+    let cate2Name = $('#cate2Name');
     let transPayee = $('#transPayee');
     let transMemo = $('#transMemo');
-    let cate1Custom = $('#cate1CustomInput');
-    let cate2Custom = $('#cate2CustomInput');
+    let transAmount = $('#transAmount');
 
     $.ajax({
         url: '/secretary/cashbook/trans/setTrans',
         type: 'POST',
         data: { 
+            familyId: familyId.val(),
+            cashbookId: cashbookId.val(),
             transDate: transDate.val(), 
-            transAmount: transAmount.val(), 
-            transCategory1: transCategory1.val(), 
-            transCategory2: transCategory2.val(),
             transType: transType.val(), 
+            cate1Name: cate1Name.val(),
+            cate2Name: cate2Name.val(),
             transPayee: transPayee.val(),
             transMemo: transMemo.val(),
-            cate1Custom: cate1Custom.val(),
-            cate2Custom: cate2Custom.val(),
+            transAmount: transAmount.val()
         },
         success: function() {
             init();
@@ -182,15 +224,16 @@ function setTransAjax() {
             // 입력창 비우기 
             transDate.html("");
             transAmount.val("");
-            $('#transCategory1').val('대분류를 입력하세요');
-            $('#transCategory2').val('소분류를 선택하세요');
+            cate1Name.val('대분류를 입력하세요');
+            cate2Name.val('소분류를 선택하세요');
             $('#inlineRadio1').prop('checked', false);
             $('#inlineRadio2').prop('checked', false);
             transPayee.val("");
             transMemo.val("");
+            $("#transCategoriesDiv").hide();
         },
         error: function() {
-            alert('서버 전송 실패');
+            alert('내역 입력 서버 전송 실패');
         }
     });
 }
@@ -200,6 +243,7 @@ function setTransAjax() {
 function init() {
     let transCntMonth = $('#transCntMonth');
     let transListDiv = $('#transListDiv');
+    let familyId = $('#familyId');
 
     // 내역 수 가져오기 
     $.ajax({
@@ -218,6 +262,7 @@ function init() {
     $.ajax({
         url: '/secretary/cashbook/trans/list',
         type: 'GET',
+        data: { familyId: familyId.val() },
         dataType: 'JSON',
         success: function(list) {
             let groupedData = {};
@@ -253,7 +298,7 @@ function init() {
                 $(groupedData[date]).each(function(idx, ta) {
                     table += `<tr>
                                 <td style="width: 5rem;">
-                                    <span class="badge bg-label-success me-1">${ta.transCategory2}</span>
+                                    <span class="badge bg-label-success me-1">${ta.cate2Name}</span>
                                     <input type="hidden" value="${ta.transId}">
                                 </td>
                                 <td style="width: 5rem;">${ta.transTime}</td>
@@ -315,116 +360,118 @@ function deleteTrans(transId) {
     });
 }
 
+/** 수입/지출에 따른 카테고리 표시 */
+function showTransCategoriesDiv() {
+    let selectedType = $("input[name='transType']:checked").val();
+    ;
+    
+    $("#transCategoriesDiv").show();
 
-/** 카테고리 추가 */
-function handleCategoryChange() {
-    let cate1Custom = 0, cate2Custom = 0;
+    if (selectedType === "수입") {
+        $("#transCategory1Div").show();
+        $("#transCategory2Div").hide();
+    } else {
+        $("#transCategory1Div").show();
+        $("#transCategory2Div").show();
+        // 지출에 대한 대분류 카테고리를 로드하는 함수 (예: loadExpenditureCategories())를 호출할 수 있습니다.
+    }
+}
 
-    if (this.value === "0") {
-        var customCategoryName = prompt("새로운 카테고리 이름을 입력하세요:");
 
-        // 1. 한글, 영문, 숫자만 사용
-        const regex = /^[가-힣A-Za-z0-9]+$/;
-
-        // 2. 연속된 공백 제한
-        if (/\s{2,}/.test(customCategoryName)) {
-            alert("카테고리 이름에 연속된 공백을 포함할 수 없습니다.");
-            return;
-        }
-
-        // 3. 중복 제한
-        const isDuplicate = [...this.options].some(option => option.value === customCategoryName);
-        if (isDuplicate) {
-            alert("이미 존재하는 카테고리 이름입니다.");
-            return;
-        }
-
-        // 4. 길이는 한글 기준 10자 이내(30BYTE)로 제한
-        if (!regex.test(customCategoryName) || new Blob([customCategoryName]).size > 30) {
-            alert("카테고리 이름은 한글, 영문, 숫자만 포함하여 30바이트(한글 10자) 이내로 입력해야 합니다.");
-            return;
-        }
-
-        if (customCategoryName && customCategoryName.trim() !== "") {
-            var newOption = document.createElement("option");
-            newOption.value = customCategoryName;
-            newOption.textContent = customCategoryName;
-
-            // "직접입력" 옵션 찾기
-            var etcOption = this.querySelector('option[value="0"]');
-
-            // "직접입력" 옵션 바로 앞에 새 옵션 삽입
-            this.insertBefore(newOption, etcOption);
-            newOption.selected = true;  // 새로 추가된 옵션을 선택 상태로 설정
-
-            // transCategory1 혹은 transCategory2에 따라 cate1Custom 혹은 cate2Custom 값을 변경
-            if (this.id === "transCategory1") {
-                cate1Custom = 1;
-                document.getElementById("cate1CustomInput").value = "1";
-            } else if (this.id === "transCategory2") {
-                cate2Custom = 1;
-                document.getElementById("cate2CustomInput").value = "1";
-            }
-        }
+/** 대분류 기본값 -> 소분류 기본값 */
+function setCategoryDefault() {
+    const selectedValue = $('#cate1Name').val();
+    if (selectedValue && selectedValue === "대분류를 선택하세요") {
+        $("#cate2Name").html('<option>소분류를 선택하세요</option>');
+    } else {
+        loadSubCategories(selectedValue);
     }
 }
 
 
 
-/** 커스텀 카테고리 불러오기 */
-function getCustomCategories() {
-    let cate1 = "";
-    let cate2 = "";
-
-    let transCategory1Div = $('#transCategory1Div');
-    let transCategory2Div = $('#transCategory2Div');
+/** 대분류 불러오기 */
+function loadMainCategories(transType) {
 
     $.ajax({
-        url: '/secretary/cashbook/trans/getCustomCategories',
+        url: '/secretary/cashbook/trans/loadCate1', // 해당 경로를 실제 경로로 교체해야 합니다.
         type: 'GET',
-        dataType: 'JSON',
-        success: (data) => {           
-            // 대분류 추가
-            cate1 += `<select id="transCategory1" name="transCategory1" class="form-select">
-            <option>대분류를 입력하세요</option>
-            <option value="식비">식비</option>
-            <option value="쇼핑">쇼핑</option>
-            <option value="여가">여가</option>
-            <option value="여행">여행</option>
-            <option value="뷰티">뷰티</option>
-            <option value="리빙">리빙</option>
-            <option value="건강">건강</option>`;
-          
-            $.each(data.cate1custom, function(idx, category1) {
-                cate1 += `<option value="${category1}">${category1}</option>`;
-            }) 
-
-            cate1 += `<option value="0">직접입력</option>
-                    </select>`;  
+        data: { transType: transType },
+        success: function(cate1List) {
+            let options = '<option>대분류를 선택하세요</option>';
             
-            // 소분류 추가
-            cate2 += `<select id="transCategory2" name="transCategory2" class="form-select">
-            <option>소분류를 선택하세요</option>
-            <option value="식사">식사</option>
-            <option value="간식">간식</option>
-            <option value="카페">카페</option>
-            <option value="술">술</option>
-            <option value="편의점">편의점</option>`;
-          
-            $.each(data.cate2custom, function(idx, category2) {
-                cate2 += `<option value="${category2}">${category2}</option>`;
-            }) 
+            cate1List.forEach(cate1 => {
+                options += `<option value="${cate1.cate1Name}">${cate1.cate1Name}</option>`;
+            });
 
-            cate2 += `<option value="0">직접입력</option>
-                    </select>`;  
-
-            // 출력
-            transCategory1Div.html(cate1);
-            transCategory2Div.html(cate2);
+            $("#cate1Name").html(options);
         },
-        error: () => {
-            alert('카테고리 목록 전송 실패');
+        error: function() {
+            alert('대분류 목록 전송 실패');
         }
     });
+}
+
+/** 소분류 불러오기 */
+function loadSubCategories(cate1Name) {
+    $.ajax({
+        url: '/secretary/cashbook/trans/loadCate2', // 해당 경로를 실제 경로로 교체해야 합니다.
+        type: 'GET',
+        data: { cate1Name: cate1Name },
+        success: function(cate2List) {
+            let options = '<option>소분류를 선택하세요</option>';
+            cate2List.forEach(cate2 => {
+                options += `<option value="${cate2.cate2Name}">${cate2.cate2Name}</option>`;
+            });
+            $("#cate2Name").html(options);
+        },
+        error: function() {
+            alert('소분류 목록 전송 실패');
+        }
+    });
+}
+
+/** 커스텀 카테고리 추가 */
+function setCustomCategory() {
+    let customCategoryName = prompt("새로운 대분류명을 입력하세요:");
+
+    // 1. 한글, 영문, 숫자만 사용
+    const regex = /^[가-힣A-Za-z0-9]+$/;
+
+    // 2. 연속된 공백 제한
+    if (/\s{2,}/.test(customCategoryName)) {
+        alert("카테고리 이름에 연속된 공백을 포함할 수 없습니다.");
+
+        return;
+    }
+
+    // 3. 중복 제한
+    const isDuplicate = [...this.options].some(option => option.value === customCategoryName);
+    if (isDuplicate) {
+        alert("이미 존재하는 카테고리 이름입니다.");
+
+        return;
+    }
+
+    // 4. 길이는 한글 기준 10자 이내(30BYTE)로 제한
+    if (!regex.test(customCategoryName) || new Blob([customCategoryName]).size > 30) {
+        alert("카테고리 이름은 한글, 영문, 숫자만 포함하여 30Byte(한글 10자) 이내로 입력해야 합니다.");
+        
+        return;
+    }
+
+    if (customCategoryName && customCategoryName.trim() !== "") {
+        var newOption = document.createElement("option");
+        newOption.value = 555;
+        newOption.textContent = customCategoryName;
+
+        // "직접입력" 옵션 찾기
+        var etcOption = this.querySelector('option[value="0"]');
+
+        // "직접입력" 옵션 바로 앞에 새 옵션 삽입
+        this.insertBefore(newOption, etcOption);
+        newOption.selected = true;  // 새로 추가된 옵션을 선택 상태로 설정
+    }
+
 }
 

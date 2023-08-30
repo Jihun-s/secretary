@@ -37,22 +37,22 @@ public class CashbookServiceImpl implements CashbookService {
 		return n;
 	}
 
-	/** 커스텀 카테고리 불러오기 */
-	@Override
-	public HashMap<String, ArrayList<String>> getAllCategories(String userId) {
-		// TODO Auto-generated method stub
-		HashMap<String, ArrayList<String>> result = new HashMap<>();
-		
-		ArrayList<String> result1 = dao.selectCustomCategory1(userId);
-		ArrayList<String> result2 = dao.selectCustomCategory2(userId);
-		log.debug("result1 대분류:{}", result1);
-		log.debug("result2 소분류:{}", result2);
-
-		result.put("cate1custom", result1);
-		result.put("cate2custom", result2);
-		
-		return result;
-	}
+//	/** 커스텀 카테고리 불러오기 */
+//	@Override
+//	public HashMap<String, ArrayList<String>> getAllCategories(String userId) {
+//		// TODO Auto-generated method stub
+//		HashMap<String, ArrayList<String>> result = new HashMap<>();
+//		
+//		ArrayList<String> result1 = dao.selectCustomCategory1(userId);
+//		ArrayList<String> result2 = dao.selectCustomCategory2(userId);
+//		log.debug("result1 대분류:{}", result1);
+//		log.debug("result2 소분류:{}", result2);
+//
+//		result.put("cate1custom", result1);
+//		result.put("cate2custom", result2);
+//		
+//		return result;
+//	}
 	
 	
 	

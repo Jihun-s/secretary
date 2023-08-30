@@ -624,6 +624,9 @@
                       </div>
                       <h4>직접 입력</h4>
                       <form>
+                        <!-- 나중에 model에 담아 뿌리도록 수정 -->
+                        <input type="hidden" name="familyId" id="familyId" value="1">
+                        <input type="hidden" name="cashbookId" id="cashbookId" value="1">
                         <div class="mb-3">
                           <label class="form-label" for="transDate">거래일자</label>
                           <input class="form-control" type="datetime-local" name="transDate" value="2021-06-18T12:30:00" id="transDate">
@@ -644,12 +647,12 @@
                             <p id="transTypeError"></p>
                           </div>
                         </div>
-                        <div class="mb-3">
+                        <div id="transCategoriesDiv" class="mb-3">
                           <label class="form-label" for="transCategory">카테고리</label>
                           <div>
                             <div id="transCategory1Div">
-                              <select id="transCategory1" name="transCategory1" class="form-select">
-                                <option>대분류를 입력하세요</option>
+                              <select id="cate1Name" name="cate1Name" class="form-select">
+                                <option value="대분류를 선택하세요">대분류를 선택하세요</option>
                                 <option value="식비">식비</option>
                                 <option value="쇼핑">쇼핑</option>
                                 <option value="여가">여가</option>
@@ -661,18 +664,17 @@
                               </select>
                             </div>
                             <div id="transCategory2Div">
-                              <select id="transCategory2" name="transCategory2" class="form-select">
-                                <option>소분류를 선택하세요</option>
+                              <select id="cate2Name" name="cate2Name" class="form-select">
+                                <option value="소분류를 선택하세요">소분류를 선택하세요</option>
                                 <option value="식사">식사</option>
                                 <option value="간식">간식</option>
                                 <option value="카페">카페</option>
                                 <option value="술">술</option>
                                 <option value="편의점">편의점</option>
+                                <option value="배달">배달</option>
                                 <option value="0">직접입력</option>
                               </select>
                             </div>
-                            <input type="hidden" name="cate1Custom" id="cate1CustomInput" value="0">
-                            <input type="hidden" name="cate2Custom" id="cate2CustomInput" value="0">
                           </div>
                           <div>
                             <p id="transCategoryError"></p>
