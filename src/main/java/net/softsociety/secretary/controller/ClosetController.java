@@ -1,13 +1,14 @@
 package net.softsociety.secretary.controller;
 
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -72,6 +73,7 @@ public class ClosetController {
 		return ResponseEntity.ok(imageBytes);
 	}
 	
+	//옷장에 의류추가
 	@ResponseBody
 	@PostMapping("insertClothes")
 	public void insertClothes(Clothes clothes, MultipartFile clothesIMG, boolean clothesEditcheck) {
@@ -89,6 +91,20 @@ public class ClosetController {
 			log.debug("저장된 파일:{}", savedfile);
 		}
 		service.insertClothes(clothes);
+	}
+	
+	//옷장에 의류목록 보여주기
+	@ResponseBody
+	@PostMapping("clothesList")
+	public ArrayList<Clothes> clothesList(@RequestParam(name="closetNum") int closetNum
+										, HttpServletRequest request
+										, HttpServletResponse response){
+		log.debug("clothesList 매핑");
+		log.debug("{}", request.getRemoteAddr());
+		
+		
+		ArrayList<Clothes> clothesList = service.findClothes(closetNum);
+		return clothesList;
 	}
 	
 }
