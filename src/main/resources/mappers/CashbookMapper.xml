@@ -6,67 +6,73 @@
 
 <!-- 내역 입력 -->
 <insert id="insertTrans" parameterType="Transaction">
-	INSERT INTO 
-	        Secretary_Transaction
-	        (trans_id
-	        , cashbook_id
-	        , user_id
-	        , family_id
-	        , trans_date
-	        , trans_type
-	        , trans_category1
-	        , trans_category2
-	        , trans_payee
-	        , trans_memo
-	        , trans_amount
-	        , cate1_custom
-	        , cate2_custom)
-	    VALUES 
-	        (Secretary_Trans_SEQ.nextval
-	        , #{cashbookId}
-	        , #{userId}
-	        , #{familyId}
-	        , TO_DATE(#{transDate}, 'YYYY-MM-DD"T"HH24:MI')
-	        , #{transType}
-	        , #{transCategory1}
-	        , #{transCategory2}
-	        , #{transPayee}
-	        , #{transMemo}
-	        , #{transAmount}
-	        , #{cate1Custom}
-	        , #{cate2Custom}
-	        )
+INSERT INTO 
+    Secretary_Transaction
+        (trans_id
+        , cashbook_id
+        , user_id
+        , family_id
+        , trans_date
+        , trans_type
+        , cate1_id
+        , cate2_id
+        , trans_payee
+        , trans_memo
+        , trans_amount)
+    VALUES 
+        (Secretary_Trans_SEQ.nextval
+        , #{cashbookId}
+        , #{userId}
+        , #{familyId}
+        , TO_DATE(#{transDate}, 'YYYY-MM-DD"T"HH24:MI')
+        , #{transType}
+        , (SELECT cate1_id FROM Secretary_Trans_Category1 WHERE cate1_name = #{cate1Name})
+        , (SELECT cate2_id FROM Secretary_Trans_Category2 WHERE cate2_name = #{cate2Name} AND cate1_id = (SELECT cate1_id FROM Secretary_Trans_Category1 WHERE cate1_name = #{cate1Name}))
+        , #{transPayee}
+        , #{transMemo}
+        , #{transAmount}
+        )
 </insert>
 
 <!-- 내역 전체 조회 -->
-<select id="selectAllTrans" resultType="Transaction">
-	SELECT 
-    trans_id
-    , cashbook_id
-    , user_id
-    , family_id
-    , to_char(trans_date, 'YYYY-MM-DD') as transDate
-    , to_char(trans_date, 'HH24:MI') as transTime
-    , trans_type
-    , trans_category1
-    , trans_category2
-    , trans_payee
-    , trans_memo
-    , trans_amount
+<select id="selectAllTrans" parameterType="int" resultType="Transaction">
+	SELECT
+	    st.trans_id
+	    , st.cashbook_id
+	    , st.user_id
+	    , st.family_id
+	    , TO_CHAR(st.trans_date, 'YYYY-MM-DD') as trans_date
+	    , TO_CHAR(st.trans_date, 'HH24:MI') as trans_time
+	    , st.trans_type
+	    , st.cate1_id
+	    , st.cate2_id
+	    , stc1.cate1_name
+	    , stc2.cate2_name
+	    , st.trans_payee
+	    , st.trans_memo
+	    , st.trans_amount
 	FROM
-	    Secretary_Transaction
+	    Secretary_Transaction st
+	LEFT JOIN
+	    Secretary_Trans_Category1 stc1 ON st.cate1_id = stc1.cate1_id
+	LEFT JOIN
+	    Secretary_Trans_Category2 stc2 ON st.cate2_id = stc2.cate2_id
+	WHERE
+	    st.family_id = #{familyId}
 	ORDER BY
-		trans_date DESC
+	    st.trans_date DESC
 </select>
 
 <!-- 해당 월 내역 수 조회 -->
-<select id="selectTransCntMonth" parameterType="int" resultType="int">
+<select id="selectTransCntMonth" parameterType="hashmap" resultType="int">
 	SELECT 
-		COUNT(*)
-	FROM
-		Secretary_Transaction
+		COUNT(*) 
+	FROM 
+		Secretary_Transaction 
 	WHERE 
-		EXTRACT(MONTH FROM trans_date) = #{month}
+		EXTRACT(MONTH FROM trans_date) = #{curMonth}
+	AND 
+		family_id = #{familyId}
 </select>
 
 <!-- 내역 삭제 -->
@@ -75,23 +81,31 @@
 	WHERE trans_id = #{transId} AND user_id = #{userId}
 </delete>
 
-<!-- 커스텀 대분류 불러오기 -->
-<select id="selectCustomCategory1" parameterType="String" resultType="String">
-	SELECT
-		DISTINCT trans_category1
-	FROM
-		Secretary_Transaction
+<!-- 대분류 불러오기 -->
+<select id="selectCate1" parameterType="string" resultType="Category1">
+	SELECT 
+	    cate1_id
+	    , cate1_name
+	    , is_custom
+	    , trans_type
+	    , family_id
+	    , user_id
+	FROM Secretary_Trans_Category1
 	WHERE
-		user_id = #{userId} and cate1_custom = 1
+	    trans_type = #{transType}
 </select>
 
-<!-- 커스텀 소분류 불러오기 -->
-<select id="selectCustomCategory2" parameterType="String" resultType="String">
-	SELECT
-		DISTINCT trans_category2
-	FROM
-		Secretary_Transaction
-	WHERE
-		user_id = #{userId} and cate2_custom = 1
+<!-- 소분류 불러오기 -->
+<select id="selectCate2" parameterType="string" resultType="Category2">
+	SELECT 
+	    cate2_id
+	    , C1.cate1_id AS cate1_id
+	    , cate2_name
+	    , C2.is_custom AS is_custom
+	    , C1.family_id AS family_id
+	    , C1.user_id AS user_id
+	FROM Secretary_Trans_Category2 C2
+	INNER JOIN Secretary_Trans_Category1 C1 ON C2.cate1_id = C1.cate1_id
+	WHERE C1.cate1_name = #{cate1Name}
 </select>
 </mapper>

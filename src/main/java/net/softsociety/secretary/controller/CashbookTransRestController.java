@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.extern.slf4j.Slf4j;
 import net.softsociety.secretary.dao.CashbookDAO;
 import net.softsociety.secretary.dao.UserMapper;
+import net.softsociety.secretary.domain.Category1;
+import net.softsociety.secretary.domain.Category2;
 import net.softsociety.secretary.domain.Transaction;
 import net.softsociety.secretary.service.CashbookService;
 
@@ -55,9 +57,9 @@ public class CashbookTransRestController {
 	
 	/** 내역 목록 출력 */
 	@GetMapping("list")
-	public ArrayList<Transaction> list() {
+	public ArrayList<Transaction> list(int familyId) {
 		
-		ArrayList<Transaction> result = dao.selectAllTrans();
+		ArrayList<Transaction> result = dao.selectAllTrans(familyId);
 		log.debug("출력할 내역목록:{}", result);
 		
 		return result;
@@ -70,7 +72,15 @@ public class CashbookTransRestController {
 		Calendar calendar = Calendar.getInstance();
         int curMonth = calendar.get(Calendar.MONTH) + 1;
         
-		int result = dao.selectTransCntMonth(curMonth);
+        // 가족ID 임의 입력
+        int familyId = 1;
+        
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("curMonth", curMonth);
+        map.put("familyId", familyId);
+        log.debug("내역 개수 셀 때 쓰는 map:{}", map);
+        
+		int result = dao.selectTransCntMonth(map);
 		log.debug("출력할 내역 개수:{}", result);
 		
 		return result;
@@ -93,15 +103,38 @@ public class CashbookTransRestController {
 		
 	}
 	
-	/** 커스텀 카테고리 불러오기 */
-	@GetMapping("getCustomCategories")
-	public HashMap<String, ArrayList<String>> getAllCategories(@AuthenticationPrincipal UserDetails user) {
-		// 유저id 불러오기
-		String userId = userdao.findByEmailOrUserId(user.getUsername()).getUserId();
-	    HashMap<String, ArrayList<String>> result = service.getAllCategories(userId);
-	    
-	    log.debug("출력할 새 카테고리들:{}", result);
-	    
-	    return result;
+	/** 대분류 불러오기 */
+	@GetMapping("loadCate1")
+	public ArrayList<Category1> loadCate1(String transType) {
+		log.debug("넘어온 거래 유형:{}", transType);
+		
+		ArrayList<Category1> result = dao.selectCate1(transType);
+		log.debug("출력할 대분류:{}", result);
+		
+		return result;
 	}
+	
+	/** 소분류 불러오기 */
+	@GetMapping("loadCate2")
+	public ArrayList<Category2> loadCate2(String cate1Name) {
+		log.debug("넘어온 대분류:{}", cate1Name);
+		
+		ArrayList<Category2> result = dao.selectCate2(cate1Name);
+		log.debug("출력할 소분류:{}", result);
+		
+		return result;
+	}
+	
+//	
+//	/** 커스텀 카테고리 불러오기 */
+//	@GetMapping("getCustomCategories")
+//	public HashMap<String, ArrayList<String>> getAllCategories(@AuthenticationPrincipal UserDetails user) {
+//		// 유저id 불러오기
+//		String userId = userdao.findByEmailOrUserId(user.getUsername()).getUserId();
+//	    HashMap<String, ArrayList<String>> result = service.getAllCategories(userId);
+//	    
+//	    log.debug("출력할 새 카테고리들:{}", result);
+//	    
+//	    return result;
+//	}
 }
