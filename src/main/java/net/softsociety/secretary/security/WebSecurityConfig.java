@@ -37,6 +37,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 "/user/confirm",
                 "/homeView/home",
                 "/boardView/list",
+                "/boardView/list2",
                 "/boardView/write",
                 "/cashbook/trans/setTrans",
                 "/thymeleaf",

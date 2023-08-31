@@ -5,53 +5,37 @@
 <meta charset="UTF-8">
 <title>list</title>
 <script th:src="@{/js/jquery-3.7.0.js}"></script>
-<script th:inline="javascript">
-    // Thymeleaf를 사용하여 현재 사용자의 ID를 포함한 loggedInUserId 변수를 정의합니다.
-    var loggedInUserId = /*[[${#authentication.name}]]*/ '';
-</script>
 <script>
-//글목록 출력 대기
 $(document).ready(function () {
-     	getList();
-    	
-    // 카테고리 선택이 변경될 때마다 검색 수행
+    getList();
+    
     document.getElementById('boardCategory1').addEventListener('change', getList);
 });
 
 function getList() {	
-    // 카테고리 선택에 따른 필터링
     const selectedCategory = document.getElementById('boardCategory1').value; 
 
     $.ajax({
         url: 'getList',
-	    type: 'get',
-	    //data: {boardCategory1: selectedCategory},
-	    dataType: 'json',
-	    success: function (list) {
-	    	 
+        type: 'get',
+        dataType: 'json',
+        success: function (list) {
             let filteredList = list;
-				 
-            // 카테고리 선택에 따른 필터링
             if (selectedCategory !== 'all') {
                 filteredList = list.filter((item) => item.boardCategory1 === selectedCategory);
             }
-            // 결과를 테이블에 표시    
             let htmlContent = '';
             filteredList.forEach((item) => {
                 htmlContent += `
                     <tr>
                         <td>${item.boardStatus}</td>
-                        <td><p id="read${item.boardId}">${item.boardTitle}</p></td>
+                        <td><a href="read?boardId=${item.boardId}">${item.boardTitle}</a></td>
                         <td>${item.userId}</td>		       
                         <td>${item.boardInputdate}</td>
-                    </tr>
-                    <tr>
-                        <td colspan="4"><table id="print${item.boardId}"></table></td>
                     </tr>
                 `;
             });
             $('#boardList').html(htmlContent);
-            $('[id^="read"]').click(read);
         },
         error: function (e) {
             alert(JSON.stringify(e));
@@ -59,36 +43,12 @@ function getList() {
     });
 }
 
-function read(event) {
-    console.log(1);
-    const clickedRow = event.currentTarget.parentNode.parentNode;
-    const boardId = clickedRow.querySelector('p').id.substring(4);
-    $.ajax({
-        url: "read",
-        type: "get",
-        data: {boardId: boardId},
-        dataType: 'json',
-        success: function(readOne) {
-            let htmlContent = `
-                <tr>
-                    <td>${readOne.boardStatus}</td>
-                    <td>${readOne.boardContent}</td>
-                    <td>${readOne.userId}</td>
-                    <td>${readOne.boardInputdate}</td>
-                    <td><a th:if="${readOne.userId == loggedInUserId}" th:href="@{/board/update/{boardId}(boardId=${readOne.boardId})}" id="updateLink">수정</a></td>
-                    <td><a th:if="${readOne.userId == loggedInUserId}" th:href="@{/board/deleteBoard}(boardId=${readOne.boardId})}" id="deleteLink">삭제</a></td>
-                </tr>
-                <tr>
-                    <td>${readOne.boardAnswer}</td>
-                </tr>
-            `;
-
-            $('#answer').html(htmlContent);
-        },
-        error: function (e) {
-            alert(JSON.stringify(e));
-        }
-    });
+function deleteOne(){
+    let a = confirm('삭제하시겠습니까?');
+    if(a){
+        let boardId = document.getElementById('boardId').value;
+        location.href = 'deleteOne?boardId=' + boardId;
+    }
 }
 </script>
 </head>
@@ -110,13 +70,10 @@ function read(event) {
             <th>답변상태</th>
             <th>제목</th>
             <th>작성자</th>
-            <th>작성일</th>	
-            
-      
+            <th>작성일</th>                   
         </tr>
     </thead>
     <tbody id="boardList"></tbody>
-    <tbody id="answer"></tbody>
 </table>
 </body>
 </html>

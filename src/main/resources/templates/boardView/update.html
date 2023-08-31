@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
 <meta charset="UTF-8">
 <title>update</title>
@@ -42,25 +43,27 @@
 <h1>[1:1 문의글 수정]</h1>
 
 <form th:action="@{/board/update}" method="post" onsubmit="return check();">
+
     <!-- 기존 게시글 정보를 Thymeleaf 변수로 받아옴 -->
-    <input type="hidden" name="boardId" th:value="${board.id}">
+    <input type="hidden" name="boardId" th:value="${b.boardId}">
+    <input type="hidden" name="boardCategory1" th:value="${b.boardCategory1}">
     
     카테고리<select name="boardCategory2" id="boardCategory2">
         <option value="">카테고리 선택</option>
-        <option value="account" th:selected="${board.boardCategory2 == 'account'}">계정</option>
-        <option value="service" th:selected="${board.boardCategory2 == 'service'}">서비스</option>
-        <option value="error" th:selected="${board.boardCategory2 == 'error'}">오류신고</option>
-        <option value="other" th:selected="${board.boardCategory2 == 'other'}">기타</option>
+        <option value="account" th:selected="${b.boardCategory2 == 'account'}">계정</option>
+        <option value="service" th:selected="${b.boardCategory2 == 'service'}">서비스</option>
+        <option value="error" th:selected="${b.boardCategory2 == 'error'}">오류신고</option>
+        <option value="other" th:selected="${b.boardCategory2 == 'other'}">기타</option>
     </select><br>
     
-    제목<input type="text" name="boardTitle" id="boardTitle" th:value="${board.boardTitle}" placeholder="제목을 입력하세요(2자 이상)"><br>
+    제목<input type="text" name="boardTitle" id="boardTitle" th:value="${b.boardTitle}" ><br>
     
-    내용<textarea name="boardContent" id="boardContent" placeholder="내용을 입력하세요(10자 이상)">${board.boardContent}</textarea><br>
+    내용<textarea name="boardContent" id="boardContent" > [[${b.boardContent}]]</textarea><br>
     
-    비밀글<input type="checkbox" name="boardIsPublic" id="boardIsPublic" value="1" onchange="checkboxChange()" th:checked="${board.boardIsPublic}"><br>
+    비밀글<input type="checkbox" name="boardIsPublic" id="boardIsPublic" value="1" onchange="checkboxChange()" th:checked="${b.boardIsPublic}"><br>
     <input type="submit" value="수정">   
 </form>
-<form th:action="@{/board/list}" method="get">
+<form th:action="@{/board/list2}" method="get">
 	 <input type="submit" value="취소">
 </form>
 

@@ -6,42 +6,109 @@
 <title>read</title>
 <script th:src="@{/js/jquery-3.7.0.js}"></script>
 <script>
-function deleteBoard(){
+function deleteOne(boardId){
     let confirmDelete = confirm('삭제하시겠습니까?');
     if (confirmDelete) {
-        let boardId = document.getElementById('boardId').value; 
-        location.href = 'deleteBoard?boardId=' + boardId;
+        location.href = '/deleteOne?boardId=' + boardId;
     }
-} 
+}
+<!--
+function deleteOne(boardId) {
+    let confirmDelete = confirm('삭제하시겠습니까?');
+    
+    if (confirmDelete) {
+        $.ajax({
+            type: 'POST', // 또는 'GET' 등 요청 방식 설정
+            url: '/deleteOne', // 삭제를 처리할 서버의 URL
+            data: { boardId: boardId }, // 삭제 요청과 함께 보낼 데이터
+            success: function(response) {
+                // 서버에서 온 응답을 처리 (화면 업데이트 등)
+                alert('삭제되었습니다.');
+                location.reload(); // 페이지 새로고침 (선택사항)
+            },
+            error: function(xhr, status, error) {
+                // 오류 처리
+                alert('오류가 발생했습니다.');
+                console.error(error);
+            }
+        });
+    }
+}-->
 </script>
 </head>
 <body>
 <h1>[글읽기]</h1>
-<a th:href="@{/}">Home</a>
+<a th:href="@{/}">Home</a> 
+<a th:href="@{/board/list2}">목록</a>
+<a th:href="@{/board/update(boardId=(${board.boardId}))}">수정</a>
+<a href="javascript:void(0);" onclick="deleteOne(${board.boardId})">삭제</a>
 
 <table>
-	<tr>
-		<td>답변상태</td>
-		<td th:text="${board.boardStatus}"></td>
-	</tr>
-	<tr>
-		<td>제목</td>
-		<td th:text="${board.boardTitle}"></td>
-	</tr>
-	<tr>
-		<td>작성자</td>
-		<td th:text="${board.userId}"></td>
-	</tr>
-	<tr>
-		<td>작성일</td>
-		<td th:text="${board.boardInputdate}"></td>
-	</tr>
-	<tr>
-		<td><input type="button" value="삭제" th:onclick="deleteBoard()" ></td>
-	
-	</tr>
-	
+    <tr>
+        <td>답변상태</td>
+        <td th:text="${board.boardStatus}"></td>
+    </tr>
+    <tr>
+        <td>제목</td>
+        <td th:text="${board.boardTitle}"></td>
+    </tr>
+    <tr>
+        <td>내용</td>
+        <td th:text="${board.boardContent}"></td>
+    </tr>
+    <tr>
+        <td>작성자</td>
+        <td th:text="${board.userId}"></td>
+    </tr>
+    <tr>
+        <td>작성일</td>
+        <td th:text="${board.boardInputdate}"></td>
+    </tr>
+    <tr>
+        <td>조회수</td>
+    </tr>   
 </table>
+<!--  
+<div>
+    <span th:if="${#authentication.name} == ${board.userId}">
+        <a th:href="@{/board/update(boardId=${board.boardId})}">수정하기</a>
+        <a href="#" th:onclick="|deleteOne(${board.boardId})|">삭제하기</a>
+    </span>
+    
+</div>-->
+<br>
+<section>
+    
+     <!-- 답변 출력 -->
+    <table th:if="${answerList != null && !answerList.isEmpty()}">
+        <tr>
+            <td><span class="name">답변상태</span></td>
+            <td><span class="name">내용</span></td>
+            <td><span class="name">작성자</span></td>
+            <td><span class="name">작성일</span></td>
+        </tr>
+        <tr th:each="a : ${answer}">
+            <!--<td><span th:text="${answer.boardStatus}"></span></td>-->
+            <td>답변완료</td>
+            <td><span th:text="${a.answerContent}"></span></td>
+            <td><span th:text="${a.userId}"></span></td>
+            <td>
+                <span th:if="${a.answerDate != null}" th:text="${answer.answerDate}"></span>
+                <span th:unless="${a.answerDate != null}">[답변 없음]</span>
+            </td>
+        </tr>
+    </table>
+    
+</section>
+<br>
+    <!-- 리플 작성 폼 -->
+	<!-- 작성한 글내용, 글번호를 서버로 전송 -->
+    <!--  <th:block th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">-->
+	<form th:action="@{/board/answer}" method="post" onsubmit="return check()">
+	   답변<input type="text" name="answertext" id="answertext">
+		  <input type="hidden" name="boardId" th:value="${board.boardId}">
+		  <input type="submit" value="저장">
+	</form>
+	</th:block>
 </body>
-
 </html>
