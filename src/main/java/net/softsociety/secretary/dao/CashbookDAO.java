@@ -48,4 +48,7 @@ public interface CashbookDAO {
 	/** 커스텀 소분류 추가 */
 	int insertCustomCate2(Category2 cate2);
 
+	/** 거래내역 하나 불러오기 */
+	Transaction selectTrans(int transId);
+
 }

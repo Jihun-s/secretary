@@ -23,6 +23,25 @@ $(document).ready(function() {
         }
    });
 
+   // 모달 거래유형 클릭 이벤트 (대분류 출력)
+   $("input[name='transType']").change(function() {
+    showTransCategoriesDivModal();
+    loadMainCategoriesModal($(this).val());
+   });
+
+   // 모달 대분류 선택 이벤트 (소분류 출력 or 기본값)
+   $("#cate1NameModal").change(function() {
+        alert('되는거맞음?ㅡㅡ');
+        const selectedCate1NameModal = $(this).val();
+        if (selectedCate1NameModal !== "대분류를 선택하세요") {
+            loadSubCategoriesModal(selectedCate1NameModal);
+        } 
+        if (selectedCate1NameModal === "대분류를 선택하세요") {
+            // 대분류가 초기 상태로 변경된 경우, 소분류도 초기 상태로 변경합니다.
+            $("#cate2NameModal").html('<option>소분류를 선택하세요</option>');
+        }
+   });
+
     // 소분류 선택 이벤트 (소분류 먼저 선택할 수 없음)
     $("#cate2Name").click(function() {
         if ($("input[name='transType']:checked").length === 0) {
@@ -30,6 +49,17 @@ $(document).ready(function() {
             return;
         }
         if ($("#cate1Name").val() === "대분류를 선택하세요") {
+            alert("대분류를 먼저 선택하세요.");
+        }
+    });
+
+    // 모달 소분류 선택 이벤트 (소분류 먼저 선택할 수 없음)
+    $("#cate2NameModal").click(function() {
+        if ($("input[name='transType']:checked").length === 0) {
+            alert("거래 유형을 먼저 선택하세요.");
+            return;
+        }
+        if ($("#cate1NameModal").val() === "대분류를 선택하세요") {
             alert("대분류를 먼저 선택하세요.");
         }
     });
@@ -338,7 +368,7 @@ function init() {
                                 <div class="dropdown">
                                     <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></button>
                                     <div class="dropdown-menu">
-                                    <a class="dropdown-item" href="javascript:updateTrans(${ta.transId});"><i class="bx bx-edit-alt me-2"></i> 수정</a>
+                                    <a class="dropdown-item" href="javascript:openModalUpdate(${ta.transId});"><i class="bx bx-edit-alt me-2"></i> 수정</a>
                                     <a class="dropdown-item" href="javascript:deleteTrans(${ta.transId});"><i class="bx bx-trash me-2"></i> 삭제</a>
                                     </div>
                                 </div>
@@ -389,12 +419,64 @@ function deleteTrans(transId) {
     });
 }
 
-/** 내역 수정 */
-function updateTrans(transId) {
+/** 수정 모달 열기 */
+function openModalUpdate(transId) {
+    // 모달을 표시
+    $('#ModalUpdate').modal('show');
+
     // 기존 내역 한번 불러오고
-    // 그걸 폼에 뿌린 다음
+    $.ajax({
+        url: '/secretary/cashbook/trans/selectTrans',
+        type: 'POST',
+        data: { transId: transId },
+        dataType: 'JSON',
+        success: (data) => {
+             // 값 뿌리기
+             $('#familyIdModal').val(data.familyId);
+             $('#cashbookIdModal').val(data.cashbookId);
+             
+             // 거래일자
+             $('#transDateModal').val(data.transDate);
+             
+             // 내역 유형
+             // 대분류 소분류 불러와주고
+             if(data.transType === '수입') {
+                 $('#inlineRadio1Modal').prop('checked', true);
+                 loadMainCategoriesModal(data.transType);
+            } else {
+                $('#inlineRadio2Modal').prop('checked', true);
+                loadMainCategoriesModal(data.transType, data.cate1Name);
+                loadSubCategoriesModal(data.cate1Name, data.cate2Name);
+            }
+             
+             // 카테고리
+             $('#cate1NameModal').val(data.cate1Name);
+             $('#cate2NameModal').val(data.cate2Name);
+             
+             // 거래내용
+             $('#transPayeeModal').val(data.transPayee);
+ 
+             // 메모
+             $('#transMemoModal').val(data.transMemo);
+ 
+             // 거래금액
+             $('#transAmountModal').val(data.transAmount);
+ 
+             // 모달을 표시
+             $('#basicModal').modal('show');
+        },
+        error: () => {
+            alert('수정하기 위한 정보 전송 실패');
+        }
+    });
     // ... 자리에 있는 '수정' 버튼을 누르면 전송
-    // '취소'누르면 원래대로 돌아감
+
+}
+
+
+/** 내역 수정 */
+function updateTrans() {
+    
 }
 
 
@@ -411,7 +493,23 @@ function showTransCategoriesDiv() {
     } else {
         $("#transCategory1Div").show();
         $("#transCategory2Div").show();
-        // 지출에 대한 대분류 카테고리를 로드하는 함수 (예: loadExpenditureCategories())를 호출할 수 있습니다.
+    }
+}
+
+
+/** 모달 수입/지출에 따른 카테고리 표시 */
+function showTransCategoriesDivModal() {
+    let selectedType = $("#transTypeModal input[name='transType']:checked").val();
+    
+    $("#transCategoriesDivModal").show();
+    
+    if (selectedType === "수입") {
+        $("#transCategory1DivModal").show();
+        $("#transCategory2DivModal").hide();
+    } else {
+        $("#cate2NameModal").html('<option>소분류를 선택하세요</option>');
+        $("#transCategory1DivModal").show();
+        $("#transCategory2DivModal").show();
     }
 }
 
@@ -420,7 +518,7 @@ function showTransCategoriesDiv() {
 function loadMainCategories(transType) {
 
     $.ajax({
-        url: '/secretary/cashbook/trans/loadCate1', // 해당 경로를 실제 경로로 교체해야 합니다.
+        url: '/secretary/cashbook/trans/loadCate1', 
         type: 'GET',
         data: { transType: transType },
         success: function(cate1List) {
@@ -443,7 +541,7 @@ function loadMainCategories(transType) {
 /** 소분류 불러오기 */
 function loadSubCategories(cate1Name) {
     $.ajax({
-        url: '/secretary/cashbook/trans/loadCate2', // 해당 경로를 실제 경로로 교체해야 합니다.
+        url: '/secretary/cashbook/trans/loadCate2',
         type: 'GET',
         data: { cate1Name: cate1Name },
         success: function(cate2List) {
@@ -459,6 +557,68 @@ function loadSubCategories(cate1Name) {
                 options = '<option>소분류를 선택하세요</option><option value="직접입력" onclick="setCustomCategory2()">직접입력</option>';
             }
             $("#cate2Name").html(options);
+        },
+        error: function() {
+            alert('소분류 목록 전송 실패');
+        }
+    });
+}
+
+
+/** 모달 대분류 불러오기 */
+function loadMainCategoriesModal(transType, cate1Name) {
+
+    $.ajax({
+        url: '/secretary/cashbook/trans/loadCate1',
+        type: 'GET',
+        data: { transType: transType },
+        success: function(cate1List) {
+            let options = '<option>대분류를 선택하세요</option>';
+            
+            cate1List.forEach(cate1 => {
+                // cate1Name과 cate1.cate1Name이 일치하는 경우에만 selected 속성 추가
+                if (cate1Name === cate1.cate1Name) {
+                    options += `<option value="${cate1.cate1Name}" selected>${cate1.cate1Name}</option>`;
+                } else {
+                    options += `<option value="${cate1.cate1Name}">${cate1.cate1Name}</option>`;
+                }
+            });
+
+            options += `<option value="직접입력" onclick="setCustomCategory1()">직접입력</option>`;
+
+            $("#cate1NameModal").html(options);
+        },
+        error: function() {
+            alert('대분류 목록 전송 실패');
+        }
+    });
+}
+
+
+/** 모달 소분류 불러오기 */
+function loadSubCategoriesModal(cate1Name, cate2Name) {
+    $.ajax({
+        url: '/secretary/cashbook/trans/loadCate2',
+        type: 'GET',
+        data: { cate1Name: cate1Name },
+        success: function(cate2List) {
+            let options;
+
+            if (cate2List.length > 0) { // 소분류 리스트가 있을 경우
+                options = '<option>소분류를 선택하세요</option>';
+                cate2List.forEach(cate2 => {
+                    // cate1Name과 cate1.cate1Name이 일치하는 경우에만 selected 속성 추가
+                    if (cate2Name === cate2.cate2Name) {
+                        options += `<option value="${cate2.cate2Name}" selected>${cate2.cate2Name}</option>`;
+                    } else {
+                        options += `<option value="${cate2.cate2Name}">${cate2.cate2Name}</option>`;
+                    }
+                });
+                options += `<option value="직접입력" onclick="setCustomCategory2()">직접입력</option>`;
+            } else { // 소분류 리스트가 비어있을 경우
+                options = '<option>소분류를 선택하세요</option><option value="직접입력" onclick="setCustomCategory2()">직접입력</option>';
+            }
+            $("#cate2NameModal").html(options);
         },
         error: function() {
             alert('소분류 목록 전송 실패');

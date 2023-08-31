@@ -159,4 +159,31 @@ INSERT INTO
 	WHERE
 		cate1_name = #{cate1Name}
 </select>
+
+<!-- 거래내역 하나 불러오기 -->
+<select id="selectTrans" parameterType="int" resultType="Transaction">
+	SELECT
+	    st.trans_id
+	    , st.cashbook_id
+	    , st.user_id
+	    , st.family_id
+	    , TO_CHAR(st.trans_date, 'YYYY-MM-DD"T"HH24:MI:SS') as trans_date
+	    , st.trans_type
+	    , st.cate1_id
+	    , st.cate2_id
+	    , stc1.cate1_name
+	    , stc2.cate2_name
+	    , st.trans_payee
+	    , st.trans_memo
+	    , st.trans_amount
+	    , stc1.label_color as label_color
+	FROM
+	    Secretary_Transaction st
+	LEFT JOIN
+	    Secretary_Trans_Category1 stc1 ON st.cate1_id = stc1.cate1_id
+	LEFT JOIN
+	    Secretary_Trans_Category2 stc2 ON st.cate2_id = stc2.cate2_id
+	WHERE
+	    st.trans_id = #{transId}
+</select>
 </mapper>

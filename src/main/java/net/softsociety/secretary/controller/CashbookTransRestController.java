@@ -153,5 +153,15 @@ public class CashbookTransRestController {
 		int n = service.addCustomCate2(cate2, cate1Name);
 	}
 	
+	/** 거래내역 하나 조회 */
+	@PostMapping("selectTrans")
+	public Transaction setTrans(int transId) {
+		log.debug("컨트롤러에 넘어온 transId:{}", transId);
+		
+		Transaction result = dao.selectTrans(transId);
+		log.debug("모달에 뿌리려고 불러온 거래내역:{}", result);
+		
+		return result;
+	}
 
 }
