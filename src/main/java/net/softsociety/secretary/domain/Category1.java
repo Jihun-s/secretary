@@ -15,5 +15,6 @@ public class Category1 {
 	String transType;
 	int familyId;
 	String userId;
+	String labelColor;
 	
 }

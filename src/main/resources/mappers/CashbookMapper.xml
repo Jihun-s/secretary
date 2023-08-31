@@ -51,6 +51,7 @@ INSERT INTO
 	    , st.trans_payee
 	    , st.trans_memo
 	    , st.trans_amount
+	    , stc1.label_color as label_color
 	FROM
 	    Secretary_Transaction st
 	LEFT JOIN

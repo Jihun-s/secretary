@@ -27,5 +27,6 @@ public class Transaction {
 	private String transPayee;
 	private String transMemo;
 	private long transAmount;
+	private String labelColor;
 	
 }
