@@ -93,6 +93,7 @@ INSERT INTO
 	FROM Secretary_Trans_Category1
 	WHERE
 	    trans_type = #{transType}
+	ORDER BY cate1_id 
 </select>
 
 <!-- 소분류 불러오기 -->

@@ -325,14 +325,17 @@ function init() {
                         <tbody class="table-border-bottom-0">`;
 
                 $(groupedData[date]).each(function(idx, ta) {
+                    // 뱃지 색상 결정
+                    let colorClass = getColorClassByCategory(ta.cate1Name);
+
                     table += `<tr>
                                 <td style="width: 5rem;">
-                                    <span class="badge bg-label-success me-1">${ta.cate2Name}</span>
+                                    <span class="badge bg-label-${colorClass} me-1">${ta.cate2Name || ta.cate1Name || '미분류'}</span>
                                     <input type="hidden" value="${ta.transId}">
                                 </td>
                                 <td style="width: 5rem;">${ta.transTime}</td>
                                 <td><i class="fab fa-react fa-lg text-info me-3"></i> <strong>${ta.transPayee}</strong></td>
-                                <td>${ta.transMemo}</td>
+                                <td>${ta.transMemo || ''}</td>
                                 <td style="width: 5rem;">${parseInt(ta.transAmount).toLocaleString('en-US')}</td>
                                 <td>
                                 <div class="dropdown">
@@ -360,6 +363,24 @@ function init() {
     
 }
 
+/** 카테고리별 뱃지 색상 결정 */
+function getColorClassByCategory(category) {
+    switch (category) {
+        case '쇼핑': return 'primary';
+        case '뷰티': return 'secondary';
+        case '건강': return 'info';
+        case '여가': return 'warning';
+        case '식비': return 'danger';
+        case '여행': return 'warning';
+        case '용돈': 
+        case '판매소득': 
+        case '복권': 
+        case '금융소득': 
+        case '투자소득': 
+        case '급여': return 'success';
+        default: return 'dark';
+    }
+}
 
 /** 날짜 형식 변환 */
 function formatDate(inputDate) {
@@ -388,6 +409,15 @@ function deleteTrans(transId) {
         }
     });
 }
+
+/** 내역 수정 */
+function updateTrans(transId) {
+    // 기존 내역 한번 불러오고
+    // 그걸 폼에 뿌린 다음
+    // ... 자리에 있는 '수정' 버튼을 누르면 전송
+    // '취소'누르면 원래대로 돌아감
+}
+
 
 /** 수입/지출에 따른 카테고리 표시 */
 function showTransCategoriesDiv() {
@@ -420,6 +450,8 @@ function loadMainCategories(transType) {
             cate1List.forEach(cate1 => {
                 options += `<option value="${cate1.cate1Name}">${cate1.cate1Name}</option>`;
             });
+
+            options += `<option value="직접입력" onclick="setCustomCategory1()">직접입력</option>`;
 
             $("#cate1Name").html(options);
         },
