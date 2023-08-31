@@ -652,27 +652,10 @@
                           <div>
                             <div id="transCategory1Div">
                               <select id="cate1Name" name="cate1Name" class="form-select">
-                                <option value="대분류를 선택하세요">대분류를 선택하세요</option>
-                                <option value="식비">식비</option>
-                                <option value="쇼핑">쇼핑</option>
-                                <option value="여가">여가</option>
-                                <option value="여행">여행</option>
-                                <option value="뷰티">뷰티</option>
-                                <option value="리빙">리빙</option>
-                                <option value="건강">건강</option>
-                                <option value="0">직접입력</option>
                               </select>
                             </div>
                             <div id="transCategory2Div">
                               <select id="cate2Name" name="cate2Name" class="form-select">
-                                <option value="소분류를 선택하세요">소분류를 선택하세요</option>
-                                <option value="식사">식사</option>
-                                <option value="간식">간식</option>
-                                <option value="카페">카페</option>
-                                <option value="술">술</option>
-                                <option value="편의점">편의점</option>
-                                <option value="배달">배달</option>
-                                <option value="0">직접입력</option>
                               </select>
                             </div>
                           </div>
@@ -772,8 +755,10 @@
         </div>
         <div class="modal-body">
           <form>
+            <input type="hidden" name="transId" id="transIdModal" value="">
             <input type="hidden" name="familyId" id="familyIdModal" value="">
             <input type="hidden" name="cashbookId" id="cashbookIdModal" value="">
+            <input type="hidden" name="labelColor" id="labelColorModal" value="">
             <div class="mb-3">
               <label class="form-label" for="transDate">거래일자</label>
               <input class="form-control" type="datetime-local" name="transDate" value="" id="transDateModal">
@@ -815,7 +800,7 @@
               <label class="form-label" for="transPayee">거래내용</label>
               <input type="text" name="transPayee" id="transPayeeModal" class="form-control phone-mask" placeholder="거래처를 입력하세요">
               <div>
-                <p id="transPayeeError"></p>
+                <p id="transPayeeErrorModal"></p>
               </div>
             </div>
             <div class="mb-3">

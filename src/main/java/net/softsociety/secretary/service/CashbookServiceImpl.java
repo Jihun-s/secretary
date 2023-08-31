@@ -36,6 +36,28 @@ public class CashbookServiceImpl implements CashbookService {
 		
 		return n;
 	}
+	
+	/** 내역 수정 */
+	@Override
+	public int updateTrans(Transaction trans) {
+		// TODO Auto-generated method stub
+		String cate1Name = trans.getCate1Name();
+		int cate1Id = dao.selectCate1Id(cate1Name);
+		log.debug("서비스에서 찾아온 대카테명:{}, 대카테id:{}", cate1Name, cate1Id);
+		
+		String cate2Name = trans.getCate2Name();
+		int cate2Id = dao.selectCate2Id(cate2Name);
+		log.debug("서비스에서 찾아온 소카테명:{}, 소카테id:{}", cate1Name, cate1Id);
+		
+		// trans에 넣어서 보내기
+		trans.setCate1Id(cate1Id);
+		trans.setCate2Id(cate2Id);
+		log.debug("서비스에서 보낼 수정할 내용:{}", trans);
+
+		int n = dao.updateTrans(trans);
+		
+		return n;
+	}
 
 	/** 내역 삭제 */
 	@Override

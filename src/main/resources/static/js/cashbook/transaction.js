@@ -6,6 +6,9 @@ $(document).ready(function() {
     // 내역 검증 후 입력
     $('#setTransBt').click(setTrans);
 
+    // 모달 검증 후 내역 수정
+    $('#setTransBtModal').click(updateTrans);
+
    // 거래유형 클릭 이벤트 (대분류 출력)
    $("input[name='transType']").change(function() {
     showTransCategoriesDiv();
@@ -31,7 +34,6 @@ $(document).ready(function() {
 
    // 모달 대분류 선택 이벤트 (소분류 출력 or 기본값)
    $("#cate1NameModal").change(function() {
-        alert('되는거맞음?ㅡㅡ');
         const selectedCate1NameModal = $(this).val();
         if (selectedCate1NameModal !== "대분류를 선택하세요") {
             loadSubCategoriesModal(selectedCate1NameModal);
@@ -95,6 +97,23 @@ $(document).ready(function() {
 
     // 1000단위 콤마 찍기
     $('#transAmount').on('input', function() {
+        let amount = $(this).val().replace(/,/g, '');  // 현재 입력된 값에서 콤마를 제거합니다.
+        
+        if (!amount) {  // 입력값이 없는 경우
+            return;
+        }
+        
+        let parsedAmount = parseFloat(amount);
+        
+        if (isNaN(parsedAmount)) {  // 숫자로 변환할 수 없는 경우
+            $(this).val('');  // 입력란을 비웁니다.
+        } else {
+            $(this).val(parsedAmount.toLocaleString('en-US'));  // 값을 천 단위로 콤마로 구분하여 다시 설정합니다.
+        }
+    });   
+    
+    // 모달 1000단위 콤마 찍기
+    $('#transAmountModal').on('input', function() {
         let amount = $(this).val().replace(/,/g, '');  // 현재 입력된 값에서 콤마를 제거합니다.
         
         if (!amount) {  // 입력값이 없는 경우
@@ -248,6 +267,102 @@ function setTrans() {
         setTransAjax();
         init();
     }
+}
+
+/** 모달 내역 수정 유효성 검사 */
+function validateTransModal() {
+    let isValid = true;
+    
+    // 하나라도 만족하지 못하면 false
+    // if(!validateTransTypeModal()) isValid = false;
+    if(!validateTransPayeeModal()) isValid = false;
+    if(!validateTransAmountModal()) isValid = false;
+
+    return isValid;
+}
+
+
+/** 모달 거래유형 유효성 검사 */
+function validateTransTypeModal() {
+    const radios = document.getElementsByName('transTypeModal');
+    const transTypeErrorModal = document.getElementById('transTypeErrorModal');
+    
+    let isSelected = false;
+    for(let i = 0; i < radios.length; i++) {
+        if(radios[i].checked) {
+            isSelected = true;
+            break;
+        }
+    }
+    
+    // 오류 메세지 출력
+    if(!isSelected) {
+        transTypeErrorModal.textContent = "거래 유형을 선택하세요.";
+    } else {
+        transTypeErrorModal.textContent = "";
+    }
+    
+    return isSelected;
+}
+
+
+/** 모달 거래내용 유효성 검사 */
+function validateTransPayeeModal() {
+    const input = document.getElementById('transPayeeModal');
+    const transPayeeErrorModal = document.getElementById('transPayeeErrorModal');
+    const value = input.value.trim();
+    
+    const isValid = value.length > 0 && value.length < 15;
+    
+    // 오류 메세지 출력
+    if(!isValid) {
+        transPayeeErrorModal.textContent = "거래내용을 15자 이내로 입력하세요.";
+    } else {
+        transPayeeErrorModal.textContent = "";
+    }
+    
+    return isValid;
+}
+
+
+/** 모달 거래금액 유효성 검사 */ 
+function validateTransAmountModal() {
+    // ',' 제거
+    let transAmountModal = $('#transAmountModal').val().replace(/,/g, '');  
+    let transAmountErrorModal = $('#transAmountErrorModal');
+
+    // 미입력
+    if(transAmountModal === '' || transAmountModal == null) {
+        transAmountErrorModal.text('거래금액을 입력하세요.');
+        return false;
+    }
+
+    // 숫자가 아님
+    if(isNaN(transAmountModal)) {
+        transAmountErrorModal.text('숫자를 입력하세요.');
+        return false;
+    }
+
+    // 정수가 아님
+    if(transAmountModal != parseInt(transAmountModal)) {
+        transAmountErrorModal.text('정수를 입력하세요.');
+        return false;
+    }
+    
+    // 콤마나 기타 문자가 포함되어 있는지 확인
+    if(/[^0-9]/.test(transAmountModal)) {
+        transAmountErrorModal.text('거래금액에는 숫자만 입력하세요.');
+        return false;
+    }
+
+    // 범위 오류 (음수 or 12자리 이상)
+    if(parseInt(transAmountModal) < 0 || transAmountModal.length > 12) {
+        transAmountErrorModal.text('0부터 12자리수까지 입력하세요.');
+        return false;
+    }
+    transAmountErrorModal.text('');
+    
+    return true;
 }
 
 
@@ -432,8 +547,10 @@ function openModalUpdate(transId) {
         dataType: 'JSON',
         success: (data) => {
              // 값 뿌리기
+             $('#transIdModal').val(data.transId);
              $('#familyIdModal').val(data.familyId);
              $('#cashbookIdModal').val(data.cashbookId);
+             $('#labelColorModal').val(data.labelColor);
              
              // 거래일자
              $('#transDateModal').val(data.transDate);
@@ -460,7 +577,7 @@ function openModalUpdate(transId) {
              $('#transMemoModal').val(data.transMemo);
  
              // 거래금액
-             $('#transAmountModal').val(data.transAmount);
+             $('#transAmountModal').val(data.transAmount.toLocaleString('en-US'));
  
              // 모달을 표시
              $('#basicModal').modal('show');
@@ -469,14 +586,60 @@ function openModalUpdate(transId) {
             alert('수정하기 위한 정보 전송 실패');
         }
     });
-    // ... 자리에 있는 '수정' 버튼을 누르면 전송
+    // 푸터 자리에 있는 '수정' 버튼을 누르면 전송
 
 }
 
 
 /** 내역 수정 */
 function updateTrans() {
-    
+    if(validateTransModal()) {
+        updateTransAjax();
+        $("#ModalUpdate").modal('hide');
+    }
+}
+
+/** 내역 수정 Ajax 호출 */
+function updateTransAjax() {
+    let transId = $('#transIdModal');
+    let familyId = $('#familyIdModal');
+    let cashbookId = $('#cashbookIdModal');
+    let transDate = $('#transDateModal');
+    let transType = $("#transTypeModal input[name='transType']:checked"); 
+    let cate1Name = $('#cate1NameModal');
+    let cate2Name = $('#cate2NameModal');
+    let transPayee = $('#transPayeeModal');
+    let transMemo = $('#transMemoModal');
+    let transAmount = $('#transAmountModal').val().replace(/,/g, '');
+    let labelColor = $('#labelColorModal');
+
+    // alert("수정할 값들:" + transId.val() + familyId.val() + cashbookId.val() + transDate.val()
+    //  + transType.val() + cate1Name.val() + cate2Name.val() + transPayee.val()
+    //   + transMemo.val()  + transAmount + labelColor.val());
+
+    $.ajax({
+        url: '/secretary/cashbook/trans/updateTrans',
+        type: 'POST',
+        data: { 
+            transId: transId.val(),
+            familyId: familyId.val(),
+            cashbookId: cashbookId.val(),
+            transDate: transDate.val(), 
+            transType: transType.val(), 
+            cate1Name: cate1Name.val(),
+            cate2Name: cate2Name.val(),
+            transPayee: transPayee.val(),
+            transMemo: transMemo.val(),
+            transAmount: transAmount,
+            labelColor: labelColor.val()
+        },
+        success: function() {
+            init();
+        },
+        error: function() {
+            alert('내역 수정 서버 전송 실패');
+        }
+    });
 }
 
 

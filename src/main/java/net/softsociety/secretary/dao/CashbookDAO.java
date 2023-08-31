@@ -23,6 +23,9 @@ public interface CashbookDAO {
 
 	/** 해당 월 내역 수 조회 */
 	int selectTransCntMonth(HashMap<String, Object> map);
+	
+	/** 내역 수정 */
+	int updateTrans(Transaction trans);
 
 	/** 내역 삭제 */
 	int deleteTrans(Transaction trans);
@@ -50,5 +53,8 @@ public interface CashbookDAO {
 
 	/** 거래내역 하나 불러오기 */
 	Transaction selectTrans(int transId);
+
+	/** 소분류 name으로 id 찾기 */
+	int selectCate2Id(String cate2Name);
 
 }

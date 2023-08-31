@@ -186,4 +186,29 @@ INSERT INTO
 	WHERE
 	    st.trans_id = #{transId}
 </select>
+
+<!-- 내역 수정 -->
+<update id="updateTrans" parameterType="Transaction">	        
+	UPDATE
+	    Secretary_Transaction
+	SET
+	    trans_date = TO_DATE(#{transDate}, 'YYYY-MM-DD"T"HH24:MI')
+	    , trans_type = #{transType}
+	    , cate1_id = #{cate1Id}
+	    , cate2_id = #{cate2Id}
+	    , trans_payee = #{transPayee}
+	    , trans_memo = #{transMemo}
+	    , trans_amount = #{transAmount}
+	WHERE trans_id = #{transId}
+</update>
+
+<!-- 소분류 name으로 id찾기 -->
+<select id="selectCate2Id" parameterType="string" resultType="int">
+	SELECT
+	    cate2_id
+	FROM
+	    Secretary_Trans_Category2
+	WHERE
+	    cate2_name = #{cate2Name}
+</select>
 </mapper>
