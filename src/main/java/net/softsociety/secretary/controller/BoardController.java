@@ -3,9 +3,11 @@ package net.softsociety.secretary.controller;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,10 +20,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import lombok.extern.slf4j.Slf4j;
 import net.softsociety.secretary.dao.BoardDAO;
+import net.softsociety.secretary.domain.Answer;
 import net.softsociety.secretary.domain.Board;
 import net.softsociety.secretary.domain.User;
 import net.softsociety.secretary.service.BoardService;
 import net.softsociety.secretary.service.UserService;
+import net.softsociety.secretary.util.PageNavigator;
 
 @Controller
 @Slf4j
@@ -34,19 +38,48 @@ public class BoardController {
 	@Autowired
 	BoardDAO dao;
 	
-	//글목록으로 이동
-	@GetMapping("list")
-	public String list() {
-		return "boardView/list";
-	}	
-	//게시글목록
-	@ResponseBody
-	@GetMapping("getList")
-	public ArrayList<Board> getList() {
-		ArrayList<Board> boardList = dao.selectAllBoard();
-		log.debug("cont : {}", boardList);
-		return boardList;
-	}	
+	@Value("${spring.servlet.multipart.location}")
+	String uploadPath;
+	
+	//게시판 목록의 페이지당 글 수
+	@Value("${user.board.page}")
+	int countPerPage;
+		
+	//게시판 목록의 페이지 이동 링크 수
+	@Value("${user.board.group}")
+	int pagePerGroup;
+	
+//	//글목록으로 이동
+//	@GetMapping("list")
+//	public String list() {
+//		return "boardView/list";
+//	}
+	
+	//리스트2
+	@GetMapping("list2")
+	public String list2 (Model m, @RequestParam(name="boardCategory2", defaultValue="all")String boardCategory2,
+						@RequestParam(name="page", defaultValue="1")int page ) {
+		String boardCategory1 = "inquiry"; 
+		PageNavigator navi = service.getPageNavigator(pagePerGroup, countPerPage, page, boardCategory1, boardCategory2);
+		
+		ArrayList<Board> list = service.getBoardList(navi, boardCategory1, boardCategory2);
+		
+		m.addAttribute("list", list);
+		m.addAttribute("navi", navi);
+		m.addAttribute("boardCategory1",boardCategory1);
+		m.addAttribute("boardCategory2",boardCategory2);
+		
+		return "boardView/list2";
+	}
+	
+//	//게시글목록
+//	@ResponseBody
+//	@GetMapping("getList")
+//	public ArrayList<Board> getList() {
+//		ArrayList<Board> boardList = dao.selectAllBoard();
+//		log.debug("cont : {}", boardList);
+//		return boardList;
+//	}	
 	
 	//1:1 문의글 등록으로 이동
 	@GetMapping("write")
@@ -66,54 +99,82 @@ public class BoardController {
     	
     	b.setUserId(u.getUserId());
     	
-    	String boardCategory1 = "inquiry";
-    	b.setBoardCategory1(boardCategory1);
     	log.debug("cont : {}", b);
     	service.write(b);
-	    return "redirect:/board/list";
+	    return "redirect:/board/list2";
     }
-//   //문의 글 읽기
-//    @ResponseBody
-//    @GetMapping("read")
-//    public String read(@RequestParam(name="boardId",defaultValue="0")int boardId, Model m) {
-//    	Board b = service.read(boardId);
-//    	if (b == null) {
-//            return "redirect:/board/list";
-//        }
-//    	m.addAttribute("Board", b);
-//    	log.debug("userId : {}", b.getUserId());
-//    	return "boardView/read";
-//    }
     //문의 글 읽기
-    @ResponseBody
     @GetMapping("read")
-    public ResponseEntity<Board> read(@RequestParam int boardId) {
-    	Board readContent = service.getboardContent(boardId);
-        if (readContent != null) {
-            return ResponseEntity.ok(readContent);
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+    public String read(@RequestParam(name="boardId", defaultValue="0") int boardId, Model model) {
+    	
+    	Board b = service.read(boardId);
+    	
+    	if(b ==null) {
+			return "redirect:/list";
+		}
+    	model.addAttribute("board", b);
+    	
+    	
+    	return "boardView/read";
+//    	if(board==null) {
+//            log.debug("post가 null입니다");
+//            return "redirect:/";
+//         } else {
+//            ArrayList<Answer> answerList = service.answerList(boardId);
+//            log.debug("{}", answerList);
+//            model.addAttribute("answerList", answerList);
+//            model.addAttribute("answer", answer);
+//            return "boardView/read";
+//         }
     }
-    // 글 수정 페이지로 이동
-    @GetMapping("update/{boardId}")
-    public String showUpdateForm(@PathVariable int boardId, Model model) {
-        Board board = service.getboardContent(boardId);
-        model.addAttribute("board", board);
-        return "boardView/update"; 
+    //수정 폼 이동
+    @GetMapping("update")
+    public String update(String boardId, Model m) {
+    	int num = (boardId != null && !boardId.isEmpty()) ? Integer.parseInt(boardId) : 0;
+    	log.debug("num 여기요여기요 : {}", num);
+    	Board b = service.upread(num);
+    	
+    	m.addAttribute("b", b);
+    	
+    	return "boardView/update";
+    }
+    //문의 글 수정
+    @PostMapping("update")
+    public String update(@AuthenticationPrincipal UserDetails user,Board b){
+    	User u = userservice.findByEmailOrUserId(user.getUsername());
+    	
+    	b.setUserId(u.getUserId());
+    	
+    	service.update(b);
+    	
+    	return "redirect:/board/list2";
+    }
+    //문의 글 삭제
+    @GetMapping("deleteOne")
+    public String deleteOne(int boardId) {
+    	log.debug("deleteOne : {}", boardId);
+    	int n = service.deleteOne(boardId);
+    	
+    	if(n==0) {
+    		log.debug("삭제실패");
+    		return "redirect:/board/read?boardId=" + boardId;
+    	}
+    	return "redirect:/board/list2";
+    }
+    //답글 달기
+    @PostMapping("answer")
+    public String answer(@AuthenticationPrincipal UserDetails user, Answer a) {
+    	User u = userservice.findByEmailOrUserId(user.getUsername()); 
+    	
+    	a.setUserId(u.getUserId());
+    	
+    	
+    	int n = service.insertAnswer(a);
+    	
+    	return "redirect:/board/read?boardId="+a.getBoardId();
     }
     
-    //글 삭제
-    @GetMapping("deleteBoard")
-    public String deleteBoard(@RequestParam int boardId) {
-    	int n = service.deleteBoard(boardId);
-    	
-    	 log.debug("deleteBoard:/ {}", boardId);
-    	
-    	 if(n==0) {
-	         log.debug("삭제 실패");
-	         return "redirect:/";
-	      }
-    	 return "redirect:list";
-    }
+   
+    
+    
 }

@@ -7,15 +7,16 @@
 	    <result property="userId" column="user_id" />
 	    <result property="boardId" column="board_id" />
 	    <result property="boardContent" column="board_content" />
-	    <result property="boardAnswer" column="board_answer" />
-	    <result property="boardAnswerDate" column="board_answerdate" />
 	    <result property="boardStatus" column="board_status" />
 	    <result property="boardTitle" column="board_title" />
 	    <result property="boardIsPublic" column="board_ispublic" />
 	    <result property="boardCategory1" column=" board_category1" />
 	    <result property="boardCategory2" column="board_category2" />
 	    <result property="boardHits" column="board_hits" />
-	    <result property="boardInputdate" column="board_inputdate" /> 
+	    <result property="boardInputdate" column="board_inputdate" />
+	    <result property="answerId" column="answer_id" /> 
+	    <result property="answerContent" column="answer_content" />
+	    <result property="answerDate" column="answer_date" />
 </resultMap>
 
 <!-- 1:1문의 글 등록 -->
@@ -23,9 +24,58 @@
   insert into secretary_board 
     (board_id, board_category1, board_category2, board_title, board_content, user_id, board_ispublic) 
   values 
-    (secretary_board_seq.nextval, #{boardCategory1}, #{boardCategory2}, #{boardTitle}, #{boardContent}, #{userId}, #{boardIsPublic}
-    ) 
+    (secretary_board_seq.nextval, #{boardCategory1}, #{boardCategory2}, #{boardTitle}, #{boardContent}, #{userId}, #{boardIsPublic}) 
 </insert>
+<!-- 리스트2 -->
+<select id="list2" parameterType="hashmap" resultType="Board">
+	select user_id
+		, board_id
+		, board_title
+		, board_content
+		, to_char(board_inputdate, '[yyyy.mm.dd] hh24:mm:ss') board_inputdate
+		, board_hits 
+	from secretary_board 
+	<where>
+		 <if test="boardCategory1 != null">
+		 	board_category1 = #{boardCategory1}
+		 </if>
+		 <if test="boardCategory2 != null and boardCategory2 != 'all'">
+			 <if test="boardCategory1 != null">
+			 	and
+			 </if>
+		 	board_category2 = #{boardCategory2}
+		 </if>
+	</where>
+</select>
+<!-- 전체 게시글 개수 계산 -->
+<select id="getTotal" parameterType="hashmap" resultType="int">
+   SELECT COUNT(*) FROM secretary_board
+   <where>
+      <if test="type == 'boardCategory1'">
+        AND board_category1 = #{boardCategory1}
+      </if>
+      <if test="type == 'boardCategory2'">
+        AND board_category2 = #{boardCategory2}
+      </if>
+      <if test="type == 'all'">
+        <choose>
+         <when test="boardCategory1 != null">
+           AND board_category1 = #{boardCategory1}
+         </when>
+         <when test="boardCategory2 != null">
+           AND board_category2 = #{boardCategory2}
+         </when>
+         <otherwise>
+            <!-- All categories -->
+         </otherwise>
+         </choose>
+      </if>
+      <if test="type == 'user'">
+        AND user_id = #{userId}
+      </if>
+    </where>
+</select>
+
 
 <!-- 글 목록 -->
 <select id="selectAllBoard" resultType="Board">
@@ -37,11 +87,46 @@ select * from secretary_board
     select * from secretary_board where board_id = #{boardId}
 </select>
 
-
 <!-- 글삭제 -->
-<delete id="deleteBoard" parameterType="int">
+<delete id="deleteOne" parameterType="int">
 delete from secretary_board where board_id = #{boardId}
 </delete>
- 
 
+<!-- 글 수정 -->
+<update id="update" parameterType="Board">
+	update 
+		secretary_board 
+	set 
+		board_title = #{boardTitle}
+		, board_content = #{boardContent}
+		, board_category2 = #{boardCategory2}
+		, board_ispublic = #{boardIsPublic}
+	where 
+		board_id = #{boardId}
+</update>
+<!-- 답글 불러오기 -->
+<select id="answerList" parameterType="int" resultType="Answer">
+select answer_content, user_id, to_char(answer_date, '[yyyy.mm.dd] hh24:mm:ss') answer_date
+from secretary_answer
+where 
+	board_id = 	#{boardId}
+</select>
+<!-- 답글입력 -->
+<insert id="insertAnswer" parameterType="Answer">
+    INSERT INTO secretary_answer (answer_content, user_id, answer_date)
+    VALUES (#{answerContent}, #{userId}, CURRENT_TIMESTAMP)
+</insert>
+
+<!-- 조회수 -->
+<update id="addhits" parameterType="int">
+	update
+		secretary_board
+	set
+		board_hits = board_hits + 1
+	where 
+		board_id = #{boardId}
+</update>
+
+<!--  게시글 읽기  -->
+<select id="selectOne" resultType="Board"> select * from secretary_board where board_id = #{boardId} </select>
 </mapper>

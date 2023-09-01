@@ -37,7 +37,7 @@ public class CashbookTransRestController {
 	
 	/** 내역 입력 */
 	@PostMapping("setTrans")
-	public void setBudget(Transaction trans, @AuthenticationPrincipal UserDetails user) {
+	public void setTrans(Transaction trans, @AuthenticationPrincipal UserDetails user) {
 		log.debug("넘어온 거래내역:{}", trans);
 		
 		// 유저id 불러오기
@@ -84,6 +84,21 @@ public class CashbookTransRestController {
 		log.debug("출력할 내역 개수:{}", result);
 		
 		return result;
+	}
+	
+	/** 내역 수정 */
+	@PostMapping("updateTrans")
+	public void updateTrans(Transaction trans, @AuthenticationPrincipal UserDetails user) {
+		log.debug("컨트롤러에 넘어온 수정할 거래내역:{}", trans);
+		
+		// 유저id 불러오기
+		String userId = userdao.findByEmailOrUserId(user.getUsername()).getUserId();
+		// 유저id 입력 
+		trans.setUserId(userId);
+		log.debug("수정 들어갈 거래내역:{}", trans);
+		
+		int n = service.updateTrans(trans);
+		
 	}
 	
 	/** 내역 삭제 */
@@ -153,5 +168,15 @@ public class CashbookTransRestController {
 		int n = service.addCustomCate2(cate2, cate1Name);
 	}
 	
+	/** 거래내역 하나 조회 */
+	@PostMapping("selectTrans")
+	public Transaction setTrans(int transId) {
+		log.debug("컨트롤러에 넘어온 transId:{}", transId);
+		
+		Transaction result = dao.selectTrans(transId);
+		log.debug("모달에 뿌리려고 불러온 거래내역:{}", result);
+		
+		return result;
+	}
 
 }
