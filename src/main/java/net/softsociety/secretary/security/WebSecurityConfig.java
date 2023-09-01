@@ -40,8 +40,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 "/boardView/list2",
                 "/boardView/write",
                 "/cashbook/trans/setTrans",
-                "/thymeleaf",
-                "/**"
+                "/thymeleaf", 
+                
+                // static 하위 폴더들
+                "/assets/**",
+                "/assets2/**",
+                "/css/**",
+                "/fonts/**",
+                "/fridgeimg/**",
+                "/images/**",
+                "/js/**",
+                "/libs/**",
+                "/scss/**",
+                "/tasks/**"
                     ).permitAll()
             .antMatchers("/admin").hasRole("ADMIN")
             .anyRequest().authenticated()
