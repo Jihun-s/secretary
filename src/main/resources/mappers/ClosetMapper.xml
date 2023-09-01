@@ -10,7 +10,7 @@
 	values (Secretary_Closet_SEQ.nextval, #{familyId}, #{userId}, #{closetName})
 </insert>
 
-<!-- 옷장목록 불러오기 -->
+<!-- 옷장목록 전체 불러오기 -->
 <select id="findAllCloset" resultType="Closet">
 	select * from Secretary_Closet order by closet_num
 </select>
@@ -20,15 +20,24 @@
 	insert into Secretary_clothes (clothes_num, family_id, closet_num, 
 								clothes_material, clothes_category,
 								clothes_seasons,  clothes_size,
-								clothes_img)
+								clothes_img, clothes_originalFile)
 	values (Secretary_Clothes_SEQ.nextval, #{familyId}, #{closetNum},
 			 	#{clothesMaterial}, #{clothesCategory},
 			 	#{clothesSeasons}, #{clothesSize},
-				#{clothesImg})	
+				#{clothesImg}, #{clothesOriginalFile})	
 </insert>
 
-<!-- 옷장안 의류목록 출력 -->
-<select id="findClothes" parameterType="int">
-	select * from Secretary_clothes where clothes_num = #{closetNum}
+<!-- 옷장안 의류 전체목록 -->
+<select id="findAllClothes" parameterType="int" resultType="Clothes">
+	select * from Secretary_clothes where closet_num = #{closetNum}
+									order by clothes_num
 </select>
+
+<!-- 옷장안 옷 찾기(옷장번호, 옷번호) -->
+<select id="findClothes" parameterType="hashmap" resultType="Clothes">
+	select * from Secretary_clothes where closet_num = #{closetNum} 
+									and clothes_num = #{clothesNum}
+</select>
+
+
 </mapper>

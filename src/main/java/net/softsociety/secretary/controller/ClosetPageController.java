@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import lombok.extern.slf4j.Slf4j;
 import net.softsociety.secretary.domain.Closet;
+import net.softsociety.secretary.domain.Clothes;
 import net.softsociety.secretary.service.ClosetService;
 
 @Slf4j
@@ -24,12 +25,13 @@ public class ClosetPageController {
 	// 옷장 메인화면
 	@GetMapping({"", "/"})
 	public String closetMain(Model model) {
-		ArrayList<Closet> closetList = service.findAllCloset(); //옷장목록 불러오기
+		//옷장목록 불러오기
+		ArrayList<Closet> closetList = service.findAllCloset();
 		model.addAttribute("closetList", closetList);
 		return "closetView/closetMain";
 	}
 	
-	// 옷장 상세1
+	// 옷장 상세
 	@GetMapping("InCloset")
 	public String InclosetPage(@RequestParam(name="closetNum") int closetNum
 								, Model model) {

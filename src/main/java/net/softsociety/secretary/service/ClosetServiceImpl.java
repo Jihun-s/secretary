@@ -1,6 +1,7 @@
 package net.softsociety.secretary.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,7 +24,7 @@ public class ClosetServiceImpl implements ClosetService {
 		return dao.insertCloset(closet);
 	}
 	
-	//옷장리스트 출력
+	//옷장 리스트 출력
 	@Override
 	public ArrayList<Closet> findAllCloset() {
 		return dao.findAllCloset();
@@ -36,11 +37,24 @@ public class ClosetServiceImpl implements ClosetService {
 		dao.insertClothes(clothes);
 	}
 
-	//옷장안에 의류목록 출력
+	//옷장안에 의류전체목록 출력
 	@Override
-	public ArrayList<Clothes> findClothes(int closetNum) {
-		return dao.findClothes(closetNum);
+	public ArrayList<Clothes> findAllClothes(int closetNum) {
+		return dao.findAllClothes(closetNum);
 	}
+	
+	//옷장안에 옷번호로 의류하나 찾기
+	@Override
+	public Clothes findClothes(int closetNum, int clothesNum) {
+		//옷장번호, 옷번호 담을 해쉬맵
+		HashMap<String, Integer> map = new HashMap<>();
+		map.put("closetNum", closetNum);
+		map.put("clothesNum", clothesNum);
+		
+		return dao.findClothes(map);
+	}
+	
+	
 	
 	
 	

@@ -69,7 +69,8 @@ public class FileService {
 	public static String processImg(String originalFilename, String uploadPath) {
 		
 		String originalFilePath = uploadPath + "/" + originalFilename;    //  c:/secretary/파일이름.확장자
-		String result = originalFilePath.substring(0,originalFilePath.length()-4) + "edited.PNG"; // Replace with your result path
+		String pySavedPath = originalFilePath.substring(0,originalFilePath.length()-4) + "edited.PNG";
+		String result = originalFilename.substring(0, originalFilename.length()-4) + "edited.PNG";
 		//누끼따기
         try {
             // Python executable command and script path
@@ -79,7 +80,7 @@ public class FileService {
             // Additional arguments to pass to the Python script
             
             // Create the ProcessBuilder
-            ProcessBuilder processBuilder = new ProcessBuilder(pythonCommand, pythonScriptPath, originalFilePath, result);
+            ProcessBuilder processBuilder = new ProcessBuilder(pythonCommand, pythonScriptPath, originalFilePath, pySavedPath);
 
             // Redirect the error stream to the output stream
             processBuilder.redirectErrorStream(true);

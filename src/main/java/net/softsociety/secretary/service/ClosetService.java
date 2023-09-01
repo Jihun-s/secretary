@@ -16,6 +16,9 @@ public interface ClosetService {
 	void insertClothes(Clothes clothes);
 
 	// 옷장에 의류목록 출력
-	ArrayList<Clothes> findClothes(int closetNum);
-
+	ArrayList<Clothes> findAllClothes(int closetNum);
+	
+	// 옷장안 옷찾기
+	Clothes findClothes(int closetNum, int clothesNum);
+	
 }
