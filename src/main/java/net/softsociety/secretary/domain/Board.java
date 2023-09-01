@@ -11,14 +11,12 @@ public class Board {
 	int boardId;
 	String userId;
 	String boardContent;
-	String boardAnswer;
-	String boardAnswerDate;
 	int boardStatus;
 	String boardTitle;
 	int boardIsPublic;
 	String boardCategory1;
 	String boardCategory2;
 	int boardHits;
-	String inputdate;
+	String boardInputdate;
 	
 }

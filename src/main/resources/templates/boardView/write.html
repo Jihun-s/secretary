@@ -38,10 +38,66 @@
 }
 
  </script>
+ <script>
+        $(document).ready(function() {
+            updateCategoryOptions(); // 페이지 로딩시 카테고리 옵션 업데이트
+            
+            // 카테고리1 선택 시 카테고리2 옵션 업데이트
+            $("#boardCategory1").change(function() {
+                updateCategoryOptions();
+            });
+        });
+        
+        // 카테고리 옵션 업데이트 함수
+        function updateCategoryOptions() {
+            const boardCategory1 = $("#boardCategory1").val();
+            const boardCategory2 = $("#boardCategory2");
+            
+            if (boardCategory1 === "inquiry") {
+                // 카테고리1이 inquiry인 경우에만 카테고리2를 보여줌
+                boardCategory2.html(`
+                    <option value="">카테고리 선택</option>
+                    <option value="account">계정</option>
+                    <option value="service">서비스</option>
+                    <option value="error">오류신고</option>
+                    <option value="other">기타</option>
+                `);
+            } else {
+                // 그 외의 경우에는 카테고리2를 숨김
+                boardCategory2.html("");
+            }
+        }
+    </script>
 </head>
 <body>
 <h1>[1:1 문의글 등록]</h1>
+<form th:action="@{/board/write}" method="post" onsubmit="return check();">
+    <!-- 역할에 따라 선택 가능한 카테고리 옵션 설정 -->
+    <select name="boardCategory1" id="boardCategory1">
+        <option value="frequently" th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">자주 묻는 질문</option>
+        <option value="notification" th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">공지사항</option>
+        <option value="inquiry" >1:1 문의</option>
+    </select><br>
 
+    <!-- 선택한 카테고리에 따라 하위 카테고리 설정 -->
+    <select name="boardCategory2" id="boardCategory2">
+        <option value="">카테고리 선택</option>
+        <option value="account" th:if="${boardCategory1 == 'inquiry'}">계정</option>
+        <option value="service" th:if="${boardCategory1 == 'inquiry'}">서비스</option>
+        <option value="error" th:if="${boardCategory1 == 'inquiry' }">오류신고</option>
+        <option value="other" th:if="${boardCategory1 == 'inquiry'}">기타</option>
+    </select><br>
+
+    제목<input type="text" name="boardTitle" id="boardTitle" placeholder="제목을 입력하세요(2자 이상)"><br>
+    내용<textarea name="boardContent" id="boardContent" placeholder="내용을 입력하세요(10자 이상)"></textarea><br>
+    비밀글<input type="checkbox" name="boardIsPublic" id="boardIsPublic" value="1" onchange="checkboxChange()"><br>
+    <input type="submit" value="저장">
+</form>
+<form th:action="@{/board/list2}" method="get">
+    <input type="submit" value="취소">
+</form>
+
+<!--  
 <form th:action="@{/board/write}" method="post" onsubmit="return check();">
     카테고리<select name="boardCategory2" id="boardCategory2">
         <option value="">카테고리 선택</option>
@@ -58,10 +114,10 @@
     비밀글<input type="checkbox" name="boardIsPublic" id="boardIsPublic" value="1" onchange="checkboxChange()"><br>
     <input type="submit" value="저장">   
 </form>
-<form th:action="@{/board/list}" method="get">
+<form th:action="@{/board/list2}" method="get">
 	 <input type="submit" value="취소">
 </form>
-
+-->
 
 </body>
 </html>
