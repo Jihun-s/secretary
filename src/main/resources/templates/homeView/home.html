@@ -9,13 +9,13 @@
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="x-ua-compatible" content="ie=edge" />
-    <title>Delivery - Home Delivery App Landing Page Template</title>
+    <title>생비</title>
     <meta name="description" content="" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link
       rel="shortcut icon"
       type="image/x-icon"
-      href="assets/img/favicon.png"
+      th:href="@{/assets2/img/logo/logo.png}"
     />
     <!-- Place favicon.ico in the root directory -->
 
@@ -27,6 +27,42 @@
     <link rel="stylesheet" th:href="@{/assets2/css/LineIcons.2.0.css}" />
     <link rel="stylesheet" th:href="@{/assets2/css/animate.css}" />
     <link rel="stylesheet" th:href="@{/assets2/css/main.css}" />
+
+    <!-- ========================= Sneat CSS ========================= -->
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Icons. Uncomment required icon fonts -->
+    <link rel="stylesheet" th:href="@{/assets/vendor/fonts/boxicons.css}" />
+
+    <!-- Core CSS -->
+    <link
+      rel="stylesheet"
+      th:href="@{/assets/vendor/css/core.css}"
+      class="template-customizer-core-css"
+    />
+    <link
+      rel="stylesheet"
+      th:href="@{/assets/vendor/css/theme-default.css}"
+      class="template-customizer-theme-css"
+    />
+    <link rel="stylesheet" th:href="@{/assets/css/demo.css}" />
+
+    <!-- Vendors CSS -->
+    <link
+      rel="stylesheet"
+      th:href="@{/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css}"
+    />
+
+    <link
+      rel="stylesheet"
+      th:href="@{/assets/vendor/libs/apex-charts/apex-charts.css}"
+    />
   </head>
   <body>
     <!--[if lte IE 9]>
@@ -36,7 +72,6 @@
         your experience and security.
       </p>
     <![endif]-->
-
     <!-- ========================= preloader start ========================= -->
     <div class="preloader">
       <div class="loader">
@@ -63,8 +98,12 @@
           <div class="row align-items-center">
             <div class="col-lg-12">
               <nav class="navbar navbar-expand-lg">
-                <a class="navbar-brand" href="index.html">
-                  <img th:src="@{/assets2/img/logo/logo.svg}" alt="Logo" />
+                <a class="navbar-brand" th:href="@{/}">
+                  <img
+                    th:src="@{/assets2/img/logo/logo.png}"
+                    style="width: 60%"
+                    alt="Logo"
+                  />
                 </a>
                 <button
                   class="navbar-toggler"
@@ -86,21 +125,22 @@
                 >
                   <ul id="nav" class="navbar-nav ml-auto">
                     <li class="nav-item">
-                      <a class="page-scroll" href="#home">Home</a>
+                      <a class="page-scroll" href="#home">맨 위로</a>
                     </li>
                     <li class="nav-item">
-                      <a class="page-scroll" href="#services">Services</a>
+                      <a th:href="@{/board/list}">공지사항</a>
                     </li>
                     <li class="nav-item">
-                      <a class="page-scroll" href="#about">About</a>
+                      <a th:href="@{/board/list}">자주 묻는 질문</a>
                     </li>
                     <li class="nav-item">
-                      <a class="page-scroll" href="#how">How It Works</a>
+                      <a th:href="@{/board/list}">문의게시판</a>
                     </li>
                     <li class="nav-item">
-                      <a class="page-scroll" href="#testimonial"
-                        >Testimonials</a
-                      >
+                      <a th:href="@{/user/signup}">가입</a>
+                    </li>
+                    <li class="nav-item">
+                      <a th:href="@{/user/login}">로그인</a>
                     </li>
                   </ul>
                 </div>
@@ -120,35 +160,29 @@
     <!-- ========================= hero-section start ========================= -->
     <section id="home" class="hero-section">
       <div class="hero-shape">
-        <img
-          th:src="@{/assets2/img/hero/hero-shape.svg}"
-          alt=""
-          class="shape"
-        />
+        <img th:src="@{/assets2/img/hero/8669382.png}" alt="" class="sanho" />
       </div>
       <div class="container">
         <div class="row align-items-center">
           <div class="col-lg-6">
             <div class="hero-content">
               <h1 class="wow fadeInUp" data-wow-delay=".2s">
-                You're Using <span>Free Lite Version</span>
+                <span>나만을 위한</span><br />
+                <span>생활 비서 서비스</span>
               </h1>
               <p class="wow fadeInUp" data-wow-delay=".4s">
-                Please, purchase full version of the template to remove footer
-                credits, documentation and support.
+                바쁜 일상 속 놓치기 쉬운 살림살이, 생비가 도와드릴게요.
               </p>
-              <a
-                href="https://rebrand.ly/delivery-ud/"
-                rel="nofollow"
-                class="main-btn btn-hover wow fadeInUp"
-                data-wow-delay=".6s"
-                >Purchase Now</a
+              <a th:href="@{/user/login}"
+                ><button type="button" class="btn btn-primary">
+                  시작하기
+                </button></a
               >
             </div>
           </div>
           <div class="col-lg-6">
             <div class="hero-img wow fadeInUp" data-wow-delay=".5s">
-              <img th:src="@{/assets2/img/hero/hero-img.jpg}" alt="" />
+              <img th:src="@{/assets2/img/hero/8669322.png}" alt="whale" />
             </div>
           </div>
         </div>
@@ -156,128 +190,19 @@
     </section>
     <!-- ========================= hero-section end ========================= -->
 
-    <!-- ========================= service-section start ========================= -->
-    <section id="services" class="service-section pt-150">
+    <!-- ========================= about-section start ========================= -->
+    <section id="introduction" class="about-section pt-150">
       <div class="container">
-        <div class="row justify-content-center">
-          <div class="col-xl-6 col-lg-8">
-            <div class="section-title text-center mb-70">
-              <span class="wow fadeInUp" data-wow-delay=".2s"
-                >Delivery Services</span
-              >
-              <h1 class="wow fadeInUp" data-wow-delay=".4s">
-                All Essentials You Need
-              </h1>
-            </div>
-          </div>
-        </div>
         <div class="row">
-          <div class="col-lg-4 col-md-6">
-            <div class="single-service wow fadeInUp" data-wow-delay=".2s">
-              <div class="icon">
-                <img
-                  th:src="@{assets2/img/service/service-icon-1.svg}"
-                  alt=""
-                />
-              </div>
-              <div class="content">
-                <h3>Food</h3>
-                <p>
-                  Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
-                  diam nonumy eirmod tempor invidunt.
-                </p>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-4 col-md-6">
-            <div class="single-service wow fadeInUp" data-wow-delay=".4s">
-              <div class="icon">
-                <img
-                  th:src="@{/assets2/img/service/service-icon-2.svg}"
-                  alt=""
-                />
-              </div>
-              <div class="content">
-                <h3>Grocery</h3>
-                <p>
-                  Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
-                  diam nonumy eirmod tempor invidunt.
-                </p>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-4 col-md-6">
-            <div class="single-service wow fadeInUp" data-wow-delay=".6s">
-              <div class="icon">
-                <img
-                  th:src="@{/assets2/img/service/service-icon-3.svg}"
-                  alt=""
-                />
-              </div>
-              <div class="content">
-                <h3>Furniture</h3>
-                <p>
-                  Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
-                  diam nonumy eirmod tempor invidunt.
-                </p>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-4 col-md-6">
-            <div class="single-service wow fadeInUp" data-wow-delay=".2s">
-              <div class="icon">
-                <img
-                  th:src="@{/assets2/img/service/service-icon-4.svg}"
-                  alt=""
-                />
-              </div>
-              <div class="content">
-                <h3>Medicine</h3>
-                <p>
-                  Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
-                  diam nonumy eirmod tempor invidunt.
-                </p>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-4 col-md-6">
-            <div class="single-service wow fadeInUp" data-wow-delay=".4s">
-              <div class="icon">
-                <img
-                  th:src="@{/assets2/img/service/service-icon-5.svg}"
-                  alt=""
-                />
-              </div>
-              <div class="content">
-                <h3>Electronics</h3>
-                <p>
-                  Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
-                  diam nonumy eirmod tempor invidunt.
-                </p>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-4 col-md-6">
-            <div class="single-service wow fadeInUp" data-wow-delay=".6s">
-              <div class="icon">
-                <img
-                  th:src="@{/assets2/img/service/service-icon-6.svg}"
-                  alt=""
-                />
-              </div>
-              <div class="content">
-                <h3>Clothes</h3>
-                <p>
-                  Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
-                  diam nonumy eirmod tempor invidunt.
-                </p>
-              </div>
+          <div class="col-lg-12 text-center">
+            <div class="about-img wow fadeInUp" data-wow-delay=".5s">
+              <h3>생비는 이러저러하고 이러저러합니다.</h3>
             </div>
           </div>
         </div>
       </div>
     </section>
-    <!-- ========================= service-section end ========================= -->
+    <!-- ========================= about-section end ========================= -->
 
     <!-- ========================= about-section start ========================= -->
     <section id="about" class="about-section pt-150">
@@ -285,7 +210,16 @@
         <div class="row">
           <div class="col-lg-6">
             <div class="about-img wow fadeInUp" data-wow-delay=".5s">
-              <img th:src="@{/assets2/img/about/about-img.jpg}" alt="" />
+              <img
+                th:src="@{/assets2/img/about/9919889.png}"
+                style="width: 20rem"
+                alt=""
+              />
+              <img
+                th:src="@{/assets2/img/about/9648040.png}"
+                style="width: 20rem"
+                alt=""
+              />
             </div>
           </div>
           <div class="col-lg-6">
@@ -381,7 +315,16 @@
           </div>
           <div class="col-lg-7 order-first order-lg-last">
             <div class="delivery-img wow fadeInUp" data-wow-delay=".5s">
-              <img th:src="@{/assets2/img/delivery/delivery-img.jpg}" alt="" />
+              <img
+                th:src="@{/assets2/img/delivery/fridge01.png}"
+                style="width: 20rem"
+                alt=""
+              />
+              <img
+                th:src="@{/assets2/img/delivery/9648830.png}"
+                style="width: 20rem"
+                alt=""
+              />
             </div>
           </div>
         </div>
@@ -398,7 +341,16 @@
               class="about-img received-img wow fadeInUp"
               data-wow-delay=".5s"
             >
-              <img th:src="@{/assets2/img/received/received-img.jpg}" alt="" />
+              <img
+                th:src="@{/assets2/img/received/9913991.png}"
+                style="width: 20rem"
+                alt=""
+              />
+              <img
+                th:src="@{/assets2/img/received/11892988.png}"
+                style="width: 20rem"
+                alt=""
+              />
             </div>
           </div>
           <div class="col-lg-6">
@@ -631,34 +583,147 @@
     </section>
     <!-- ========================= testimonial-section end ========================= -->
 
-    <!-- ========================= partners-section start ========================= -->
-    <section id="partner" class="partner-section pt-60 pb-60">
+    <!-- ========================= service-section start ========================= -->
+    <section id="services" class="service-section pt-150">
       <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-xl-6 col-lg-8">
+            <div class="section-title text-center mb-70">
+              <span class="wow fadeInUp" data-wow-delay=".2s"
+                >Delivery Services</span
+              >
+              <h1 class="wow fadeInUp" data-wow-delay=".4s">
+                All Essentials You Need
+              </h1>
+            </div>
+          </div>
+        </div>
         <div class="row">
-          <div class="col-lg-3 col-sm-6">
-            <div class="single-partner wow fadeInUp" data-wow-delay=".2s">
-              <img th:src="@{/assets2/img/partners/partner-1.svg}" alt="" />
+          <div class="col-lg-4 col-md-6">
+            <div class="single-service wow fadeInUp" data-wow-delay=".2s">
+              <div class="icon">
+                <img
+                  th:src="@{assets2/img/service/service-icon-1.svg}"
+                  alt=""
+                />
+              </div>
+              <div class="content">
+                <h3>Food</h3>
+                <p>
+                  Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
+                  diam nonumy eirmod tempor invidunt.
+                </p>
+              </div>
             </div>
           </div>
-          <div class="col-lg-3 col-sm-6">
-            <div class="single-partner wow fadeInUp" data-wow-delay=".4s">
-              <img th:src="@{/assets2/img/partners/partner-2.svg}" alt="" />
+          <div class="col-lg-4 col-md-6">
+            <div class="single-service wow fadeInUp" data-wow-delay=".4s">
+              <div class="icon">
+                <img
+                  th:src="@{/assets2/img/service/service-icon-2.svg}"
+                  alt=""
+                />
+              </div>
+              <div class="content">
+                <h3>Grocery</h3>
+                <p>
+                  Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
+                  diam nonumy eirmod tempor invidunt.
+                </p>
+              </div>
             </div>
           </div>
-          <div class="col-lg-3 col-sm-6">
-            <div class="single-partner wow fadeInUp" data-wow-delay=".6s">
-              <img th:src="@{/assets2/img/partners/partner-3.svg}" alt="" />
+          <div class="col-lg-4 col-md-6">
+            <div class="single-service wow fadeInUp" data-wow-delay=".6s">
+              <div class="icon">
+                <img
+                  th:src="@{/assets2/img/service/service-icon-3.svg}"
+                  alt=""
+                />
+              </div>
+              <div class="content">
+                <h3>Furniture</h3>
+                <p>
+                  Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
+                  diam nonumy eirmod tempor invidunt.
+                </p>
+              </div>
             </div>
           </div>
-          <div class="col-lg-3 col-sm-6">
-            <div class="single-partner wow fadeInUp" data-wow-delay=".8s">
-              <img th:src="@{/assets2/img/partners/partner-4.svg}" alt="" />
+          <div class="col-lg-4 col-md-6">
+            <div class="single-service wow fadeInUp" data-wow-delay=".2s">
+              <div class="icon">
+                <img
+                  th:src="@{/assets2/img/service/service-icon-4.svg}"
+                  alt=""
+                />
+              </div>
+              <div class="content">
+                <h3>Medicine</h3>
+                <p>
+                  Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
+                  diam nonumy eirmod tempor invidunt.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6">
+            <div class="single-service wow fadeInUp" data-wow-delay=".4s">
+              <div class="icon">
+                <img
+                  th:src="@{/assets2/img/service/service-icon-5.svg}"
+                  alt=""
+                />
+              </div>
+              <div class="content">
+                <h3>Electronics</h3>
+                <p>
+                  Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
+                  diam nonumy eirmod tempor invidunt.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6">
+            <div class="single-service wow fadeInUp" data-wow-delay=".6s">
+              <div class="icon">
+                <img
+                  th:src="@{/assets2/img/service/service-icon-6.svg}"
+                  alt=""
+                />
+              </div>
+              <div class="content">
+                <h3>Clothes</h3>
+                <p>
+                  Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
+                  diam nonumy eirmod tempor invidunt.
+                </p>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </section>
-    <!-- ========================= partners-section end ========================= -->
+    <!-- ========================= service-section end ========================= -->
+
+    <!-- ========================= partners-section start ========================= -->
+    <section id="partner" class="partner-section pb-60">
+      <div class="container">
+        <div class="row">
+          <a th:href="@{/user/signup}"
+            ><button type="button" class="btn btn-xl btn-outline-primary">
+              가입하고 시작하기
+            </button></a
+          >
+          <a th:href="@{/user/login}"
+            ><button type="button" class="btn btn-xl btn-primary">
+              로그인하기
+            </button></a
+          >
+        </div>
+      </div>
+    </section>
+    <!-- ========================= partners-section end =========================
 
     <!-- ========================= footer start ========================= -->
     <footer id="footer" class="footer pt-100 pb-70">
