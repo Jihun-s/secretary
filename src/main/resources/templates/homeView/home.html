@@ -137,10 +137,23 @@
                       <a th:href="@{/board/list}">문의게시판</a>
                     </li>
                     <li class="nav-item">
-                      <a th:href="@{/user/signup}">가입</a>
+                      <a
+                        sec:authorize="!isAuthenticated()"
+                        th:href="@{/user/signup}"
+                        >가입</a
+                      >
                     </li>
                     <li class="nav-item">
-                      <a th:href="@{/user/login}">로그인</a>
+                      <a
+                        sec:authorize="!isAuthenticated()"
+                        th:href="@{/user/login}"
+                        >로그인</a
+                      >
+                      <a
+                        sec:authorize="isAuthenticated()"
+                        th:href="@{/user/logout}"
+                        >로그아웃</a
+                      >
                     </li>
                   </ul>
                 </div>
@@ -173,7 +186,7 @@
               <p class="wow fadeInUp" data-wow-delay=".4s">
                 바쁜 일상 속 놓치기 쉬운 살림살이, 생비가 도와드릴게요.
               </p>
-              <a th:href="@{/user/login}"
+              <a th:href="@{/main}"
                 ><button type="button" class="btn btn-primary">
                   시작하기
                 </button></a
@@ -710,12 +723,12 @@
     <section id="partner" class="partner-section pb-60">
       <div class="container">
         <div class="row">
-          <a th:href="@{/user/signup}"
+          <a sec:authorize="!isAuthenticated()" th:href="@{/user/signup}"
             ><button type="button" class="btn btn-xl btn-outline-primary">
               가입하고 시작하기
             </button></a
           >
-          <a th:href="@{/user/login}"
+          <a sec:authorize="!isAuthenticated()" th:href="@{/user/login}"
             ><button type="button" class="btn btn-xl btn-primary">
               로그인하기
             </button></a
