@@ -7,10 +7,10 @@
         SELECT * FROM Secretary_Fridge WHERE family_id = #{familyId} and fridge_category = '냉장실'
     </select>
 
-    <insert id="addFridge">
-        INSERT INTO Secretary_Fridge (fridge_id, family_id, fridge_name, fridge_category)
-        VALUES (Secretary_Fridge_SEQ.NEXTVAL, #{familyId}, #{fridgeName}, #{fridgeCategory})
-    </insert>
+	<insert id="addFridge">
+	    INSERT INTO Secretary_Fridge (fridge_id, family_id, fridge_name, fridge_category)
+	    VALUES (Secretary_Fridge_SEQ.NEXTVAL, #{familyId}, #{fridgeName}, #{fridgeCategory})
+	</insert>
 
     <update id="updateFridge">
         UPDATE Secretary_Fridge

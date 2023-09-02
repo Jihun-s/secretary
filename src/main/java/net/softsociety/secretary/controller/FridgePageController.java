@@ -4,7 +4,8 @@ import java.security.Principal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -68,22 +69,29 @@ public class FridgePageController {
     }
 
 	@ResponseBody
-    @PostMapping("addFridge")
-    public void addFridge(@RequestBody Fridge fridge, Principal principal) {
-	    // Principal 객체를 사용하여 현재 인증된 사용자의 이름을 가져옵니다.
-	    String username = principal.getName();
+	@PostMapping("addFridge")
+	public ResponseEntity<?> addFridge(@RequestBody Fridge fridge, Principal principal) {
+	    try {
+		    // Principal 객체를 사용하여 현재 인증된 사용자의 이름을 가져옵니다.
+		    String username = principal.getName();
 
-	    // UserService를 사용하여 User 객체를 검색합니다.
-	    User user = userService.findByEmailOrUserId(username);
+		    // UserService를 사용하여 User 객체를 검색합니다.
+		    User user = userService.findByEmailOrUserId(username);
 
-	    // User 객체에서 family_id를 가져옵니다.
-	    int familyId = user.getFamilyId();
+		    // User 객체에서 family_id를 가져옵니다.
+		    int familyId = user.getFamilyId();
 
-	    // Fridge 객체에 family_id를 설정합니다.
-	    fridge.setFamilyId(familyId);
-		
-        fridgeService.addFridge(fridge);
-    }
+		    // Fridge 객체에 family_id를 설정합니다.
+		    fridge.setFamilyId(familyId);
+			
+		    List<Integer> newFridgeIds = fridgeService.addFridge(fridge);
+		    
+		    
+	        return new ResponseEntity<>(newFridgeIds, HttpStatus.OK);
+	    } catch (Exception e) {
+	        return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+	    }
+	}
 
     @PutMapping("/{id}")
     public Fridge updateFridge(@PathVariable int id, @RequestBody Fridge fridge) {

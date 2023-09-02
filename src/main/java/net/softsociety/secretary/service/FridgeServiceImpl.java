@@ -1,5 +1,6 @@
 package net.softsociety.secretary.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,14 +21,20 @@ public class FridgeServiceImpl implements FridgeService {
     }
 
     @Override
-    public void addFridge(Fridge fridge) {
+    public List<Integer> addFridge(Fridge fridge) {
+        List<Integer> fridgeIds = new ArrayList<>();
+
         // 냉장실 추가
         fridge.setFridgeCategory("냉장실");
         fridgeDAO.addFridge(fridge);
+        fridgeIds.add(fridge.getFridgeId());
 
         // 냉동실 추가
         fridge.setFridgeCategory("냉동실");
         fridgeDAO.addFridge(fridge);
+        fridgeIds.add(fridge.getFridgeId());
+
+        return fridgeIds;
     }
 
     @Override
