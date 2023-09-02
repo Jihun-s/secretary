@@ -624,15 +624,16 @@
 					        <h2 class="accordion-header text-body d-flex justify-content-between" id="accordionIconOne" style="border:1;">
  						         <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#accordionIcon-1" aria-controls="accordionIcon-1">
  							           <strong>옷 찾기</strong> 
- 							      </button> <button class="btn btn-danger">Search</button>
+ 							      </button> <button class="btn btn-danger" id="clothesSearchbtn">Search</button>
 					        </h2>
 					        <div id="accordionIcon-1" class="accordion-collapse collapse" data-bs-parent="#accordionIcon">
  						      <div class="accordion-body">
 			<!-- 옷찾기 테이블 --><table>
 									<colgroup>
 									<col width="10%">
-									<col width="30%">
+									<col width="50%">
 									<col width="10%">
+									<col>
 									</colgroup>
 										<tr>
 										  <td><label for="clothesCategoryForSearch">분류</label></td>
@@ -648,8 +649,8 @@
                       					  		<option value="accessory">악세사리</option>
                       					  		<option value="etc">기타</option>
                       					  	</select>
-                      					  </td>
-                      					  <td> <!-- 의류 소분류 -->
+                      					  
+                      					   		<!-- 의류 소분류 -->
 												<select id="topCategory" >
                       							<option value="topAll" selected>상의 전체</option>
                       							<option value="Tshirt">티셔츠</option>
@@ -740,7 +741,7 @@
 										</tr> <!-- 옷 찾기 1행 끝 -->
 										<tr> <!-- 2행 -->
 										<td>계절</td>
-										<td colspan="2">
+										<td>
 										<input type="checkbox" name="seasonsForSearch" value="spring"><label for="spirng"><small>봄</small></label>
                       					<input type="checkbox" name="seasonsForSearch" value="summer"><label for="summer"><small>여름</small></label>
                       					<input type="checkbox" name="seasonsForSearch" value="fall"><label for="fall"><small>가을</small></label>
@@ -762,8 +763,8 @@
                       						
                       						<table id="shoesSizeForSearch">
                       						<tr>
-                      						<td><input type="checkbox" value="shoesSizeAll"><small>전체</small></td>
-											<td><input type="number" value="210" min="210" max="300" step="5"></td>
+                      						<td><input type="checkbox" name="shoesSizeAll" value="shoesSizeAll"><small>전체</small></td>
+											<td><input type="number" name="shoesForSearch" value="210" min="210" max="300" step="5"></td>
 											</tr>
 											</table>
                       					</td>										
@@ -791,11 +792,15 @@
                 <!-- 2열 -->
                 <div class="col-lg-3 mb-4">
                   <!-- 2열 1행 -->
-                  <h3 class="">착용 통계</h3>
+                  <h3 class="">자세히 보기</h3>
                   <div class="card">
                     <div class="d-flex align-items-end"></div>
                     <div class="card-body">
-                      <h5>2열</h5>
+                    	<div id="updateImagePreview">
+                    	</div>
+                    	<div id="readClothesView">
+                      <h5>의류 클릭하기 전에는 착용통계 보여주기 (나중에 구현),클릭하면 의류 상세정보 나타나기</h5>
+                      	</div>
                     </div>
                   </div>
                 </div>

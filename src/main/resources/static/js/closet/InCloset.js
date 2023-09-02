@@ -3,6 +3,7 @@
  */
 $(document).ready(function(){
 	
+//!!!!!!!!!!!!!!!!!!!!!! 옷 찾기  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!	
 		//옷찾기 분류에서 소분류 숨겨놓기
 		$('#topCategory').hide();
 		$('#bottomCategory').hide();
@@ -12,13 +13,14 @@ $(document).ready(function(){
 		$('#bagCategory').hide();
 		$('#accessoryCategory').hide();
 		$('#etcCategory').hide();
-		
 		//옷찾기에서 신발사이즈 숨겨놓기
 		$('#shoesSizeForSearch').hide();
-		
-		//옷찾기에서 분류를 선택하면 categoryFunction함수 실행	
-		$("#clothesCategoryForSearch").on('change',categoryFunction);
-		
+		//옷찾기에서 분류를 선택하면 clothesSearchAnimation함수 실행	
+		$("#clothesCategoryForSearch").on('change',clothesSearchAnimation);
+		$("#clothesSearchbtn").on('click',clothesSearch); //옷찾기 버튼 클릭하면 clothesSearch 함수실행
+//!!!!!!!!!!!!!!!!!!!!!! 옷 찾기  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!		
+
+
 		//(의류)등록버튼을 클릭하면 insertClothes함수 실행
 		$('#insertClothesbtn').on('click', insertClothes);
 
@@ -26,6 +28,7 @@ $(document).ready(function(){
 		$('#editIMGbtn').on('click', editIMG);
 		//웹에서 찾기 버튼을 누르면 webSearch함수 실행	
 		$('#webSearchbtn').on('click', webSearch);
+
 
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!옷장안에 의류목록 출력!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		closetNum = parseInt(closetNum); // 스트링에서 정수형으로 변환
@@ -37,7 +40,7 @@ $(document).ready(function(){
 			success:function(list){
 				let str ='';
 				$(list).each(function(i,n){
-					str +='<img src="../closet/clothesDownload?closetNum='+closetNum+'&clothesNum='+n+'">';
+					str +='<a onclick="readClothes('+n+')"><img src="../closet/clothesDownload?closetNum='+closetNum+'&clothesNum='+n+'"></a>';
 				});
 				$('#whatsInCloset').html(str); 
 			},
@@ -124,7 +127,6 @@ $(document).ready(function(){
         imgEditCheck = 1; //사진편집여부 체크
 	}
 	
-	
 	//(의류)등록 insertClothesbtn 누르면 실행되는 함수 
 	function insertClothes(){
 		let originalFileName = document.getElementById("uploadIMG").files[0].name; //사용자가 첨부한 파일이름, clothesOriginalFile의 값
@@ -194,9 +196,7 @@ $(document).ready(function(){
 
 	}
 	
-	function categoryFunction(){
-		//$("select[name='topCategory']").hide();
-		//$("#topCategory").hide();
+	function clothesSearchAnimation(){
 		var result = $('#clothesCategoryForSearch option:selected').val();
 		if(result=='top'){
 			$('#bottomCategory').hide();
@@ -308,6 +308,96 @@ $(document).ready(function(){
 			$('#clothesSizeForSearch').show();				
 		}
 	}
+	
+	function clothesSearch(){
+		//console.log();
+		// 카테고리 category, 사이즈 size
+		let category = $('#clothesCategoryForSearch option:selected').val();
+		let size;				
+		if(category == 'top'){
+			category = $('#topCategory option:selected').val();
+		} else if(category == 'bottom'){
+			category = $('#bottomCategory option:selected').val();
+		} else if(category == 'clothesOuter'){
+			category = $('#outerCategory option:selected').val();
+		} else if(category == 'dress'){
+			category = $('#dressCategory option:selected').val();
+		} else if(category == 'shoes'){
+			//신발사이즈 체크된 값
+			size = $("input:checkbox[name='shoesSizeAll']:checked").val();
+			if(size==undefined){
+				size = $("input[name='shoesForSearch']").val();
+			}
+			category = $('#shoesCategory option:selected').val();
+		} else if(category == 'bag'){
+			category = $('#bagCategory option:selected').val();
+		} else if(category == 'accessory'){
+			category = $('#accessoryCategory option:selected').val();
+		} else if(category == 'etc'){
+			category = $('#etcCategory option:selected').val();
+		}
+		//신발이 아닌경우
+		if(size==undefined){
+				size = $('#clothesSizeForSearch option:selected').val();
+		}	 
+		console.log(category);
+		console.log(size);
+		
+		// 소재 material
+		let material = $('#materialListForSearch option:selected').val();
+		console.log(material);
+
+		// 계절 seasonArr
+		const seasonArr = [];
+		var seasonChecked = $("input:checkbox[name='seasonsForSearch']:checked");
+		$(seasonChecked).each(function(){
+			seasonArr.push($(this).val());
+		}); 		
+		console.log(seasonArr);
+		
+		
+		
+	}
+	
+	function readClothes(clothesNum){
+		console.log(clothesNum);
+		$.ajax({
+			url:'readClothes',
+			type:'get',
+			data:{closetNum: closetNum, clothesNum: clothesNum},
+			dataType:'json',
+			success:function(clothes){
+				console.log('성공');
+				console.log(clothes.clothesMaterial);
+				let imgStr = '<img src="../closet/clothesDownload?closetNum='+closetNum+'&clothesNum='+clothesNum+'">';
+				let str = '<table><colgroup><col width="35%;"><col><col></colgroup>\
+							<tr><td><label for="updateIMG" id="cssupdateIMG"><span>사진 수정<span></label>\
+									<input type="file" id="updateIMG" accept="image/*"></td>\
+								<td><input type="button" value="편집" id="updateEditIMGbtn"></td>\
+								<td><input type="button" value="웹에서 찾기" id="webSearchbtn"></td></tr>\
+							<tr><td>분류</td><td colspan="2">'+clothes.clothesCategory+'</td></tr>\
+							<tr><td>소재</td><td colspan="2">'+clothes.clothesMaterial+'</td></tr>\
+							<tr><td>계절</td><td colspan="2">'+clothes.clothesSeasons+'</td></tr>\
+							<tr><td>사이즈</td><td colspan="2">'+clothes.clothesSize+'</td></tr>\
+							<tr><td><button onclick="updateClothes('+clothesNum+')">수정</button></td>\
+								<td colspan="2"><button onclick="deleteClothes('+clothesNum+')">삭제</button></td></tr></table>'
+				$('#updateImagePreview').html(imgStr); 
+				$('#readClothesView').html(str); 
+			},
+			error:function(e){
+				alert(JSON.stringify(e));
+			}			
+		});
+	}
+	
+	function deleteClothes(clothesNum){
+		alert(clothesNum);
+	}
+	
+	function updateClothes(clothesNum){
+		alert(clothesNum);
+	}
+	
 	function webSearch(){
 		window.open("webSearch");
 	}

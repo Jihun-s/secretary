@@ -110,6 +110,15 @@ public class ClosetController {
 		}
 		return clothesNumList;
 	}
+	
+	@ResponseBody
+	@GetMapping("readClothes")
+	public Clothes readClothes(@RequestParam(name="closetNum") int closetNum,
+							@RequestParam(name="clothesNum") int clothesNum) {
+		log.debug("readClothes 매핑!");
+		Clothes clothes = service.findClothes(closetNum, clothesNum);
+		return clothes;
+	}
 
 	//옷이미지 다운로드 (옷장안에 이미지 구현)
 	@GetMapping("clothesDownload")
@@ -136,6 +145,7 @@ public class ClosetController {
 			e.printStackTrace();
 		}
 	}
-		
+	
+	
 	
 }
