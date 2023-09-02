@@ -744,7 +744,7 @@
                         </div>
                       </div>
                       
-                      <!-- 검색 -->
+                      <!-- 검색 & 정렬 -->
                       <div class="col-6">
                         <label class="form-label" for="search">검색</label>
                         <div class="input-group input-group-merge">
@@ -757,6 +757,16 @@
                           <span class="input-group-text"><i class="bx bx-search"></i></span>
                           <input type="text" id="searchWord" name="searchWord" class="form-control" placeholder="검색" aria-label="검색" aria-describedby="검색">
                           <button class="btn btn-outline-success" id="searchSubmitBt">검색</button>
+                        </div>
+                        <label class="form-label" for="sort">정렬</label>
+                        <div class="input-group input-group-merge">
+                          <select id="sortBy" name="sortBy" class="form-select">
+                            <option value="dateAsc">날짜 오름차순</option>
+                            <option value="dateDesc" selected>날짜 내림차순</option>
+                            <option value="amountAsc">금액 오름차순</option>
+                            <option value="amountDesc">금액 내림차순</option>
+                            <option value="payeeAsc">거래내용 가나다순</option>
+                          </select>
                         </div>
                       </div>
 

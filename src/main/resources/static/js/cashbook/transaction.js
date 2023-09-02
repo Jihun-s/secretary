@@ -133,15 +133,10 @@ $(document).ready(function() {
     // 이달의 수입&지출
     selectSumInEx();
 
-    // 검색어 입력
-    $('#searchSubmitBt').click(selectConditionTrans);
-
-    // 수입만 or 지출만 or 내꺼만 출력
-    $('#selectCondition input, #selectCondition select').change(selectConditionTrans);
-
+    
     // 검색용 전체 대분류 & 에 맞는 소분류 출력
     loadMainCategoriesSearch();
-   $("#transSearchCategory1Div").change(function() {
+    $("#transSearchCategory1Div").change(function() {
         selectConditionTrans();
         const selectedCate1NameSearch = $(this).val();
         if (selectedCate1NameSearch !== "대분류를 선택하세요") {
@@ -151,11 +146,16 @@ $(document).ready(function() {
             $("#cate2NameSearch").html('<option>소분류를 선택하세요</option>');
         }
     });
-
+    
+    // 조건 & 검색 & 정렬 
+    // 검색어 입력
+    $('#searchSubmitBt').click(selectConditionTrans);
+    $('#selectCondition input, #selectCondition select').change(selectConditionTrans);
     $('#transSearchCheckIncome').click(selectConditionTrans);
     $('#transSearchCheckExpense').click(selectConditionTrans);
     $('#transSearchCheckUserId').click(selectConditionTrans);
     $('#transSearchCategoriesDiv').click(selectConditionTrans);
+    $('#sortBy').change(selectConditionTrans);
 
 });
 
@@ -1044,6 +1044,7 @@ function selectConditionTrans() {
     let cate2Name = $('#cate2NameSearch').val(); // 아직 구현 안함 ㅎ
     let searchBy = $('#searchBy').val();
     let searchWord = $('#searchWord').val();
+    let sortBy = $('#sortBy').val();
 
     
     if($("#transSearchCheckIncome").is(':checked')) {
@@ -1071,7 +1072,8 @@ function selectConditionTrans() {
             , cate1Name: cate1Name
             , cate2Name: cate2Name
             , searchBy: searchBy
-            , searchWord: searchWord },
+            , searchWord: searchWord
+            , sortBy: sortBy },
         dataType: 'JSON',
         success: (list) => {
             // 넘어올 값: 내역리스트

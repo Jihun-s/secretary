@@ -231,10 +231,12 @@ public class CashbookTransRestController {
 			, String cate2Name
 			, String searchBy
 			, String searchWord
+			, String sortBy
 			) {
 		log.debug("컨트롤러에 넘어온 내꺼만:{}, 수입만:{}, 지출만:{}", myTransOnly, incomeSelected, expenseSelected);
 		log.debug("컨트롤러에 넘어온 대분류:{}, 소분류:{}", cate1Name, cate2Name);
 		log.debug("컨트롤러에 넘어온 검색어:{} 중 {}", searchBy, searchWord);
+		log.debug("컨트롤러에 넘어온 정렬: {}순", sortBy);
 		
 		// 현재 월 구하기
 		Calendar calendar = Calendar.getInstance();
@@ -253,6 +255,8 @@ public class CashbookTransRestController {
 		map.put("incomeSelected", incomeSelected);
 		map.put("expenseSelected", expenseSelected);
 		map.put("userId", userId);
+		map.put("sortBy", sortBy);
+		
 		if(cate1Name.length() > 0) {
 			map.put("cate1Name", cate1Name);
 		}

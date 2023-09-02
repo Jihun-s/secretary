@@ -89,9 +89,27 @@ INSERT INTO
 		        OR upper(trans_memo) like upper('%' || #{searchWord} || '%'))
 		    </when>
 		</choose>
+		<choose>
+		    <when test="sortBy == 'dateAsc'">
+		        ORDER BY st.trans_date ASC
+		    </when>
+		    <when test="sortBy == 'dateDesc'">
+		        ORDER BY st.trans_date DESC
+		    </when>
+		    <when test="sortBy == 'amountAsc'">
+		        ORDER BY st.trans_amount ASC
+		    </when>
+		    <when test="sortBy == 'amountDesc'">
+		        ORDER BY st.trans_amount DESC
+		    </when>
+		    <when test="sortBy == 'payeeAsc'">
+		        ORDER BY st.trans_payee ASC
+		    </when>
+		    <otherwise>
+		        ORDER BY st.trans_date DESC
+		    </otherwise>
+		</choose>
 
-    ORDER BY
-        st.trans_date DESC
 </select>
 
 <!-- 해당 월 내역 수 조회 -->
