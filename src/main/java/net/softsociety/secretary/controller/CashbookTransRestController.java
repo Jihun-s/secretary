@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.extern.slf4j.Slf4j;
@@ -58,8 +59,16 @@ public class CashbookTransRestController {
 	/** 내역 목록 출력 */
 	@GetMapping("list")
 	public ArrayList<Transaction> list(int familyId) {
+		// 현재 월 구하기
+		Calendar calendar = Calendar.getInstance();
+        int month = calendar.get(Calendar.MONTH) + 1;
+        
+        // DAO에 보낼 맵 
+ 		HashMap<String, Object> map = new HashMap<>();
+ 		map.put("month", month);
+ 		map.put("familyId", familyId);
 		
-		ArrayList<Transaction> result = dao.selectAllTrans(familyId);
+		ArrayList<Transaction> result = dao.selectAllTrans(map);
 		log.debug("출력할 내역목록:{}", result);
 		
 		return result;
@@ -129,6 +138,16 @@ public class CashbookTransRestController {
 		return result;
 	}
 	
+	/** 검색 대분류 불러오기 */
+	@GetMapping("loadCate1Search")
+	public ArrayList<Category1> loadCate1Search() {
+		
+		ArrayList<Category1> result = dao.selectCate1Search();
+		log.debug("출력할 검색용 대분류:{}", result);
+		
+		return result;
+	}
+	
 	/** 소분류 불러오기 */
 	@GetMapping("loadCate2")
 	public ArrayList<Category2> loadCate2(String cate1Name) {
@@ -178,5 +197,74 @@ public class CashbookTransRestController {
 		
 		return result;
 	}
+	
+	/** 한달 총 수입&지출 조회 */
+	@GetMapping("selectSumInEx")
+	public HashMap<String, Object> selectSumInEx() {
+		// 현재 월 구하기
+		Calendar calendar = Calendar.getInstance();
+        int curMonth = calendar.get(Calendar.MONTH) + 1;
+		
+		HashMap<String, Object> result = new HashMap<>();
+		
+		// 한달 수입
+		int sumIncomeMonth = dao.selectSumIncomeMonth(curMonth);
+		result.put("sumIncomeMonth", sumIncomeMonth);
+		log.debug("컨트롤러가 가져온 {}월 총 수입:{}", curMonth, sumIncomeMonth);
+		// 한달 지출
+		int sumExpenseMonth = dao.selectSumExpenseMonth(curMonth);
+		result.put("sumExpenseMonth", sumExpenseMonth);
+		log.debug("컨트롤러가 가져온 {}월 총 수입:{}", curMonth, sumExpenseMonth);
+		
+		return result;
+	}
+	
+	/** 조건별 보기 */
+	@GetMapping("selectConditionTrans")
+	public ArrayList<Transaction> selectConditionTrans(
+			@AuthenticationPrincipal UserDetails user
+			, boolean incomeSelected
+			, boolean expenseSelected
+			, boolean myTransOnly
+			, int familyId
+			, String cate1Name
+			, String cate2Name
+			) {
+		log.debug("컨트롤러에 넘어온 내꺼만:{}, 수입만:{}, 지출만:{}", myTransOnly, incomeSelected, expenseSelected);
+		log.debug("컨트롤러에 넘어온 대분류:{}, 소분류:{}", cate1Name, cate2Name);
+		
+		// 현재 월 구하기
+		Calendar calendar = Calendar.getInstance();
+        int month = calendar.get(Calendar.MONTH) + 1;
+		
+        // 유저id 불러오기
+        String userId = userdao.findByEmailOrUserId(user.getUsername()).getUserId();
 
+        // DAO에 보낼 맵 
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("month", month);
+		map.put("familyId", familyId);
+		map.put("myTransOnly", myTransOnly);
+		map.put("incomeSelected", incomeSelected);
+		map.put("expenseSelected", expenseSelected);
+		map.put("userId", userId);
+		if(cate1Name.length() > 0) {
+			map.put("cate1Name", cate1Name);
+		}
+		
+		ArrayList<Transaction> result = new ArrayList<>();
+		
+		if(!incomeSelected && !expenseSelected) {
+			result.clear();
+		}
+		else {
+			result = dao.selectAllTrans(map);
+		}
+		
+		return result;
+	}
+	
+	
+	
 }
+	

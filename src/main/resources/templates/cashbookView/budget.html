@@ -382,13 +382,29 @@
 
         <!-- Layout container -->
         <div class="layout-page">
+
           <!-- Navbar 상단바 -->
           <nav
             class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
             id="layout-navbar"
           >
+                    
+            <!-- 로고 -->
+            <div class="app-brand demo">
+              <a th:href="@{/main}" class="app-brand-link">
+                <span class="app-brand-logo demo">
+                  <img
+                    th:src="@{/images/logo.png}"
+                    alt="logo"
+                    style="width: 3rem"
+                  />
+                </span>
+              </a>
+            </div>
+
+          <!-- aside 호출하는 버튼 -->
             <div
-              class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none"
+              class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0"
             >
               <a
                 class="nav-item nav-link px-0 me-xl-4"

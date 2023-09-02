@@ -2,12 +2,13 @@ $(document).ready(function() {
     // 목록 불러오기
     init();
     $("#transCategoriesDiv").hide();
+    $("#transSearchCategory2Div").hide();
 
     // 내역 검증 후 입력
     $('#setTransBt').click(setTrans);
 
     // 모달 검증 후 내역 수정
-    $('#setTransBtModal').click(updateTrans);
+    $('#setTransBtModal').click(updateTrans); 
 
    // 거래유형 클릭 이벤트 (대분류 출력)
    $("input[name='transType']").change(function() {
@@ -128,7 +129,25 @@ $(document).ready(function() {
             $(this).val(parsedAmount.toLocaleString('en-US'));  // 값을 천 단위로 콤마로 구분하여 다시 설정합니다.
         }
     });   
+
+    // 이달의 수입&지출
+    selectSumInEx();
+
+    // 수입만 or 지출만 or 내꺼만 출력
+    $('#selectCondition').change(selectConditionTrans);
     
+    // 검색용 전체 대분류 & 에 맞는 소분류 출력
+    loadMainCategoriesSearch();
+   $("#cate1NameSearch").change(function() {
+    const selectedCate1NameSearch = $(this).val();
+    if (selectedCate1NameSearch !== "대분류를 선택하세요") {
+        loadSubCategoriesSearch(selectedCate1NameSearch);
+    } else {
+        // 대분류가 초기 상태로 변경된 경우, 소분류도 초기 상태로 변경합니다.
+        $("#cate2NameSearch").html('<option>소분류를 선택하세요</option>');
+    }
+});
+
 });
 
 
@@ -159,8 +178,11 @@ function dateToSysdate() {
     const minutes = now.getMinutes().toString().padStart(2, '0');
 
     const dateTimeString = `${year}-${month}-${day}T${hours}:${minutes}`;
-    
+    const searchDate = `${year}-${month}-${day}`;
+
     document.getElementById('transDate').value = dateTimeString;
+    document.getElementById('searchDate').value = searchDate;
+
 }
 
 
@@ -701,6 +723,27 @@ function loadMainCategories(transType) {
     });
 }
 
+/** 검색용 대분류 불러오기 */
+function loadMainCategoriesSearch() {
+
+    $.ajax({
+        url: '/secretary/cashbook/trans/loadCate1Search', 
+        type: 'GET',
+        success: function(cate1List) {
+            let options = '<option>대분류를 선택하세요</option>';
+            
+            cate1List.forEach(cate1 => {
+                options += `<option value="${cate1.cate1Name}">${cate1.cate1Name}</option>`;
+            });
+
+            $("#cate1NameSearch").html(options);
+        },
+        error: function() {
+            alert('검색 대분류 목록 전송 실패');
+        }
+    });
+}
+
 /** 소분류 불러오기 */
 function loadSubCategories(cate1Name) {
     $.ajax({
@@ -719,7 +762,35 @@ function loadSubCategories(cate1Name) {
             } else { // 소분류 리스트가 비어있을 경우
                 options = '<option>소분류를 선택하세요</option><option value="직접입력" onclick="setCustomCategory2()">직접입력</option>';
             }
+
             $("#cate2Name").html(options);
+        },
+        error: function() {
+            alert('소분류 목록 전송 실패');
+        }
+    });
+}
+
+
+/** 검색용 소분류 불러오기 */
+function loadSubCategoriesSearch(cate1Name) {
+    $.ajax({
+        url: '/secretary/cashbook/trans/loadCate2',
+        type: 'GET',
+        data: { cate1Name: cate1Name },
+        success: function(cate2List) {
+            let options;
+
+            if (cate2List.length > 0) { // 소분류 리스트가 있을 경우
+                options = '<option>소분류를 선택하세요</option>';
+                cate2List.forEach(cate2 => {
+                    options += `<option value="${cate2.cate2Name}">${cate2.cate2Name}</option>`;
+                });
+            } else { // 소분류 리스트가 비어있을 경우
+                options = '<option>소분류를 선택하세요</option><option value="직접입력" onclick="setCustomCategory2()">직접입력</option>';
+            }
+
+            $("#cate2NameSearch").html(options);
         },
         error: function() {
             alert('소분류 목록 전송 실패');
@@ -933,3 +1004,127 @@ function setCustomCategory2() {
 
 }
 
+/** 이달의 수입&지출  */
+function selectSumInEx() {
+
+    $.ajax({
+        url: '/secretary/cashbook/trans/selectSumInEx',
+        type: 'GET',
+        success: (result) => {
+            // 이달의 수입&지출
+            $('#transSumIncomeMonth').html(result.sumIncomeMonth.toLocaleString('en-US'));
+            $('#transSumExpenseMonth').html(result.sumExpenseMonth.toLocaleString('en-US'));
+        },
+        error: () => {
+            alert('날짜 서버 전송 실패');
+        }
+    });
+}
+
+
+/** 조건별 보기 */
+function selectConditionTrans() {
+    let familyId = $('#familyId').val();
+    let incomeSelected = false;
+    let expenseSelected = false;
+    let myTransOnly = false;
+    let transListDiv = $('#transListDiv');
+    let cate1Name = $('#cate1NameSearch').val();
+    let cate2Name = $('#cate2NameSearch').val();
+
+    
+    if($("#transSearchCheckIncome").is(':checked')) {
+        incomeSelected = true;
+    }
+    
+    if($("#transSearchCheckExpense").is(':checked')) {
+        expenseSelected = true;
+    }
+    
+    if($("#transSearchCheckUserId").is(':checked')) {
+        myTransOnly = true;
+    }
+    // alert("incomeSelected" + incomeSelected + "expenseSelected" + expenseSelected);
+    
+
+    $.ajax({
+        url: '/secretary/cashbook/trans/selectConditionTrans',
+        type: 'GET',
+        data: { incomeSelected: incomeSelected
+            , expenseSelected: expenseSelected
+            , myTransOnly: myTransOnly
+            , familyId: familyId
+            , cate1Name: cate1Name
+            , cate2Name: cate2Name },
+        dataType: 'JSON',
+        success: (list) => {
+            // 넘어올 값: 내역리스트
+            if(list.length == 0) {
+                transListDiv.html("내역이 존재하지 않습니다.");
+            } else {
+                let groupedData = {};
+
+            // 일자별로 데이터 그룹화
+            $(list).each(function(idx, ta) {
+                let date = ta.transDate;  // 거래날짜를 가져옵니다. (예: "2023-08-28")
+                if (!groupedData[date]) {
+                    groupedData[date] = [];
+                }
+                groupedData[date].push(ta);
+            });
+
+            let table = `<table class="table">`;
+
+            // 일자별로 테이블 생성
+            for (let date in groupedData) {
+                table += `<thead>
+                            <tr>
+                                <th colspan="6">${formatDate(date)}</th>
+                            </tr>
+                            <tr>
+                                <th>카테고리</th>
+                                <th>시간</th>
+                                <th>내용</th>
+                                <th>메모</th>
+                                <th>거래금액</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody class="table-border-bottom-0">`;
+
+                $(groupedData[date]).each(function(idx, ta) {
+                    table += `<tr>
+                                <td style="width: 5rem;">
+                                    <span class="badge bg-label-${ta.labelColor} me-1">${ta.cate2Name || ta.cate1Name || '미분류'}</span>
+                                    <input type="hidden" value="${ta.transId}">
+                                </td>
+                                <td style="width: 5rem;">${ta.transTime}</td>
+                                <td><i class="fab fa-react fa-lg text-info me-3"></i> <strong>${ta.transPayee}</strong></td>
+                                <td>${ta.transMemo || ''}</td>
+                                <td style="width: 5rem;">${parseInt(ta.transAmount).toLocaleString('en-US')}</td>
+                                <td>
+                                <div class="dropdown">
+                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></button>
+                                    <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="javascript:openModalUpdate(${ta.transId});"><i class="bx bx-edit-alt me-2"></i> 수정</a>
+                                    <a class="dropdown-item" href="javascript:deleteTrans(${ta.transId});"><i class="bx bx-trash me-2"></i> 삭제</a>
+                                    </div>
+                                </div>
+                                </td>
+                            </tr>`;
+                });
+
+                table += `</tbody>`;
+            }
+
+            table += `</table>`;
+
+            transListDiv.html(table);
+            }
+
+        },
+        error: () => {
+            alert("수입만or지출만 전송 실패");
+        }
+    });
+}
