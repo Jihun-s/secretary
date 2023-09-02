@@ -133,20 +133,29 @@ $(document).ready(function() {
     // 이달의 수입&지출
     selectSumInEx();
 
+    // 검색어 입력
+    $('#searchSubmitBt').click(selectConditionTrans);
+
     // 수입만 or 지출만 or 내꺼만 출력
-    $('#selectCondition').change(selectConditionTrans);
-    
+    $('#selectCondition input, #selectCondition select').change(selectConditionTrans);
+
     // 검색용 전체 대분류 & 에 맞는 소분류 출력
     loadMainCategoriesSearch();
-   $("#cate1NameSearch").change(function() {
-    const selectedCate1NameSearch = $(this).val();
-    if (selectedCate1NameSearch !== "대분류를 선택하세요") {
-        loadSubCategoriesSearch(selectedCate1NameSearch);
-    } else {
-        // 대분류가 초기 상태로 변경된 경우, 소분류도 초기 상태로 변경합니다.
-        $("#cate2NameSearch").html('<option>소분류를 선택하세요</option>');
-    }
-});
+   $("#transSearchCategory1Div").change(function() {
+        selectConditionTrans();
+        const selectedCate1NameSearch = $(this).val();
+        if (selectedCate1NameSearch !== "대분류를 선택하세요") {
+            loadSubCategoriesSearch(selectedCate1NameSearch);
+        } else {
+            // 대분류가 초기 상태로 변경된 경우, 소분류도 초기 상태로 변경합니다.
+            $("#cate2NameSearch").html('<option>소분류를 선택하세요</option>');
+        }
+    });
+
+    $('#transSearchCheckIncome').click(selectConditionTrans);
+    $('#transSearchCheckExpense').click(selectConditionTrans);
+    $('#transSearchCheckUserId').click(selectConditionTrans);
+    $('#transSearchCategoriesDiv').click(selectConditionTrans);
 
 });
 
@@ -1024,13 +1033,17 @@ function selectSumInEx() {
 
 /** 조건별 보기 */
 function selectConditionTrans() {
+    let transListDiv = $('#transListDiv');
+    transListDiv.html("");
+
     let familyId = $('#familyId').val();
     let incomeSelected = false;
     let expenseSelected = false;
     let myTransOnly = false;
-    let transListDiv = $('#transListDiv');
     let cate1Name = $('#cate1NameSearch').val();
-    let cate2Name = $('#cate2NameSearch').val();
+    let cate2Name = $('#cate2NameSearch').val(); // 아직 구현 안함 ㅎ
+    let searchBy = $('#searchBy').val();
+    let searchWord = $('#searchWord').val();
 
     
     if($("#transSearchCheckIncome").is(':checked')) {
@@ -1050,12 +1063,15 @@ function selectConditionTrans() {
     $.ajax({
         url: '/secretary/cashbook/trans/selectConditionTrans',
         type: 'GET',
+        cache: false, // 캐싱 방지 걍 넣어봄 
         data: { incomeSelected: incomeSelected
             , expenseSelected: expenseSelected
             , myTransOnly: myTransOnly
             , familyId: familyId
             , cate1Name: cate1Name
-            , cate2Name: cate2Name },
+            , cate2Name: cate2Name
+            , searchBy: searchBy
+            , searchWord: searchWord },
         dataType: 'JSON',
         success: (list) => {
             // 넘어올 값: 내역리스트
@@ -1124,7 +1140,7 @@ function selectConditionTrans() {
 
         },
         error: () => {
-            alert("수입만or지출만 전송 실패");
+            alert("조건&검색 전송 실패");
         }
     });
 }

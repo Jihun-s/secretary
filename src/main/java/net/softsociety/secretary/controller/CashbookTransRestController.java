@@ -229,14 +229,19 @@ public class CashbookTransRestController {
 			, int familyId
 			, String cate1Name
 			, String cate2Name
+			, String searchBy
+			, String searchWord
 			) {
 		log.debug("컨트롤러에 넘어온 내꺼만:{}, 수입만:{}, 지출만:{}", myTransOnly, incomeSelected, expenseSelected);
 		log.debug("컨트롤러에 넘어온 대분류:{}, 소분류:{}", cate1Name, cate2Name);
+		log.debug("컨트롤러에 넘어온 검색어:{} 중 {}", searchBy, searchWord);
 		
 		// 현재 월 구하기
 		Calendar calendar = Calendar.getInstance();
         int month = calendar.get(Calendar.MONTH) + 1;
 		
+        log.debug("컨트롤러에 넘어온 검색할 기간:{}월", month);
+
         // 유저id 불러오기
         String userId = userdao.findByEmailOrUserId(user.getUsername()).getUserId();
 
@@ -251,6 +256,10 @@ public class CashbookTransRestController {
 		if(cate1Name.length() > 0) {
 			map.put("cate1Name", cate1Name);
 		}
+		if(searchWord.length() > 0) {
+			map.put("searchBy", searchBy);
+			map.put("searchWord", searchWord);
+		}
 		
 		ArrayList<Transaction> result = new ArrayList<>();
 		
@@ -258,7 +267,9 @@ public class CashbookTransRestController {
 			result.clear();
 		}
 		else {
+			log.debug("뽑아올 내역 조건:{}", map);
 			result = dao.selectAllTrans(map);
+			log.debug("조건 결과 내역목록:{}", result);
 		}
 		
 		return result;

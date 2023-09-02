@@ -704,10 +704,10 @@
                     <input type="hidden" value="" id="searchDate">
                     
                     <!-- 조건별 보기 -->
-                    <div id="selectCondition" class="row mb-3">
+                    <div class="row mb-3">
                       
                       <!-- 분류랑 정렬 -->
-                      <div class="col-6">
+                      <div id="selectCondition" class="col-6">
                         <div class="row-6">
                           <div>
                             <div class="form-check form-check-inline">
@@ -746,11 +746,17 @@
                       
                       <!-- 검색 -->
                       <div class="col-6">
-                        <label class="form-label" for="basic-icon-default-search">검색</label>
+                        <label class="form-label" for="search">검색</label>
                         <div class="input-group input-group-merge">
+                          <select id="searchBy" name="searchBy" class="form-select">
+                            <option value="all" selected>전체</option>
+                            <option value="transPayee">거래내용</option>
+                            <option value="transMemo">거래메모</option>
+                            <option value="transAmount">거래금액</option>
+                          </select>
                           <span class="input-group-text"><i class="bx bx-search"></i></span>
-                          <input type="text" id="keyword" class="form-control" placeholder="검색" aria-label="검색" aria-describedby="basic-icon-default-search">
-                          <button class="btn btn-outline-success" type="submit">검색</button>
+                          <input type="text" id="searchWord" name="searchWord" class="form-control" placeholder="검색" aria-label="검색" aria-describedby="검색">
+                          <button class="btn btn-outline-success" id="searchSubmitBt">검색</button>
                         </div>
                       </div>
 

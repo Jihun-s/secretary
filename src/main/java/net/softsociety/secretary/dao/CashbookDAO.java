@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import lombok.extern.slf4j.Slf4j;
 import net.softsociety.secretary.domain.Category1;
 import net.softsociety.secretary.domain.Category2;
 import net.softsociety.secretary.domain.Transaction;
@@ -62,12 +63,6 @@ public interface CashbookDAO {
 
 	/** 한달 총 지출 */
 	int selectSumExpenseMonth(int curMonth);
-
-	/** 수입만 내역 */
-	ArrayList<Transaction> selectIncomeTrans(HashMap<String, Object> map);
-
-	/** 지출만 내역 */
-	ArrayList<Transaction> selectExpenseTrans(HashMap<String, Object> map);
 
 	/** 검색용 전체 대분류 */
 	ArrayList<Category1> selectCate1Search();
