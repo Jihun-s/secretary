@@ -135,17 +135,6 @@
                 $(document).on('click', '#addConfirmButton', function () {
                     const fridgeName = $('#fridgeNameInput').val();
                     if (fridgeName) {
-                        const fridgeElement = `
-                        <div class="fridgeItem">
-                            <a href="">
-                                <img src="images/fridgeimg/노랑냉장고.jpg" alt="냉장고" style="width: 90px; height: 90px">
-                            </a>
-                            <div class="fridgeName">${fridgeName}</div>
-                        </div>	
-                        `;
-                        $('#addFridgeImage').replaceWith(fridgeElement);
-
-                        // 데이터베이스에 냉장고 정보 저장
                         $.ajax({
                             url: 'fridge/addFridge',
                             type: 'POST',
@@ -153,12 +142,16 @@
                             contentType: 'application/json',
                             success: function (data) {
                                 console.log('냉장고가 추가되었습니다.', data);
+                                // UX 개선: 냉장고 추가 후 입력 필드와 버튼 제거
+                                $('#addFridgeImage').remove();
                                 $('#fridgeNameInput').remove();
                                 $('#addConfirmButton').remove();
                                 $('#addCancelButton').remove();
+                                // 냉장고 목록 새로고침
+                                loadFridges();
                             },
-                            error: function (error) {
-                                console.error('냉장고 추가 중 오류 발생:', error);
+                            error: function (jqXHR, textStatus, errorThrown) {
+                                console.error('냉장고 추가 중 오류 발생:', jqXHR.responseText);
                             },
                         });
                     } else {
@@ -191,28 +184,36 @@
 
             function loadFridges() {
                 $.ajax({
-                    url: 'fridge/getAllFridges', // Controller의 해당 URL
+                    url: 'fridge/getAllFridges',
                     type: 'GET',
                     success: function (data) {
-                        // 가져온 냉장고 데이터를 화면에 뿌려주는 로직
-
                         // 냉장고 컨테이너 초기화
                         $('#fridgeContainer').empty();
+                        // 냉장고 선택 dropdown 초기화
+                        $('#fridgeSelect').empty();
+                        $('#fridgeSelect').append(
+                            '<option disabled="" selected="" value="">냉장고를 선택해주세요</option>'
+                        );
 
-                        // 가져온 냉장고 데이터를 순회하면서 화면에 추가
                         data.forEach(function (fridge) {
                             // 각 냉장고의 이미지와 이름을 포함하는 HTML 생성
                             var fridgeElement = `
-                                <div class="fridgeItem">
-                                    <a href="/fridge/${fridge.fridgeId}">
-                                        <img src="images/fridgeimg/노랑냉장고.jpg" alt="냉장고" style="width: 90px; height: 90px">
-                                    </a>
-                                    <div class="fridgeName">${fridge.fridgeName}</div>
-                                </div>
-                            `;
+                    <div class="fridgeItem">
+                        <a href="/fridge/${fridge.fridgeId}">
+                            <img src="images/fridgeimg/노랑냉장고.jpg" alt="냉장고" style="width: 90px; height: 90px">
+                        </a>
+                        <div class="fridgeName">${fridge.fridgeName}</div>
+                    </div>
+                `;
 
                             // 생성한 HTML을 냉장고 컨테이너에 추가
                             $('#fridgeContainer').append(fridgeElement);
+
+                            // 냉장실만을 대상으로 dropdown에 추가
+                            if (fridge.fridgeCategory === '냉장실') {
+                                var option = `<option value="${fridge.fridgeId}">${fridge.fridgeName}</option>`;
+                                $('#fridgeSelect').append(option);
+                            }
                         });
                     },
                     error: function (error) {
@@ -785,6 +786,15 @@
                                                                 ></button>
                                                             </div>
                                                             <div class="modal-body">
+                                                                <label class="form-label" for="fridgeSelect"
+                                                                    >냉장고 선택</label
+                                                                >
+                                                                <select class="form-select" id="fridgeSelect" required>
+                                                                    <option disabled="" selected="" value="">
+                                                                        냉장고를 선택해주세요
+                                                                    </option>
+                                                                    <!-- 냉장고 항목은 JavaScript로 추가됩니다. -->
+                                                                </select>
                                                                 <label class="form-label" for="foodName"
                                                                     >음식 이름</label
                                                                 >
