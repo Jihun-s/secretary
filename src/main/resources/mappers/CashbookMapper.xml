@@ -70,6 +70,9 @@ SELECT
 		<if test="incomeSelected == true and expenseSelected != true">
 		    AND st.trans_type = '수입'
 		</if>
+		<if test="cate1Name != null and cate1Name != '대분류를 선택하세요'">
+			AND stc1.cate1_name = #{cate1Name}
+		</if>
     ORDER BY
         st.trans_date DESC
 </select>

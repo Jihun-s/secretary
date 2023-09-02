@@ -248,6 +248,9 @@ public class CashbookTransRestController {
 		map.put("incomeSelected", incomeSelected);
 		map.put("expenseSelected", expenseSelected);
 		map.put("userId", userId);
+		if(cate1Name.length() > 0) {
+			map.put("cate1Name", cate1Name);
+		}
 		
 		ArrayList<Transaction> result = new ArrayList<>();
 		

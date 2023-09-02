@@ -2,6 +2,7 @@ $(document).ready(function() {
     // 목록 불러오기
     init();
     $("#transCategoriesDiv").hide();
+    $("#transSearchCategory2Div").hide();
 
     // 내역 검증 후 입력
     $('#setTransBt').click(setTrans);
