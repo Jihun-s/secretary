@@ -19,7 +19,7 @@ public interface CashbookDAO {
 	String selectUserId(String username);
 
 	/** 내역 목록 출력 */
-	ArrayList<Transaction> selectAllTrans(int familyId);
+	ArrayList<Transaction> selectAllTrans(HashMap<String, Object> map);
 
 	/** 해당 월 내역 수 조회 */
 	int selectTransCntMonth(HashMap<String, Object> map);
@@ -56,5 +56,20 @@ public interface CashbookDAO {
 
 	/** 소분류 name으로 id 찾기 */
 	int selectCate2Id(String cate2Name);
+
+	/** 한달 총 수입 */
+	int selectSumIncomeMonth(int curMonth);
+
+	/** 한달 총 지출 */
+	int selectSumExpenseMonth(int curMonth);
+
+	/** 수입만 내역 */
+	ArrayList<Transaction> selectIncomeTrans(HashMap<String, Object> map);
+
+	/** 지출만 내역 */
+	ArrayList<Transaction> selectExpenseTrans(HashMap<String, Object> map);
+
+	/** 검색용 전체 대분류 */
+	ArrayList<Category1> selectCate1Search();
 
 }
