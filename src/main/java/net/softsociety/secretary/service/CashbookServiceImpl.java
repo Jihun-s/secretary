@@ -93,6 +93,15 @@ public class CashbookServiceImpl implements CashbookService {
 		return n;
 	}
 
+	/** 예산 - 지출 구하기 */
+	@Override
+	public int budgetRest(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		int result = dao.budgetRest(map);
+		
+		return result;
+	}
+
 
 	
 	

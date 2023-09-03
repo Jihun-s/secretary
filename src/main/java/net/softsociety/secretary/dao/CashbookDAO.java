@@ -2,10 +2,13 @@ package net.softsociety.secretary.dao;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Optional;
 
 import org.apache.ibatis.annotations.Mapper;
 
+
 import lombok.extern.slf4j.Slf4j;
+import net.softsociety.secretary.domain.Budget;
 import net.softsociety.secretary.domain.Category1;
 import net.softsociety.secretary.domain.Category2;
 import net.softsociety.secretary.domain.Transaction;
@@ -66,5 +69,24 @@ public interface CashbookDAO {
 
 	/** 검색용 전체 대분류 */
 	ArrayList<Category1> selectCate1Search();
+
+	
+	/** 예산 입력 */
+	int setBudget(Budget budget);
+
+	/** 예산 - 지출 */
+	int budgetRest(HashMap<String, Object> map);
+
+	/** 해당 연월 예산 있는지 확인 */
+	Optional<Integer> budgetExist(HashMap<String, Object> map);
+
+	/** 예산 가져오기 */
+	Budget selectBudget(HashMap<String, Object> map);
+
+	/** 예산 수정 */
+	int updateBudget(Budget budget);
+
+	/** 예산 삭제 */
+	int deleteBudget(Budget budget);
 
 }
