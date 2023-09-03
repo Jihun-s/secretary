@@ -101,10 +101,125 @@ document.addEventListener("DOMContentLoaded", function() {
         })
         .then(response => response.text())
         .then(data => {
-            document.getElementById('ocrResult').innerText = data;
+            // 임시로 OCR 결과 출력 (이 부분을 상품명 추출로 변경해야 합니다.)
+            //document.getElementById('ocrResult').innerText = data;
+    
+            // 상품명 추출 (이 부분에서 정규식을 사용하게 될 것입니다.)
+            let productNames = extractProductNames(data); // 정규식을 사용하는 함수
+    
+            // 추출된 상품명을 HTML에 추가
+            appendProductNamesToHTML(productNames);
         })
         .catch(error => {
             console.error('Error:', error);
         });
     });
+    
+    // 상품명 추출 함수 (여기서 정규식을 사용합니다.)
+    function extractProductNames(ocrText) {
+        const productLines = ocrText.match(/^\d{3}\sP.*$/gm);
+        
+        // 상품명만 추출하기 위한 정규식 패턴
+        const productNamePattern = /^\d{3}\sP\s(.+?)(?:\s\*\d+|\s\d{13}|\s\d{3,4})?$/;
+    
+        const productNames = productLines.map(line => {
+            const match = line.match(productNamePattern);
+            return match ? match[1].trim() : null;
+        }).filter(name => name); // null 값을 제거
+    
+        return productNames;
+    }
+    
+    // 추출된 상품명을 HTML에 추가하는 함수
+    function appendProductNamesToHTML(productNames) {
+        let productsContainer = document.getElementById('productsContainer');
+    
+        // 헤더 생성
+        let headerDiv = document.createElement('div');
+        headerDiv.classList.add('d-flex', 'mb-2', 'bg-light', 'p-2');
+        headerDiv.innerHTML = `
+            <div style="width: 20%;" class="text-center"><strong>카테고리</strong></div>
+            <div style="width: 60%;" class="text-center"><strong>상품명</strong></div>
+            <div style="width: 20%;" class="text-center"><strong>수량</strong></div>
+        `;
+        productsContainer.appendChild(headerDiv);
+    
+        productNames.forEach(product => {
+            let productDiv = document.createElement('div');
+            productDiv.classList.add('d-flex', 'mb-2');
+    
+            // 카테고리 입력
+            let categorySelect = document.createElement('select');
+            categorySelect.setAttribute('name', 'foodCategory');
+            categorySelect.classList.add('form-control', 'flex-fill');
+            const categories = ['일반', '야채', '생선', '육류'];
+            categories.forEach(category => {
+                let option = document.createElement('option');
+                option.value = category;
+                option.text = category;
+                categorySelect.appendChild(option);
+            });
+            productDiv.appendChild(categorySelect);
+    
+            // 상품명 입력
+            let nameInput = document.createElement('input');
+            nameInput.value = product;
+            nameInput.setAttribute('name', 'foodName');
+            nameInput.classList.add('form-control', 'flex-fill');
+            productDiv.appendChild(nameInput);
+    
+            // 수량 입력
+            let quantityInput = document.createElement('input');
+            quantityInput.value = '1'; // Default 값
+            quantityInput.setAttribute('name', 'foodQuantity');
+            quantityInput.setAttribute('type', 'number');
+            quantityInput.setAttribute('min', '1');
+            quantityInput.classList.add('form-control');
+            quantityInput.style.width = '60px';
+            productDiv.appendChild(quantityInput);
+    
+            productsContainer.appendChild(productDiv);
+        });
+    
+        // + 버튼 추가
+        let addButton = document.createElement('button');
+        addButton.textContent = '+';
+        addButton.classList.add('btn', 'btn-primary', 'mt-2');
+        addButton.addEventListener('click', function(event) {
+            event.preventDefault();
+            
+            let newProductDiv = document.createElement('div');
+            newProductDiv.classList.add('d-flex', 'mb-2');
+    
+            let categorySelect = document.createElement('select');
+            categorySelect.setAttribute('name', 'foodCategory');
+            categorySelect.classList.add('form-control', 'flex-fill');
+            const categories = ['일반', '야채', '생선', '육류'];
+            categories.forEach(category => {
+                let option = document.createElement('option');
+                option.value = category;
+                option.text = category;
+                categorySelect.appendChild(option);
+            });
+            newProductDiv.appendChild(categorySelect);
+    
+            let nameInput = document.createElement('input');
+            nameInput.setAttribute('name', 'foodName');
+            nameInput.classList.add('form-control', 'flex-fill');
+            newProductDiv.appendChild(nameInput);
+    
+            let quantityInput = document.createElement('input');
+            quantityInput.value = '1';
+            quantityInput.setAttribute('name', 'foodQuantity');
+            quantityInput.setAttribute('type', 'number');
+            quantityInput.setAttribute('min', '1');
+            quantityInput.classList.add('form-control');
+            quantityInput.style.width = '60px';
+            newProductDiv.appendChild(quantityInput);
+    
+            productsContainer.insertBefore(newProductDiv, addButton);
+        });
+        productsContainer.appendChild(addButton);
+    }
+    
 });

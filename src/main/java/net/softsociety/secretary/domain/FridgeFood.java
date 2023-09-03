@@ -14,7 +14,7 @@ public class FridgeFood {
     private int foodId;
     private String foodName;
     private int fridgeId;
-    private int foodAmount;
+    private int foodQuantity;
     private String foodCategory;
     private Date foodInputDate;
     private Date foodMadeDate;
