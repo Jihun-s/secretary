@@ -7,9 +7,9 @@ document.addEventListener("DOMContentLoaded", function() {
             btn: document.getElementById('recordFoodName'),
             input: document.getElementById('foodName'),
         },
-        foodAmount: {
-            btn: document.getElementById('recordFoodAmount'),
-            input: document.getElementById('foodAmount'),
+        foodQuantity: {
+            btn: document.getElementById('recordFoodQuantity'),
+            input: document.getElementById('foodQuantity'),
         },
         foodPrice: {
             btn: document.getElementById('recordFoodPrice'),

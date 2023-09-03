@@ -5,7 +5,35 @@
 <mapper namespace="net.softsociety.secretary.dao.FridgeFoodDAO">
 	<!-- 냉장고에 음식 추가 -->
     <insert id="insertFridgeFood" parameterType="FridgeFood">
-        INSERT INTO SECRETARY_FRIDGE_FOOD (FOOD_ID, FOOD_NAME, FRIDGE_ID, FOOD_QUANTITY, FOOD_CATEGORY, FOOD_INPUT_DATE, FOOD_PURCHASE_DATE, FOOD_MADE_DATE, FOOD_EXPIRY_DATE, FOOD_PRICE, FOOD_ORIGINAL_FILE, FOOD_SAVED_FILE)
-        VALUES (FRIDGE_FOOD_SEQ.NEXTVAL, #{foodName}, #{fridgeId}, #{foodQuantity}, #{foodCategory}, #{foodInputDate}, #{foodPurchaseDate}, #{foodMadeDate}, #{foodExpiryDate}, #{foodPrice}, #{foodOriginalFile}, #{foodSavedFile})
+        INSERT
+        INTO
+        	SECRETARY_FRIDGE_FOOD (
+        		FOOD_ID, FOOD_NAME
+        		, FRIDGE_ID, FOOD_QUANTITY
+        		, FOOD_CATEGORY
+        		, FOOD_PURCHASE_DATE
+        		, FOOD_MADE_DATE
+        		, FOOD_EXPIRY_DATE
+        		, FOOD_PRICE
+        		<if test="foodOriginalFile != null and foodSavedFile != null">
+        		, FOOD_ORIGINAL_FILE
+        		, FOOD_SAVED_FILE
+        		</if>
+        	)
+        VALUES (
+        	FRIDGE_FOOD_SEQ.NEXTVAL
+        	, #{foodName}
+        	, #{fridgeId}
+        	, #{foodQuantity}
+        	, #{foodCategory}
+        	, #{foodPurchaseDate}
+        	, #{foodMadeDate}
+        	, #{foodExpiryDate}
+        	, #{foodPrice}
+        	<if test="foodOriginalFile != null and foodSavedFile != null">
+        	, #{foodOriginalFile}
+        	, #{foodSavedFile}
+        	</if>
+        )
     </insert>
 </mapper>

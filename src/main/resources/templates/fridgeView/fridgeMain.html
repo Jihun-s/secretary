@@ -722,7 +722,7 @@
                                                                 ></button>
                                                             </div>
                                                             <form
-                                                                action="/fridgeFood/add"
+                                                                th:action="@{/fridgeFood/add}"
                                                                 method="post"
                                                                 enctype="multipart/form-data"
                                                             >
@@ -780,7 +780,7 @@
                                                                     <!-- 분석 결과를 서버로 전송하는 버튼 -->
                                                                     <button
                                                                         type="submit"
-                                                                        class="btn btn-success"
+                                                                        class="btn btn-primary"
                                                                         id="submitDataButton"
                                                                     >
                                                                         Submit
@@ -823,7 +823,7 @@
                                                                 ></button>
                                                             </div>
                                                             <form
-                                                                action="/fridgeFood/add"
+                                                                th:action="@{/fridgeFood/add}"
                                                                 method="post"
                                                                 enctype="multipart/form-data"
                                                             >
@@ -850,6 +850,7 @@
                                                                             id="foodName"
                                                                             required=""
                                                                             type="text"
+                                                                            name="foodName"
                                                                         /><button class="voice-input-button">
                                                                             <img
                                                                                 src="images/fridgeimg/MikeButton.png"
@@ -869,6 +870,7 @@
                                                                         <select
                                                                             class="form-select"
                                                                             id="foodCategory"
+                                                                            name="foodCategory"
                                                                             required=""
                                                                         >
                                                                             <option disabled="" selected="" value="">
@@ -894,23 +896,24 @@
                                                                     </div>
 
                                                                     <div style="display: flex; align-items: center">
-                                                                        <label class="form-label" for="foodAmount"
+                                                                        <label class="form-label" for="foodQuantity"
                                                                             >개수</label
                                                                         >
                                                                         <input
                                                                             class="form-control"
-                                                                            id="foodAmount"
+                                                                            id="foodQuantity"
+                                                                            name="foodQuantity"
                                                                             type="number"
                                                                         />
                                                                         <button class="voice-input-button">
                                                                             <img
-                                                                                src="images/fridgeimg/MikeButton.png"
+                                                                                th:src="@{/images/fridgeimg/MikeButton.png}"
                                                                                 style="
                                                                                     width: 30px;
                                                                                     height: 30px;
                                                                                     vertical-align: middle;
                                                                                 "
-                                                                                id="recordFoodAmount"
+                                                                                id="recordFoodQuantity"
                                                                             />
                                                                         </button>
                                                                     </div>
@@ -921,11 +924,12 @@
                                                                         <input
                                                                             class="form-control"
                                                                             id="foodPrice"
+                                                                            name="foodPrice"
                                                                             type="number"
                                                                         />
                                                                         <button class="voice-input-button">
                                                                             <img
-                                                                                src="images/fridgeimg/MikeButton.png"
+                                                                                th:src="@{/images/fridgeimg/MikeButton.png}"
                                                                                 style="
                                                                                     width: 30px;
                                                                                     height: 30px;
@@ -941,6 +945,7 @@
                                                                     <input
                                                                         class="form-control"
                                                                         id="foodPurchaseDate"
+                                                                        name="foodPurchaseDate"
                                                                         type="date"
                                                                     />
                                                                     <label class="form-label" for="foodExpiryDate"
@@ -949,6 +954,7 @@
                                                                     <input
                                                                         class="form-control"
                                                                         id="foodExpiryDate"
+                                                                        name="foodExpiryDate"
                                                                         type="date"
                                                                     />
                                                                     <label class="form-label" for="foodMadeDate"
@@ -957,6 +963,7 @@
                                                                     <input
                                                                         class="form-control"
                                                                         id="foodMadeDate"
+                                                                        name="foodMadeDate"
                                                                         type="date"
                                                                     />
                                                                     <label class="form-label" for="foodImage"
@@ -965,6 +972,7 @@
                                                                     <input
                                                                         class="form-control"
                                                                         id="foodImage"
+                                                                        name="foodImage"
                                                                         type="file"
                                                                     />
                                                                 </div>
