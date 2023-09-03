@@ -85,6 +85,24 @@ document.addEventListener("DOMContentLoaded", function() {
     Object.values(buttons).forEach(({ btn, input }) => {
         btn.onclick = () => startRecording(btn, input);
     });
+
+    document.getElementById('submitDataButton').addEventListener('click', function(event) {
+        alert("Fridge ID before submitting: " + $('.fridgeSelect').val());
+        let selectedFridgeId = Number($('.fridgeSelect').val());  // 선택된 냉장고의 ID 값을 가져옵니다.
+        
+        if (!selectedFridgeId || isNaN(parseInt(selectedFridgeId))) {
+            event.preventDefault();  // 폼 제출 중단
+            return;
+        }
+    
+        // 선택된 냉장고 ID로 모든 hidden input 값을 설정
+        let productsContainer = document.getElementById('productsContainer');
+        let hiddenInputs = productsContainer.querySelectorAll('[name^="fridgeFoods["][name$="].fridgeId"]');
+        hiddenInputs.forEach(input => {
+            input.value = selectedFridgeId;
+        });
+    });
+
     document.getElementById('uploadReceiptButton').addEventListener('click', function() {
         let fileInput = document.getElementById('receiptUpload');
         if (!fileInput.files.length) {
@@ -144,13 +162,15 @@ document.addEventListener("DOMContentLoaded", function() {
         `;
         productsContainer.appendChild(headerDiv);
     
-        productNames.forEach(product => {
+        productNames.forEach((product, index) => {
             let productDiv = document.createElement('div');
             productDiv.classList.add('d-flex', 'mb-2');
     
+            
+
             // 카테고리 입력
             let categorySelect = document.createElement('select');
-            categorySelect.setAttribute('name', 'foodCategory');
+            categorySelect.setAttribute('name', `fridgeFoods[${index}].foodCategory`);
             categorySelect.classList.add('form-control', 'flex-fill');
             const categories = ['일반', '야채', '생선', '육류'];
             categories.forEach(category => {
@@ -164,19 +184,25 @@ document.addEventListener("DOMContentLoaded", function() {
             // 상품명 입력
             let nameInput = document.createElement('input');
             nameInput.value = product;
-            nameInput.setAttribute('name', 'foodName');
+            nameInput.setAttribute('name', `fridgeFoods[${index}].foodName`);
             nameInput.classList.add('form-control', 'flex-fill');
             productDiv.appendChild(nameInput);
     
             // 수량 입력
             let quantityInput = document.createElement('input');
             quantityInput.value = '1'; // Default 값
-            quantityInput.setAttribute('name', 'foodQuantity');
+            quantityInput.setAttribute('name', `fridgeFoods[${index}].foodQuantity`);
             quantityInput.setAttribute('type', 'number');
             quantityInput.setAttribute('min', '1');
             quantityInput.classList.add('form-control');
             quantityInput.style.width = '60px';
             productDiv.appendChild(quantityInput);
+
+            // 냉장고 ID의 hidden input 생성 (값은 아직 설정하지 않음)
+            let fridgeIdInput = document.createElement('input');
+            fridgeIdInput.setAttribute('type', 'hidden');
+            fridgeIdInput.setAttribute('name', `fridgeFoods[${index}].fridgeId`);
+            productDiv.appendChild(fridgeIdInput);
     
             productsContainer.appendChild(productDiv);
         });
@@ -187,12 +213,14 @@ document.addEventListener("DOMContentLoaded", function() {
         addButton.classList.add('btn', 'btn-primary', 'mt-2');
         addButton.addEventListener('click', function(event) {
             event.preventDefault();
-            
+    
+            let index = productsContainer.children.length - 2;  // Adjust index for added products
+    
             let newProductDiv = document.createElement('div');
             newProductDiv.classList.add('d-flex', 'mb-2');
     
             let categorySelect = document.createElement('select');
-            categorySelect.setAttribute('name', 'foodCategory');
+            categorySelect.setAttribute('name', `fridgeFoods[${index}].foodCategory`);
             categorySelect.classList.add('form-control', 'flex-fill');
             const categories = ['일반', '야채', '생선', '육류'];
             categories.forEach(category => {
@@ -204,13 +232,13 @@ document.addEventListener("DOMContentLoaded", function() {
             newProductDiv.appendChild(categorySelect);
     
             let nameInput = document.createElement('input');
-            nameInput.setAttribute('name', 'foodName');
+            nameInput.setAttribute('name', `fridgeFoods[${index}].foodName`);
             nameInput.classList.add('form-control', 'flex-fill');
             newProductDiv.appendChild(nameInput);
     
             let quantityInput = document.createElement('input');
             quantityInput.value = '1';
-            quantityInput.setAttribute('name', 'foodQuantity');
+            quantityInput.setAttribute('name', `fridgeFoods[${index}].foodQuantity`);
             quantityInput.setAttribute('type', 'number');
             quantityInput.setAttribute('min', '1');
             quantityInput.classList.add('form-control');
@@ -221,5 +249,4 @@ document.addEventListener("DOMContentLoaded", function() {
         });
         productsContainer.appendChild(addButton);
     }
-    
 });

@@ -4,36 +4,50 @@
 
 <mapper namespace="net.softsociety.secretary.dao.FridgeFoodDAO">
 	<!-- 냉장고에 음식 추가 -->
-    <insert id="insertFridgeFood" parameterType="FridgeFood">
-        INSERT
-        INTO
-        	SECRETARY_FRIDGE_FOOD (
-        		FOOD_ID, FOOD_NAME
-        		, FRIDGE_ID, FOOD_QUANTITY
-        		, FOOD_CATEGORY
-        		, FOOD_PURCHASE_DATE
-        		, FOOD_MADE_DATE
-        		, FOOD_EXPIRY_DATE
-        		, FOOD_PRICE
-        		<if test="foodOriginalFile != null and foodSavedFile != null">
-        		, FOOD_ORIGINAL_FILE
-        		, FOOD_SAVED_FILE
-        		</if>
-        	)
-        VALUES (
-        	FRIDGE_FOOD_SEQ.NEXTVAL
-        	, #{foodName}
-        	, #{fridgeId}
-        	, #{foodQuantity}
-        	, #{foodCategory}
-        	, #{foodPurchaseDate}
-        	, #{foodMadeDate}
-        	, #{foodExpiryDate}
-        	, #{foodPrice}
-        	<if test="foodOriginalFile != null and foodSavedFile != null">
-        	, #{foodOriginalFile}
-        	, #{foodSavedFile}
-        	</if>
-        )
-    </insert>
+<insert id="insertFridgeFood" parameterType="FridgeFood">
+    INSERT INTO SECRETARY_FRIDGE_FOOD (
+        FOOD_ID, FOOD_NAME,
+        FRIDGE_ID, FOOD_QUANTITY,
+        FOOD_CATEGORY
+        <if test="foodPurchaseDate != null">
+        , FOOD_PURCHASE_DATE
+        </if>
+        <if test="foodMadeDate != null">
+        , FOOD_MADE_DATE
+        </if>
+        <if test="foodExpiryDate != null">
+        , FOOD_EXPIRY_DATE
+        </if>
+        <if test="foodPrice != null">
+        , FOOD_PRICE
+        </if>
+        <if test="foodOriginalFile != null and foodSavedFile != null">
+        , FOOD_ORIGINAL_FILE, FOOD_SAVED_FILE
+        </if>
+    )
+    VALUES (
+        FRIDGE_FOOD_SEQ.NEXTVAL,
+        #{foodName},
+        #{fridgeId},
+        #{foodQuantity},
+        #{foodCategory}
+        <if test="foodPurchaseDate != null">
+        , #{foodPurchaseDate}
+        </if>
+        <if test="foodMadeDate != null">
+        , #{foodMadeDate}
+        </if>
+        <if test="foodExpiryDate != null">
+        , #{foodExpiryDate}
+        </if>
+        <if test="foodPrice != null">
+        , #{foodPrice}
+        </if>
+        <if test="foodOriginalFile != null and foodSavedFile != null">
+        , #{foodOriginalFile}, #{foodSavedFile}
+        </if>
+    )
+</insert>
+
+
 </mapper>
