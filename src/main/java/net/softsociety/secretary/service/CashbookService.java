@@ -25,4 +25,7 @@ public interface CashbookService {
 	 * @param cate1Name */
 	int addCustomCate2(Category2 cate2, String cate1Name);
 
+	/** 예산-지출 */
+	int budgetRest(HashMap<String, Object> map);
+
 }

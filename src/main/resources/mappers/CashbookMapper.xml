@@ -295,4 +295,95 @@ INSERT INTO
 		AND EXTRACT(MONTH FROM trans_date) = #{month}
 </select>
 
+
+<!-- 예산 입력 -->
+<insert id="setBudget" parameterType="Budget">
+	INSERT INTO
+		Secretary_Budget
+			(budget_id
+			, cashbook_id
+			, family_id
+			, budget_year
+			, budget_month
+			, budget_amount)
+		VALUES
+			(Secretary_Budget_SEQ.nextval
+			, #{cashbookId}
+			, #{familyId}
+			, #{budgetYear}
+			, #{budgetMonth}
+			, #{budgetAmount})
+</insert>
+
+<!-- 예산 - 지출 구하기 -->
+<select id="budgetRest" parameterType="map" resultType="int">
+	SELECT 
+	    (b.budget_amount - NVL(t.total_expense, 0)) AS remainingAmount
+	FROM 
+	    (SELECT 
+	    	budget_amount 
+	     FROM 
+	     	Secretary_Budget 
+	     WHERE 
+	     	budget_year = 2023 
+	     	AND budget_month = 9) b,
+	    (SELECT 
+	    	SUM(trans_amount) AS total_expense
+	     FROM 
+	     	Secretary_Transaction
+	     WHERE 
+	     	EXTRACT(YEAR FROM trans_date) = #{budgetYear} 
+	     	AND EXTRACT(MONTH FROM trans_date) = #{budgetMonth} 
+	     	AND trans_type = '지출') t
+</select>
+
+<!-- 해당 연월 예산 있는지 확인 -->
+<select id="budgetExist" parameterType="map" resultType="int">
+	SELECT
+		budget_amount
+	FROM 
+		Secretary_Budget
+	WHERE
+		budget_month = #{budgetMonth}
+		AND budget_year = #{budgetYear}
+		AND family_id = #{familyId}
+</select>
+
+<!-- 예산 가져오기 -->
+<select id="selectBudget" parameterType="map" resultType="Budget">
+	SELECT
+		budget_id
+		, cashbook_id
+		, family_id
+		, budget_year
+		, budget_month
+		, budget_amount
+	FROM
+		Secretary_Budget
+	WHERE
+		budget_month = #{budgetMonth}
+		AND budget_year = #{budgetYear}
+		AND family_id = #{familyId}
+</select>
+
+<!-- 예산 수정 -->
+<insert id="updateBudget" parameterType="Budget">
+	UPDATE
+		Secretary_Budget
+	SET
+		budget_amount = #{budgetAmount}
+	WHERE
+		family_id = #{familyId}
+		AND budget_month = #{budgetMonth}
+		AND budget_year = #{budgetYear}
+</insert>
+
+<!-- 예산 삭제 -->
+<delete id="deleteBudget" parameterType="Budget">
+	DELETE FROM
+		Secretary_Budget
+	WHERE
+		budget_id = ${budgetId}
+		AND family_id = ${familyId}
+</delete>
 </mapper>

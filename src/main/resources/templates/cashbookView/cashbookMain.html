@@ -76,7 +76,7 @@
     />
 
     <!-- 소영 추가 CSS -->
-    <link rel="stylesheet" th:href="@{/css/monthly-default.css}" />
+    <!-- <link rel="stylesheet" th:href="@{/css/monthly-default.css}" /> -->
 
     <!-- Page CSS -->
 
@@ -625,95 +625,44 @@
                     <div class="d-flex align-items-xl-center"></div>
                     <div class="card-body">
                       <h4>이번 달 예산</h4>
-                      <p>이번 달 남은 예산은 <span>000</span>원입니다.</p>
-                      <div class="mt-3">
+                      <!-- 예산 존재함 -->
+                      <div th:if="${budgetExist}">
+                        <p>
+                          이번 달 남은 예산은
+                          <!-- 1,000 단위로 콤마 찍도록 포맷 설정 -->
+                          <span
+                            th:text="${#numbers.formatDecimal(remainingAmount, 0, 'COMMA', 0, 'POINT')}"
+                            >000</span
+                          >원입니다.
+                        </p>
                         <button
-                          class="btn btn-success"
                           type="button"
-                          data-bs-toggle="offcanvas"
-                          data-bs-target="#offcanvasBoth"
-                          aria-controls="offcanvasBoth"
+                          class="btn btn-success"
+                          data-bs-toggle="modal"
+                          data-bs-target="#ModalUpdateBudget"
+                        >
+                          예산 수정하기
+                        </button>
+                        <button
+                          type="button"
+                          class="btn btn-success"
+                          data-bs-toggle="modal"
+                          data-bs-target="#ModalDeleteBudget"
+                        >
+                          예산 삭제하기
+                        </button>
+                      </div>
+                      <!-- 예산 미지정 -->
+                      <div th:if="${!budgetExist}">
+                        <p>아직 이번달 예산을 설정하지 않았어요.</p>
+                        <button
+                          type="button"
+                          class="btn btn-success"
+                          data-bs-toggle="modal"
+                          data-bs-target="#ModalSetBudget"
                         >
                           예산 설정하기
                         </button>
-                        <div
-                          class="offcanvas offcanvas-end"
-                          data-bs-scroll="true"
-                          tabindex="-1"
-                          id="offcanvasBoth"
-                          aria-labelledby="offcanvasBothLabel"
-                          aria-hidden="true"
-                          style="visibility: hidden"
-                        >
-                          <div class="offcanvas-header">
-                            <h5 id="offcanvasBothLabel" class="offcanvas-title">
-                              예산 설정하기
-                            </h5>
-                            <button
-                              type="button"
-                              class="btn-close text-reset"
-                              data-bs-dismiss="offcanvas"
-                              aria-label="Close"
-                            ></button>
-                          </div>
-                          <div class="offcanvas-body my-auto mx-0 flex-grow-0">
-                            <p class="text-center">
-                              <span>2023</span>년 <span>9</span>월 예산
-                            </p>
-                            <div>
-                              지난 3개월 예산의 평균은
-                              <span>700,000</span>원입니다.
-                              <p>
-                                <span>2023</span>년 <span>8</span>월:
-                                <span>800,000</span>원
-                              </p>
-                              <p>
-                                <span>2023</span>년 <span>7</span>월:
-                                <span>700,000</span>원
-                              </p>
-                              <p>
-                                <span>2023</span>년 <span>6</span>월:
-                                <span>600,000</span>원
-                              </p>
-                            </div>
-                            <form
-                              th:action="@{/cashbook/setBudget}"
-                              method="post"
-                              onsubmit="return validateBudget()"
-                            >
-                              <div class="input-group">
-                                <span
-                                  class="input-group-text"
-                                  id="basic-addon11"
-                                  >₩</span
-                                >
-                                <input
-                                  type="text"
-                                  id="budgetAmount"
-                                  name="budgetAmount"
-                                  class="form-control"
-                                  placeholder="다음 달 예산을 입력하세요"
-                                  aria-label="Username"
-                                  aria-describedby="basic-addon11"
-                                />
-                              </div>
-                              <p id="budgetAmountError"></p>
-                              <button
-                                type="submit"
-                                class="btn btn-success mb-2 d-grid w-100"
-                              >
-                                설정
-                              </button>
-                              <button
-                                type="button"
-                                class="btn btn-outline-secondary d-grid w-100"
-                                data-bs-dismiss="offcanvas"
-                              >
-                                취소
-                              </button>
-                            </form>
-                          </div>
-                        </div>
                       </div>
                     </div>
                   </div>
@@ -889,6 +838,234 @@
 
     <!-- Overlay -->
     <div class="layout-overlay layout-menu-toggle"></div>
+
+    <!-- Modal -->
+    <div th:if="${budget}">
+      <input type="hidden" id="budgetId" th:value="${budget.budgetId}" />
+      <input type="hidden" id="familyId" th:value="${budget.familyId}" />
+      <input type="hidden" id="cashbookId" th:value="${budget.cashbookId}" />
+    </div>
+    <!-- 예산 입력 모달 -->
+    <div
+      class="modal fade"
+      id="ModalSetBudget"
+      tabindex="-1"
+      style="display: none"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel1">예산 설정하기</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div class="row mb-2">
+              <div class="col">
+                <label for="nameBasic" class="form-label">지난 예산</label>
+                <p class="text">
+                  지난 3개월의 예산 평균은 <span></span>원입니다.
+                </p>
+                <div>
+                  <p class="text-muted">2023년 8월 000원</p>
+                  <p class="text-muted">2023년 7월 000원</p>
+                  <p class="text-muted">2023년 6월 000원</p>
+                </div>
+              </div>
+              <div class="col">
+                <label for="" class="form-label">이번 달 이벤트</label>
+                <!-- 이벤트 리스트 -->
+                <div class="mb-4 mb-xl-0">
+                  <div class="demo-inline-spacing mt-3">
+                    <div class="list-group list-group-flush">
+                      <a
+                        href="javascript:void(0);"
+                        class="list-group-item list-group-item-action"
+                        >19 화 민지 생일</a
+                      >
+                      <a
+                        href="javascript:void(0);"
+                        class="list-group-item list-group-item-action"
+                        >19 화 종합평가</a
+                      >
+                      <a
+                        href="javascript:void(0);"
+                        class="list-group-item list-group-item-action"
+                        >29 금 추석</a
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row g-2">
+              <h5>2023년 9월 예산</h5>
+              <input
+                type="text"
+                id="setModalInput"
+                class="form-control"
+                placeholder="예산을 입력하세요."
+              />
+              <span id="budgetAmountErrorModal"></span>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-outline-success"
+              data-bs-dismiss="modal"
+            >
+              취소
+            </button>
+            <button type="button" id="setBudgetBtModal" class="btn btn-success">
+              설정
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- /예산 입력 모달 -->
+
+    <!-- 예산 수정 모달 -->
+    <div
+      class="modal fade"
+      id="ModalUpdateBudget"
+      tabindex="-1"
+      style="display: none"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel1">예산 수정하기</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div class="row mb-2">
+              <div class="col">
+                <label for="nameBasic" class="form-label">지난 예산</label>
+                <p class="text">
+                  지난 3개월의 예산 평균은 <span></span>원입니다.
+                </p>
+                <div>
+                  <p class="text-muted">2023년 8월 000원</p>
+                  <p class="text-muted">2023년 7월 000원</p>
+                  <p class="text-muted">2023년 6월 000원</p>
+                </div>
+              </div>
+              <div class="col">
+                <label for="" class="form-label">이번 달 이벤트</label>
+                <!-- 이벤트 리스트 -->
+                <div class="mb-4 mb-xl-0">
+                  <div class="demo-inline-spacing mt-3">
+                    <div class="list-group list-group-flush">
+                      <a
+                        href="javascript:void(0);"
+                        class="list-group-item list-group-item-action"
+                        >19 화 민지 생일</a
+                      >
+                      <a
+                        href="javascript:void(0);"
+                        class="list-group-item list-group-item-action"
+                        >19 화 종합평가</a
+                      >
+                      <a
+                        href="javascript:void(0);"
+                        class="list-group-item list-group-item-action"
+                        >29 금 추석</a
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row g-2">
+              <h5>2023년 9월 예산</h5>
+              <input
+                type="text"
+                id="updateModalInput"
+                class="form-control"
+                placeholder="새로운 예산을 입력하세요."
+                th:value="${#numbers.formatDecimal(budget.budgetAmount, 0, 'COMMA', 0, 'POINT')}"
+              />
+              <span id="budgetAmountErrorUpdateModal"></span>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-outline-success"
+              data-bs-dismiss="modal"
+            >
+              취소
+            </button>
+            <button
+              type="button"
+              id="updateBudgetBtModal"
+              class="btn btn-success"
+            >
+              수정
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- /예산 수정 모달 -->
+
+    <!-- 예산 입력 모달 -->
+    <div
+      class="modal fade"
+      id="ModalDeleteBudget"
+      tabindex="-1"
+      style="display: none"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel1">예산 삭제하기</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div class="row mb-2">
+              <p class="text">이번 달 예산을 삭제하시겠습니까?</p>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-outline-success"
+              data-bs-dismiss="modal"
+            >
+              취소
+            </button>
+            <button
+              type="button"
+              id="deleteBudgetBtModal"
+              class="btn btn-success"
+            >
+              삭제
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- /예산 입력 모달 -->
 
     <!-- / Layout wrapper -->
 
