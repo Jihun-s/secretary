@@ -1,20 +1,22 @@
 package net.softsociety.secretary.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import lombok.extern.slf4j.Slf4j;
 import net.softsociety.secretary.domain.FridgeFood;
+import net.softsociety.secretary.domain.FridgeFoodListWrapper;
 import net.softsociety.secretary.service.FridgeFoodService;
 import net.softsociety.secretary.util.FileService;
 
+@Slf4j
 @Controller
 @RequestMapping("/fridgeFood")
 public class FridgeFoodController {
@@ -24,23 +26,38 @@ public class FridgeFoodController {
 	@Value("${spring.servlet.multipart.location}")
 	String uploadPath;// = "c:/secretary";
     
-    @ResponseBody
+	//단일 추가
     @PostMapping("/add")
-    public ResponseEntity<?> addFridgeFood(@ModelAttribute FridgeFood fridgeFood, MultipartFile file) {
+    public String addFridgeFood(@ModelAttribute FridgeFood fridgeFood, MultipartFile foodImage) {
+    	
         try {
-            if (file != null && !file.isEmpty()) {
-            	String savedFileName = FileService.saveFile(file, uploadPath);
+            if (foodImage != null && !foodImage.isEmpty()) {
+            	String savedFileName = FileService.saveFile(foodImage, uploadPath);
                 // 파일 저장 로직
                 // ...
-                fridgeFood.setFoodOriginalFile(file.getOriginalFilename());
+                fridgeFood.setFoodOriginalFile(foodImage.getOriginalFilename());
                 fridgeFood.setFoodSavedFile(savedFileName);  // 저장된 파일명
-            } else {
-                fridgeFood.setFoodSavedFile("/images/fridgeimg/DefaultFood.webp");
             }
             fridgeFoodService.addFridgeFood(fridgeFood);
-            return new ResponseEntity<>(HttpStatus.OK);
+            return "redirect:/fridge";
         } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        	return "error-page";
+        }
+    }
+  //영수증을 통한 다중 추가
+    @PostMapping("/addFromReceipt")
+    public String addFridgeFoodFromReceipt(@ModelAttribute FridgeFoodListWrapper wrapper) {
+        List<FridgeFood> fridgeFoods = wrapper.getFridgeFoods();
+        log.debug("이게 제대로 오긴 해요? : {}",fridgeFoods);
+        try {
+            for (FridgeFood fridgeFood : fridgeFoods) {
+                // 이미지 처리 코드는 제거
+                fridgeFoodService.addFridgeFood(fridgeFood);
+            }
+            return "redirect:/fridge";
+        } catch (Exception e) {
+            log.error("An error occurred: {}", e.getMessage(), e);
+            return "error-page";
         }
     }
 }
