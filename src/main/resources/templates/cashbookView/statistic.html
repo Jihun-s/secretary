@@ -387,6 +387,8 @@
             class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
             id="layout-navbar"
           >
+
+            <!-- === -->
             <div
               class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none"
             >
@@ -398,37 +400,26 @@
               </a>
             </div>
 
+
+            <!-- 상단바 오른쪽 -->
             <div
               class="navbar-nav-right d-flex align-items-center"
               id="navbar-collapse"
             >
-              <!-- Search -->
-              <div class="navbar-nav align-items-center">
-                <div class="nav-item d-flex align-items-center">
-                  <i class="bx bx-search fs-4 lh-0"></i>
-                  <input
-                    type="text"
-                    class="form-control border-0 shadow-none"
-                    placeholder="검색어를 입력하세요"
-                    aria-label="검색어를 입력하세요"
-                  />
-                </div>
-              </div>
-              <!-- /Search -->
-
               <ul class="navbar-nav flex-row align-items-center ms-auto">
-                <!-- Place this tag where you want the button to render. -->
-                <!-- 무슨 별 -->
-                <!-- <li class="nav-item lh-1 me-3">
-                  <a
-                    class="github-button"
-                    href="https://github.com/themeselection/sneat-html-admin-template-free"
-                    data-icon="octicon-star"
-                    data-size="large"
-                    data-show-count="true"
-                    aria-label="Star themeselection/sneat-html-admin-template-free on GitHub"
-                    >Star</a
-                  > -->
+                <!-- 검색 -->
+                <li>
+                  <div class="navbar-nav align-items-center">
+                    <div class="nav-item d-flex align-items-center">
+                      <i class="bx bx-search fs-4 lh-0"></i>
+                      <input
+                        type="text"
+                        class="form-control border-0 shadow-none"
+                        placeholder="검색어를 입력하세요"
+                        aria-label="검색어를 입력하세요"
+                      />
+                    </div>
+                  </div>
                 </li>
 
                 <!-- 알림 종 -->
@@ -547,8 +538,8 @@
                             </div>
                           </div>
                           <div class="flex-grow-1">
-                            <span class="fw-semibold d-block">사용자명</span>
-                            <small class="text-muted">권한명</small>
+                            <span th:text="${loginUser.userNickname}" class="fw-semibold d-block">별명</span>
+                            <small th:text="${loginUser.userId}" class="text-muted"></small>
                           </div>
                         </div>
                       </a>
