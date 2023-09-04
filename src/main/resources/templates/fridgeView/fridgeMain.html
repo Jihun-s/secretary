@@ -82,8 +82,8 @@
                 font-size: 12px; /* 원하는 폰트 크기로 설정 */
             }
             .food-image {
-                width: 100px;
-                height: 100px;
+                width: 70px;
+                height: 70px;
             }
         </style>
         <script>
@@ -91,9 +91,7 @@
                 // 페이지 로드 시 냉장고 목록 가져오기
                 loadFridges();
                 //냉동실/ 냉장실 전환
-                function updateButtonText(text, buttonId) {
-                    document.getElementById(buttonId).textContent = text;
-                }
+
                 document.getElementById('toggleButton').addEventListener('click', function () {
                     const button = this;
                     if (button.textContent === '냉장실 보기') {
@@ -183,7 +181,8 @@
                 //</냉장고 이름 글자 수 제한!
 
                 // When a fridge item is clicked
-                $(document).on('click', '.food-item', function () {
+                $(document).on('click', '.food-item', function (e) {
+                    e.stopPropagation();
                     var foodId = $(this).data('food-id');
 
                     $.ajax({
@@ -247,10 +246,6 @@
                 // 페이지가 로드될 때 냉장고의 음식 항목을 로드하고 표시
                 loadFridgeItems();
 
-                function updateButtonText(text, buttonId) {
-                    document.getElementById(buttonId).textContent = text;
-                }
-
                 function loadFridges() {
                     $.ajax({
                         url: 'fridge/getAllFridges',
@@ -305,6 +300,9 @@
                     });
                 }
             });
+            function updateButtonText(text, buttonId) {
+                document.getElementById(buttonId).textContent = text;
+            }
         </script>
     </head>
     <body>
