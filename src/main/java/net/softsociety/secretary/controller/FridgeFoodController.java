@@ -1,13 +1,25 @@
 package net.softsociety.secretary.controller;
 
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.MediaTypeFactory;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.extern.slf4j.Slf4j;
@@ -60,4 +72,42 @@ public class FridgeFoodController {
             return "error-page";
         }
     }
+    //음식 가져오기
+    @ResponseBody
+    @GetMapping("/food/{foodId}")
+    public FridgeFood getFoodDetails(@PathVariable int foodId) {
+    	log.debug("정상 작동 되나요? : {}",foodId);
+        return fridgeFoodService.getFoodDetails(foodId);
+    }
+    
+    //전체 음식 출력
+    @ResponseBody
+    @GetMapping("/getAllFoods")
+    public List<FridgeFood> getAllFridgeFoods() {
+        return fridgeFoodService.getAllFridgeFoods();
+    }
+    
+    @ResponseBody
+    @GetMapping("/image/{fileName:.+}")
+    public ResponseEntity<Resource> serveImage(@PathVariable String fileName) {
+        try {
+            // 이미지를 제공할 경로 설정
+            String imagePath = "c:/secretaryfile/";
+
+            // 이미지 파일 로드
+            Path imageFilePath = Paths.get(imagePath + fileName);
+            Resource imageResource = new UrlResource(imageFilePath.toUri());
+
+            // 파일 확장자에 따라 콘텐츠 유형 결정
+            MediaType contentType = MediaTypeFactory.getMediaType(imageResource).orElse(MediaType.IMAGE_JPEG);
+
+            // 이미지 응답으로 전송
+            return ResponseEntity.ok()
+                    .contentType(contentType)
+                    .body(imageResource);
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
 }
