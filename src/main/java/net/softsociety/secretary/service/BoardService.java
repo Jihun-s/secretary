@@ -27,6 +27,9 @@ public interface BoardService {
 	int update(Board b);
 	//글수정
 	Board upread(int num);
+	//답변상태 업데이트
+	int updateBoardStatus(int boardId);
+	
 
 
 

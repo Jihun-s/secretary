@@ -46,6 +46,7 @@
 		 	board_category2 = #{boardCategory2}
 		 </if>
 	</where>
+	ORDER BY board_inputdate DESC
 </select>
 <!-- 전체 게시글 개수 계산 -->
 <select id="getTotal" parameterType="hashmap" resultType="int">
@@ -129,4 +130,13 @@ where
 
 <!--  게시글 읽기  -->
 <select id="selectOne" resultType="Board"> select * from secretary_board where board_id = #{boardId} </select>
+
+<update id="updateBoardStatus" parameterType="int">
+update 
+	secretary_board
+set
+	board_status = 1
+where
+	board_id = #{boardId}
+</update>
 </mapper>
