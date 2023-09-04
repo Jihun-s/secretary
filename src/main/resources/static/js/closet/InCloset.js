@@ -2,7 +2,8 @@
  * 옷장 페이지
  */
 $(document).ready(function(){
-	
+		$('#4row').hide();
+
 //!!!!!!!!!!!!!!!!!!!!!! 옷 찾기  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!	
 		//옷찾기 분류에서 소분류 숨겨놓기
 		$('#topCategory').hide();
@@ -354,11 +355,31 @@ $(document).ready(function(){
 			seasonArr.push($(this).val());
 		}); 		
 		console.log(seasonArr);
+		console.log(typeof(seasonArr));
 		
-		
-		
+		closetNum = parseInt(closetNum); // 스트링에서 정수형으로 변환
+		$.ajax({
+			url:'inCloset',
+			type:'get',
+			traditional:true,
+			data:{closetNum: closetNum, category:category, size:size
+				,seasonArr: seasonArr, material:material},
+			dataType:'json',
+			success:function(list){
+				let str ='';
+				$(list).each(function(i,n){
+					str +='<a onclick="readClothes('+n+')"><img src="../closet/clothesDownload?closetNum='+closetNum+'&clothesNum='+n+'"></a>';
+				});
+				$('#whatsInCloset').html(str); 
+			},
+			error:function(e){
+				alert(JSON.stringify(e));
+			}			
+		})
 	}
 	
+	
+	//의류 자세히보기
 	function readClothes(clothesNum){
 		console.log(clothesNum);
 		$.ajax({
@@ -367,10 +388,11 @@ $(document).ready(function(){
 			data:{closetNum: closetNum, clothesNum: clothesNum},
 			dataType:'json',
 			success:function(clothes){
-				console.log('성공');
-				console.log(clothes.clothesMaterial);
-				let imgStr = '<img src="../closet/clothesDownload?closetNum='+closetNum+'&clothesNum='+clothesNum+'">';
-				let str = '<table><colgroup><col width="35%;"><col><col></colgroup>\
+				$('#3row').hide();
+				$('#2row').hide();
+				let imgStr =  '<img style="width:100%; height:100%; object-fit:cover;" \
+							src="../closet/clothesDownload?closetNum='+closetNum+'&clothesNum='+clothesNum+'">'
+				let str = '<br><table><colgroup><col width="35%;"><col><col></colgroup>\
 							<tr><td><label for="updateIMG" id="cssupdateIMG"><span>사진 수정<span></label>\
 									<input type="file" id="updateIMG" accept="image/*"></td>\
 								<td><input type="button" value="편집" id="updateEditIMGbtn"></td>\
@@ -380,9 +402,10 @@ $(document).ready(function(){
 							<tr><td>계절</td><td colspan="2">'+clothes.clothesSeasons+'</td></tr>\
 							<tr><td>사이즈</td><td colspan="2">'+clothes.clothesSize+'</td></tr>\
 							<tr><td><button onclick="updateClothes('+clothesNum+')">수정</button></td>\
-								<td colspan="2"><button onclick="deleteClothes('+clothesNum+')">삭제</button></td></tr></table>'
-				$('#updateImagePreview').html(imgStr); 
-				$('#readClothesView').html(str); 
+								<td colspan="2"><button onclick="deleteClothes('+clothesNum+')">삭제</button></td></tr></table><br>'
+				$('#4row').show();
+				$('#IMGdetail').html(imgStr);
+				$('#InfoDetail').html(str);
 			},
 			error:function(e){
 				alert(JSON.stringify(e));

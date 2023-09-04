@@ -20,7 +20,7 @@ public interface ClosetDAO {
 	void insertClothes(Clothes clothes);
 
 	//옷장에 의류목록 출력
-	ArrayList<Clothes> findAllClothes(int closetNum);
+	ArrayList<Clothes> findAllClothes(HashMap<String, Object> map);
 	//옷장 옷 찾기
 	Clothes findClothes(HashMap<String, Integer> map);
 

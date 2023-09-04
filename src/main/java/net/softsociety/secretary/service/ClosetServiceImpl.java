@@ -39,8 +39,27 @@ public class ClosetServiceImpl implements ClosetService {
 
 	//옷장안에 의류전체목록 출력
 	@Override
-	public ArrayList<Clothes> findAllClothes(int closetNum) {
-		return dao.findAllClothes(closetNum);
+	public ArrayList<Clothes> findAllClothes(int closetNum, String category, String size, String material, String[] seasonArr) {
+		HashMap<String, Object> map = new HashMap<>();
+		if(seasonArr == null) {
+			log.debug("계절 Null");
+		}else {
+			StringBuilder temp = new StringBuilder();
+			for(String s : seasonArr) {
+				temp.append(s+',');
+			}
+			String season = temp.toString();
+			season = season.substring(0, season.length()-1);
+			log.debug("dddf:{}", season);
+			map.put("seasons", season);
+		}
+		map.put("closetNum", closetNum);
+		map.put("category", category);
+		map.put("size",size);
+		map.put("material", material);
+		log.debug("map:{}", map);
+
+		return dao.findAllClothes(map);
 	}
 	
 	//옷장안에 옷번호로 의류하나 찾기

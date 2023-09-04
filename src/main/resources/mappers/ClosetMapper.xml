@@ -28,9 +28,46 @@
 </insert>
 
 <!-- 옷장안 의류 전체목록 -->
-<select id="findAllClothes" parameterType="int" resultType="Clothes">
+<select id="findAllClothes" parameterType="hashmap" resultType="Clothes">
 	select * from Secretary_clothes where closet_num = #{closetNum}
-									order by clothes_num
+			<if test="material !=null and material !='materialAll'">
+			and clothes_material = #{material}
+			</if>
+			<if test="category == 'topAll'">
+			and (clothes_category = 'Tshirt' or clothes_category = 'blouse' or clothes_category = 'sweatshirt' or clothes_category = 'knitwear')
+			</if>
+			<if test="category == 'bottomAll'">
+			and (clothes_category = 'skirt' or clothes_category = 'pants' or clothes_category = 'jeans' or clothes_category = 'trainingPants')
+			</if>
+			<if test="category == 'clothesOuterAll'">
+			and (clothes_category = 'coat' or clothes_category = 'jacket' or clothes_category = 'paddedJacket' or clothes_category = 'zipupHoodie' or clothes_category = 'cardigan')
+			</if>
+			<if test="category == 'dressAll'">
+			and (clothes_category = 'miniDress' or clothes_category = 'longDress')
+			</if>			
+			<if test="category == 'shoesAll'">
+			and (clothes_category = 'sneakers' or clothes_category = 'formalShoes' or clothes_category = 'boots' or clothes_category = 'sandals')
+			</if>
+			<if test="category == 'bagAll'">
+			and (clothes_category = 'backpack' or clothes_category = 'totebag' or clothes_category = 'crossbodybag' or clothes_category = 'clutchbag')
+			</if>
+			<if test="category == 'accessoryAll'">
+			and (clothes_category = 'hat' or clothes_category = 'socks' or clothes_category = 'jewelryOrWatch' or clothes_category = 'scarf' or clothes_category = 'belt' or clothes_category = 'accessoryEtc')
+			</if>
+			<if test="category == 'etcAll'">
+			and (clothes_category = 'innerwear' or clothes_category = 'sleepwear' or clothes_category = 'swimsuit')
+			</if>
+			<if test="category != null and category != 'CategoryAll' 
+			and category != 'topAll' and category != 'bottomAll' and category != 'clothesOuterAll' and category != 'dressAll' 
+			and category != 'shoesAll' and category != 'bagAll' and category != 'accessoryAll' and category != 'etcAll'">
+			and clothes_category = #{category}
+			</if>
+			<if test="seasons != null">
+			and upper(clothes_seasons) like upper('%' || #{seasons} || '%')		
+			</if>
+			<if test="size != null and size !='SizeAll'">
+			and clothes_size = #{size}
+			</if>
 </select>
 
 <!-- 옷장안 옷 찾기(옷장번호, 옷번호) -->
