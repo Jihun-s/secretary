@@ -4,6 +4,28 @@ $(document).ready(function() {
     $('#deleteBudgetBtModal').click(deleteBudgetModal);
 });
 
+/** 화면 초기화 */
+// function init() {
+//     let familyId = $('#familyId').val();
+//     let cashbookId = $('#cashbookId').val();
+//     let budgetId = $('#budgetId').val();
+
+//     $.ajax({
+//         url: '/secretary/cashbook/init',
+//         type: 'POST',
+//         data: { familyId: familyId, cashbookId: cashbookId, budgetId: budgetId },
+//         dataType: 'JSON',
+//         success: (data) => {
+//             alert(budgetExist + remainingAmount + budgetAmount + incomeSumMonth + expenseSumMonth + budgetAvg + budgetAmountX + budgetAmountXx + budgetAmountXxx + curYear + curMonth + )
+//         },
+//         error: () => {
+//             alert('init 실행 실패');
+//         }
+//     });
+
+
+// }
+
 /** 예산 설정 유효성 검사 */
 function validateBudget() {
     let budgetAmount = $('#setModalInput').val();
@@ -137,7 +159,7 @@ function deleteBudgetAjax() {
     let familyId = $('#familyId').val();
 
     $.ajax({
-        url: '/secretary/cashbook/budget/updateBudget',
+        url: '/secretary/cashbook/budget/deleteBudget',
         type: 'POST',
         data: { budgetId: budgetId, cashbookId: cashbookId, familyId: familyId },
         success: () => {
