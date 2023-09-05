@@ -100,9 +100,22 @@ public class ClosetController {
 	//옷장안 의류목록(옷번호 배열 반환)
 	@ResponseBody
 	@GetMapping("inCloset")
-	public ArrayList<Integer> clothesListInCloset(@RequestParam(name="closetNum") int closetNum) {
+	public ArrayList<Integer> clothesListInCloset(@RequestParam(name="closetNum") int closetNum, String category, String size
+													,String[] seasonArr, String material) {
+		log.debug("옷장 번호: {}", closetNum);
+		log.debug("분류: {}", category);
+		log.debug("사이즈: {}", size);
+		log.debug("소재: {}", material);
+		if(seasonArr == null) {
+			log.debug("계절 해당없음");
+		} else {
+		for(String season:seasonArr) {
+			log.debug("계절:{}", season);
+			}
+		};
+		
 		//옷장안에 의류리스트 불러오기
-		ArrayList<Clothes> clothesList = service.findAllClothes(closetNum);
+		ArrayList<Clothes> clothesList = service.findAllClothes(closetNum, category, size, material, seasonArr);
 		//의류리스트 옷번호 배열에 담기
 		ArrayList<Integer> clothesNumList = new ArrayList<>();
 		for(Clothes i : clothesList) {
@@ -111,6 +124,7 @@ public class ClosetController {
 		return clothesNumList;
 	}
 	
+	//옷 자세히보기
 	@ResponseBody
 	@GetMapping("readClothes")
 	public Clothes readClothes(@RequestParam(name="closetNum") int closetNum,

@@ -750,7 +750,7 @@
                       					<td><label for="sizeForSearch">사이즈</label></td>
 			                      		<td>
                       						<select id="clothesSizeForSearch">
-                      						<option value="clothesSizeAll">전체</option>
+                      						<option value="SizeAll">전체</option>
                       						<option value="none">해당없음</option>
                       						<option value="free">FREE</option>
 	                      					<option value="XS">XS</option>
@@ -763,7 +763,7 @@
                       						
                       						<table id="shoesSizeForSearch">
                       						<tr>
-                      						<td><input type="checkbox" name="shoesSizeAll" value="shoesSizeAll"><small>전체</small></td>
+                      						<td><input type="checkbox" name="shoesSizeAll" value="SizeAll"><small>전체</small></td>
 											<td><input type="number" name="shoesForSearch" value="210" min="210" max="300" step="5"></td>
 											</tr>
 											</table>
@@ -790,9 +790,9 @@
                 
                 
                 <!-- 2열 -->
-                <div class="col-lg-3 mb-4">
+                <div class="col-lg-3 mb-4" id="2row">
                   <!-- 2열 1행 -->
-                  <h3 class="">자세히 보기</h3>
+                  <h3 class="">착용 통계</h3>
                   <div class="card">
                     <div class="d-flex align-items-end"></div>
                     <div class="card-body">
@@ -806,7 +806,7 @@
                 </div>
 
                 <!-- 3열 -->
-                <div class="col-lg-3 mb-4">
+                <div class="col-lg-3 mb-4" id="3row">
                   <h3>내 옷 등록</h3>
                   <div class="card">
                     <div class="card-body">
@@ -904,7 +904,8 @@
                       	</tr>
                       	<tr> <!-- 4행 -->
                       		<td>계절</td>
-                      		<td colspan="2"><input type="checkbox" name="seasons" value="spring"><label for="spirng"><small>봄</small></label>
+                      		<td colspan="2">
+                      			<input type="checkbox" name="seasons" value="spring"><label for="spirng"><small>봄</small></label>
                       			<input type="checkbox" name="seasons" value="summer"><label for="summer"><small>여름</small></label>
                       			<input type="checkbox" name="seasons" value="fall"><label for="fall"><small>가을</small></label>
                       			<input type="checkbox" name="seasons" value="winter"><label for="winter"><small>겨울</small></label></td>
@@ -935,13 +936,21 @@
                       	</tr>
                       </table>
                       </div> <!-- insertClothes -->
-                    </div>
-                  </div>
+                    </div><!-- card-body -->
+                  </div><!-- card -->
+                </div><!-- 3열 class="col-lg-3 mb-4"  -->
+                <div class="col-lg-6 mb-4" id="4row">
+                	<h3>의류 상세정보</h3>
+                <div class="card">
+                <div class="d-flex align-items-end"></div>
+                <div class="card-body"></div>
+					<div id="IMGdetail"></div>
+					<div id="InfoDetail"></div>
                 </div>
-              </div>
-            </div>
+                </div>
+              </div><!-- row -->
+            </div> <!-- 컨텐트 박스 class="container-xxl flex-grow-1 container-p-y" -->
 
-            <!-- 컨텐트 박스 -->
           </div>
           <!-- / Content -->
 
