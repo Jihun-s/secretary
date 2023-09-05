@@ -72,6 +72,16 @@ public class ClosetServiceImpl implements ClosetService {
 		
 		return dao.findClothes(map);
 	}
+
+	//옷장안 의류 삭제
+	@Override
+	public int deleteClothes(int closetNum, int clothesNum) {
+		//옷장번호, 옷번호 담을 해쉬맵
+		HashMap<String, Integer> map = new HashMap<>();
+		map.put("closetNum", closetNum);
+		map.put("clothesNum", clothesNum);
+		return dao.deleteClothes(map);
+	}
 	
 	
 	

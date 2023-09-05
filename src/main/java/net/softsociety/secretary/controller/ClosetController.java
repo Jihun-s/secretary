@@ -160,6 +160,23 @@ public class ClosetController {
 		}
 	}
 	
-	
+	//옷 삭제
+	@ResponseBody
+	@GetMapping("deleteClothes")
+	public void deleteClothes(@RequestParam(name="closetNum") int closetNum,
+							@RequestParam(name="clothesNum") int clothesNum) {
+		log.debug("deleteClothes 매핑!");
+		Clothes clothes = service.findClothes(closetNum, clothesNum);
+		if(clothes.getClothesImg() != null || clothes.getClothesImg() != "") {
+			String fullPath = uploadPath + "/" + clothes.getClothesImg();
+			FileService.deleteFile(fullPath);
+		}
+		int n = service.deleteClothes(closetNum, clothesNum);
+		if( n == 0 ) {
+			log.debug("옷 삭제 실패");
+		} else {
+			log.debug("옷 삭제 성공");
+		}
+	}
 	
 }
