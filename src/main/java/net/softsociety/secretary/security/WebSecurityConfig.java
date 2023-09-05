@@ -52,7 +52,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 "/js/**",
                 "/libs/**",
                 "/scss/**",
-                "/tasks/**"
+                "/tasks/**",
+                "/fridgeFood/image/**"
                     ).permitAll()
             .antMatchers("/admin").hasRole("ADMIN")
             .anyRequest().authenticated()
