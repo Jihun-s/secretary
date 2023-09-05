@@ -5,6 +5,9 @@ $(document).ready(function() {
     $('#ModalSetBudget').on('show.bs.modal', function() {
         initSetBudgetModal();
     });
+    $('#ModalUpdateBudget').on('show.bs.modal', function() {
+        initUpdateBudgetModal();
+    });
     $('#setBudgetBtModal').click(setBudgetModal);
     $('#updateBudgetBtModal').click(updateBudgetModal);
     $('#deleteBudgetBtModal').click(deleteBudgetModal);
@@ -153,14 +156,53 @@ function initSetBudgetModal() {
         dataType: 'JSON',
         success: (data) => {
             // alert("ajax로 가져온 데이터:" + JSON.stringify(data));
-            $('#budgetAvgSpan1').html(data.budgetAvg);
-            $('#budgetAmountXP1').html(data.budgetAmountX);
-            $('#budgetAmountXxP1').html(data.budgetAmountXx);
-            $('#budgetAmountXxxP1').html(data.budgetAmountXxx);
+            $('.budgetAvg').html(data.budgetAvg);
+            $('.budgetAmountX').html(data.budgetAmountX);
+            $('.budgetAmountXx').html(data.budgetAmountXx);
+            $('.budgetAmountXxx').html(data.budgetAmountXxx);
+            $('.curYear').html(curYear);
+            $('.curMonth').html(curMonth);
+            $('.curMonthX').html(curMonth - 1);
+            $('.curMonthXx').html(curMonth - 2);
+            $('.curMonthXxx').html(curMonth - 3);
 
         },
         error: () => {
             alert('예산 설정 모달 init 실패');
+        }
+    });
+}
+
+/** 예산 수정 모달 init */
+function initUpdateBudgetModal() {
+    alert('예산 수정 가보자고?');
+    let familyId = $('#familyId').val();
+    let curYear = $('#curYear').val();
+    let curMonth = $('#curMonth').val();
+    let curDate = $('#curDate').val();
+    let curDateTime = $('#curDateTime').val();
+
+    $.ajax({
+        url: '/secretary/cashbook/initSetBudgetModal',
+        type: 'POST',
+        data: { familyId: familyId, curDateTime: curDateTime,
+            curYear: curYear, curMonth: curMonth, curDate: curDate },
+        dataType: 'JSON',
+        success: (data) => {
+            // alert("ajax로 가져온 데이터:" + JSON.stringify(data));
+            $('.budgetAvg').html(data.budgetAvg);
+            $('.budgetAmountX').html(data.budgetAmountX);
+            $('.budgetAmountXx').html(data.budgetAmountXx);
+            $('.budgetAmountXxx').html(data.budgetAmountXxx);
+            $('.curYear').html(curYear);
+            $('.curMonth').html(curMonth);
+            $('.curMonthX').html(curMonth - 1);
+            $('.curMonthXx').html(curMonth - 2);
+            $('.curMonthXxx').html(curMonth - 3);
+
+        },
+        error: () => {
+            alert('예산 수정 모달 init 실패');
         }
     });
 }
@@ -174,6 +216,14 @@ function updateBudgetModal() {
     }
 }
 
+/** 모달 예산 입력 */
+function setBudgetModal() {
+    if(validateBudget()) {
+        setBudgetAjax();
+        $('#ModalSetBudget').modal('hide');
+        init();
+    }
+}
 /** 모달 예산 삭제 */
 function deleteBudgetModal() {
     deleteBudgetAjax();
@@ -207,7 +257,7 @@ function updateBudgetAjax() {
         type: 'POST',
         data: { budgetAmount: budgetAmount },
         success: () => {
-            init();
+            location.reload();
         },
         error: () => {
             alert('예산 수정 서버 전송 실패');

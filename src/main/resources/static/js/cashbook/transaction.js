@@ -1,5 +1,6 @@
 $(document).ready(function() {
     // 목록 불러오기
+    setCurDate();
     init();
     $("#transCategoriesDiv").hide();
     $("#transSearchCategory2Div").hide();
@@ -129,9 +130,6 @@ $(document).ready(function() {
             $(this).val(parsedAmount.toLocaleString('en-US'));  // 값을 천 단위로 콤마로 구분하여 다시 설정합니다.
         }
     });   
-
-    // 이달의 수입&지출
-    selectSumInEx();
 
     
     // 검색용 전체 대분류 & 에 맞는 소분류 출력
@@ -467,6 +465,8 @@ function init() {
     let transCntMonth = $('#transCntMonth');
     let transListDiv = $('#transListDiv');
     let familyId = $('#familyId');
+    let curYear = $('#curYear').val();
+    let curMonth = $('#curMonth').val();
 
     // 내역 수 가져오기 
     $.ajax({
@@ -478,6 +478,21 @@ function init() {
         },
         error: () => {
             alert('내역 개수 전송 실패');
+        }
+    });
+
+    // 총지출 총수입 가져오기 
+    $.ajax({
+        url: '/secretary/cashbook/trans/selectSumInEx',
+        type: 'GET',
+        data: { curYear: curYear, curMonth: curMonth },
+        dataType: 'JSON',
+        success: (data) => {
+            $('#transSumIncomeMonth').html(data.INCOMESUMMONTH);
+            $('#transSumExpenseMonth').html(data.EXPENSESUMMONTH);
+        },
+        error: () => {
+            alert('총수입 총지출 전송 실패');
         }
     });
 
@@ -1029,23 +1044,6 @@ function setCustomCategory2() {
         }
     });
 
-}
-
-/** 이달의 수입&지출  */
-function selectSumInEx() {
-
-    $.ajax({
-        url: '/secretary/cashbook/trans/selectSumInEx',
-        type: 'GET',
-        success: (result) => {
-            // 이달의 수입&지출
-            $('#transSumIncomeMonth').html(result.sumIncomeMonth.toLocaleString('en-US'));
-            $('#transSumExpenseMonth').html(result.sumExpenseMonth.toLocaleString('en-US'));
-        },
-        error: () => {
-            alert('날짜 서버 전송 실패');
-        }
-    });
 }
 
 

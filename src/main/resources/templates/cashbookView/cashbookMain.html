@@ -887,17 +887,23 @@
                 <label for="nameBasic" class="form-label">지난 예산</label>
                 <p class="text">
                   지난 3개월의 예산 평균은
-                  <span id="budgetAvgSpan1"></span>원입니다.
+                  <span class="budgetAvg"></span>원입니다.
                 </p>
                 <div>
                   <p class="text-muted">
-                    2023년 8월 <span id="budgetAmountXP1"></span>원
+                    <span class="curYear"></span>년
+                    <span class="curMonthX"></span>월
+                    <span class="budgetAmountX"></span>원
                   </p>
                   <p class="text-muted">
-                    2023년 7월 <span id="budgetAmountXxP1"></span>원
+                    <span class="curYear"></span>년
+                    <span class="curMonthXx"></span>월
+                    <span class="budgetAmountXx"></span>원
                   </p>
                   <p class="text-muted">
-                    2023년 6월 <span id="budgetAmountXxxP1"></span>원
+                    <span class="curYear"></span>년
+                    <span class="curMonthXxx"></span>월
+                    <span class="budgetAmountXxx"></span>원
                   </p>
                 </div>
               </div>
@@ -983,17 +989,23 @@
                 <label for="nameBasic" class="form-label">지난 예산</label>
                 <p class="text">
                   지난 3개월의 예산 평균은
-                  <span id="budgetAvgSpan2"></span>원입니다.
+                  <span class="budgetAvg"></span>원입니다.
                 </p>
                 <div>
-                  <p class="text-muted" id="budgetAmountXP2">
-                    2023년 8월 000원
+                  <p class="text-muted">
+                    <span class="curYear"></span>년
+                    <span class="curMonthX"></span>월
+                    <span class="budgetAmountX"></span>원
                   </p>
-                  <p class="text-muted" id="budgetAmountXxP2">
-                    2023년 7월 000원
+                  <p class="text-muted">
+                    <span class="curYear"></span>년
+                    <span class="curMonthXx"></span>월
+                    <span class="budgetAmountXx"></span>원
                   </p>
-                  <p class="text-muted" id="budgetAmountXxxP2">
-                    2023년 6월 000원
+                  <p class="text-muted">
+                    <span class="curYear"></span>년
+                    <span class="curMonthXxx"></span>월
+                    <span class="budgetAmountXxx"></span>원
                   </p>
                 </div>
               </div>
@@ -1024,12 +1036,15 @@
               </div>
             </div>
             <div class="row g-2">
-              <h5>2023년 9월 예산</h5>
+              <h5>
+                <span class="curYear"></span>년 <span class="curMonth"></span>월
+                예산
+              </h5>
               <input
                 type="text"
                 id="updateModalInput"
                 class="form-control"
-                placeholder="새로운 예산을 입력하세요."
+                placeholder="예산을 입력하세요."
               />
               <span id="budgetAmountErrorUpdateModal"></span>
             </div>

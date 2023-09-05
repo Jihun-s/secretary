@@ -54,13 +54,6 @@ public class CashbookPageController {
 		map.put("familyId", loginUser.getFamilyId());
 		map.put("budgetMonth", curMonth);
 		map.put("budgetYear", curYear);
-//		
-//		Budget budget = dao.selectBudget(map);
-//		log.debug("예산 찾을 맵:{}", map);
-//		log.debug("가계부 홈에 보낼 예산:{}", budget);
-//		
-//		// 모델에 넣기
-//		model.addAttribute("budget", budget);
 		
 		int budgetExist = dao.budgetExist(map);
 		model.addAttribute("budgetExist", budgetExist);
@@ -72,27 +65,12 @@ public class CashbookPageController {
 	@GetMapping("trans")
 	public String cashbookTransaction() {
 		
-		
-		
 		return "cashbookView/transaction";
 	}
 
 	/** 예산 */
 	@GetMapping("budget")
 	public String cashbookBudget(Model model) {
-		// 현재 연월 구하기
-		Calendar calendar = Calendar.getInstance();
-		int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH) + 1;
-        
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("budgetYear", year);
-        map.put("budgetMonth", month);
-        
-        // 예산 - 지출 구하기
-		int remainingAmount = service.budgetRest(map);
-		model.addAttribute("remainingAmount", remainingAmount);
-		log.debug("{}년 {}월 남은 예산:{}", year, month, remainingAmount);
 		
 		return "cashbookView/budget";
 	}

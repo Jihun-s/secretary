@@ -7,6 +7,7 @@ import java.util.HashMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +20,7 @@ import net.softsociety.secretary.dao.UserMapper;
 import net.softsociety.secretary.domain.Category1;
 import net.softsociety.secretary.domain.Category2;
 import net.softsociety.secretary.domain.Transaction;
+import net.softsociety.secretary.domain.User;
 import net.softsociety.secretary.service.CashbookService;
 
 @Slf4j
@@ -198,26 +200,24 @@ public class CashbookTransRestController {
 		return result;
 	}
 	
-//	/** 한달 총 수입&지출 조회 */
-//	@GetMapping("selectSumInEx")
-//	public HashMap<String, Object> selectSumInEx() {
-//		// 현재 월 구하기
-//		Calendar calendar = Calendar.getInstance();
-//        int curMonth = calendar.get(Calendar.MONTH) + 1;
-//		
-//		HashMap<String, Object> result = new HashMap<>();
-//		
-//		// 한달 수입
-//		int sumIncomeMonth = dao.selectSumIncomeMonth(map);
-//		result.put("sumIncomeMonth", sumIncomeMonth);
-//		log.debug("컨트롤러가 가져온 {}월 총 수입:{}", curMonth, sumIncomeMonth);
-//		// 한달 지출
-//		int sumExpenseMonth = dao.selectSumExpenseMonth(curMonth);
-//		result.put("sumExpenseMonth", sumExpenseMonth);
-//		log.debug("컨트롤러가 가져온 {}월 총 수입:{}", curMonth, sumExpenseMonth);
-//		
-//		return result;
-//	}
+	/** 한달 총 수입&지출 조회 */
+	@GetMapping("selectSumInEx")
+	public HashMap<String, Object> selectSumInEx(
+			Model model
+			, int curYear
+			, int curMonth) {
+		User loginUser = (User) model.getAttribute("loginUser");
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("familyId", loginUser.getFamilyId());
+		map.put("budgetYear", curYear);
+		map.put("budgetMonth", curMonth);
+		log.debug("총수입지출 조회할 map:{}", map);
+		
+		HashMap<String, Object> result = dao.selectInExSumMonth(map);
+		log.debug("총수입지출:{}", result);
+		
+		return result;
+	}
 	
 	/** 조건별 보기 */
 	@GetMapping("selectConditionTrans")
