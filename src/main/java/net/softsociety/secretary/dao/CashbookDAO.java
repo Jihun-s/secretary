@@ -62,10 +62,10 @@ public interface CashbookDAO {
 	int selectCate2Id(String cate2Name);
 
 	/** 한달 총 수입 */
-	int selectSumIncomeMonth(int curMonth);
+	int selectSumIncomeMonth(HashMap<String, Object> map);
 
 	/** 한달 총 지출 */
-	int selectSumExpenseMonth(int curMonth);
+	int selectSumExpenseMonth(HashMap<String, Object> map);
 
 	/** 검색용 전체 대분류 */
 	ArrayList<Category1> selectCate1Search();
@@ -75,10 +75,10 @@ public interface CashbookDAO {
 	int setBudget(Budget budget);
 
 	/** 예산 - 지출 */
-	int budgetRest(HashMap<String, Object> map);
+	Integer budgetRest(HashMap<String, Object> map);
 
 	/** 해당 연월 예산 있는지 확인 */
-	Optional<Integer> budgetExist(HashMap<String, Object> map);
+	int budgetExist(HashMap<String, Object> map);
 
 	/** 예산 가져오기 */
 	Budget selectBudget(HashMap<String, Object> map);
@@ -88,5 +88,11 @@ public interface CashbookDAO {
 
 	/** 예산 삭제 */
 	int deleteBudget(Budget budget);
+
+	/** 월 총수입 총지출 */
+	HashMap<String, Object> selectInExSumMonth(HashMap<String, Object> map);
+
+	/** 예산 평균, 직전 3개월 예산 */
+	HashMap<String, Object> selectBudgetAvgXXX(HashMap<String, Object> map);
 
 }

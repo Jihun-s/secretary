@@ -195,6 +195,24 @@ function dateToSysdate() {
 }
 
 
+/** 현재 날짜 심기 */
+function setCurDate() {
+    let date = new Date();
+    let curYear = date.getFullYear();
+    let curMonth = (date.getMonth() + 1).toString().padStart(2, '0');
+    let curDate = date.getDate().toString().padStart(2, '0');
+    let curHour = date.getHours().toString().padStart(2, '0');
+    let curMin = date.getMinutes().toString().padStart(2, '0');
+
+    let curDateTime = `${curYear}-${curMonth}-${curDate} ${curHour}:${curMin}:00`;
+
+    $('#curDateTime').val(curDateTime);
+    $('#curYear').val(curYear);
+    $('#curMonth').val(curMonth);
+    $('#curDate').val(curDate);
+}
+
+
 /** 내역 입력 유효성 검사 */
 function validateTrans() {
     let isValid = true;

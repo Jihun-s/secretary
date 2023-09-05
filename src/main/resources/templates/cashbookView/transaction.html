@@ -589,6 +589,15 @@
 
           <!-- Content wrapper -->
           <div class="content-wrapper">
+            <!-- 현재시각 심어놓기 -->
+            <input type="hidden" id="curDatetime" value="" />
+            <input type="hidden" id="curYear" value="" />
+            <input type="hidden" id="curMonth" value="" />
+            <input type="hidden" id="curDate" value="" />
+
+            <!-- id 심어놓기 -->
+            <input type="hidden" id="familyId" th:value="${loginUser.getFamilyId}">
+
             <!-- Content -->
 
             <!-- 컨텐츠 박스 -->
@@ -625,8 +634,8 @@
                       <h4>직접 입력</h4>
                       <form>
                         <!-- 나중에 model에 담아 뿌리도록 수정 -->
-                        <input type="hidden" name="familyId" id="familyId" value="1">
-                        <input type="hidden" name="cashbookId" id="cashbookId" value="1">
+                        <!-- <input type="hidden" name="familyId" id="familyId" value="1">
+                        <input type="hidden" name="cashbookId" id="cashbookId" value="1"> -->
                         <div class="mb-3">
                           <label class="form-label" for="transDate">거래일자</label>
                           <input class="form-control" type="datetime-local" name="transDate" value="2021-06-18T12:30:00" id="transDate">
