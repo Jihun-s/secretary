@@ -585,6 +585,12 @@
 
           <!-- Content wrapper -->
           <div class="content-wrapper">
+            <!-- 현재시각 심어놓기 -->
+            <input type="hidden" id="curDateTime" value="" />
+            <input type="hidden" id="curYear" value="" />
+            <input type="hidden" id="curMonth" value="" />
+            <input type="hidden" id="curDate" value="" />
+
             <!-- Content -->
 
             <!-- 컨텐츠 박스 -->
@@ -626,44 +632,46 @@
                     <div class="card-body">
                       <h4>이번 달 예산</h4>
                       <!-- 예산 존재함 -->
-                      <div th:if="${budgetExist}">
-                        <p>
-                          이번 달 남은 예산은
-                          <!-- 1,000 단위로 콤마 찍도록 포맷 설정 -->
-                          <span
-                            th:text="${#numbers.formatDecimal(remainingAmount, 0, 'COMMA', 0, 'POINT')}"
-                            >000</span
-                          >원입니다.
-                        </p>
-                        <button
-                          type="button"
-                          class="btn btn-success"
-                          data-bs-toggle="modal"
-                          data-bs-target="#ModalUpdateBudget"
-                        >
-                          예산 수정하기
-                        </button>
-                        <button
-                          type="button"
-                          class="btn btn-success"
-                          data-bs-toggle="modal"
-                          data-bs-target="#ModalDeleteBudget"
-                        >
-                          예산 삭제하기
-                        </button>
-                      </div>
+                      <th:block th:if="${budgetExist == 1}">
+                        <div id="budgetExistDiv">
+                          <p>
+                            이번 달 남은 예산은
+                            <!-- 1,000 단위로 콤마 찍도록 포맷 설정 -->
+                            <span id="remainingAmountSpan">000</span>원입니다.
+                          </p>
+                          <p class="text-muted" id="budgetAmountP"></p>
+                          <button
+                            type="button"
+                            class="btn btn-success"
+                            data-bs-toggle="modal"
+                            data-bs-target="#ModalUpdateBudget"
+                          >
+                            예산 수정하기
+                          </button>
+                          <button
+                            type="button"
+                            class="btn btn-success"
+                            data-bs-toggle="modal"
+                            data-bs-target="#ModalDeleteBudget"
+                          >
+                            예산 삭제하기
+                          </button>
+                        </div>
+                      </th:block>
                       <!-- 예산 미지정 -->
-                      <div th:if="${!budgetExist}">
-                        <p>아직 이번달 예산을 설정하지 않았어요.</p>
-                        <button
-                          type="button"
-                          class="btn btn-success"
-                          data-bs-toggle="modal"
-                          data-bs-target="#ModalSetBudget"
-                        >
-                          예산 설정하기
-                        </button>
-                      </div>
+                      <th:block th:if="${budgetExist == 0}">
+                        <div id="budgetNotExistDiv">
+                          <p>아직 이번달 예산을 설정하지 않았어요.</p>
+                          <button
+                            type="button"
+                            class="btn btn-success"
+                            data-bs-toggle="modal"
+                            data-bs-target="#ModalSetBudget"
+                          >
+                            예산 설정하기
+                          </button>
+                        </div>
+                      </th:block>
                     </div>
                   </div>
 
@@ -675,8 +683,18 @@
                       <div class="row">
                         <div class="col-md-6">
                           <h5>이번 달 내역</h5>
-                          <p>수입 총 <span>5,000</span>원<span>▲</span></p>
-                          <p>지출 총 <span>2,900</span>원<span>▼</span></p>
+                          <p>
+                            수입 총
+                            <span id="incomeSumMonthSpan">5,000</span>원<span
+                              >▲</span
+                            >
+                          </p>
+                          <p>
+                            지출 총
+                            <span id="expenseSumMonthSpan">2,900</span>원<span
+                              >▼</span
+                            >
+                          </p>
                         </div>
                         <div class="col-md-6">
                           <h5>내역 추가하기</h5>
@@ -840,10 +858,9 @@
     <div class="layout-overlay layout-menu-toggle"></div>
 
     <!-- Modal -->
-    <div th:if="${budget}">
-      <input type="hidden" id="budgetId" th:value="${budget.budgetId}" />
-      <input type="hidden" id="familyId" th:value="${budget.familyId}" />
-      <input type="hidden" id="cashbookId" th:value="${budget.cashbookId}" />
+    <div>
+      <input type="hidden" id="budgetId" value="" />
+      <input type="hidden" id="cashbookId" value="" />
     </div>
     <!-- 예산 입력 모달 -->
     <div
@@ -869,12 +886,19 @@
               <div class="col">
                 <label for="nameBasic" class="form-label">지난 예산</label>
                 <p class="text">
-                  지난 3개월의 예산 평균은 <span></span>원입니다.
+                  지난 3개월의 예산 평균은
+                  <span id="budgetAvgSpan1"></span>원입니다.
                 </p>
                 <div>
-                  <p class="text-muted">2023년 8월 000원</p>
-                  <p class="text-muted">2023년 7월 000원</p>
-                  <p class="text-muted">2023년 6월 000원</p>
+                  <p class="text-muted">
+                    2023년 8월 <span id="budgetAmountXP1"></span>원
+                  </p>
+                  <p class="text-muted">
+                    2023년 7월 <span id="budgetAmountXxP1"></span>원
+                  </p>
+                  <p class="text-muted">
+                    2023년 6월 <span id="budgetAmountXxxP1"></span>원
+                  </p>
                 </div>
               </div>
               <div class="col">
@@ -904,7 +928,10 @@
               </div>
             </div>
             <div class="row g-2">
-              <h5>2023년 9월 예산</h5>
+              <h5>
+                <span class="curYear"></span>년 <span class="curMonth"></span>월
+                예산
+              </h5>
               <input
                 type="text"
                 id="setModalInput"
@@ -955,12 +982,19 @@
               <div class="col">
                 <label for="nameBasic" class="form-label">지난 예산</label>
                 <p class="text">
-                  지난 3개월의 예산 평균은 <span></span>원입니다.
+                  지난 3개월의 예산 평균은
+                  <span id="budgetAvgSpan2"></span>원입니다.
                 </p>
                 <div>
-                  <p class="text-muted">2023년 8월 000원</p>
-                  <p class="text-muted">2023년 7월 000원</p>
-                  <p class="text-muted">2023년 6월 000원</p>
+                  <p class="text-muted" id="budgetAmountXP2">
+                    2023년 8월 000원
+                  </p>
+                  <p class="text-muted" id="budgetAmountXxP2">
+                    2023년 7월 000원
+                  </p>
+                  <p class="text-muted" id="budgetAmountXxxP2">
+                    2023년 6월 000원
+                  </p>
                 </div>
               </div>
               <div class="col">
@@ -996,7 +1030,6 @@
                 id="updateModalInput"
                 class="form-control"
                 placeholder="새로운 예산을 입력하세요."
-                th:value="${#numbers.formatDecimal(budget.budgetAmount, 0, 'COMMA', 0, 'POINT')}"
               />
               <span id="budgetAmountErrorUpdateModal"></span>
             </div>
@@ -1022,7 +1055,7 @@
     </div>
     <!-- /예산 수정 모달 -->
 
-    <!-- 예산 입력 모달 -->
+    <!-- 예산 삭제 모달 -->
     <div
       class="modal fade"
       id="ModalDeleteBudget"

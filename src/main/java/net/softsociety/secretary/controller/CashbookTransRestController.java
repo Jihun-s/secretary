@@ -198,26 +198,26 @@ public class CashbookTransRestController {
 		return result;
 	}
 	
-	/** 한달 총 수입&지출 조회 */
-	@GetMapping("selectSumInEx")
-	public HashMap<String, Object> selectSumInEx() {
-		// 현재 월 구하기
-		Calendar calendar = Calendar.getInstance();
-        int curMonth = calendar.get(Calendar.MONTH) + 1;
-		
-		HashMap<String, Object> result = new HashMap<>();
-		
-		// 한달 수입
-		int sumIncomeMonth = dao.selectSumIncomeMonth(curMonth);
-		result.put("sumIncomeMonth", sumIncomeMonth);
-		log.debug("컨트롤러가 가져온 {}월 총 수입:{}", curMonth, sumIncomeMonth);
-		// 한달 지출
-		int sumExpenseMonth = dao.selectSumExpenseMonth(curMonth);
-		result.put("sumExpenseMonth", sumExpenseMonth);
-		log.debug("컨트롤러가 가져온 {}월 총 수입:{}", curMonth, sumExpenseMonth);
-		
-		return result;
-	}
+//	/** 한달 총 수입&지출 조회 */
+//	@GetMapping("selectSumInEx")
+//	public HashMap<String, Object> selectSumInEx() {
+//		// 현재 월 구하기
+//		Calendar calendar = Calendar.getInstance();
+//        int curMonth = calendar.get(Calendar.MONTH) + 1;
+//		
+//		HashMap<String, Object> result = new HashMap<>();
+//		
+//		// 한달 수입
+//		int sumIncomeMonth = dao.selectSumIncomeMonth(map);
+//		result.put("sumIncomeMonth", sumIncomeMonth);
+//		log.debug("컨트롤러가 가져온 {}월 총 수입:{}", curMonth, sumIncomeMonth);
+//		// 한달 지출
+//		int sumExpenseMonth = dao.selectSumExpenseMonth(curMonth);
+//		result.put("sumExpenseMonth", sumExpenseMonth);
+//		log.debug("컨트롤러가 가져온 {}월 총 수입:{}", curMonth, sumExpenseMonth);
+//		
+//		return result;
+//	}
 	
 	/** 조건별 보기 */
 	@GetMapping("selectConditionTrans")
