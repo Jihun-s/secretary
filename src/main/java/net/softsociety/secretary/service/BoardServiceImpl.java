@@ -88,6 +88,12 @@ public class BoardServiceImpl implements BoardService {
 		Board b = dao.selectOne(boardId);
 		return b;
 	}
+	//답변 상태 수정
+	@Override
+	public int updateBoardStatus(int boardId) {
+		int n = dao.updateBoardStatus(boardId);
+		return n;
+	}
 	
 	
 	

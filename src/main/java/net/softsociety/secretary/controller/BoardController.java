@@ -1,6 +1,7 @@
 package net.softsociety.secretary.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,6 +24,7 @@ import net.softsociety.secretary.dao.BoardDAO;
 import net.softsociety.secretary.domain.Answer;
 import net.softsociety.secretary.domain.Board;
 import net.softsociety.secretary.domain.User;
+import net.softsociety.secretary.service.AnswerService;
 import net.softsociety.secretary.service.BoardService;
 import net.softsociety.secretary.service.UserService;
 import net.softsociety.secretary.util.PageNavigator;
@@ -35,6 +37,8 @@ public class BoardController {
 	BoardService service;
 	@Autowired
 	UserService userservice;
+	@Autowired
+	AnswerService Aservice;
 	@Autowired
 	BoardDAO dao;
 	
@@ -49,17 +53,11 @@ public class BoardController {
 	@Value("${user.board.group}")
 	int pagePerGroup;
 	
-//	//글목록으로 이동
-//	@GetMapping("list")
-//	public String list() {
-//		return "boardView/list";
-//	}
-	
-	//리스트2
+	//리스트2 이게 지금 되는거
 	@GetMapping("list2")
 	public String list2 (Model m, @RequestParam(name="boardCategory2", defaultValue="all")String boardCategory2,
+						@RequestParam(name = "boardCategory1", defaultValue = "inquiry") String boardCategory1,
 						@RequestParam(name="page", defaultValue="1")int page ) {
-		String boardCategory1 = "inquiry"; 
 		PageNavigator navi = service.getPageNavigator(pagePerGroup, countPerPage, page, boardCategory1, boardCategory2);
 		
 		ArrayList<Board> list = service.getBoardList(navi, boardCategory1, boardCategory2);
@@ -71,15 +69,6 @@ public class BoardController {
 		
 		return "boardView/list2";
 	}
-	
-//	//게시글목록
-//	@ResponseBody
-//	@GetMapping("getList")
-//	public ArrayList<Board> getList() {
-//		ArrayList<Board> boardList = dao.selectAllBoard();
-//		log.debug("cont : {}", boardList);
-//		return boardList;
-//	}	
 	
 	//1:1 문의글 등록으로 이동
 	@GetMapping("write")
@@ -109,23 +98,18 @@ public class BoardController {
     	
     	Board b = service.read(boardId);
     	
+    	ArrayList<Answer> answer = Aservice.read(boardId);
+    	
     	if(b ==null) {
 			return "redirect:/list";
 		}
     	model.addAttribute("board", b);
     	
-    	
+    	if(answer != null && !answer.isEmpty()) {
+    		model.addAttribute("answer", answer);
+    	} 	    	
     	return "boardView/read";
-//    	if(board==null) {
-//            log.debug("post가 null입니다");
-//            return "redirect:/";
-//         } else {
-//            ArrayList<Answer> answerList = service.answerList(boardId);
-//            log.debug("{}", answerList);
-//            model.addAttribute("answerList", answerList);
-//            model.addAttribute("answer", answer);
-//            return "boardView/read";
-//         }
+    	
     }
     //수정 폼 이동
     @GetMapping("update")
@@ -161,18 +145,44 @@ public class BoardController {
     	}
     	return "redirect:/board/list2";
     }
+    //답글 삭제
+    @GetMapping("deleteAnswer")
+    public String deleteAnswer(int answerId) {
+    	log.debug("deleteAnswer :{}", answerId);
+    	int n = Aservice.deleteAnswer(answerId);
+    	
+    	return "redirect:/board/list2";
+    }
     //답글 달기
     @PostMapping("answer")
-    public String answer(@AuthenticationPrincipal UserDetails user, Answer a) {
+    public String answer(@AuthenticationPrincipal UserDetails user, Answer answer) {
     	User u = userservice.findByEmailOrUserId(user.getUsername()); 
     	
-    	a.setUserId(u.getUserId());
+    	answer.setUserId(u.getUserId());    	
     	
+    	int n = Aservice.insertAnswer(answer);
+    	// 답글이 추가된 후, 해당 게시글의 상태를 업데이트
+        int boardId = answer.getBoardId(); 
+        service.updateBoardStatus(boardId);
     	
-    	int n = service.insertAnswer(a);
-    	
-    	return "redirect:/board/read?boardId="+a.getBoardId();
+    	return "redirect:/board/read?boardId="+boardId + "&reload=true";
     }
+//    //답글달기 ajax
+//    @ResponseBody
+//    @PostMapping("answer")
+//    public String answer(@AuthenticationPrincipal UserDetails user, Answer answer) {
+//    	User u = userservice.findByEmailOrUserId(user.getUsername()); 
+//    	
+//    	answer.setUserId(u.getUserId());    	
+//    	
+//    	int n = Aservice.insertAnswer(answer);
+//    	// 답글이 추가된 후, 해당 게시글의 상태를 업데이트
+//        int boardId = answer.getBoardId(); 
+//        service.updateBoardStatus(boardId);
+//    	
+//    	return "redirect:/board/read?boardId="+boardId + "&reload=true";
+//    }
+    
     
    
     

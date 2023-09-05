@@ -35,6 +35,8 @@ public interface BoardDAO {
 	public int update(Board b);
 	
 	public Board selectOne(int boardId);
+	//답변상태 업데이트
+	public int updateBoardStatus(int boardId);
 	
 	
 

@@ -11,6 +11,32 @@
 	    <result property="answerDate" column="answer_date" />
 </resultMap>
 
+<!--  답글 작성  -->
+<insert id="insertAnswer" parameterType="Answer"> 
+insert into secretary_answer 
+	(answer_id, board_id, user_id, answer_content) 
+values
+	(secretary_answer_seq.nextval, #{boardId}, #{userId}, #{answerContent})
+</insert>
 
+<!-- 답글 불러오기 -->
+<select id="read" resultType="Answer">
+ select 
+ 	answer_id, user_id , answer_content , to_char(answer_date, 'yyyy.mm.dd') answer_date 
+ from 
+ 	secretary_answer 
+ where 
+ 	board_id = #{boardId} 
+</select>
+
+<!-- 답글 삭제 
+<delete id="deleteAnswer" parameterType="Answer">
+delete from secretary_answer where answer_id = #{answerId}  and user_id=#{userId} 
+</delete>-->
+
+<!-- 답글 삭제 -->
+<delete id="deleteAnswer" parameterType="int">
+delete from secretary_answer where answer_id = #{answerId}  
+</delete>
 
 </mapper>
