@@ -23,5 +23,7 @@ public interface ClosetDAO {
 	ArrayList<Clothes> findAllClothes(HashMap<String, Object> map);
 	//옷장 옷 찾기
 	Clothes findClothes(HashMap<String, Integer> map);
+	//옷장 옷 삭제
+	int deleteClothes(HashMap<String, Integer> map);
 
 }

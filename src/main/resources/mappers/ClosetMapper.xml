@@ -68,13 +68,17 @@
 			<if test="size != null and size !='SizeAll'">
 			and clothes_size = #{size}
 			</if>
+			order by clothes_num desc
 </select>
 
 <!-- 옷장안 옷 찾기(옷장번호, 옷번호) -->
 <select id="findClothes" parameterType="hashmap" resultType="Clothes">
-	select * from Secretary_clothes where closet_num = #{closetNum} 
-									and clothes_num = #{clothesNum}
+	select * from Secretary_clothes where closet_num = #{closetNum} and clothes_num = #{clothesNum}
 </select>
 
+<!-- 옷장안 옷 삭제 -->
+<delete id="deleteClothes" parameterType="hashmap">
+	delete from Secretary_clothes where closet_num = #{closetNum} and clothes_num = #{clothesNum}
+</delete>
 
 </mapper>
