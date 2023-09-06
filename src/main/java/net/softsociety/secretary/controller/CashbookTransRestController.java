@@ -60,14 +60,13 @@ public class CashbookTransRestController {
 	
 	/** 내역 목록 출력 */
 	@GetMapping("list")
-	public ArrayList<Transaction> list(int familyId) {
-		// 현재 월 구하기
-		Calendar calendar = Calendar.getInstance();
-        int month = calendar.get(Calendar.MONTH) + 1;
-        
-        // DAO에 보낼 맵 
+	public ArrayList<Transaction> list(int familyId
+			, int nowYear
+			, int nowMonth
+			, Model model) {
  		HashMap<String, Object> map = new HashMap<>();
- 		map.put("month", month);
+ 		map.put("nowMonth", nowMonth);
+ 		map.put("nowYear", nowYear);
  		map.put("familyId", familyId);
 		
 		ArrayList<Transaction> result = dao.selectAllTrans(map);
@@ -78,17 +77,16 @@ public class CashbookTransRestController {
 	
 	/** 월간 내역 개수 출력 */
 	@GetMapping("cntMonth")
-	public int cntMonth() {
-		// 현재 월 구하기
-		Calendar calendar = Calendar.getInstance();
-        int curMonth = calendar.get(Calendar.MONTH) + 1;
-        
-        // 가족ID 임의 입력
-        int familyId = 1;
+	public int cntMonth(
+			Model model
+			, int nowMonth
+			, int nowYear) {     
+		User loginUser = (User) model.getAttribute("loginUser");
         
         HashMap<String, Object> map = new HashMap<>();
-        map.put("curMonth", curMonth);
-        map.put("familyId", familyId);
+        map.put("nowYear", nowYear);
+        map.put("nowMonth", nowMonth);
+        map.put("familyId", loginUser.getFamilyId());
         log.debug("내역 개수 셀 때 쓰는 map:{}", map);
         
 		int result = dao.selectTransCntMonth(map);
@@ -204,18 +202,17 @@ public class CashbookTransRestController {
 	@GetMapping("selectSumInEx")
 	public HashMap<String, Object> selectSumInEx(
 			Model model
-			, int curYear
-			, int curMonth) {
+			, int nowYear
+			, int nowMonth) {
 		User loginUser = (User) model.getAttribute("loginUser");
 		HashMap<String, Object> map = new HashMap<>();
 		map.put("familyId", loginUser.getFamilyId());
-		map.put("budgetYear", curYear);
-		map.put("budgetMonth", curMonth);
+		map.put("nowYear", nowYear);
+		map.put("nowMonth", nowMonth);
 		log.debug("총수입지출 조회할 map:{}", map);
 		
 		HashMap<String, Object> result = dao.selectInExSumMonth(map);
 		log.debug("총수입지출:{}", result);
-		
 		return result;
 	}
 	
@@ -226,31 +223,31 @@ public class CashbookTransRestController {
 			, boolean incomeSelected
 			, boolean expenseSelected
 			, boolean myTransOnly
-			, int familyId
 			, String cate1Name
 			, String cate2Name
 			, String searchBy
 			, String searchWord
 			, String sortBy
+			, int nowMonth
+			, int nowYear
+			, Model model
 			) {
 		log.debug("컨트롤러에 넘어온 내꺼만:{}, 수입만:{}, 지출만:{}", myTransOnly, incomeSelected, expenseSelected);
 		log.debug("컨트롤러에 넘어온 대분류:{}, 소분류:{}", cate1Name, cate2Name);
 		log.debug("컨트롤러에 넘어온 검색어:{} 중 {}", searchBy, searchWord);
 		log.debug("컨트롤러에 넘어온 정렬: {}순", sortBy);
 		
-		// 현재 월 구하기
-		Calendar calendar = Calendar.getInstance();
-        int month = calendar.get(Calendar.MONTH) + 1;
-		
-        log.debug("컨트롤러에 넘어온 검색할 기간:{}월", month);
+        log.debug("컨트롤러에 넘어온 검색할 기간:{}년 {}월", nowYear, nowMonth);
 
         // 유저id 불러오기
         String userId = userdao.findByEmailOrUserId(user.getUsername()).getUserId();
-
+        User loginUser = (User) model.getAttribute("loginUser");
+        
         // DAO에 보낼 맵 
 		HashMap<String, Object> map = new HashMap<>();
-		map.put("month", month);
-		map.put("familyId", familyId);
+		map.put("nowMonth", nowMonth);
+		map.put("nowYear", nowYear);
+		map.put("familyId", loginUser.getFamilyId());
 		map.put("myTransOnly", myTransOnly);
 		map.put("incomeSelected", incomeSelected);
 		map.put("expenseSelected", expenseSelected);

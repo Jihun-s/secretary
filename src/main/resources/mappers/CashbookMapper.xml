@@ -60,7 +60,8 @@ INSERT INTO
         Secretary_Trans_Category2 stc2 ON st.cate2_id = stc2.cate2_id
     WHERE
         st.family_id = #{familyId}
-        AND EXTRACT(MONTH FROM trans_date) = #{month}
+        AND EXTRACT(MONTH FROM trans_date) = #{nowMonth}
+        AND EXTRACT(YEAR FROM trans_date) = #{nowYear}
         <if test="myTransOnly == true">
             AND st.user_id = #{userId}
         </if>
@@ -119,9 +120,9 @@ INSERT INTO
 	FROM 
 		Secretary_Transaction 
 	WHERE 
-		EXTRACT(MONTH FROM trans_date) = #{curMonth}
-	AND 
-		family_id = #{familyId}
+		EXTRACT(MONTH FROM trans_date) = #{nowMonth}
+		AND EXTRACT(YEAR FROM trans_date) = #{nowYear}
+		AND family_id = #{familyId}
 </select>
 
 <!-- 내역 삭제 -->
@@ -387,8 +388,8 @@ INSERT INTO
 	    Secretary_Transaction
 	WHERE
 	    family_id = #{familyId} 
-	    AND EXTRACT(YEAR FROM trans_date) = #{budgetYear} 
-	    AND EXTRACT(MONTH FROM trans_date) = #{budgetMonth}
+	    AND EXTRACT(YEAR FROM trans_date) = #{nowYear} 
+	    AND EXTRACT(MONTH FROM trans_date) = #{nowMonth}
 </select>
 
 <!-- 예산 평균, 직전 3개월 예산 -->

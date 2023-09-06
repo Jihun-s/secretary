@@ -3,8 +3,17 @@ $(document).ready(function() {
     setCurDate();
     initializeDateSelector();
 
+    // 오늘 날짜로 초기화
+    $('#dateReset').click(function() {
+        resetToCurrentDate();
+        initializeDateSelector();
+        init();
+    });
+
     // 목록 불러오기
     init();
+    $('#prevYear, #prevMonth, #nextYear, #nextMonth').click(init);
+
     $("#transCategoriesDiv").hide();
     $("#transSearchCategory2Div").hide();
 
@@ -203,13 +212,21 @@ function setCurDate() {
     let curDate = date.getDate().toString().padStart(2, '0');
     let curHour = date.getHours().toString().padStart(2, '0');
     let curMin = date.getMinutes().toString().padStart(2, '0');
-
+    
     let curDateTime = `${curYear}-${curMonth}-${curDate} ${curHour}:${curMin}:00`;
-
+    
     $('#curDateTime').val(curDateTime);
     $('#curYear').val(curYear);
     $('#curMonth').val(curMonth);
     $('#curDate').val(curDate);
+}
+
+
+/** 오늘로 가기 */
+function resetToCurrentDate() {
+    const currentDate = new Date();
+    $('#nowYear').html(currentDate.getFullYear());
+    $('#nowMonth').html(currentDate.getMonth() + 1);
 }
 
 
@@ -219,7 +236,7 @@ function initializeDateSelector() {
     let monthElement = $('#nowMonth');
 
     let currentYear = parseInt(yearElement.text());
-    let currentMonth = parseInt(monthElement.text().replace("월", ""));
+    let currentMonth = parseInt(monthElement.text());
 
     $('#prevYear').on('click', function() {
         currentYear--;
@@ -238,7 +255,7 @@ function initializeDateSelector() {
             currentYear--;
         }
         yearElement.text(currentYear);
-        monthElement.text(currentMonth + "월");
+        monthElement.text(currentMonth);
     });
 
     $('#nextMonth').on('click', function() {
@@ -248,10 +265,9 @@ function initializeDateSelector() {
             currentYear++;
         }
         yearElement.text(currentYear);
-        monthElement.text(currentMonth + "월");
+        monthElement.text(currentMonth);
     });
 }
-
 
 
 /** 내역 입력 유효성 검사 */
@@ -508,13 +524,14 @@ function init() {
     let transCntMonth = $('#transCntMonth');
     let transListDiv = $('#transListDiv');
     let familyId = $('#familyId');
-    let curYear = $('#curYear').val();
-    let curMonth = $('#curMonth').val();
+    let nowYear = $('#nowYear').html();
+    let nowMonth = $('#nowMonth').html();
 
     // 내역 수 가져오기 
     $.ajax({
         url: '/secretary/cashbook/trans/cntMonth',
         type: 'GET',
+        data: { nowYear: nowYear, nowMonth: nowMonth },
         dataType: 'text',
         success: (cnt) => {
             transCntMonth.html(cnt);
@@ -528,14 +545,18 @@ function init() {
     $.ajax({
         url: '/secretary/cashbook/trans/selectSumInEx',
         type: 'GET',
-        data: { curYear: curYear, curMonth: curMonth },
+        data: { nowYear: nowYear, nowMonth: nowMonth },
         dataType: 'JSON',
         success: (data) => {
-            $('#transSumIncomeMonth').html(data.INCOMESUMMONTH);
-            $('#transSumExpenseMonth').html(data.EXPENSESUMMONTH);
+            if (data == null || data == undefined) {
+                $('#transListDiv').html("내역이 존재하지 않습니다.");
+            } else {
+                $('#transSumIncomeMonth').html(data.INCOMESUMMONTH);
+                $('#transSumExpenseMonth').html(data.EXPENSESUMMONTH);
+            }
         },
         error: () => {
-            alert('총수입 총지출 전송 실패');
+            $('#transListDiv').html("내역이 존재하지 않습니다.");
         }
     });
 
@@ -543,7 +564,7 @@ function init() {
     $.ajax({
         url: '/secretary/cashbook/trans/list',
         type: 'GET',
-        data: { familyId: familyId.val() },
+        data: { familyId: familyId.val(), nowYear: nowYear, nowMonth: nowMonth },
         dataType: 'JSON',
         success: function(list) {
             let groupedData = {};
@@ -1095,7 +1116,6 @@ function selectConditionTrans() {
     let transListDiv = $('#transListDiv');
     transListDiv.html("");
 
-    let familyId = $('#familyId').val();
     let incomeSelected = false;
     let expenseSelected = false;
     let myTransOnly = false;
@@ -1104,6 +1124,8 @@ function selectConditionTrans() {
     let searchBy = $('#searchBy').val();
     let searchWord = $('#searchWord').val();
     let sortBy = $('#sortBy').val();
+    let nowYear = $('#nowYear').html();
+    let nowMonth = $('#nowMonth').html();
 
     
     if($("#transSearchCheckIncome").is(':checked')) {
@@ -1127,12 +1149,13 @@ function selectConditionTrans() {
         data: { incomeSelected: incomeSelected
             , expenseSelected: expenseSelected
             , myTransOnly: myTransOnly
-            , familyId: familyId
             , cate1Name: cate1Name
             , cate2Name: cate2Name
             , searchBy: searchBy
             , searchWord: searchWord
-            , sortBy: sortBy },
+            , sortBy: sortBy
+            , nowYear: nowYear
+            , nowMonth: nowMonth },
         dataType: 'JSON',
         success: (list) => {
             // 넘어올 값: 내역리스트

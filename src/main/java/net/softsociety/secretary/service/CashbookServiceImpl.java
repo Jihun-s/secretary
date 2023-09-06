@@ -29,6 +29,9 @@ public class CashbookServiceImpl implements CashbookService {
 		String cate1Name = trans.getCate1Name();
 		int cate1Id = dao.selectCate1Id(cate1Name);
 		log.debug("서비스에서 찾아온 대카테명:{}, 대카테id:{}", cate1Name, cate1Id);
+		if(cate1Name.equals("수입")) {
+			trans.setLabelColor("success");
+		}
 		
 		// trans에 넣어서 보내기
 		trans.setCate1Id(cate1Id);
