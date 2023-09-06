@@ -50,20 +50,15 @@ public class CashbookMainRestController {
 		User loginUser = (User) model.getAttribute("loginUser");
 		HashMap<String, Object> result = new HashMap<>();		
 		
-		// dao에 보낼 매개변수 map 만들기 
-		HashMap<String, Object> map = new HashMap<>();
-		map.put("budgetYear", curYear);
-		map.put("budgetMonth", curMonth);
-		map.put("familyId", loginUser.getFamilyId());
-		log.debug("DAO에 보낼 map:{}", map);
-
-		// 예산 존재 여부
-		int budgetExist = dao.budgetExist(map);		
-		log.debug("예산 있나요?:{}", budgetExist);
-		result.put("budgetExist", budgetExist);
+		// dao에 보낼 매개변수 now용 map 만들기 
+		HashMap<String, Object> map2 = new HashMap<>();
+		map2.put("nowYear", curYear);
+		map2.put("nowMonth", curMonth);
+		map2.put("familyId", loginUser.getFamilyId());
+		log.debug("DAO에 보낼 map2:{}", map2);		
 		
 		// 수입 지출 총합 
-		HashMap<String, Object> sum = dao.selectInExSumMonth(map);
+		HashMap<String, Object> sum = dao.selectInExSumMonth(map2);
 		BigDecimal incomeSumMonth = (BigDecimal) sum.get("INCOMESUMMONTH"); 
 		BigDecimal expenseSumMonth = (BigDecimal) sum.get("EXPENSESUMMONTH");
 		log.debug("총합 가져오기:{}", sum);
@@ -71,6 +66,18 @@ public class CashbookMainRestController {
 		result.put("incomeSumMonth", incomeSumMonth);
 		result.put("expenseSumMonth", expenseSumMonth);		
 
+		
+		// dao에 보낼 매개변수 budget용 map 만들기 
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("budgetYear", curYear);
+		map.put("budgetMonth", curMonth);
+		map.put("familyId", loginUser.getFamilyId());
+		log.debug("DAO에 보낼 map:{}", map);
+		
+		// 예산 존재 여부
+		int budgetExist = dao.budgetExist(map);		
+		log.debug("예산 있나요?:{}", budgetExist);
+		result.put("budgetExist", budgetExist);
 		
 		if(budgetExist == 1) {
 			Budget budget = dao.selectBudget(map);

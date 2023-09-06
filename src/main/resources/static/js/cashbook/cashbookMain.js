@@ -31,10 +31,10 @@ function init() {
         success: (data) => {
             //  alert('init 결과:' + JSON.stringify(data));
             if(data.budgetExist == 1) {
-                $('#remainingAmountSpan').html(data.remainingAmount);
-                $('#budgetAmountP').html(data.budgetAmount);
-                $('#incomeSumMonthSpan').html(data.incomeSumMonth);
-                $('#expenseSumMonthSpan').html(data.expenseSumMonth);
+                $('#remainingAmountSpan').html(data.remainingAmount.toLocaleString('en-US'));
+                $('#budgetAmountP').html(data.budgetAmount.toLocaleString('en-US'));
+                $('#incomeSumMonthSpan').html(data.incomeSumMonth.toLocaleString('en-US'));
+                $('#expenseSumMonthSpan').html(data.expenseSumMonth.toLocaleString('en-US'));
                 $('.curYear').html(curYear);
                 $('.curMonth').html(curMonth);
             }
@@ -156,10 +156,10 @@ function initSetBudgetModal() {
         dataType: 'JSON',
         success: (data) => {
             // alert("ajax로 가져온 데이터:" + JSON.stringify(data));
-            $('.budgetAvg').html(data.budgetAvg);
-            $('.budgetAmountX').html(data.budgetAmountX);
-            $('.budgetAmountXx').html(data.budgetAmountXx);
-            $('.budgetAmountXxx').html(data.budgetAmountXxx);
+            $('.budgetAvg').html(data.budgetAvg.toLocaleString('en-US'));
+            $('.budgetAmountX').html(data.budgetAmountX.toLocaleString('en-US'));
+            $('.budgetAmountXx').html(data.budgetAmountXx.toLocaleString('en-US'));
+            $('.budgetAmountXxx').html(data.budgetAmountXxx.toLocaleString('en-US'));
             $('.curYear').html(curYear);
             $('.curMonth').html(curMonth);
             $('.curMonthX').html(curMonth - 1);
@@ -175,7 +175,6 @@ function initSetBudgetModal() {
 
 /** 예산 수정 모달 init */
 function initUpdateBudgetModal() {
-    alert('예산 수정 가보자고?');
     let familyId = $('#familyId').val();
     let curYear = $('#curYear').val();
     let curMonth = $('#curMonth').val();

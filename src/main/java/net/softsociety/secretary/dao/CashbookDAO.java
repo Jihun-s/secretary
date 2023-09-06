@@ -95,4 +95,7 @@ public interface CashbookDAO {
 	/** 예산 평균, 직전 3개월 예산 */
 	HashMap<String, Object> selectBudgetAvgXXX(HashMap<String, Object> map);
 
+	/** 총수입 총지출 예산용 */
+	HashMap<String, Object> selectInExSumMonthBudget(HashMap<String, Object> map);
+
 }

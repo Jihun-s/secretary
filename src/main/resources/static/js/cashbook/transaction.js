@@ -550,13 +550,17 @@ function init() {
         success: (data) => {
             if (data == null || data == undefined) {
                 $('#transListDiv').html("내역이 존재하지 않습니다.");
+                $('#transSumIncomeMonth').html("0");
+                $('#transSumExpenseMonth').html("0");
             } else {
-                $('#transSumIncomeMonth').html(data.INCOMESUMMONTH);
-                $('#transSumExpenseMonth').html(data.EXPENSESUMMONTH);
+                $('#transSumIncomeMonth').html(data.INCOMESUMMONTH.toLocaleString('en-US'));
+                $('#transSumExpenseMonth').html(data.EXPENSESUMMONTH.toLocaleString('en-US'));
             }
         },
         error: () => {
             $('#transListDiv').html("내역이 존재하지 않습니다.");
+            $('#transSumIncomeMonth').html("0");
+            $('#transSumExpenseMonth').html("0");
         }
     });
 
