@@ -96,6 +96,49 @@ public class ClosetController {
 		service.insertClothes(clothes);
 	}
 	
+	//의류정보 수정
+	@ResponseBody
+	@PostMapping("updateClothes")
+	public void updateClothes(Clothes clothes, MultipartFile uploadFile, boolean clothesEditcheck) {
+		log.debug("***********************옷수정 매핑**********************");
+		log.debug("의류수정전 옷 객체:{}", clothes);
+		log.debug("옷이미지 파일 :{}", uploadFile);//사진변경 안했을경우 '사진변경안함', 변경했으면 multifile 객체, 변경하고 편집했으면 null값
+		log.debug("편집여부 :{}", clothesEditcheck);
+		// 1. 사진변경 안했을 경우, uploadFile은 null, clothesEditcheck는 false
+		// 원래 객체 clothesIMG값과 originalfilename 넣어주기
+		// 2. 사진변경은 했는데 편집 안했을 경우, uploadFile은 MultipartFile객체,clothesEditcheck는 false
+		// 원래 객체 사진파일 삭제, 새로운 파일 저장&clothesIMG값 넣어주기
+		// 3. 사진변경 및 편집한 경우, uploadFile은 null, clothesEditcheck는 true
+		// 원래 객체 사진파일 삭제, 새로운 파일은 returnfile 값으로 저장&clothesIMG값 넣어주기
+		
+		Clothes oldClothes = service.findClothes(clothes.getClosetNum(), clothes.getClothesNum());
+		
+		if((uploadFile == null) && !clothesEditcheck) {
+			log.debug("사진 변경 안함");
+			clothes.setClothesOriginalFile(oldClothes.getClothesOriginalFile());
+			clothes.setClothesImg(oldClothes.getClothesImg());
+		}else if((uploadFile != null) && !clothesEditcheck) {
+			log.debug("사진 변경함 & 편집 안함");
+			String fullPath = uploadPath + "/" + oldClothes.getClothesImg();
+			FileService.deleteFile(fullPath); //원래 사진 삭제
+			String savedfile = FileService.saveFile(uploadFile, uploadPath);
+			clothes.setClothesImg(savedfile);
+		}else if((uploadFile == null) && clothesEditcheck) {
+			log.debug("사진 변경 & 편집 했음");
+			String fullPath = uploadPath + "/" + oldClothes.getClothesImg();
+			FileService.deleteFile(fullPath); //원래 사진 삭제
+			clothes.setClothesImg(returnfile); //편집된 사진 저장
+		}
+		
+		// 의류 수정
+		int n = service.updateClothes(clothes);
+		if(n==0) {
+			log.debug("의류수정 실패");
+		} else {
+			log.debug("의류수정 성공");
+		}
+		
+	}	
 	
 	//옷장안 의류목록(옷번호 배열 반환)
 	@ResponseBody

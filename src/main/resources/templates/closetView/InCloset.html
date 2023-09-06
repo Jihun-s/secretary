@@ -786,7 +786,7 @@
                 <!-- 2열 -->
                 <div class="col-lg-6 mb-4">
                 	<h3 style="display:inline-block;">의류 상세정보</h3>           
-                	<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#basicModal" style="display:inline-block; float:right;">
+                	<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#basicModal" style="display:inline-block; float:right; background-color: rgba(223,132,166,255); border-color: rgba(223,132,166,255); ">
             		의류 등록
           			</button>
         <!-- 의류등록 모달!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->  			
@@ -801,7 +801,7 @@
           			 	
           			 	<div class="modal-body">
                     <div id="imagePreview">
-                      <img th:src="@{/images/shirt.png}" id="preview">
+                      <img th:src="@{/images/closetImg/shirt.png}" id="preview">
                     </div>  
                       <div class="insertClothes">
                       <table>
@@ -927,7 +927,7 @@
           			 	
           			 	<div class="modal-footer">
                   			<button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
-                  			<button type="button" class="btn btn-primary" id="insertClothesbtn">Save changes</button>
+                  			<button type="button" class="btn btn-primary" id="insertClothesbtn" style="background-color: rgba(223,132,166,255); border-color: rgba(223,132,166,255);">Save changes</button>
                 		</div><!--  class="modal-footer" -->
           			</div><!-- class="modal-content" -->
           			</div><!-- class="modal-dialog" -->
@@ -947,7 +947,7 @@
           			 	
           			 	<div class="modal-body">
                     <div id="updatePreview">
-                      <img th:src="@{/images/shirt.png}">
+                      <img th:src="@{/images/closetImg/shirt.png}">
                     </div>  
                       <div class="insertClothes">
                       <table>
@@ -1015,9 +1015,9 @@
                       		</td>
                       	</tr>
                       	<tr> <!-- 3행 -->
-                      		<td><label for="materialList">소재</label></td>
+                      		<td><label for="updateMaterialList">소재</label></td>
                       		<td colspan="2">
-								<select id=materialList>
+								<select id=updateMaterialList>
 									<option value="none">해당 없음</option>
 									<option value="cotton">면</option>
 									<option value="linen">린넨</option>
@@ -1041,15 +1041,15 @@
                       	<tr> <!-- 4행 -->
                       		<td>계절</td>
                       		<td colspan="2">
-                      			<input type="checkbox" name="seasons" value="spring"><label for="spirng"><small>봄</small></label>
-                      			<input type="checkbox" name="seasons" value="summer"><label for="summer"><small>여름</small></label>
-                      			<input type="checkbox" name="seasons" value="fall"><label for="fall"><small>가을</small></label>
-                      			<input type="checkbox" name="seasons" value="winter"><label for="winter"><small>겨울</small></label></td>
+                      			<input type="checkbox" name="updateSeasons" value="spring"><label for="spirng"><small>봄</small></label>
+                      			<input type="checkbox" name="updateSeasons" value="summer"><label for="summer"><small>여름</small></label>
+                      			<input type="checkbox" name="updateSeasons" value="fall"><label for="fall"><small>가을</small></label>
+                      			<input type="checkbox" name="updateSeasons" value="winter"><label for="winter"><small>겨울</small></label></td>
                       	</tr>
                       	<tr id = "updateClothesSize"> <!-- 5행 -->
-                      		<td><label for="clothesSize">사이즈</label></td>
+                      		<td><label for="updateClothesSize">사이즈</label></td>
                       		<td colspan="2">
-                      			<select name="clothesSize">
+                      			<select name="updateClothesSize">
                       					<option value="none">해당없음</option>
                       					<option value="free">FREE</option>
                       					<option value="XS">XS</option>
@@ -1062,9 +1062,9 @@
                       		</td>
                       	</tr>
                       	<tr id="updateShoesSize">
-                      		<td><label for="shoesSize">신발사이즈</label></td>
+                      		<td><label for="updateShoesSize">신발사이즈</label></td>
                       		<td colspan="2">
-                      			<input type="number" name="shoesSize" value="210" min="210" max="300" step="5">
+                      			<input type="number" name="updateShoesSize" value="210" min="210" max="300" step="5">
                       		</td>
                       	</tr>
                       	<tr><td><input type="hidden" value="0" id="clothesNumForUpdate"></td></tr>
@@ -1074,7 +1074,7 @@
           			 	
           			 	<div class="modal-footer">
                   			<button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
-                  			<button type="button" class="btn btn-primary" id="updateClothesbtn">Save changes</button>
+                  			<button type="button" class="btn btn-primary" id="updateClothesbtn" style="background-color: rgba(223,132,166,255); border-color: rgba(223,132,166,255);">Save changes</button>
                 		</div><!--  class="modal-footer" -->
           			</div><!-- class="modal-content" -->
           			</div><!-- class="modal-dialog" -->

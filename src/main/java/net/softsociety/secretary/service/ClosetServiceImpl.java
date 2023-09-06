@@ -82,6 +82,13 @@ public class ClosetServiceImpl implements ClosetService {
 		map.put("clothesNum", clothesNum);
 		return dao.deleteClothes(map);
 	}
+
+	//옷장안 의류정보 수정
+	@Override
+	public int updateClothes(Clothes clothes) {
+
+		return dao.updateClothes(clothes);
+	}
 	
 	
 	
