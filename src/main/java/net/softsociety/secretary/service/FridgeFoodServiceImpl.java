@@ -6,8 +6,11 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
+import net.softsociety.secretary.dao.FoodCategoryDAO;
 import net.softsociety.secretary.dao.FridgeFoodDAO;
+import net.softsociety.secretary.domain.FoodCategory;
 import net.softsociety.secretary.domain.FridgeFood;
 
 @Service
@@ -15,10 +18,14 @@ public class FridgeFoodServiceImpl implements FridgeFoodService {
 
     @Autowired
     private FridgeFoodDAO fridgeFoodDAO;
+    @Autowired
+    private FoodCategoryDAO foodCategoryDAO; // 카테고리 테이블과 관련된 DAO
+    @Autowired
+    private UserService userService; // UserService 주입
 
     @Override
-    public void addFridgeFood(FridgeFood fridgeFood) {
-        
+    public void addFridgeFood(FridgeFood fridgeFood, int familyId) {
+    	
         // foodMadeDate의 경우 null을 그대로 유지하므로 별도의 처리가 필요하지 않습니다.
 
     	System.out.println("Before setting expiry date: " + fridgeFood.getFoodExpiryDate());
@@ -36,6 +43,16 @@ public class FridgeFoodServiceImpl implements FridgeFoodService {
         System.out.println("After setting expiry date: " + fridgeFood.getFoodExpiryDate());
         
         fridgeFoodDAO.insertFridgeFood(fridgeFood);
+        
+     // 2. 카테고리가 이미 존재하는지 확인
+        String category = fridgeFood.getFoodCategory();
+        FoodCategory foodCategory = new FoodCategory();
+        foodCategory.setFoodCategory(category);
+        foodCategory.setFamilyId(familyId);
+        if (!foodCategoryDAO.exists(foodCategory)) {
+            // 3. 카테고리가 존재하지 않으면 새로운 카테고리 추가
+            foodCategoryDAO.addCategory(foodCategory);
+        }
     }
     
     //음식 한개
