@@ -707,7 +707,23 @@
                 <!-- 2열 -->
                 <div class="col-md-8 mb-4">
                   <!-- 2열 1행 -->
-                  <h3 class="">내역</h3>
+                  <div class="row">
+                    <div class="col">
+                      <h3 class="">내역</h3>
+                    </div>
+                    <div class="col">
+                      <div class="date-selector">
+                        <button id="prevYear">◁◁</button>
+                        <button id="nowYear">2023</button>
+                        <button id="nextYear">▷▷</button>
+                        <br>
+                        <button id="prevMonth">◁</button>
+                        <span><span id="nowMonth">9월</span></span>
+                        <button id="nextMonth">▷</button>
+                      </div>
+                    </div>
+                  </div>
+                  
                   <div class="card">
                     <h5 class="card-header">이달의 내역<span id="transCntMonth"></span>건</h5>
                     <input type="hidden" value="" id="searchDate">

@@ -1,6 +1,9 @@
 $(document).ready(function() {
-    // 목록 불러오기
+    // 날짜 설정
     setCurDate();
+    initializeDateSelector();
+
+    // 목록 불러오기
     init();
     $("#transCategoriesDiv").hide();
     $("#transSearchCategory2Div").hide();
@@ -189,7 +192,6 @@ function dateToSysdate() {
 
     document.getElementById('transDate').value = dateTimeString;
     document.getElementById('searchDate').value = searchDate;
-
 }
 
 
@@ -209,6 +211,47 @@ function setCurDate() {
     $('#curMonth').val(curMonth);
     $('#curDate').val(curDate);
 }
+
+
+/** 연월 설정 */
+function initializeDateSelector() {
+    let yearElement = $('#nowYear');
+    let monthElement = $('#nowMonth');
+
+    let currentYear = parseInt(yearElement.text());
+    let currentMonth = parseInt(monthElement.text().replace("월", ""));
+
+    $('#prevYear').on('click', function() {
+        currentYear--;
+        yearElement.text(currentYear);
+    });
+
+    $('#nextYear').on('click', function() {
+        currentYear++;
+        yearElement.text(currentYear);
+    });
+
+    $('#prevMonth').on('click', function() {
+        currentMonth--;
+        if(currentMonth === 0) {
+            currentMonth = 12;
+            currentYear--;
+        }
+        yearElement.text(currentYear);
+        monthElement.text(currentMonth + "월");
+    });
+
+    $('#nextMonth').on('click', function() {
+        currentMonth++;
+        if(currentMonth === 13) {
+            currentMonth = 1;
+            currentYear++;
+        }
+        yearElement.text(currentYear);
+        monthElement.text(currentMonth + "월");
+    });
+}
+
 
 
 /** 내역 입력 유효성 검사 */

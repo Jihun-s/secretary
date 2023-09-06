@@ -45,7 +45,7 @@ public class CashbookServiceImpl implements CashbookService {
 		int cate1Id = dao.selectCate1Id(cate1Name);
 		log.debug("서비스에서 찾아온 대카테명:{}, 대카테id:{}", cate1Name, cate1Id);
 		
-		if(trans.getTransType().equals("수입")) {
+		if(!trans.getTransType().equals("수입")) {
 			String cate2Name = trans.getCate2Name();
 			int cate2Id = dao.selectCate2Id(cate2Name);
 			log.debug("서비스에서 찾아온 소카테명:{}, 소카테id:{}", cate1Name, cate1Id);
