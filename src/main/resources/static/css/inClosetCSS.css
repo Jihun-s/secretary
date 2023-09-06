@@ -1,17 +1,9 @@
 @charset "UTF-8";
-
-
-.searchCloset {
-	margin-bottom:20px;
-} 
-/* 옷찾기 */
-.searchCloset select {
-	height:30px;
+#clothesSearchbtn{
+	background-color: rgba(223,132,166,255);
+	border-color: rgba(223,132,166,255);
 }
-.searchCloset .searchWord{
-	height:30px;
-	width:75%;
-}
+
 
 /* 옷등록 사진 미리보기*/
 #imagePreview img{

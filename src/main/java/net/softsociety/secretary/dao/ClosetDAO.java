@@ -25,5 +25,7 @@ public interface ClosetDAO {
 	Clothes findClothes(HashMap<String, Integer> map);
 	//옷장 옷 삭제
 	int deleteClothes(HashMap<String, Integer> map);
+	//옷장 옷 수정
+	int updateClothes(Clothes clothes);
 
 }

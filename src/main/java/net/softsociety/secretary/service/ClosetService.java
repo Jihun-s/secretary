@@ -23,4 +23,7 @@ public interface ClosetService {
 	// 옷장안 옷 삭제
 	int deleteClothes(int closetNum, int clothesNum);
 	
+	//옷장안 의류정보 수정
+	int updateClothes(Clothes clothes);
+	
 }

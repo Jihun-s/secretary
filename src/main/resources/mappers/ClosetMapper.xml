@@ -27,6 +27,14 @@
 				#{clothesImg}, #{clothesOriginalFile})	
 </insert>
 
+<!-- 옷장안 의류수정 -->
+<update id="updateClothes" parameterType="Clothes">
+	update  Secretary_clothes set clothes_material = #{clothesMaterial}, clothes_category = #{clothesCategory}
+								,clothes_seasons = #{clothesSeasons}, clothes_size = #{clothesSize}
+								,clothes_img = #{clothesImg}, clothes_originalFile = #{clothesOriginalFile}
+			where clothes_num = #{clothesNum} and closet_num = #{closetNum}
+</update>
+
 <!-- 옷장안 의류 전체목록 -->
 <select id="findAllClothes" parameterType="hashmap" resultType="Clothes">
 	select * from Secretary_clothes where closet_num = #{closetNum}
