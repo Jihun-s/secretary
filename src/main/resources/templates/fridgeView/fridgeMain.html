@@ -81,13 +81,161 @@
                 white-space: nowrap; /* 텍스트를 한 줄로 표시 */
                 font-size: 12px; /* 원하는 폰트 크기로 설정 */
             }
+
+            /*음식 여기부터*/
+            .food-items-container {
+                display: grid;
+                grid-template-columns: repeat(3, calc(33% - 1%));
+                gap: 1%; /* 상자 사이의 간격을 조절합니다. */
+                overflow-y: auto;
+                max-height: calc(125px * 4);
+            }
+
+            .food-item {
+                width: 100%;
+                box-sizing: border-box;
+                height: 80%;
+            }
+
+            .food-image-container {
+                width: 90px;
+                height: 90px;
+                position: relative;
+                margin: auto; /* 이미지를 가운데에 위치시킵니다. */
+                overflow: hidden;
+            }
+
             .food-image {
-                width: 70px;
-                height: 70px;
+                max-width: 100%;
+                max-height: 100%;
+                object-fit: cover;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%); /* 이미지를 상자의 중심에 맞춥니다. */
+            }
+
+            .food-details {
+                text-align: left;
+                font-size: 13px;
+            }
+            .food-details .centered-category {
+                display: block;
+                text-align: center;
+            }
+
+            .food-category,
+            .food-name,
+            .purchase-date,
+            .expiry-date {
+                margin-bottom: 0.5rem;
+                white-space: nowrap;
+            }
+
+            .foodcard {
+                margin: 0;
+                padding: 0;
+            }
+
+            /*음식 여기까지*/
+
+            #fridgeContainer {
+                display: flex;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+
+            .fridgeBox {
+                display: inline-block;
+                position: relative;
+                width: 90px; /* 냉장고 이미지의 너비를 기준으로 설정합니다. */
+            }
+
+            .fridgeInputField {
+                width: 100%; /* 폭을 부모 요소에 맞춥니다. */
+                display: none; /* 초기에는 숨깁니다. */
+                box-sizing: border-box;
+                padding: 5px; /* 적절한 패딩을 추가합니다. */
+                text-align: center; /* 텍스트 정렬을 중앙으로 설정합니다. */
+
+                /* 아래에서 크기 및 폰트 사이즈를 조정합니다. */
+                font-size: 10px; /* 폰트 크기를 줄입니다. */
+            }
+
+            .fridgeInputField input[type='text'] {
+                width: 100%; /* 입력 필드의 폭을 부모 요소에 맞춥니다. */
+                font-size: 10px; /* 폰트 크기를 줄입니다. */
+                padding: 2px 5px; /* 패딩을 조정하여 입력 필드의 높이를 줄입니다. */
+                margin-bottom: 5px; /* 입력 필드 아래에 간격을 추가합니다. */
+            }
+
+            .fridgeInputField button {
+                width: 40%; /* 버튼의 폭을 조정합니다. */
+                font-size: 10px; /* 폰트 크기를 줄입니다. */
+                padding: 2px 5px; /* 패딩을 조정하여 버튼의 높이를 줄입니다. */
+                margin: 0 5%; /* 버튼 사이의 간격을 조정합니다. */
+            }
+
+            .fridgeBox img {
+                display: block;
+                width: 100%; /* 이미지가 부모 요소의 폭에 맞게 조정됩니다. */
             }
         </style>
         <script>
             $(document).ready(function () {
+                //카테고리 구현!
+                $('#foodCategory').change(function () {
+                    if ($(this).val() === 'custom') {
+                        $('#customCategoryInput').show();
+                        $('#addCategoryBtn').show();
+                        $('button[type="submit"]').prop('disabled', true); // Submit 버튼 비활성화
+                    } else {
+                        $('#customCategoryInput').hide();
+                        $('#addCategoryBtn').hide();
+                        $('button[type="submit"]').prop('disabled', false); // Submit 버튼 활성화
+                    }
+                });
+
+                // 카테고리 추가 버튼 클릭 이벤트
+                $('#addCategoryBtn').click(function () {
+                    const newCategory = $('#customCategoryInput').val().trim();
+
+                    // 중복 검사
+                    let isDuplicate = false;
+                    $('#foodCategory option').each(function () {
+                        if (this.value === newCategory) {
+                            isDuplicate = true;
+                            return false; // loop 중단
+                        }
+                    });
+
+                    if (!isDuplicate) {
+                        $('#foodCategory').append(`<option value="${newCategory}" selected>${newCategory}</option>`);
+                        $('#customCategoryInput').hide();
+                        $('#addCategoryBtn').hide();
+                        $('button[type="submit"]').prop('disabled', false); // Submit 버튼 활성화
+                    } else {
+                        alert('이미 존재하는 카테고리입니다.');
+                    }
+                });
+
+                // 페이지 로드 시 저장된 모든 카테고리 조회
+                $.ajax({
+                    url: 'foodCategories',
+                    method: 'GET',
+                    success: function (categories) {
+                        categories.forEach(function (category) {
+                            $('#foodCategory').append(
+                                `<option value="${category.foodCategory}">${category.foodCategory}</option>`
+                            );
+                        });
+                    },
+                    error: function (error) {
+                        console.error('Error fetching categories:', error);
+                    },
+                });
+                //</ 카테고리구현!>
+
                 // 페이지 로드 시 냉장고 목록 가져오기
                 loadFridges();
                 //냉동실/ 냉장실 전환
@@ -97,10 +245,10 @@
                     if (button.textContent === '냉장실 보기') {
                         button.textContent = '냉동실 보기';
                         button.classList.remove('btn-primary');
-                        button.classList.add('btn-info');
+                        button.classList.add('btn-warning');
                     } else {
                         button.textContent = '냉장실 보기';
-                        button.classList.remove('btn-info');
+                        button.classList.remove('btn-warning');
                         button.classList.add('btn-primary');
                     }
                 });
@@ -115,11 +263,18 @@
                     if (isEditMode) {
                         // 편집 모드라면
                         $('#addFridgeImage').remove(); // PlusButton.png 제거
+                        // 입력 필드와 버튼들도 제거
+                        $('#fridgeNameInput').remove();
+                        $('#addConfirmButton').remove();
+                        $('#addCancelButton').remove();
                         isEditMode = false;
                     } else {
                         // 편집 모드가 아니라면
-                        const addButton = `<img src="images/fridgeimg/PlusButton.png" alt="추가버튼" style="width: 90px; height: 90px" id="addFridgeImage">`;
                         $('#fridgeContainer').append(addButton);
+
+                        setTimeout(() => {
+                            $('#addFridgeImage')[0].scrollIntoView({ behavior: 'smooth', block: 'end' });
+                        }, 100); // 100ms의 지연을 줍니다.
                         isEditMode = true;
                     }
                 });
@@ -127,14 +282,27 @@
                 $(document).on('click', '#addFridgeImage', function () {
                     $(this).attr('src', 'images/fridgeimg/노랑냉장고.jpg');
                     const inputField = `
-                        <input type="text" placeholder="냉장고 이름을 입력하세요!" id="fridgeNameInput">
-                        <button type="button" id="addConfirmButton">추가</button>
-                        <button type="button" id="addCancelButton">취소</button>
-                    `;
-                    $(this).after(inputField);
+    <div class="fridgeInputField mt-2">
+        <input type="text" class="form-control mb-2" placeholder="냉장고 이름을 입력하세요!" id="fridgeNameInput">
+        <button type="button" class="btn btn-primary" id="addConfirmButton">추가</button>
+        <button type="button" class="btn btn-secondary ml-2" id="addCancelButton">취소</button>
+    </div>
+`;
+
+                    const fridgeBox = $(`<div class="fridgeBox"></div>`);
+                    $(this).appendTo(fridgeBox);
+                    fridgeBox.append(inputField);
+                    $('#fridgeContainer').append(fridgeBox);
+
+                    $('.fridgeInputField').show(); /* 입력 필드를 표시합니다. */
+                    this.scrollIntoView({ behavior: 'smooth', block: 'end' });
                 });
 
                 $(document).on('click', '#addConfirmButton', function () {
+                    if ($('#fridgeNameInput').val().length < 2) {
+                        alert(`냉장고 이름은 2자 이상이어야 합니다.`);
+                        return;
+                    }
                     const fridgeName = $('#fridgeNameInput').val();
                     if (fridgeName) {
                         $.ajax({
@@ -151,6 +319,7 @@
                                 $('#addCancelButton').remove();
                                 // 냉장고 목록 새로고침
                                 loadFridges();
+                                isEditMode = false;
                             },
                             error: function (jqXHR, textStatus, errorThrown) {
                                 console.error('냉장고 추가 중 오류 발생:', jqXHR.responseText);
@@ -166,6 +335,7 @@
                     $('#fridgeNameInput').remove();
                     $(this).remove();
                     $('#addConfirmButton').remove();
+                    isEditMode = false;
                 });
                 //</ 냉장고 추가!
 
@@ -219,6 +389,18 @@
                     var expiryDate = new Date(foodItem.foodExpiryDate);
                     var diffDays = Math.ceil((expiryDate - today) / (1000 * 60 * 60 * 24));
 
+                    function formatDate(dateStr) {
+                        var date = new Date(dateStr);
+                        var year = date.getFullYear().toString().substr(2, 2); // 년도의 마지막 두 자리만 가져옵니다.
+                        return (
+                            year +
+                            '-' +
+                            (date.getMonth() + 1).toString().padStart(2, '0') +
+                            '-' +
+                            date.getDate().toString().padStart(2, '0')
+                        );
+                    }
+
                     // D-day에 따른 색상 설정
                     var dDayColor = 'blue'; // 기본 색상
                     if (diffDays <= 3) {
@@ -227,13 +409,22 @@
 
                     // 동적으로 음식 항목의 HTML 구조를 생성
                     var foodItemElement = `
-                    <div class="card mt-3 mb-4 food-item" data-food-id="${foodItem.foodId}">
-            <div class="card-body d-flex">
-                <img src="${imagePath}" alt="${foodItem.foodName}" class="food-image mr-4">
-                <div>
-                    <h5>이름: <span class="food-name">${foodItem.foodName}</span> D-<span class="d-day" style="color:${dDayColor}">${diffDays}</span></h5>
-                    <p>구매일: <span class="purchase-date">${foodItem.foodPurchaseDate}</span></p>
-                    <p>유통기한: <span class="expiry-date">${foodItem.foodExpiryDate}</span></p>
+        <div class="card mt-3 mb-4 food-item" data-food-id="${foodItem.foodId}">
+            <div class="card-body foodcard">
+                <!-- Food Image -->
+                <div class="food-image-container">
+                    <img src="${imagePath}" alt="${foodItem.foodName}" class="food-image">
+                </div>
+                <!-- Food Details -->
+                <div class="food-details">
+                    <span class="badge rounded-pill bg-success food-category centered-category">${
+                        foodItem.foodCategory
+                    }</span>
+                    <div class="food-name">${foodItem.foodName}</div>
+                    <div class="purchase-date">구매: ${formatDate(foodItem.foodPurchaseDate)}</div>
+        <div class="expiry-date">기한: ${formatDate(
+            foodItem.foodExpiryDate
+        )} (D-<span class="d-day" style="color:${dDayColor}">${diffDays}</span>)</div>
                 </div>
             </div>
         </div>
@@ -729,189 +920,109 @@
                         <div class="container-xxl flex-grow-1 container-p-y">
                             <!-- 메뉴 행 -->
                             <div class="row mb-4">
-                                <span style="display: inline-block">
-                                    <img
-                                        style="height: 4rem; width: 4rem; vertical-align: middle"
-                                        th:src="@{/images/ck8.png}"
-                                    />
-                                    <h1 style="display: inline; vertical-align: middle">전체 냉장고</h1>
-                                    <button
-                                        class="btn btn-sm btn-info"
-                                        id="toggleButton"
-                                        style="margin-left: 3px; display: inline; vertical-align: middle"
-                                    >
-                                        냉동실 보기
-                                    </button>
-                                </span>
+                                <!--처분할행-->
+                                <div class="d-flex justify-content-between w-100">
+                                    <div class="d-flex align-items-center" style="width: 40%"></div>
+                                    <div style="width: 32%"></div>
+                                </div>
                             </div>
                             <!-- 컨텐츠 -->
                             <div class="row">
-                                <!-- 1열 -->
-                                <div class="col-lg-3 mb-4">
-                                    <!-- 1열 1행 -->
+                                <!-- 1열-->
+                                <div class="col-lg-3 mb-3">
+                                    <span class="mb-3" style="display: inline-block">
+                                        <img
+                                            style="height: 4rem; width: 4rem; vertical-align: middle"
+                                            th:src="@{/images/ck8.png}"
+                                        />
+                                        <h1 style="display: inline; vertical-align: middle">전체 냉장고</h1>
+                                    </span>
+                                    <div class="card mb-4">
+                                        <div class="d-flex">
+                                            <button class="btn btn-sm btn-info flex-fill" id="editButton" type="button">
+                                                우리집 냉장고 편집
+                                            </button>
+                                            <button class="btn btn-sm btn-warning flex-fill" id="toggleButton">
+                                                냉동실 보기
+                                            </button>
+                                        </div>
+                                        <div class="card-body" id="fridgeContainer">
+                                            <!-- 냉장고 이미지들이 이곳에 추가됩니다. -->
+                                        </div>
+                                    </div>
                                     <h3>소비 이력</h3>
                                     <div class="card mb-4">
                                         <div class="card-body">
                                             <h5>1열 1행</h5>
                                         </div>
                                     </div>
-                                    <!-- 1열 2행 -->
-                                    <div class="d-flex align-items-center">
-                                        <h3 class="mt-3 mb-3" style="margin-right: 5px">나의 냉장고</h3>
-                                        <button class="btn btn-sm btn-info" id="editButton" type="button">편집</button>
-                                    </div>
-                                    <div class="card mb-4">
-                                        <div class="card-body" id="fridgeContainer">
-                                            <!-- 냉장고 이미지들이 이곳에 추가됩니다. -->
-                                        </div>
-                                    </div>
                                 </div>
                                 <!-- 2열 -->
+
                                 <div class="col-lg-5 mb-3">
-                                    <!-- 2열 1행 -->
-                                    <h3 style="margin-bottom: 0px">물품 입력</h3>
-                                    <div class="d-flex align-items-center mb-3">
+                                    <!-- 2열 2행 -->
+                                    <h3 class="mt-3 mb-3" style="margin-right: 3rem">물품 목록</h3>
+                                    <!-- Add margin-right to create some space between the title and the button -->
+                                    <!-- Flex container -->
+                                    <div class="d-flex justify-content-between mb-3">
                                         <!-- 영수증 입력 Modal -->
-                                        <div class="col-lg-4 col-md-6">
-                                            <div class="mt-3">
-                                                <!-- Button trigger modal -->
-                                                <button
-                                                    class="btn btn-primary"
-                                                    data-bs-target="#receiptModal"
-                                                    data-bs-toggle="modal"
-                                                    type="button"
-                                                >
-                                                    영수증 입력
-                                                </button>
-                                                <!-- Modal -->
-                                                <!-- 영수증 입력 Modal -->
-                                                <!-- 영수증 입력 Modal -->
-                                                <div
-                                                    class="modal fade"
-                                                    id="receiptModal"
-                                                    tabindex="-1"
-                                                    aria-hidden="true"
-                                                >
-                                                    <div class="modal-dialog">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h5 class="modal-title">영수증 업로드</h5>
-                                                                <button
-                                                                    type="button"
-                                                                    class="btn-close"
-                                                                    data-bs-dismiss="modal"
-                                                                    aria-label="Close"
-                                                                ></button>
-                                                            </div>
-                                                            <form
-                                                                th:action="@{/fridgeFood/addFromReceipt}"
-                                                                method="post"
-                                                                enctype="multipart/form-data"
-                                                                id="addFromReceipt"
-                                                            >
-                                                                <div class="modal-body">
-                                                                    <!-- 영수증 이미지 업로드 부분 -->
-                                                                    <div class="mb-3">
-                                                                        <label for="receiptUpload" class="form-label"
-                                                                            >파일 선택</label
-                                                                        >
-                                                                        <input
-                                                                            class="form-control"
-                                                                            id="receiptUpload"
-                                                                            type="file"
-                                                                        />
-                                                                    </div>
-                                                                    <div class="text-center mb-3">
-                                                                        <button
-                                                                            type="button"
-                                                                            class="btn btn-primary"
-                                                                            id="uploadReceiptButton"
-                                                                        >
-                                                                            Upload
-                                                                        </button>
-                                                                    </div>
-                                                                    <!-- 구분선 -->
-                                                                    <hr />
-                                                                    <!-- 냉장고 선택 부분 -->
-                                                                    <div class="mb-3">
-                                                                        <label for="fridgeSelect" class="form-label"
-                                                                            >냉장고 선택</label
-                                                                        >
-                                                                        <select
-                                                                            class="form-select fridgeSelect"
-                                                                            name="fridgeId"
-                                                                            required
-                                                                        >
-                                                                            <option disabled="" selected="" value="">
-                                                                                냉장고를 선택해주세요
-                                                                            </option>
-                                                                            <!-- 냉장고 항목은 JavaScript로 추가됩니다. -->
-                                                                        </select>
-                                                                    </div>
-                                                                    <!-- 상품 항목 추가 부분 -->
-                                                                    <div id="productsContainer"></div>
+                                        <div class="flex-fill mr-1" style="margin-right: 3px">
+                                            <!-- Button trigger modal -->
+                                            <button
+                                                class="btn btn-primary w-100"
+                                                data-bs-target="#receiptModal"
+                                                data-bs-toggle="modal"
+                                                type="button"
+                                            >
+                                                영수증 입력
+                                            </button>
+                                            <!-- Modal -->
+                                            <!-- 영수증 입력 Modal -->
+                                            <!-- 영수증 입력 Modal -->
+                                            <div class="modal fade" id="receiptModal" tabindex="-1" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title">영수증 업로드</h5>
+                                                            <button
+                                                                type="button"
+                                                                class="btn-close"
+                                                                data-bs-dismiss="modal"
+                                                                aria-label="Close"
+                                                            ></button>
+                                                        </div>
+                                                        <form
+                                                            th:action="@{/fridgeFood/addFromReceipt}"
+                                                            method="post"
+                                                            enctype="multipart/form-data"
+                                                            id="addFromReceipt"
+                                                        >
+                                                            <div class="modal-body">
+                                                                <!-- 영수증 이미지 업로드 부분 -->
+                                                                <div class="mb-3">
+                                                                    <label for="receiptUpload" class="form-label"
+                                                                        >파일 선택</label
+                                                                    >
+                                                                    <input
+                                                                        class="form-control"
+                                                                        id="receiptUpload"
+                                                                        type="file"
+                                                                    />
                                                                 </div>
-                                                                <div class="modal-footer">
-                                                                    <!-- 모달 창 닫기 버튼 -->
+                                                                <div class="text-center mb-3">
                                                                     <button
                                                                         type="button"
-                                                                        class="btn btn-outline-secondary"
-                                                                        data-bs-dismiss="modal"
-                                                                    >
-                                                                        Close
-                                                                    </button>
-                                                                    <!-- 분석 결과를 서버로 전송하는 버튼 -->
-                                                                    <button
-                                                                        type="submit"
                                                                         class="btn btn-primary"
-                                                                        id="submitDataButton"
+                                                                        id="uploadReceiptButton"
                                                                     >
-                                                                        Submit
+                                                                        Upload
                                                                     </button>
                                                                 </div>
-                                                            </form>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- 직접 입력 Modal -->
-                                        <div class="col-lg-4 col-md-6">
-                                            <div class="mt-3">
-                                                <!-- Button trigger modal -->
-                                                <button
-                                                    class="btn btn-primary"
-                                                    data-bs-target="#manualInputModal"
-                                                    data-bs-toggle="modal"
-                                                    type="button"
-                                                >
-                                                    직접 입력
-                                                </button>
-                                                <!-- Modal -->
-                                                <div
-                                                    aria-hidden="true"
-                                                    class="modal fade"
-                                                    id="manualInputModal"
-                                                    tabindex="-1"
-                                                >
-                                                    <div class="modal-dialog">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h5 class="modal-title">음식 정보 입력</h5>
-                                                                <button
-                                                                    aria-label="Close"
-                                                                    class="btn-close"
-                                                                    data-bs-dismiss="modal"
-                                                                    type="button"
-                                                                ></button>
-                                                            </div>
-                                                            <form
-                                                                th:action="@{/fridgeFood/add}"
-                                                                method="post"
-                                                                enctype="multipart/form-data"
-                                                            >
-                                                                <div class="modal-body">
-                                                                    <label class="form-label" for="fridgeSelect"
+                                                                <!-- 구분선 -->
+                                                                <hr />
+                                                                <!-- 냉장고 선택 부분 -->
+                                                                <div class="mb-3">
+                                                                    <label for="fridgeSelect" class="form-label"
                                                                         >냉장고 선택</label
                                                                     >
                                                                     <select
@@ -924,172 +1035,258 @@
                                                                         </option>
                                                                         <!-- 냉장고 항목은 JavaScript로 추가됩니다. -->
                                                                     </select>
-                                                                    <label class="form-label" for="foodName"
-                                                                        >음식 이름</label
-                                                                    >
-                                                                    <div style="display: flex; align-items: center">
-                                                                        <input
-                                                                            class="form-control"
-                                                                            id="foodName"
-                                                                            required=""
-                                                                            type="text"
-                                                                            name="foodName"
-                                                                        /><button class="voice-input-button">
-                                                                            <img
-                                                                                src="images/fridgeimg/MikeButton.png"
-                                                                                style="
-                                                                                    width: 30px;
-                                                                                    height: 30px;
-                                                                                    vertical-align: middle;
-                                                                                "
-                                                                                id="recordFoodName"
-                                                                            />
-                                                                        </button>
-                                                                    </div>
-                                                                    <label class="form-label" for="foodCategory"
-                                                                        >카테고리</label
-                                                                    >
-                                                                    <div style="display: flex; align-items: center">
-                                                                        <select
-                                                                            class="form-select"
-                                                                            id="foodCategory"
-                                                                            name="foodCategory"
-                                                                            required=""
-                                                                        >
-                                                                            <option disabled="" selected="" value="">
-                                                                                카테고리를 선택해주세요
-                                                                            </option>
-                                                                            <option value="일반">일반</option>
-                                                                            <option value="야채">야채</option>
-                                                                            <option value="생선">생선</option>
-                                                                            <option value="육류">육류</option>
-                                                                            <option value="과일">과일</option>
-                                                                        </select>
-                                                                        <button class="voice-input-button">
-                                                                            <img
-                                                                                src="images/fridgeimg/MikeButton.png"
-                                                                                style="
-                                                                                    width: 30px;
-                                                                                    height: 30px;
-                                                                                    vertical-align: middle;
-                                                                                "
-                                                                                id="recordFoodCategory"
-                                                                            />
-                                                                        </button>
-                                                                    </div>
-
-                                                                    <div style="display: flex; align-items: center">
-                                                                        <label class="form-label" for="foodQuantity"
-                                                                            >개수</label
-                                                                        >
-                                                                        <input
-                                                                            class="form-control"
-                                                                            id="foodQuantity"
-                                                                            name="foodQuantity"
-                                                                            type="number"
-                                                                            value="1"
-                                                                            min="1"
-                                                                        />
-                                                                        <button class="voice-input-button">
-                                                                            <img
-                                                                                th:src="@{/images/fridgeimg/MikeButton.png}"
-                                                                                style="
-                                                                                    width: 30px;
-                                                                                    height: 30px;
-                                                                                    vertical-align: middle;
-                                                                                "
-                                                                                id="recordFoodQuantity"
-                                                                            />
-                                                                        </button>
-                                                                    </div>
-                                                                    <div style="display: flex; align-items: center">
-                                                                        <label class="form-label" for="foodPrice"
-                                                                            >가격</label
-                                                                        >
-                                                                        <input
-                                                                            class="form-control"
-                                                                            id="foodPrice"
-                                                                            name="foodPrice"
-                                                                            type="number"
-                                                                        />
-                                                                        <button class="voice-input-button">
-                                                                            <img
-                                                                                th:src="@{/images/fridgeimg/MikeButton.png}"
-                                                                                style="
-                                                                                    width: 30px;
-                                                                                    height: 30px;
-                                                                                    vertical-align: middle;
-                                                                                "
-                                                                                id="recordFoodPrice"
-                                                                            />
-                                                                        </button>
-                                                                    </div>
-                                                                    <label class="form-label" for="foodPurchaseDate"
-                                                                        >구매일자</label
-                                                                    >
-                                                                    <input
-                                                                        class="form-control"
-                                                                        id="foodPurchaseDate"
-                                                                        name="foodPurchaseDate"
-                                                                        type="date"
-                                                                    />
-                                                                    <label class="form-label" for="foodExpiryDate"
-                                                                        >유통기한</label
-                                                                    >
-                                                                    <input
-                                                                        class="form-control"
-                                                                        id="foodExpiryDate"
-                                                                        name="foodExpiryDate"
-                                                                        type="date"
-                                                                    />
-                                                                    <label class="form-label" for="foodMadeDate"
-                                                                        >제조일</label
-                                                                    >
-                                                                    <input
-                                                                        class="form-control"
-                                                                        id="foodMadeDate"
-                                                                        name="foodMadeDate"
-                                                                        type="date"
-                                                                    />
-                                                                    <label class="form-label" for="foodImage"
-                                                                        >음식 사진</label
-                                                                    >
-                                                                    <input
-                                                                        class="form-control"
-                                                                        id="foodImage"
-                                                                        name="foodImage"
-                                                                        type="file"
-                                                                    />
                                                                 </div>
-                                                                <div class="modal-footer">
-                                                                    <button
-                                                                        class="btn btn-outline-secondary"
-                                                                        data-bs-dismiss="modal"
-                                                                        type="button"
-                                                                    >
-                                                                        Close
-                                                                    </button>
-                                                                    <button class="btn btn-primary" type="submit">
-                                                                        Submit
-                                                                    </button>
-                                                                </div>
-                                                            </form>
+                                                                <!-- 상품 항목 추가 부분 -->
+                                                                <div id="productsContainer"></div>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <!-- 모달 창 닫기 버튼 -->
+                                                                <button
+                                                                    type="button"
+                                                                    class="btn btn-outline-secondary"
+                                                                    data-bs-dismiss="modal"
+                                                                >
+                                                                    Close
+                                                                </button>
+                                                                <!-- 분석 결과를 서버로 전송하는 버튼 -->
+                                                                <button
+                                                                    type="submit"
+                                                                    class="btn btn-primary"
+                                                                    id="submitDataButton"
+                                                                >
+                                                                    Submit
+                                                                </button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- 직접 입력 Modal -->
+                                        <div class="flex-fill ml-1" style="margin-left: 3px">
+                                            <!-- Button trigger modal -->
+                                            <button
+                                                class="btn btn-primary w-100"
+                                                data-bs-target="#manualInputModal"
+                                                data-bs-toggle="modal"
+                                                type="button"
+                                            >
+                                                직접 입력
+                                            </button>
+                                            <!-- Modal -->
+                                            <div
+                                                aria-hidden="true"
+                                                class="modal fade"
+                                                id="manualInputModal"
+                                                tabindex="-1"
+                                            >
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title">음식 정보 입력</h5>
+                                                            <button
+                                                                aria-label="Close"
+                                                                class="btn-close"
+                                                                data-bs-dismiss="modal"
+                                                                type="button"
+                                                            ></button>
                                                         </div>
+                                                        <form
+                                                            th:action="@{/fridgeFood/add}"
+                                                            method="post"
+                                                            enctype="multipart/form-data"
+                                                        >
+                                                            <div class="modal-body">
+                                                                <label class="form-label" for="fridgeSelect"
+                                                                    >냉장고 선택</label
+                                                                >
+                                                                <select
+                                                                    class="form-select fridgeSelect"
+                                                                    name="fridgeId"
+                                                                    required
+                                                                >
+                                                                    <option disabled="" selected="" value="">
+                                                                        냉장고를 선택해주세요
+                                                                    </option>
+                                                                    <!-- 냉장고 항목은 JavaScript로 추가됩니다. -->
+                                                                </select>
+                                                                <label class="form-label" for="foodName"
+                                                                    >음식 이름</label
+                                                                >
+                                                                <div style="display: flex; align-items: center">
+                                                                    <input
+                                                                        class="form-control"
+                                                                        id="foodName"
+                                                                        required=""
+                                                                        type="text"
+                                                                        name="foodName"
+                                                                    /><button class="voice-input-button">
+                                                                        <img
+                                                                            src="images/fridgeimg/MikeButton.png"
+                                                                            style="
+                                                                                width: 30px;
+                                                                                height: 30px;
+                                                                                vertical-align: middle;
+                                                                            "
+                                                                            id="recordFoodName"
+                                                                        />
+                                                                    </button>
+                                                                </div>
+                                                                <label class="form-label" for="foodCategory"
+                                                                    >카테고리</label
+                                                                >
+                                                                <div style="display: flex; align-items: center">
+                                                                    <select
+                                                                        class="form-select"
+                                                                        id="foodCategory"
+                                                                        name="foodCategory"
+                                                                        required=""
+                                                                    >
+                                                                        <option disabled="" selected="" value="">
+                                                                            카테고리를 선택해주세요
+                                                                        </option>
+                                                                        <option value="custom">사용자 입력</option>
+                                                                        <option value="일반">일반</option>
+                                                                        <option value="야채">야채</option>
+                                                                        <option value="생선">생선</option>
+                                                                        <option value="육류">육류</option>
+                                                                        <option value="과일">과일</option>
+                                                                    </select>
+                                                                    <input
+                                                                        class="form-control"
+                                                                        type="text"
+                                                                        id="customCategoryInput"
+                                                                        placeholder="카테고리 입력"
+                                                                        style="display: none"
+                                                                    />
+                                                                    <button class="voice-input-button">
+                                                                        <img
+                                                                            src="images/fridgeimg/MikeButton.png"
+                                                                            style="
+                                                                                width: 30px;
+                                                                                height: 30px;
+                                                                                vertical-align: middle;
+                                                                            "
+                                                                            id="recordFoodCategory"
+                                                                        />
+                                                                    </button>
+                                                                </div>
+                                                                <button
+                                                                    id="addCategoryBtn"
+                                                                    class="btn btn-primary"
+                                                                    style="display: none"
+                                                                    type="button"
+                                                                >
+                                                                    카테고리 추가하기
+                                                                </button>
+
+                                                                <div style="display: flex; align-items: center">
+                                                                    <label class="form-label" for="foodQuantity"
+                                                                        >개수</label
+                                                                    >
+                                                                    <input
+                                                                        class="form-control"
+                                                                        id="foodQuantity"
+                                                                        name="foodQuantity"
+                                                                        type="number"
+                                                                        value="1"
+                                                                        min="1"
+                                                                    />
+                                                                    <button class="voice-input-button">
+                                                                        <img
+                                                                            th:src="@{/images/fridgeimg/MikeButton.png}"
+                                                                            style="
+                                                                                width: 30px;
+                                                                                height: 30px;
+                                                                                vertical-align: middle;
+                                                                            "
+                                                                            id="recordFoodQuantity"
+                                                                        />
+                                                                    </button>
+                                                                </div>
+                                                                <div style="display: flex; align-items: center">
+                                                                    <label class="form-label" for="foodPrice"
+                                                                        >가격</label
+                                                                    >
+                                                                    <input
+                                                                        class="form-control"
+                                                                        id="foodPrice"
+                                                                        name="foodPrice"
+                                                                        type="number"
+                                                                    />
+                                                                    <button class="voice-input-button">
+                                                                        <img
+                                                                            th:src="@{/images/fridgeimg/MikeButton.png}"
+                                                                            style="
+                                                                                width: 30px;
+                                                                                height: 30px;
+                                                                                vertical-align: middle;
+                                                                            "
+                                                                            id="recordFoodPrice"
+                                                                        />
+                                                                    </button>
+                                                                </div>
+                                                                <label class="form-label" for="foodPurchaseDate"
+                                                                    >구매일자</label
+                                                                >
+                                                                <input
+                                                                    class="form-control"
+                                                                    id="foodPurchaseDate"
+                                                                    name="foodPurchaseDate"
+                                                                    type="date"
+                                                                />
+                                                                <label class="form-label" for="foodExpiryDate"
+                                                                    >유통기한</label
+                                                                >
+                                                                <input
+                                                                    class="form-control"
+                                                                    id="foodExpiryDate"
+                                                                    name="foodExpiryDate"
+                                                                    type="date"
+                                                                />
+                                                                <label class="form-label" for="foodMadeDate"
+                                                                    >제조일</label
+                                                                >
+                                                                <input
+                                                                    class="form-control"
+                                                                    id="foodMadeDate"
+                                                                    name="foodMadeDate"
+                                                                    type="date"
+                                                                />
+                                                                <label class="form-label" for="foodImage"
+                                                                    >음식 사진</label
+                                                                >
+                                                                <input
+                                                                    class="form-control"
+                                                                    id="foodImage"
+                                                                    name="foodImage"
+                                                                    type="file"
+                                                                />
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button
+                                                                    class="btn btn-outline-secondary"
+                                                                    data-bs-dismiss="modal"
+                                                                    type="button"
+                                                                >
+                                                                    Close
+                                                                </button>
+                                                                <button class="btn btn-primary" type="submit">
+                                                                    Submit
+                                                                </button>
+                                                            </div>
+                                                        </form>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- 2열 2행 -->
-                                    <h3 class="mt-3 mb-3">물품 목록</h3>
-                                    <!-- Add margin-right to create some space between the title and the button -->
-                                    <div class="d-flex align-items-center mb-3">
-                                        <!-- Flex container -->
-                                        <div class="btn-group" style="margin-right: 1rem">
+                                    <div class="d-flex">
+                                        <div class="btn-group flex-fill">
                                             <button
                                                 class="btn btn-sm btn-info no-wrap-text"
                                                 id="infoButton1"
-                                                style="width: 120px; pointer-events: none"
+                                                style="pointer-events: none"
                                                 type="button"
                                             >
                                                 카테고리
@@ -1140,11 +1337,11 @@
                                                 </li>
                                             </ul>
                                         </div>
-                                        <div class="btn-group">
+                                        <div class="btn-group flex-fill" style="margin: 0 3px">
                                             <button
                                                 class="btn btn-sm btn-info no-wrap-text"
                                                 id="infoButton2"
-                                                style="width: 120px; pointer-events: none"
+                                                style="pointer-events: none"
                                                 type="button"
                                             >
                                                 정렬순서
@@ -1195,11 +1392,12 @@
                                                 </li>
                                             </ul>
                                         </div>
+                                        <button class="btn btn-sm btn-warning no-wrap-text" type="button">편집</button>
                                     </div>
                                     <!-- Fridge Item Display -->
-                                    <div class="card mt-3 mb-4 food-item">
-                                        <div class="card-body">
-                                            <div id="foodItemsContainer"></div>
+                                    <div class="card mb-4 food-item">
+                                        <div class="card-body foodbox">
+                                            <div id="foodItemsContainer" class="food-items-container"></div>
                                         </div>
                                     </div>
 
