@@ -39,6 +39,12 @@ public class ClosetPageController {
 		return "closetView/InCloset";
 	}
 	
+	// 세탁바구니 페이지
+	@GetMapping("laundryPage")
+	public String laundryPage() {
+		return "closetView/Laundry";
+	}
+	
 	// 옷장 상세2
 	@GetMapping("InCloset2")
 	public String closet2() {

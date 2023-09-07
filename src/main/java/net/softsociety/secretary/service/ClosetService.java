@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import net.softsociety.secretary.domain.Closet;
 import net.softsociety.secretary.domain.Clothes;
+import net.softsociety.secretary.domain.ClothesManager;
 
 public interface ClosetService {
 
@@ -16,7 +17,7 @@ public interface ClosetService {
 	void insertClothes(Clothes clothes);
 
 	// 옷장에 의류목록 출력 & 검색
-	ArrayList<Clothes> findAllClothes(int closetNum, String category, String size, String material, String[] seasonArr);
+	ArrayList<Clothes> findAllClothes(int closetNum, String category, String size, String material, String[] seasonArr, boolean clothesLaundry);
 	
 	// 옷장안 옷찾기
 	Clothes findClothes(int closetNum, int clothesNum);
@@ -25,5 +26,8 @@ public interface ClosetService {
 	
 	//옷장안 의류정보 수정
 	int updateClothes(Clothes clothes);
+
+	//소재별 세탁및관리방법 찾아오기
+	ClothesManager howToManageClothes(String clothesMaterial);
 	
 }

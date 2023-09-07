@@ -41,14 +41,15 @@ $(document).ready(function(){
 			success:function(list){
 				let str ='';
 				$(list).each(function(i,n){
-					str +='<a onclick="readClothes('+n+')"><img src="../closet/clothesDownload?closetNum='+closetNum+'&clothesNum='+n+'"></a>';
+					let clothesNum = parseInt(n.clothesNum);
+					str +='<a onclick="readClothes('+clothesNum+')"><img src="../closet/clothesDownload?closetNum='+n.closetNum+'&clothesNum='+clothesNum+'"></a>';
 				});
 				$('#whatsInCloset').html(str); 
 			},
 			error:function(e){
 				alert(JSON.stringify(e));
 			}			
-		})
+		})		
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!옷장안에 의류목록 출력!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 
@@ -494,12 +495,15 @@ $(document).ready(function(){
 				}
 				
 				let imgStr =  '<img	src="../closet/clothesDownload?closetNum='+closetNum+'&clothesNum='+clothesNum+'">'
-				let str = '<br><ul>\
-							<li>분류 :'+translatedCategory+'</li>\
-							<li>소재 :'+ translatedMaterial+'</li>\
-							<li>계절 :'+seasonresult+'</li>\
-							<li>사이즈 :'+clothes.clothesSize+'</li>'
-				let footer = '<button type="button" class="btn btn-primary" style="background-color: rgba(223,132,166,255); border-color: rgba(223,132,166,255);" \
+				let str = '<br><table><tr>\
+							<td><button class="btn-pink">카테고리</button><td>\
+							<td>&nbsp;&nbsp;'+translatedCategory+'</td>\
+							<td>&nbsp;&nbsp;'+ translatedMaterial+'</td>\
+							<td>&nbsp;&nbsp;'+seasonresult+'</td>\
+							<td>&nbsp;&nbsp;'+clothes.clothesSize+'</td></tr>'
+				let footer = '<br><button class="btn btn-primary" style="background-color: rgba(223,132,166,255); border-color: rgba(223,132,166,255); float:left"\
+								onclick="laundryIn('+clothesNum+')">세탁물 체크</button>\
+							<button type="button" class="btn btn-primary" style="background-color: rgba(223,132,166,255); border-color: rgba(223,132,166,255);" \
 								onclick="deleteClothes('+clothesNum+')"> 삭제 </button>\
 							<button type="button" class="btn btn-primary"	style="background-color: rgba(223,132,166,255); border-color: rgba(223,132,166,255);" \
 								onclick="openUpdateModal('+clothes.clothesNum+')"> 수정 </button>'
@@ -512,7 +516,27 @@ $(document).ready(function(){
 			error:function(e){
 				alert(JSON.stringify(e));
 			}			
-		});
+		}) //의류정보 읽어오기
+		
+		
+		$.ajax({
+			url:'howToManageClothes',
+			type:'get',
+			data:{closetNum: closetNum, clothesNum: clothesNum},
+			dataType:'json',
+			success:function(manageTip){
+				console.log('howToManageClothes 매핑')
+				let manageTipStr = '<tr><td><button class="btn-pink">관리방법</button></td>\
+				<td colspan="4">&nbsp;&nbsp;'+manageTip.howToWash+manageTip.howToKeep+'</td></tr></table>';
+				$('#ManageDetail').html(manageTipStr); 
+			},
+			error:function(e){
+				alert(JSON.stringify(e));
+			}			
+		})//관리정보 읽어오기
+		
+		
+		
 	}
 	
 	//의류 수정 모달창 열기 + 의류 수정
@@ -685,6 +709,9 @@ $(document).ready(function(){
 		}//if문
 	}
 	
+	function laundryIn(clothesNum){
+		closetNum = parseInt(closetNum);
+	}
 	
 	function webSearch(){
 		window.open("webSearch");
