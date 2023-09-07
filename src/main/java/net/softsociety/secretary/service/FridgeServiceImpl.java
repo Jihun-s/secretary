@@ -38,8 +38,8 @@ public class FridgeServiceImpl implements FridgeService {
     }
 
     @Override
-    public Fridge updateFridge(int id, Fridge fridge) {
-        return fridgeDAO.updateFridge(id, fridge);
+    public void updateFridge(Fridge fridge) {
+        fridgeDAO.updateFridge(fridge);
     }
 
     @Override

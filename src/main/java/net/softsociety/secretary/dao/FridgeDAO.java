@@ -10,6 +10,6 @@ import net.softsociety.secretary.domain.Fridge;
 public interface FridgeDAO {
     List<Fridge> getAllFridges(int familyId);
     void addFridge(Fridge fridge);
-    Fridge updateFridge(int id, Fridge fridge);
+    void updateFridge(Fridge fridge);
     void deleteFridge(int id);
 }

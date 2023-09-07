@@ -30,7 +30,6 @@
         />
         <title>냉장고 :: 메인 페이지</title>
         <meta content="" name="description" />
-        <script th:src="@{/assets/vendor/libs/jquery/jquery.js}"></script>
         <!-- Favicon -->
         <link rel="icon" th:href="@{/assets/img/favicon/favicon.ico}" type="image/x-icon" />
         <!-- Fonts -->
@@ -62,6 +61,7 @@
         <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
         <script th:src="@{/assets/js/config.js}"></script>
         <script th:src="@{/js/fridge/speechscript.js}"></script>
+        <script th:src="@{/assets/vendor/libs/jquery/jquery.js}"></script>
         <style>
             h3 {
                 white-space: nowrap;
@@ -95,6 +95,21 @@
                 width: 100%;
                 box-sizing: border-box;
                 height: 80%;
+            }
+            .editIcon {
+                position: absolute;
+                width: 20px;
+                height: 20px;
+                top: 0;
+                z-index: 10;
+            }
+
+            .modifyIcon {
+                right: 20px;
+            }
+
+            .deleteIcon {
+                right: 0;
             }
 
             .food-image-container {
@@ -183,6 +198,81 @@
         </style>
         <script>
             $(document).ready(function () {
+                // 수정 이미지 버튼 클릭 시
+                $(document).on('click', '.modifyIcon', function () {
+                    const fridgeItem = $(this).closest('.fridgeItem');
+                    const fridgeNameDiv = fridgeItem.find('.fridgeName');
+                    const currentName = fridgeNameDiv.text();
+
+                    // 입력 필드와 버튼들을 생성
+                    const buttonContainer = `
+                    <div class="fridgeInputField mt-2" style="display: block;">
+                        <input type="text" value="${currentName}" class="fridgeNameInput form-control mb-2">
+            <button type="button" class="btn btn-primary" id="confirmEditButton">수정</button>
+            <button type="button" class="btn btn-secondary ml-2" id="cancelEditButton">취소</button>
+        </div>`;
+
+                    // fridgeName 대신 입력 필드와 버튼들을 표시
+                    fridgeNameDiv.hide();
+                    fridgeItem.append(buttonContainer);
+                });
+
+                // 수정 확인 버튼 클릭 시
+                $(document).on('click', '#confirmEditButton', function () {
+                    const fridgeItem = $(this).closest('.fridgeItem');
+                    const fridgeId = fridgeItem.find('.modifyIcon').data('fridge-id');
+                    const fridgeName = fridgeItem.find('.fridgeNameInput').val();
+                    const currentName = fridgeItem.find('.fridgeName').data('current-name');
+                    $.ajax({
+                        url: 'fridge/updateFridge',
+                        type: 'POST',
+                        data: JSON.stringify({
+                            fridgeId: fridgeId,
+                            fridgeName: fridgeName,
+                            currentFridgeName: currentName,
+                        }),
+                        contentType: 'application/json',
+                        success: function (updatedFridge) {
+                            console.log('수정되었습니다.');
+                            fridgeItem.find('.fridgeName').text(updatedFridge.name).show();
+                            fridgeItem.find('.fridgeNameInput, #confirmEditButton, #cancelEditButton').remove();
+                            loadFridges();
+                            isEditMode = false;
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            alert('냉장고 이름을 수정하는 데 실패했습니다.');
+                        },
+                    });
+                });
+
+                // 취소 버튼 클릭 시
+                $(document).on('click', '#cancelEditButton', function () {
+                    const fridgeItem = $(this).closest('.fridgeItem');
+                    fridgeItem.find('.fridgeName').show();
+                    fridgeItem.find('.fridgeNameInput, #confirmEditButton, #cancelEditButton').remove();
+                });
+                // 삭제 이미지 버튼 클릭 시
+                $(document).on('click', '.deleteIcon', function () {
+                    const fridgeId = $(this).data('fridge-id');
+                    const fridgeName = $(this).closest('.fridgeItem').find('.fridgeName').text();
+
+                    if (confirm(`${fridgeName}를 삭제하시겠습니까?`)) {
+                        $.ajax({
+                            url: 'fridge/deleteFridge',
+                            type: 'POST',
+                            data: JSON.stringify({ fridgeId: fridgeId }),
+                            contentType: 'application/json',
+                            success: function () {
+                                alert(`${fridgeName}가 성공적으로 삭제되었습니다.`);
+                                location.reload();
+                            },
+                            error: function (jqXHR, textStatus, errorThrown) {
+                                alert('냉장고를 삭제하는 데 실패했습니다.');
+                            },
+                        });
+                    }
+                });
+
                 //카테고리 구현!
                 $('#foodCategory').change(function () {
                     if ($(this).val() === 'custom') {
@@ -258,8 +348,6 @@
                 let isEditMode = false; // 편집 모드 상태를 추적하는 변수
 
                 $('#editButton').on('click', function () {
-                    // PlusButton 이미지 추가
-                    const addButton = `<img src="images/fridgeimg/PlusButton.png" alt="추가버튼" style="width: 90px; height: 90px" id="addFridgeImage">`;
                     if (isEditMode) {
                         // 편집 모드라면
                         $('#addFridgeImage').remove(); // PlusButton.png 제거
@@ -267,14 +355,38 @@
                         $('#fridgeNameInput').remove();
                         $('#addConfirmButton').remove();
                         $('#addCancelButton').remove();
+
+                        // 수정 및 삭제 아이콘 제거
+                        $('.editIcon').remove();
+
                         isEditMode = false;
                     } else {
                         // 편집 모드가 아니라면
-                        $('#fridgeContainer').append(addButton);
+                        $('#fridgeContainer').append(
+                            `<img src="images/fridgeimg/PlusButton.png" alt="추가버튼" style="width: 90px; height: 90px; margin-left:10px" id="addFridgeImage">`
+                        );
 
+                        // 각 냉장고에 수정 및 삭제 아이콘 추가
+                        $('.fridgeItem').each(function () {
+                            const fridgeId = $(this).find('a').attr('href').split('/').pop();
+
+                            const modifyIcon = `
+                <img src="images/fridgeimg/ModifyName.png" alt="수정" class="editIcon modifyIcon" 
+                     data-fridge-id="${fridgeId}" style="position: absolute; top: 0; right: 20px;">
+            `;
+                            const deleteIcon = `
+                <img src="images/fridgeimg/Red_X.png" alt="삭제" class="editIcon deleteIcon" 
+                     data-fridge-id="${fridgeId}" style="position: absolute; top: 0; right: 0;">
+            `;
+
+                            $(this)
+                                .find('div[style="position: relative;"]')
+                                .append(modifyIcon + deleteIcon);
+                        });
                         setTimeout(() => {
                             $('#addFridgeImage')[0].scrollIntoView({ behavior: 'smooth', block: 'end' });
                         }, 100); // 100ms의 지연을 줍니다.
+
                         isEditMode = true;
                     }
                 });
@@ -451,15 +563,19 @@
                             );
 
                             data.forEach(function (fridge) {
+                                // 수정 및 삭제 아이콘 추가
+
                                 // 각 냉장고의 이미지와 이름을 포함하는 HTML 생성
                                 var fridgeElement = `
-                    <div class="fridgeItem">
-                        <a href="/fridge/${fridge.fridgeId}">
-                            <img src="images/fridgeimg/노랑냉장고.jpg" alt="냉장고" style="width: 90px; height: 90px">
-                        </a>
-                        <div class="fridgeName">${fridge.fridgeName}</div>
-                    </div>
-                `;
+            <div class="fridgeItem">
+                <div style="position: relative;">
+                    <a href="/fridge/${fridge.fridgeId}">
+                        <img src="images/fridgeimg/노랑냉장고.jpg" alt="${fridge.fridgeName}" style="width: 90px; height: 90px">
+                    </a>
+                </div>
+                <div class="fridgeName" data-current-name="${fridge.fridgeName}">${fridge.fridgeName}</div>
+            </div>
+        `;
 
                                 // 생성한 HTML을 냉장고 컨테이너에 추가
                                 $('#fridgeContainer').append(fridgeElement);

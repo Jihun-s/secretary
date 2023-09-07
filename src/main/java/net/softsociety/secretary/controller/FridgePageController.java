@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -93,13 +94,16 @@ public class FridgePageController {
 	    }
 	}
 
-    @PutMapping("/{id}")
-    public Fridge updateFridge(@PathVariable int id, @RequestBody Fridge fridge) {
-        return fridgeService.updateFridge(id, fridge);
+	@ResponseBody
+    @PostMapping("updateFridge")
+    public void updateFridge(@RequestBody Fridge fridge, @ModelAttribute("loginUser") User user) {
+		fridge.setFamilyId(user.getFamilyId());
+        fridgeService.updateFridge(fridge);
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteFridge(@PathVariable int id) {
-        fridgeService.deleteFridge(id);
+	@ResponseBody
+    @PostMapping("deleteFridge")
+    public void deleteFridge(@RequestBody Fridge fridge) {
+        fridgeService.deleteFridge(fridge.getFridgeId());
     }
 }
