@@ -46,4 +46,8 @@
 	    SET user_pw = #{userPw}
 	    WHERE user_id = #{userId} OR user_email = #{userEmail}
 	</update>
+	<!-- 관리자 기능 유저목록-인찬 -->
+	<select id="findALL" resultType="User">
+	select*from secretary_user;
+	</select>
 </mapper>

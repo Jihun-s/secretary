@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="UTF-8">
+<title>userList</title>
+<script th:src="@{/js/jquery-3.7.0.js}"></script>
+</head>
+<body>
+	<h1>[ 회원 목록 ]</h1>
+        <select name="category1" id="category1">
+            <option value="all">전체</option>
+            <option value="sex">성별</option>
+            <option value="role">권한</option>
+            <option value="suspended">정지 계정</option>
+        </select>
+        <input type="text" id="title" />
+        <table>
+            <thead>
+                <tr>
+                    <th>번호</th>
+                    <th>카테고리</th>
+                    <th>제목</th>
+                </tr>
+            </thead>
+            <tbody id="searchList"></tbody>
+        </table>
+</body>
+</html>

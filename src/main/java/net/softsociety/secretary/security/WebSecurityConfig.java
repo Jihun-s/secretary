@@ -86,5 +86,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public logEventListner authenticationSuccessEventListener() {
         return new logEventListner();
-}
+    }
+    @Bean
+    public logOutEventListener logoutEventListener() {
+        return new logOutEventListener();
+    }
 }

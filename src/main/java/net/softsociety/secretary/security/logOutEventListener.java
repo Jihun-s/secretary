@@ -32,7 +32,7 @@ public class logOutEventListener implements ApplicationListener<LogoutSuccessEve
     public void onApplicationEvent(LogoutSuccessEvent event) {
         // 로그아웃 로그 기록
         String userEmail = event.getAuthentication().getName();
-        log.debug("로그아웃 성공 - 사용자: {}", userEmail);
+        log.debug("로그아웃 - 사용자: {}", userEmail);
         User user = userservice.findByEmailOrUserId(userEmail);
         Log log = new Log();
         log.setUserId(user.getUserId());
