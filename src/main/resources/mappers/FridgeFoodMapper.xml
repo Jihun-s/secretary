@@ -59,6 +59,11 @@
 	    SELECT * FROM SECRETARY_FRIDGE_FOOD
 	</select>
 	
+	<!-- 특정 냉장고의 음식 출력하기 -->
+	<select id="getFoodsByFridgeId" resultType="FridgeFood">
+	    SELECT * FROM SECRETARY_FRIDGE_FOOD WHERE FRIDGE_ID = #{fridgeId}
+	</select>
+	
 	<update id="modifyFridgeFood" parameterType="FridgeFood">
 	    UPDATE SECRETARY_FRIDGE_FOOD
 	    SET 

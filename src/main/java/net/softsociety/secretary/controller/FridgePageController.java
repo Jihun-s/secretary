@@ -7,18 +7,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import lombok.extern.slf4j.Slf4j;
 import net.softsociety.secretary.domain.Fridge;
+import net.softsociety.secretary.domain.FridgeFood;
 import net.softsociety.secretary.domain.User;
 import net.softsociety.secretary.service.FridgeService;
 import net.softsociety.secretary.service.UserService;
@@ -39,20 +38,6 @@ public class FridgePageController {
 	public String fridgeMain() {
 		
 		return "fridgeView/fridgeMain";
-	}
-	
-	// 냉장고 상세1
-	@GetMapping("1")
-	public String fridge1() {
-		
-		return "fridgeView/fridge1";
-	}
-	
-	// 냉장고 상세2
-	@GetMapping("2")
-	public String fridge2() {
-		
-		return "fridgeView/fridge2";
 	}
 
 	@ResponseBody

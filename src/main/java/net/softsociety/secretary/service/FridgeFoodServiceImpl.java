@@ -97,4 +97,9 @@ public class FridgeFoodServiceImpl implements FridgeFoodService {
 		fridgeFoodDAO.deleteFridgeFood(foodId);
 	}
 
+	@Override
+	public List<FridgeFood> getFoodsByFridgeId(int fridgeId) {
+		return fridgeFoodDAO.getFoodsByFridgeId(fridgeId);
+	}
+
 }

@@ -210,6 +210,20 @@
         </style>
         <script>
             $(document).ready(function () {
+                $(document).on('click', '.fridgeItem', function () {
+                    event.preventDefault(); // <a> 태그의 기본 동작 중단
+                    const fridgeId = $(this).find('a').attr('href').split('/').pop();
+                    const fridgeName = $(this).find('.fridgeName').data('current-name'); // 클릭된 냉장고의 이름을 가져옵니다.
+
+                    // 냉장고 이름을 표시하는 요소에 이름 설정
+                    $('#fName').text(fridgeName);
+                    // 해당 냉장고의 음식 항목을 AJAX로 요청합니다.
+                    $.get(`fridgeFood/getFridgeFoods/${fridgeId}`, function (foods) {
+                        $('#foodItemsContainer').empty(); // 기존에 표시되던 음식 항목을 모두 제거합니다.
+                        foods.forEach(displayFoodItem); // 각 음식 항목을 화면에 표시합니다.
+                    });
+                });
+
                 let isFoodItemEditMode = false; // 편집 모드 상태를 저장하는 변수
 
                 $('#foodItemModify').click(function () {
@@ -303,11 +317,11 @@
 
                     // 입력 필드와 버튼들을 생성
                     const buttonContainer = `
-                    <div class="fridgeInputField mt-2" style="display: block;">
-                        <input type="text" value="${currentName}" class="fridgeNameInput form-control mb-2">
-            <button type="button" class="btn btn-primary" id="confirmEditButton">수정</button>
-            <button type="button" class="btn btn-secondary ml-2" id="cancelEditButton">취소</button>
-        </div>`;
+                                <div class="fridgeInputField mt-2" style="display: block;">
+                                    <input type="text" value="${currentName}" class="fridgeNameInput form-control mb-2">
+                        <button type="button" class="btn btn-primary" id="confirmEditButton">수정</button>
+                        <button type="button" class="btn btn-secondary ml-2" id="cancelEditButton">취소</button>
+                    </div>`;
 
                     // fridgeName 대신 입력 필드와 버튼들을 표시
                     fridgeNameDiv.hide();
@@ -467,13 +481,13 @@
                             const fridgeId = $(this).find('a').attr('href').split('/').pop();
 
                             const modifyIcon = `
-<img src="images/fridgeimg/ModifyName.png" alt="수정" class="editIcon fridge-editIcon modifyIcon" 
-     data-fridge-id="${fridgeId}" style="position: absolute; top: 0; right: 20px;">
-`;
+            <img src="images/fridgeimg/ModifyName.png" alt="수정" class="editIcon fridge-editIcon modifyIcon"
+                 data-fridge-id="${fridgeId}" style="position: absolute; top: 0; right: 20px;">
+            `;
                             const deleteIcon = `
-<img src="images/fridgeimg/Red_X.png" alt="삭제" class="editIcon fridge-editIcon deleteIcon" 
-     data-fridge-id="${fridgeId}" style="position: absolute; top: 0; right: 0;">
-`;
+            <img src="images/fridgeimg/Red_X.png" alt="삭제" class="editIcon fridge-editIcon deleteIcon"
+                 data-fridge-id="${fridgeId}" style="position: absolute; top: 0; right: 0;">
+            `;
 
                             $(this)
                                 .find('div[style="position: relative;"]')
@@ -493,12 +507,12 @@
                 $(document).on('click', '#addFridgeImage', function () {
                     $(this).attr('src', 'images/fridgeimg/노랑냉장고.jpg');
                     const inputField = `
-    <div class="fridgeInputField mt-2">
-        <input type="text" class="form-control mb-2" placeholder="냉장고 이름을 입력하세요!" id="fridgeNameInput">
-        <button type="button" class="btn btn-primary" id="addConfirmButton">추가</button>
-        <button type="button" class="btn btn-secondary ml-2" id="addCancelButton">취소</button>
-    </div>
-`;
+                <div class="fridgeInputField mt-2">
+                    <input type="text" class="form-control mb-2" placeholder="냉장고 이름을 입력하세요!" id="fridgeNameInput">
+                    <button type="button" class="btn btn-primary" id="addConfirmButton">추가</button>
+                    <button type="button" class="btn btn-secondary ml-2" id="addCancelButton">취소</button>
+                </div>
+            `;
 
                     const fridgeBox = $(`<div class="fridgeBox"></div>`);
                     $(this).appendTo(fridgeBox);
@@ -572,10 +586,10 @@
                         success: function (data) {
                             // Populate modal with data
                             $('#foodModal .modal-body').html(`
-                <p><strong>Food Name:</strong> ${data.foodName}</p>
-                <p><strong>Expiry Date:</strong> ${data.foodExpiryDate}</p>
-                <!-- Add other details as needed -->
-            `);
+                            <p><strong>Food Name:</strong> ${data.foodName}</p>
+                            <p><strong>Expiry Date:</strong> ${data.foodExpiryDate}</p>
+                            <!-- Add other details as needed -->
+                        `);
                             $('#foodModal').modal('show');
                         },
                         error: function (error) {
@@ -620,41 +634,43 @@
 
                     // 동적으로 음식 항목의 HTML 구조를 생성
                     const foodModifyIcon = `
-<img src="images/fridgeimg/ModifyName.png" alt="수정" class="editIcon food-editIcon foodModifyIcon" 
-     data-food-id="${foodItem.foodId}" style="position: absolute; top: 0; right: 20px;">
-`;
+            <img src="images/fridgeimg/ModifyName.png" alt="수정" class="editIcon food-editIcon foodModifyIcon"
+                 data-food-id="${foodItem.foodId}" style="position: absolute; top: 0; right: 20px;">
+            `;
                     const foodDeleteIcon = `
-<img src="images/fridgeimg/Red_X.png" alt="삭제" class="editIcon food-editIcon foodDeleteIcon" 
-     data-food-id="${foodItem.foodId}" style="position: absolute; top: 0; right: 0;">
-`;
+            <img src="images/fridgeimg/Red_X.png" alt="삭제" class="editIcon food-editIcon foodDeleteIcon"
+                 data-food-id="${foodItem.foodId}" style="position: absolute; top: 0; right: 0;">
+            `;
 
                     var foodItemElement = `
-<div class="card mt-3 mb-4 food-item" data-food-id="${foodItem.foodId}">
-    <div class="card-body foodcard">
-        <!-- Edit & Delete Icons -->
-        ${foodModifyIcon}
-        ${foodDeleteIcon}
-        <!-- Food Image -->
-        <div class="food-image-container">
-            <img src="${imagePath}" alt="${foodItem.foodName}" class="food-image">
-        </div>
-        <!-- Food Details -->
-        <div class="food-details">
-            <span class="badge rounded-pill bg-success food-category centered-category">${foodItem.foodCategory}</span>
-            <div class="food-name">${foodItem.foodName}</div>
-            <div class="purchase-date">${
-                foodItem.foodPurchaseDate && foodItem.foodPurchaseDate !== ''
-                    ? `구매: ${formatDate(foodItem.foodPurchaseDate)}`
-                    : `입력: ${formatDate(foodItem.foodInputDate)}`
-            }</div>
+            <div class="card mt-3 mb-4 food-item" data-food-id="${foodItem.foodId}">
+                <div class="card-body foodcard">
+                    <!-- Edit & Delete Icons -->
+                    ${foodModifyIcon}
+                    ${foodDeleteIcon}
+                    <!-- Food Image -->
+                    <div class="food-image-container">
+                        <img src="${imagePath}" alt="${foodItem.foodName}" class="food-image">
+                    </div>
+                    <!-- Food Details -->
+                    <div class="food-details">
+                        <span class="badge rounded-pill bg-success food-category centered-category">${
+                            foodItem.foodCategory
+                        }</span>
+                        <div class="food-name">${foodItem.foodName}</div>
+                        <div class="purchase-date">${
+                            foodItem.foodPurchaseDate && foodItem.foodPurchaseDate !== ''
+                                ? `구매: ${formatDate(foodItem.foodPurchaseDate)}`
+                                : `입력: ${formatDate(foodItem.foodInputDate)}`
+                        }</div>
 
-            <div class="expiry-date">기한: ${formatDate(
-                foodItem.foodExpiryDate
-            )} (D-<span class="d-day" style="color:${dDayColor}">${diffDays}</span>)</div>
-        </div>
-    </div>
-</div>
-`;
+                        <div class="expiry-date">기한: ${formatDate(
+                            foodItem.foodExpiryDate
+                        )} (D-<span class="d-day" style="color:${dDayColor}">${diffDays}</span>)</div>
+                    </div>
+                </div>
+            </div>
+            `;
 
                     // 생성한 음식 항목을 적절한 위치에 추가
                     $('#foodItemsContainer').append(foodItemElement);
@@ -677,19 +693,17 @@
                             );
 
                             data.forEach(function (fridge) {
-                                // 수정 및 삭제 아이콘 추가
-
                                 // 각 냉장고의 이미지와 이름을 포함하는 HTML 생성
                                 var fridgeElement = `
-            <div class="fridgeItem">
-                <div style="position: relative;">
-                    <a href="/fridge/${fridge.fridgeId}">
-                        <img src="images/fridgeimg/노랑냉장고.jpg" alt="${fridge.fridgeName}" style="width: 90px; height: 90px">
-                    </a>
-                </div>
-                <div class="fridgeName" data-current-name="${fridge.fridgeName}">${fridge.fridgeName}</div>
-            </div>
-        `;
+                        <div class="fridgeItem">
+                            <div style="position: relative;">
+                                <a href="/fridge/${fridge.fridgeId}">
+                                    <img src="images/fridgeimg/노랑냉장고.jpg" alt="${fridge.fridgeName}" style="width: 90px; height: 90px">
+                                </a>
+                            </div>
+                            <div class="fridgeName" data-current-name="${fridge.fridgeName}">${fridge.fridgeName}</div>
+                        </div>
+                    `;
 
                                 // 생성한 HTML을 냉장고 컨테이너에 추가
                                 $('#fridgeContainer').append(fridgeElement);
@@ -1165,7 +1179,7 @@
                                             style="height: 4rem; width: 4rem; vertical-align: middle"
                                             th:src="@{/images/ck8.png}"
                                         />
-                                        <h1 style="display: inline; vertical-align: middle">전체 냉장고</h1>
+                                        <h1 id="fName" style="display: inline; vertical-align: middle">전체 냉장고</h1>
                                     </span>
                                     <div class="card mb-4">
                                         <div class="d-flex">
