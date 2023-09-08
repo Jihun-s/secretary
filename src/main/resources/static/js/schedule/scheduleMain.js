@@ -30,7 +30,7 @@ $(document).ready(function () {
               title: sch.schContent,
               start: sch.schStart,
               end: sch.schEnd,
-              allday: sch.schAllday === 1 ? true : false // assuming 1 represents true and 0 represents false
+              allday: sch.schAllday === 1 ? true : false // 1이면 참, 0이면 거짓
             }
           })
 

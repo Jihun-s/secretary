@@ -4,6 +4,23 @@
 
 <mapper namespace="net.softsociety.secretary.dao.ScheduleDAO">
 
-<!--  -->
+<!-- 일정 목록 불러오기 -->
+<select id="selectAllSche" parameterType="hashmap" resultType="Schedule">
+	SELECT
+		sch_id
+		, user_id
+		, family_id
+		, sch_type
+		, sch_cate
+		, sch_level
+		, sch_content
+		, sch_start
+		, sch_end
+		, sch_allday
+	FROM
+		Secretary_Schedule
+	WHERE
+		family_id = #{familyId}
+</select>
 
 </mapper>
