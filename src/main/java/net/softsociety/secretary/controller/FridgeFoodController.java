@@ -78,7 +78,6 @@ public class FridgeFoodController {
     @ResponseBody
     @GetMapping("/food/{foodId}")
     public FridgeFood getFoodDetails(@PathVariable int foodId) {
-    	log.debug("정상 작동 되나요? : {}",foodId);
         return fridgeFoodService.getFoodDetails(foodId);
     }
     
@@ -110,6 +109,34 @@ public class FridgeFoodController {
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
+    }
+
+    @PostMapping("/modify/{foodId}")
+    public String modifyFridgeFood(@PathVariable int foodId, @ModelAttribute FridgeFood fridgeFood, MultipartFile foodImage, @ModelAttribute("loginUser") User user) {
+        try {
+            // 이미지 변경 로직
+            if (foodImage != null && !foodImage.isEmpty()) {
+                String savedFileName = FileService.saveFile(foodImage, uploadPath);
+                fridgeFood.setFoodOriginalFile(foodImage.getOriginalFilename());
+                fridgeFood.setFoodSavedFile(savedFileName);
+            }
+            fridgeFood.setFoodId(foodId);
+
+            fridgeFoodService.modifyFridgeFood(fridgeFood, user.getFamilyId());
+            return "redirect:/fridge";
+        } catch (Exception e) {
+            log.error("An error occurred during modification: {}", e.getMessage(), e);
+            return "error-page";
+        }
+    }
+
+
+    @ResponseBody
+    @PostMapping("/delete/{foodId}")
+    public String deleteFridgeFood(@PathVariable int foodId) {
+    	log.debug("정상적으로 작동 하나요? : {}",foodId);
+        fridgeFoodService.deleteFridgeFood(foodId);
+        return "success";
     }
 
 }

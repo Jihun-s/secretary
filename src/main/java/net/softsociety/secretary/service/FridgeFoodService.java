@@ -8,4 +8,6 @@ public interface FridgeFoodService {
     void addFridgeFood(FridgeFood fridgeFood,int familyId);
     FridgeFood getFoodDetails(int foodId);
     List<FridgeFood> getAllFridgeFoods();
+    public void modifyFridgeFood(FridgeFood fridgeFood, int familyId);
+    public void deleteFridgeFood(int foodId);
 }
