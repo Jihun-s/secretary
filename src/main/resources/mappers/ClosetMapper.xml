@@ -37,7 +37,8 @@
 
 <!-- 옷장안 의류 전체목록 -->
 <select id="findAllClothes" parameterType="hashmap" resultType="Clothes">
-	select * from Secretary_clothes where closet_num = #{closetNum}
+	select * from Secretary_clothes <where>
+			<if test="closetNum !=null and closetNum != 0">closet_num = #{closetNum}</if>
 			<if test="material !=null and material !='materialAll'">
 			and clothes_material = #{material}
 			</if>
@@ -76,6 +77,13 @@
 			<if test="size != null and size !='SizeAll'">
 			and clothes_size = #{size}
 			</if>
+			<if test="!clothesLaundry">
+			and clothes_laundry = 0
+			</if>
+			<if test="clothesLaundry">
+			and clothes_laundry = 1
+			</if>
+			</where>
 			order by clothes_num desc
 </select>
 
@@ -89,4 +97,8 @@
 	delete from Secretary_clothes where closet_num = #{closetNum} and clothes_num = #{clothesNum}
 </delete>
 
+<!-- 소재별 세탁및관리방법 찾아오기 -->
+<select id="howToManageClothes" parameterType="string" resultType="ClothesManager">
+	select * from Secretary_clothesManager where clothes_material = #{clothesMaterial}
+</select>
 </mapper>

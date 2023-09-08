@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.softsociety.secretary.dao.ClosetDAO;
 import net.softsociety.secretary.domain.Closet;
 import net.softsociety.secretary.domain.Clothes;
+import net.softsociety.secretary.domain.ClothesManager;
 
 @Slf4j
 @Service
@@ -39,7 +40,7 @@ public class ClosetServiceImpl implements ClosetService {
 
 	//옷장안에 의류전체목록 출력
 	@Override
-	public ArrayList<Clothes> findAllClothes(int closetNum, String category, String size, String material, String[] seasonArr) {
+	public ArrayList<Clothes> findAllClothes(int closetNum, String category, String size, String material, String[] seasonArr, boolean clothesLaundry) {
 		HashMap<String, Object> map = new HashMap<>();
 		if(seasonArr == null) {
 			log.debug("계절 Null");
@@ -53,6 +54,8 @@ public class ClosetServiceImpl implements ClosetService {
 			log.debug("dddf:{}", season);
 			map.put("seasons", season);
 		}
+
+		map.put("clothesLaundry",clothesLaundry);		
 		map.put("closetNum", closetNum);
 		map.put("category", category);
 		map.put("size",size);
@@ -88,6 +91,12 @@ public class ClosetServiceImpl implements ClosetService {
 	public int updateClothes(Clothes clothes) {
 
 		return dao.updateClothes(clothes);
+	}
+
+	//소재별 세탁및관리방법 찾아오기
+	@Override
+	public ClothesManager howToManageClothes(String clothesMaterial) {
+		return dao.howToManageClothes(clothesMaterial);
 	}
 	
 	

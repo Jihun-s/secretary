@@ -59,6 +59,74 @@ function pluscloset(){
 }
 
 
+
+function clothesSearch(){
+	//console.log();
+	// 카테고리 category, 사이즈 size
+	let category = $('#clothesCategoryForSearch option:selected').val();
+	let size;				
+	if(category == 'top'){
+		category = $('#topCategory option:selected').val();
+	} else if(category == 'bottom'){
+		category = $('#bottomCategory option:selected').val();
+	} else if(category == 'clothesOuter'){
+		category = $('#outerCategory option:selected').val();
+	} else if(category == 'dress'){
+		category = $('#dressCategory option:selected').val();
+	} else if(category == 'shoes'){
+		//신발사이즈 체크된 값
+		size = $("input:checkbox[name='shoesSizeAll']:checked").val();
+		if(size==undefined){
+		size = $("input[name='shoesForSearch']").val();
+		}
+		category = $('#shoesCategory option:selected').val();
+	} else if(category == 'bag'){
+		category = $('#bagCategory option:selected').val();
+	} else if(category == 'accessory'){
+		category = $('#accessoryCategory option:selected').val();
+	} else if(category == 'etc'){
+		category = $('#etcCategory option:selected').val();
+	}
+	//신발이 아닌경우
+	if(size==undefined){
+		size = $('#clothesSizeForSearch option:selected').val();
+	}	 
+	console.log(category);
+	console.log(size);
+	
+	// 소재 material
+	let material = $('#materialListForSearch option:selected').val();
+	console.log(material);
+
+	// 계절 seasonArr
+	const seasonArr = [];
+	var seasonChecked = $("input:checkbox[name='seasonsForSearch']:checked");
+	$(seasonChecked).each(function(){
+		seasonArr.push($(this).val());
+	}); 		
+	console.log(seasonArr);
+	console.log(typeof(seasonArr));
+		
+	$.ajax({
+		url:'inCloset',
+		type:'get',
+		traditional:true,
+		data:{closetNum: closetNum, category:category, size:size
+			,seasonArr: seasonArr, material:material},
+		dataType:'json',
+		success:function(list){
+			let str ='';
+			$(list).each(function(i,n){
+				str +='<a onclick="readClothes('+n+')"><img src="../closet/clothesDownload?closetNum='+closetNum+'&clothesNum='+n+'"></a>';
+			});
+			$('#whatsInCloset').html(str); 
+		},
+		error:function(e){
+			alert(JSON.stringify(e));
+		}			
+	})
+}
+
 function clothesSearchAnimation(){
 	var result = $('#clothesCategoryForSearch option:selected').val();
 	if(result=='top'){
@@ -170,71 +238,4 @@ function clothesSearchAnimation(){
 			
 		$('#clothesSizeForSearch').show();				
 	}
-}
-
-function clothesSearch(){
-	//console.log();
-	// 카테고리 category, 사이즈 size
-	let category = $('#clothesCategoryForSearch option:selected').val();
-	let size;				
-	if(category == 'top'){
-		category = $('#topCategory option:selected').val();
-	} else if(category == 'bottom'){
-		category = $('#bottomCategory option:selected').val();
-	} else if(category == 'clothesOuter'){
-		category = $('#outerCategory option:selected').val();
-	} else if(category == 'dress'){
-		category = $('#dressCategory option:selected').val();
-	} else if(category == 'shoes'){
-		//신발사이즈 체크된 값
-		size = $("input:checkbox[name='shoesSizeAll']:checked").val();
-		if(size==undefined){
-		size = $("input[name='shoesForSearch']").val();
-		}
-		category = $('#shoesCategory option:selected').val();
-	} else if(category == 'bag'){
-		category = $('#bagCategory option:selected').val();
-	} else if(category == 'accessory'){
-		category = $('#accessoryCategory option:selected').val();
-	} else if(category == 'etc'){
-		category = $('#etcCategory option:selected').val();
-	}
-	//신발이 아닌경우
-	if(size==undefined){
-		size = $('#clothesSizeForSearch option:selected').val();
-	}	 
-	console.log(category);
-	console.log(size);
-	
-	// 소재 material
-	let material = $('#materialListForSearch option:selected').val();
-	console.log(material);
-
-	// 계절 seasonArr
-	const seasonArr = [];
-	var seasonChecked = $("input:checkbox[name='seasonsForSearch']:checked");
-	$(seasonChecked).each(function(){
-		seasonArr.push($(this).val());
-	}); 		
-	console.log(seasonArr);
-	console.log(typeof(seasonArr));
-		
-	$.ajax({
-		url:'inCloset',
-		type:'get',
-		traditional:true,
-		data:{closetNum: closetNum, category:category, size:size
-			,seasonArr: seasonArr, material:material},
-		dataType:'json',
-		success:function(list){
-			let str ='';
-			$(list).each(function(i,n){
-				str +='<a onclick="readClothes('+n+')"><img src="../closet/clothesDownload?closetNum='+closetNum+'&clothesNum='+n+'"></a>';
-			});
-			$('#whatsInCloset').html(str); 
-		},
-		error:function(e){
-			alert(JSON.stringify(e));
-		}			
-	})
 }

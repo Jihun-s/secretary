@@ -31,6 +31,7 @@ import org.springframework.web.multipart.MultipartFile;
 import lombok.extern.slf4j.Slf4j;
 import net.softsociety.secretary.domain.Closet;
 import net.softsociety.secretary.domain.Clothes;
+import net.softsociety.secretary.domain.ClothesManager;
 import net.softsociety.secretary.service.ClosetService;
 import net.softsociety.secretary.util.FileService;
 
@@ -143,8 +144,8 @@ public class ClosetController {
 	//옷장안 의류목록(옷번호 배열 반환)
 	@ResponseBody
 	@GetMapping("inCloset")
-	public ArrayList<Integer> clothesListInCloset(@RequestParam(name="closetNum") int closetNum, String category, String size
-													,String[] seasonArr, String material) {
+	public ArrayList<Clothes> clothesListInCloset(@RequestParam(name="closetNum") int closetNum, String category, String size
+												,String[] seasonArr, String material, boolean clothesLaundry) {
 		log.debug("옷장 번호: {}", closetNum);
 		log.debug("분류: {}", category);
 		log.debug("사이즈: {}", size);
@@ -156,16 +157,28 @@ public class ClosetController {
 			log.debug("계절:{}", season);
 			}
 		};
+		log.debug("세탁물 여부 :{}", clothesLaundry);
 		
 		//옷장안에 의류리스트 불러오기
-		ArrayList<Clothes> clothesList = service.findAllClothes(closetNum, category, size, material, seasonArr);
-		//의류리스트 옷번호 배열에 담기
-		ArrayList<Integer> clothesNumList = new ArrayList<>();
-		for(Clothes i : clothesList) {
-			clothesNumList.add(i.getClothesNum());
-		}
-		return clothesNumList;
+		ArrayList<Clothes> clothesList = service.findAllClothes(closetNum, category, size, material, seasonArr, clothesLaundry);
+
+		return clothesList;
 	}
+	
+	//세탁및관리방법
+	@ResponseBody
+	@GetMapping("howToManageClothes")
+	public ClothesManager howToManageClothes(@RequestParam(name="closetNum") int closetNum,
+											@RequestParam(name="clothesNum") int clothesNum) {
+		log.debug("howToManageClothes 매핑!");
+		Clothes clothes = service.findClothes(closetNum, clothesNum);
+		log.debug("옷 객체:{}",clothes);
+		ClothesManager clothesManager = service.howToManageClothes(clothes.getClothesMaterial());
+		log.debug("세탁및 관리방법:{}", clothesManager);
+		return clothesManager;
+	}
+	
+	
 	
 	//옷 자세히보기
 	@ResponseBody
