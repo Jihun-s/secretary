@@ -1,6 +1,7 @@
 package net.softsociety.secretary.service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -138,8 +139,8 @@ public class UserServiceImpl implements UserService {
     }
     //관리자 기능 유저목록 조회-인찬
 	@Override
-	public List<User> findALL() {
-		List<User> findeALL = userMapper.findALL();
+	public ArrayList<User> findALL() {
+		ArrayList<User> findeALL = userMapper.findALL();
 		return findeALL;
 	}
 

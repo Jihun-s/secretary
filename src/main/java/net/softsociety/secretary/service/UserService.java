@@ -1,5 +1,6 @@
 package net.softsociety.secretary.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.softsociety.secretary.domain.User;
@@ -21,5 +22,5 @@ public interface UserService {
     
     void resetPassword(User user, String newPassword);
     //관리자 기능 유저목록-인찬
-	List<User> findALL();
+	ArrayList<User> findALL();
 }

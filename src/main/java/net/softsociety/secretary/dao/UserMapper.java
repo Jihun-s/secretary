@@ -1,5 +1,6 @@
 package net.softsociety.secretary.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
@@ -18,5 +19,5 @@ public interface UserMapper {
 	int countByUserId(String userId);
 	void updateUserPw(User user);
 	//관리자 기능 유저목록 - 인찬
-	List<User> findALL();
+	ArrayList<User> findALL();
 }
