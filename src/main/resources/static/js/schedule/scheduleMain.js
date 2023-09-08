@@ -9,6 +9,8 @@ $(document).ready(function () {
   let curDate = now.getDate().toString().padStart(2, '0');
   let curDateFormat = curYear + '-' + curMonth + '-' + curDate;  
 
+
+  /** 풀캘린더 */
   let calendar = new FullCalendar.Calendar(calendarEl, {
     locale: 'ko',
     initialDate: curDateFormat,
@@ -16,62 +18,29 @@ $(document).ready(function () {
     selectable: true,
     businessHours: true,
     dayMaxEvents: true,
-    events: [
-      {
-        title: "All Day Event",
-        start: "2023-01-01",
-      },
-      {
-        title: "Long Event",
-        start: "2023-01-07",
-        end: "2023-01-10",
-      },
-      {
-        groupId: 999,
-        title: "Repeating Event",
-        start: "2023-01-09T16:00:00",
-      },
-      {
-        groupId: 999,
-        title: "Repeating Event",
-        start: "2023-01-16T16:00:00",
-      },
-      {
-        title: "Conference",
-        start: "2023-01-11",
-        end: "2023-01-13",
-      },
-      {
-        title: "Meeting",
-        start: "2023-01-12T10:30:00",
-        end: "2023-01-12T12:30:00",
-      },
-      {
-        title: "Lunch",
-        start: "2023-01-12T12:00:00",
-      },
-      {
-        title: "Meeting",
-        start: "2023-01-12T14:30:00",
-      },
-      {
-        title: "Happy Hour",
-        start: "2023-01-12T17:30:00",
-      },
-      {
-        title: "Dinner",
-        start: "2023-01-12T20:00:00",
-      },
-      {
-        title: "Birthday Party",
-        start: "2023-01-13T07:00:00",
-      },
-      {
-        title: "Click for Google",
-        url: "http://google.com/",
-        start: "2023-01-28",
-      },
-    ],
+    events: function(info, successCallback, failureCallback) {
+      $.ajax({
+        url: "/secretary/schedule/list",
+        type: "GET",
+        dataType: "JSON",
+        success: (data) => {
+          let transformedData = data.map(function (sch) {
+            return {
+              id: sch.schId,
+              title: sch.schContent,
+              start: sch.schStart,
+              end: sch.schEnd,
+              allday: sch.schAllday === 1 ? true : false // assuming 1 represents true and 0 represents false
+            }
+          })
+
+          successCallback(transformedData);
+        },
+        error: (e) => {
+          alert(JSON.stringify(e));
+        }
+      });
+    },
   });
 
   calendar.render();
