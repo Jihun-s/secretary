@@ -30,4 +30,9 @@ public interface ClosetService {
 	//소재별 세탁및관리방법 찾아오기
 	ClothesManager howToManageClothes(String clothesMaterial);
 	
+	//세탁물 체크
+	void laundryIn(Clothes clothes);
+	//세탁물 다시 옷장으로
+	void laundryOut(int closetNum, int clothesNum);
+	
 }

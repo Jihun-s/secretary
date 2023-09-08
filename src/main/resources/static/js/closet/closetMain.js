@@ -3,6 +3,7 @@
  */
 
  $(document).ready(function(){
+	 	
 	 	$('.closetEditForUser').hide(); //옷장 편집(수정,삭제버튼) 숨기기
 		$('#insertClosetBtn').click(pluscloset); //옷장추가
 		$('#editClosetBtn').click(editCloset); //옷장편집
@@ -22,7 +23,29 @@
 		$("#clothesCategoryForSearch").on('change',clothesSearchAnimation);
 		$("#clothesSearchbtn").on('click',clothesSearch); //옷찾기 버튼 클릭하면 clothesSearch 함수실행
 //!!!!!!!!!!!!!!!!!!!!!! 옷 찾기  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!		
-
+		let laundryCheck = true;
+		let closetNum = 0;
+		$.ajax({
+			url:'closet/inCloset',
+			type:'get',
+			data:{closetNum : closetNum, clothesLaundry: laundryCheck},
+			dataType:'json',
+			success:function(list){
+				let laundryCnt = 0; //세탁물 갯수
+				$(list).each(function(i,n){
+					laundryCnt += 1;
+				});
+				
+				let proVal = (laundryCnt/50) * 100; 
+				let proStr = '<div class="progress-bar" role="progressbar" style="width:'+proVal+'%; \
+				background-color: rgba(223,132,166,255); border-color: rgba(223,132,166,255);" \
+				aria-valuenow="'+proVal+'" aria-valuemin="0" aria-valuemax="50"></div>';
+				$('#progessDetail').html(proStr);
+			},
+			error:function(e){
+				alert(JSON.stringify(e));
+			}			
+		})	
 		
 });//document.ready 끝
 

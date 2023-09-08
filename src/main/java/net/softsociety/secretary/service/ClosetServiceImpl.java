@@ -99,6 +99,23 @@ public class ClosetServiceImpl implements ClosetService {
 		return dao.howToManageClothes(clothesMaterial);
 	}
 	
+	//세탁물 체크
+	@Override
+	public void laundryIn(Clothes clothes) {
+		dao.laundryIn(clothes);
+	}
+
+	//세탁물 다시 옷장으로
+	@Override
+	public void laundryOut(int closetNum, int clothesNum) {
+		//옷장번호, 옷번호 담을 해쉬맵
+		HashMap<String, Integer> map = new HashMap<>();
+		map.put("closetNum", closetNum);
+		map.put("clothesNum", clothesNum);
+		dao.laundryOut(map);
+	}
+
+	
 	
 	
 	

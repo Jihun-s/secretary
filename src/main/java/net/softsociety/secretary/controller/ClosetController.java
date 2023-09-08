@@ -235,4 +235,23 @@ public class ClosetController {
 		}
 	}
 	
+	//세탁물 체크
+	@ResponseBody
+	@GetMapping("laundryIn")
+	public void laundryIn(@RequestParam(name="closetNum") int closetNum,
+			@RequestParam(name="clothesNum") int clothesNum) {
+		log.debug("laundryIn 매핑!");
+		Clothes clothes = service.findClothes(closetNum, clothesNum);
+		service.laundryIn(clothes);
+	}
+	
+	//세탁물 다시 옷장으로
+	@ResponseBody
+	@GetMapping("laundryOut")
+	public void laundryOut(@RequestParam(name="closetNum", defaultValue="0") int closetNum,
+			@RequestParam(name="clothesNum", defaultValue="0") int clothesNum) {
+		log.debug("laundryOut 매핑!");
+		service.laundryOut(closetNum,clothesNum);
+	}
+	
 }

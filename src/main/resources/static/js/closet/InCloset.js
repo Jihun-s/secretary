@@ -108,67 +108,6 @@ $(document).ready(function(){
 		
 	});//document.ready 끝
 	
-	const categoryMapping = {
-    'Tshirt': '티셔츠',
-    'blouse': '블라우스/셔츠',
-    'sweatshirt': '맨투맨/후디',
-    'knitwear': '니트',
-    'skirt': '치마',
-    'pants': '바지',
-    'jeans': '청바지',
-    'trainingPants': '트레이닝/조거',
-    'coat': '코트',
-    'jacket': '자켓/점퍼',
-    'paddedJacket': '패딩',
-    'zipupHoodie': '후드집업',
-    'cardigan': '가디건/베스트',
-    'miniDress': '미니원피스',
-    'longDress': '롱원피스',
-    'sneakers': '운동화',
-    'formalShoes': '구두',
-    'boots': '부츠',
-    'sandals': '샌들',
-    'backpack': '백팩',
-    'totebag': '숄더/토트백',
-    'crossbodybag': '크로스백',
-    'clutchbag': '클러치',
-    'hat': '모자',
-    'socks': '양말',
-    'jewelryOrWatch': '쥬얼리/시계',
-    'scarf': '머플러/스카프',
-    'belt': '벨트',
-    'accessoryEtc': '기타',
-    'innerwear': '이너웨어',
-    'sleepwear': '잠옷',
-    'swimsuit': '수영복'
-	};
-	
-	const materialMapping = {
-    'none': '해당 없음',
-    'cotton': '면',
-    'linen': '린넨',
-    'polyester': '폴리에스테르',
-    'denim': '데님',
-    'knit': '니트',
-    'wool': '울',
-    'acryl': '아크릴',
-    'corduroy': '코듀로이',
-    'silk': '실크',
-    'woolen': '모직',
-    'nylon': '나일론',
-    'suede': '스웨이드',
-    'leather': '가죽',
-    'rayon': '레이온',
-    'oxford': '옥스퍼드',
-    'napping': '기모'
-	};
-	
-	const seasonMapping = {
-    'spring': '봄',
-    'summer': '여름',
-    'fall': '가을',
-    'winter': '겨울'
-	};
 
 	//사진 편집여부 체크하는 변수
 	let imgEditCheck = 0;
@@ -280,118 +219,6 @@ $(document).ready(function(){
 
 	}
 	
-	function clothesSearchAnimation(){
-		var result = $('#clothesCategoryForSearch option:selected').val();
-		if(result=='top'){
-			$('#bottomCategory').hide();
-			$('#outerCategory').hide();
-			$('#dressCategory').hide();
-			$('#shoesCategory').hide();
-			$('#bagCategory').hide();
-			$('#accessoryCategory').hide();
-			$('#etcCategory').hide();
-			$('#shoesSizeForSearch').hide();
-			
-			$('#clothesSizeForSearch').show();
-			$('#topCategory').show();
-		}else if(result =='bottom'){
-			$('#topCategory').hide();
-			$('#outerCategory').hide();
-			$('#dressCategory').hide();
-			$('#shoesCategory').hide();
-			$('#bagCategory').hide();
-			$('#accessoryCategory').hide();
-			$('#etcCategory').hide();
-			$('#shoesSizeForSearch').hide();
-			
-			$('#clothesSizeForSearch').show();			
-			$('#bottomCategory').show();
-		}else if(result =='clothesOuter'){
-			$('#topCategory').hide();
-			$('#bottomCategory').hide();
-			$('#dressCategory').hide();
-			$('#shoesCategory').hide();
-			$('#bagCategory').hide();
-			$('#accessoryCategory').hide();
-			$('#etcCategory').hide();
-			$('#shoesSizeForSearch').hide();
-			
-			$('#clothesSizeForSearch').show();			
-			$('#outerCategory').show();
-		}else if(result =='dress'){
-			$('#topCategory').hide();
-			$('#bottomCategory').hide();
-			$('#outerCategory').hide();
-			$('#shoesCategory').hide();
-			$('#bagCategory').hide();
-			$('#accessoryCategory').hide();
-			$('#etcCategory').hide();
-			$('#shoesSizeForSearch').hide();
-			
-			$('#clothesSizeForSearch').show();			
-			$('#dressCategory').show();
-		}else if(result =='shoes'){
-			$('#topCategory').hide();
-			$('#bottomCategory').hide();
-			$('#outerCategory').hide();
-			$('#dressCategory').hide();
-			$('#bagCategory').hide();
-			$('#accessoryCategory').hide();
-			$('#etcCategory').hide();
-			$('#clothesSizeForSearch').hide();
-			
-			$('#shoesSizeForSearch').show();
-			$('#shoesCategory').show();
-		}else if(result =='bag'){
-			$('#topCategory').hide();
-			$('#bottomCategory').hide();
-			$('#outerCategory').hide();
-			$('#dressCategory').hide();
-			$('#shoesCategory').hide();
-			$('#accessoryCategory').hide();
-			$('#etcCategory').hide();	
-			$('#shoesSizeForSearch').hide();
-			
-			$('#clothesSizeForSearch').show();					
-			$('#bagCategory').show();
-		}else if(result =='accessory'){
-			$('#topCategory').hide();
-			$('#bottomCategory').hide();
-			$('#outerCategory').hide();
-			$('#dressCategory').hide();
-			$('#shoesCategory').hide();
-			$('#bagCategory').hide();
-			$('#etcCategory').hide();
-			$('#shoesSizeForSearch').hide();
-			
-			$('#clothesSizeForSearch').show();			
-			$('#accessoryCategory').show();
-		}else if(result =='etc'){
-			$('#topCategory').hide();
-			$('#bottomCategory').hide();
-			$('#outerCategory').hide();
-			$('#dressCategory').hide();
-			$('#shoesCategory').hide();
-			$('#bagCategory').hide();
-			$('#accessoryCategory').hide();
-			$('#shoesSizeForSearch').hide();
-			
-			$('#clothesSizeForSearch').show();			
-			$('#etcCategory').show();			
-		}else if(result== 'CategoryAll'){
-			$('#topCategory').hide();
-			$('#bottomCategory').hide();
-			$('#outerCategory').hide();
-			$('#dressCategory').hide();
-			$('#shoesCategory').hide();
-			$('#bagCategory').hide();
-			$('#accessoryCategory').hide();
-			$('#etcCategory').hide();		
-			$('#shoesSizeForSearch').hide();
-			
-			$('#clothesSizeForSearch').show();				
-		}
-	}
 	
 	function clothesSearch(){
 		//console.log();
@@ -451,7 +278,7 @@ $(document).ready(function(){
 			success:function(list){
 				let str ='';
 				$(list).each(function(i,n){
-					str +='<a onclick="readClothes('+n+')"><img src="../closet/clothesDownload?closetNum='+closetNum+'&clothesNum='+n+'"></a>';
+					str +='<a onclick="readClothes('+n.clothesNum+')"><img src="../closet/clothesDownload?closetNum='+closetNum+'&clothesNum='+n.clothesNum+'"></a>';
 				});
 				$('#whatsInCloset').html(str); 
 			},
@@ -527,7 +354,7 @@ $(document).ready(function(){
 			success:function(manageTip){
 				console.log('howToManageClothes 매핑')
 				let manageTipStr = '<tr><td><button class="btn-pink">관리방법</button></td>\
-				<td colspan="4">&nbsp;&nbsp;'+manageTip.howToWash+manageTip.howToKeep+'</td></tr></table>';
+				<td colspan="4">&nbsp;&nbsp;'+manageTip.howToWash+'&nbsp;'+manageTip.howToKeep+'</td></tr></table>';
 				$('#ManageDetail').html(manageTipStr); 
 			},
 			error:function(e){
@@ -709,10 +536,160 @@ $(document).ready(function(){
 		}//if문
 	}
 	
+	//의류 세탁물 체크
 	function laundryIn(clothesNum){
 		closetNum = parseInt(closetNum);
+		$.ajax({
+			url:'laundryIn',
+			type:'get',
+			data:{closetNum: closetNum, clothesNum:clothesNum},
+			success:function(){
+				location.reload(true);				
+			},
+			error:function(e){
+				alert(JSON.stringify(e));
+			}						
+		})		
 	}
 	
 	function webSearch(){
 		window.open("webSearch");
+	}
+	
+	const categoryMapping = {
+    'Tshirt': '티셔츠', 'blouse': '블라우스/셔츠', 'sweatshirt': '맨투맨/후디', 'knitwear': '니트',
+    'skirt': '치마', 'pants': '바지', 'jeans': '청바지', 'trainingPants': '트레이닝/조거',
+    'coat': '코트', 'jacket': '자켓/점퍼', 'paddedJacket': '패딩', 'zipupHoodie': '후드집업', 'cardigan': '가디건/베스트',
+    'miniDress': '미니원피스', 'longDress': '롱원피스',
+    'sneakers': '운동화', 'formalShoes': '구두', 'boots': '부츠', 'sandals': '샌들',
+    'backpack': '백팩', 'totebag': '숄더/토트백', 'crossbodybag': '크로스백', 'clutchbag': '클러치',
+    'hat': '모자', 'socks': '양말', 'jewelryOrWatch': '쥬얼리/시계', 'scarf': '머플러/스카프', 'belt': '벨트', 'accessoryEtc': '기타',
+    'innerwear': '이너웨어', 'sleepwear': '잠옷', 'swimsuit': '수영복'
+	};
+	
+	const materialMapping = {
+    'none': '해당 없음', 'cotton': '면', 'linen': '린넨',
+    'polyester': '폴리에스테르', 'denim': '데님', 'knit': '니트',
+    'wool': '울', 'acryl': '아크릴', 'corduroy': '코듀로이',
+    'silk': '실크', 'woolen': '모직', 'nylon': '나일론', 'suede': '스웨이드',
+    'leather': '가죽', 'rayon': '레이온', 'oxford': '옥스퍼드',
+    'napping': '기모'
+	};
+	
+	const seasonMapping = {
+    'spring': '봄', 'summer': '여름', 'fall': '가을','winter': '겨울'
+	};
+	
+// !!!!!!!!!!!!!!!!!!!!!!!!! 옷 검색 애니메이션 효과 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	function clothesSearchAnimation(){
+		var result = $('#clothesCategoryForSearch option:selected').val();
+		if(result=='top'){
+			$('#bottomCategory').hide();
+			$('#outerCategory').hide();
+			$('#dressCategory').hide();
+			$('#shoesCategory').hide();
+			$('#bagCategory').hide();
+			$('#accessoryCategory').hide();
+			$('#etcCategory').hide();
+			$('#shoesSizeForSearch').hide();
+			
+			$('#clothesSizeForSearch').show();
+			$('#topCategory').show();
+		}else if(result =='bottom'){
+			$('#topCategory').hide();
+			$('#outerCategory').hide();
+			$('#dressCategory').hide();
+			$('#shoesCategory').hide();
+			$('#bagCategory').hide();
+			$('#accessoryCategory').hide();
+			$('#etcCategory').hide();
+			$('#shoesSizeForSearch').hide();
+			
+			$('#clothesSizeForSearch').show();			
+			$('#bottomCategory').show();
+		}else if(result =='clothesOuter'){
+			$('#topCategory').hide();
+			$('#bottomCategory').hide();
+			$('#dressCategory').hide();
+			$('#shoesCategory').hide();
+			$('#bagCategory').hide();
+			$('#accessoryCategory').hide();
+			$('#etcCategory').hide();
+			$('#shoesSizeForSearch').hide();
+			
+			$('#clothesSizeForSearch').show();			
+			$('#outerCategory').show();
+		}else if(result =='dress'){
+			$('#topCategory').hide();
+			$('#bottomCategory').hide();
+			$('#outerCategory').hide();
+			$('#shoesCategory').hide();
+			$('#bagCategory').hide();
+			$('#accessoryCategory').hide();
+			$('#etcCategory').hide();
+			$('#shoesSizeForSearch').hide();
+			
+			$('#clothesSizeForSearch').show();			
+			$('#dressCategory').show();
+		}else if(result =='shoes'){
+			$('#topCategory').hide();
+			$('#bottomCategory').hide();
+			$('#outerCategory').hide();
+			$('#dressCategory').hide();
+			$('#bagCategory').hide();
+			$('#accessoryCategory').hide();
+			$('#etcCategory').hide();
+			$('#clothesSizeForSearch').hide();
+			
+			$('#shoesSizeForSearch').show();
+			$('#shoesCategory').show();
+		}else if(result =='bag'){
+			$('#topCategory').hide();
+			$('#bottomCategory').hide();
+			$('#outerCategory').hide();
+			$('#dressCategory').hide();
+			$('#shoesCategory').hide();
+			$('#accessoryCategory').hide();
+			$('#etcCategory').hide();	
+			$('#shoesSizeForSearch').hide();
+			
+			$('#clothesSizeForSearch').show();					
+			$('#bagCategory').show();
+		}else if(result =='accessory'){
+			$('#topCategory').hide();
+			$('#bottomCategory').hide();
+			$('#outerCategory').hide();
+			$('#dressCategory').hide();
+			$('#shoesCategory').hide();
+			$('#bagCategory').hide();
+			$('#etcCategory').hide();
+			$('#shoesSizeForSearch').hide();
+			
+			$('#clothesSizeForSearch').show();			
+			$('#accessoryCategory').show();
+		}else if(result =='etc'){
+			$('#topCategory').hide();
+			$('#bottomCategory').hide();
+			$('#outerCategory').hide();
+			$('#dressCategory').hide();
+			$('#shoesCategory').hide();
+			$('#bagCategory').hide();
+			$('#accessoryCategory').hide();
+			$('#shoesSizeForSearch').hide();
+			
+			$('#clothesSizeForSearch').show();			
+			$('#etcCategory').show();			
+		}else if(result== 'CategoryAll'){
+			$('#topCategory').hide();
+			$('#bottomCategory').hide();
+			$('#outerCategory').hide();
+			$('#dressCategory').hide();
+			$('#shoesCategory').hide();
+			$('#bagCategory').hide();
+			$('#accessoryCategory').hide();
+			$('#etcCategory').hide();		
+			$('#shoesSizeForSearch').hide();
+			
+			$('#clothesSizeForSearch').show();				
+		}
 	}

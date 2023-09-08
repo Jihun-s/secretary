@@ -3,6 +3,7 @@
  */
 $(document).ready(function(){
 
+		$('#laundryAllOut').on('click',laundryAllOut);
 //!!!!!!!!!!!!!!!!!!!!!! 옷 찾기  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!	
 		//옷찾기 분류에서 소분류 숨겨놓기
 		$('#topCategory').hide();
@@ -16,11 +17,9 @@ $(document).ready(function(){
 		//옷찾기에서 신발사이즈 숨겨놓기
 		$('#shoesSizeForSearch').hide();
 		//옷찾기에서 분류를 선택하면 clothesSearchAnimation함수 실행	
-	//	$("#clothesCategoryForSearch").on('change',clothesSearchAnimation);
-	//	$("#clothesSearchbtn").on('click',clothesSearch); //옷찾기 버튼 클릭하면 clothesSearch 함수실행
+		$("#clothesCategoryForSearch").on('change',clothesSearchAnimation);
+		$("#clothesSearchbtn").on('click',clothesSearch); //옷찾기 버튼 클릭하면 clothesSearch 함수실행
 //!!!!!!!!!!!!!!!!!!!!!! 옷 찾기  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!		
-
-
 
 
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!옷장안에 의류목록 출력!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -33,17 +32,56 @@ $(document).ready(function(){
 			dataType:'json',
 			success:function(list){
 				let str ='';
+				let laundryCnt = 0; //세탁물 갯수
 				$(list).each(function(i,n){
 					let clothesNum = parseInt(n.clothesNum);
 					str += '<a onclick="readClothes('+n.closetNum+','+clothesNum+')"><img src="../closet/clothesDownload?closetNum='+n.closetNum+'&clothesNum='+clothesNum+'">';
+					laundryCnt += 1;
 				});
-				$('#whatsInCloset').html(str); 
+				if(str != ''){
+					$('#whatsInCloset').html(str); 
+				}
+				
+				let proVal = (laundryCnt/50) * 100; 
+				let proStr = '<div class="progress-bar" role="progressbar" style="width:'+proVal+'%; \
+				background-color: rgba(223,132,166,255); border-color: rgba(223,132,166,255);" \
+				aria-valuenow="'+proVal+'" aria-valuemin="0" aria-valuemax="50"></div>';
+				let cntStr = '<p>세탁물 '+laundryCnt+'개가 쌓여있어요</p>';
+				
+				$('#progessDetail').html(proStr);
+				$('#laundryDetail').html(cntStr);
 			},
 			error:function(e){
 				alert(JSON.stringify(e));
 			}			
 		})				
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!옷장안에 의류목록 출력!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	
+// !!!!!!!!!!!!!!!!!!! 상세 정보: 세탁물 게이지 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
+		$.ajax({
+			url:'inCloset',
+			type:'get',
+			data:{closetNum : closetNum, clothesLaundry: laundryCheck},
+			dataType:'json',
+			success:function(list){
+				let str ='';
+				$(list).each(function(i,n){
+					let clothesNum = parseInt(n.clothesNum);
+					str += '<a onclick="readClothes('+n.closetNum+','+clothesNum+')"><img src="../closet/clothesDownload?closetNum='+n.closetNum+'&clothesNum='+clothesNum+'">';
+				});
+				if(str != ''){
+					$('#whatsInCloset').html(str); 
+				}
+			},
+			error:function(e){
+				alert(JSON.stringify(e));
+			}			
+		})	  
+	
+	
+	
+	
+	
 	
 });//document.ready 끝
 	
@@ -87,7 +125,7 @@ $(document).ready(function(){
 							<td>&nbsp;&nbsp;'+seasonresult+'</td>\
 							<td>&nbsp;&nbsp;'+clothes.clothesSize+'</td></tr>'
 				let footer = '<br><button class="btn btn-primary" style="background-color: rgba(223,132,166,255); border-color: rgba(223,132,166,255); float:right"\
-								onclick="laundryIn('+clothes.clothesNum+')">옷장으로 보내기</button>'
+								onclick="laundryOut('+clothes.closetNum+','+clothes.clothesNum+')">옷장으로 보내기</button>'
 							
 
 				$('#IMGdetail').html(imgStr);
@@ -119,8 +157,43 @@ $(document).ready(function(){
 		
 		
 	}
+	
+	function laundryAllOut(){
+		let res = confirm('정말로 비우시겠어요?');
+		if(res){
+			$.ajax({
+				url:'laundryOut',
+				type:'get',
+				data:{closetNum:0, clothesNum:0},
+				success:function(){
+					location.reload(true);
+				},
+				error:function(e){
+					alert(JSON.stringify(e));
+				}			
+			});	
+		}//if문
+	}
+	
+	function laundryOut(closetNum,clothesNum){
+		$.ajax({
+			url:'laundryOut',
+			type:'get',
+			data:{closetNum:closetNum, clothesNum:clothesNum},
+			success:function(){
+				location.reload(true);
+			},
+			error:function(e){
+				alert(JSON.stringify(e));
+			}			
+		});	
+	}
+	
+	
+	
 
-/*	function clothesSearch(){
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 옷 검색 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	function clothesSearch(){
 		//console.log();
 		// 카테고리 category, 사이즈 size
 		let category = $('#clothesCategoryForSearch option:selected').val();
@@ -167,18 +240,19 @@ $(document).ready(function(){
 		console.log(seasonArr);
 		console.log(typeof(seasonArr));
 		
-		closetNum = parseInt(closetNum); // 스트링에서 정수형으로 변환
+		let laundryCheck = true;
+		let closetNum = 0;
 		$.ajax({
 			url:'inCloset',
 			type:'get',
 			traditional:true,
 			data:{closetNum: closetNum, category:category, size:size
-				,seasonArr: seasonArr, material:material},
+				,seasonArr: seasonArr, material:material, clothesLaundry: laundryCheck},
 			dataType:'json',
 			success:function(list){
 				let str ='';
 				$(list).each(function(i,n){
-					str +='<a onclick="readClothes('+n+')"><img src="../closet/clothesDownload?closetNum='+closetNum+'&clothesNum='+n+'"></a>';
+					str +='<a onclick="readClothes('+n.clothesNum+')"><img src="../closet/clothesDownload?closetNum='+n.closetNum+'&clothesNum='+n.clothesNum+'"></a>';
 				});
 				$('#whatsInCloset').html(str); 
 			},
@@ -186,10 +260,10 @@ $(document).ready(function(){
 				alert(JSON.stringify(e));
 			}			
 		})
-	}*/
+	}
 	
 	
-	
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!! 옷 검색 애니메이션 효과 !!!!!!!!!!!!!!!!!!!!!!!!!1	
 	function clothesSearchAnimation(){
 		var result = $('#clothesCategoryForSearch option:selected').val();
 		if(result=='top'){
@@ -303,6 +377,8 @@ $(document).ready(function(){
 		}
 	}
 	
+	
+//!!!!!!!!!!!!!!!!!!!!!!     카테고리 맵핑   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!	
 	const categoryMapping = {
     'Tshirt': '티셔츠',
     'blouse': '블라우스/셔츠',
@@ -359,8 +435,5 @@ $(document).ready(function(){
 	};
 	
 	const seasonMapping = {
-    'spring': '봄',
-    'summer': '여름',
-    'fall': '가을',
-    'winter': '겨울'
+    'spring': '봄', 'summer': '여름', 'fall': '가을', 'winter': '겨울'
 	};
