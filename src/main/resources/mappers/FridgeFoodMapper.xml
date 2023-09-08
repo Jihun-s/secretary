@@ -58,4 +58,36 @@
 	<select id="getAllFridgeFoods" resultType="FridgeFood">
 	    SELECT * FROM SECRETARY_FRIDGE_FOOD
 	</select>
+	
+	<update id="modifyFridgeFood" parameterType="FridgeFood">
+	    UPDATE SECRETARY_FRIDGE_FOOD
+	    SET 
+	        FOOD_NAME = #{foodName},
+	        FRIDGE_ID = #{fridgeId},
+	        FOOD_QUANTITY = #{foodQuantity},
+	        FOOD_CATEGORY = #{foodCategory}
+	        <if test="foodPurchaseDate != null">
+	        , FOOD_PURCHASE_DATE = #{foodPurchaseDate}
+	        </if>
+	        <if test="foodExpiryDate != null">
+	        , FOOD_EXPIRY_DATE = #{foodExpiryDate}
+	        </if>
+	        <if test="foodMadeDate != null">
+	        , FOOD_MADE_DATE = #{foodMadeDate}
+	        </if>
+	        <if test="foodPrice != null">
+	        , FOOD_PRICE = #{foodPrice}
+	        </if>
+	        <if test="foodOriginalFile != null">
+	        , FOOD_ORIGINAL_FILE = #{foodOriginalFile}
+	        </if>
+	        <if test="foodSavedFile != null">
+	        , FOOD_SAVED_FILE = #{foodSavedFile}
+	        </if>
+	    WHERE FOOD_ID = #{foodId}
+	</update>
+
+	<delete id="deleteFridgeFood" parameterType="int">
+	    DELETE FROM SECRETARY_FRIDGE_FOOD WHERE FOOD_ID = #{foodId}
+	</delete>
 </mapper>

@@ -11,4 +11,6 @@ public interface FridgeFoodDAO {
     void insertFridgeFood(FridgeFood fridgeFood);
     FridgeFood getFoodDetails(int foodId);
     List<FridgeFood> getAllFridgeFoods();
+    public int modifyFridgeFood(FridgeFood fridgeFood);
+    public int deleteFridgeFood(int foodId);
 }

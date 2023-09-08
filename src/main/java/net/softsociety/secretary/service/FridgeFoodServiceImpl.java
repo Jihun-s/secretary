@@ -8,11 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
+import lombok.extern.slf4j.Slf4j;
 import net.softsociety.secretary.dao.FoodCategoryDAO;
 import net.softsociety.secretary.dao.FridgeFoodDAO;
 import net.softsociety.secretary.domain.FoodCategory;
 import net.softsociety.secretary.domain.FridgeFood;
 
+@Slf4j
 @Service
 public class FridgeFoodServiceImpl implements FridgeFoodService {
 
@@ -66,5 +68,33 @@ public class FridgeFoodServiceImpl implements FridgeFoodService {
     public List<FridgeFood> getAllFridgeFoods() {
         return fridgeFoodDAO.getAllFridgeFoods();
     }
+
+    @Override
+    public void modifyFridgeFood(FridgeFood fridgeFood, int familyId) {
+        // 유통기한 설정 로직
+        if (fridgeFood.getFoodExpiryDate() == null || fridgeFood.getFoodExpiryDate().trim().isEmpty()) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.add(Calendar.DAY_OF_MONTH, 14);
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            String formattedDate = dateFormat.format(calendar.getTime());
+            fridgeFood.setFoodExpiryDate(formattedDate);
+        }
+
+        // 카테고리 존재 여부 확인 및 추가 로직
+        String category = fridgeFood.getFoodCategory();
+        FoodCategory foodCategory = new FoodCategory();
+        foodCategory.setFoodCategory(category);
+        foodCategory.setFamilyId(familyId);
+        if (!foodCategoryDAO.exists(foodCategory)) {
+            foodCategoryDAO.addCategory(foodCategory);
+        }
+
+        fridgeFoodDAO.modifyFridgeFood(fridgeFood);
+    }
+
+	@Override
+	public void deleteFridgeFood(int foodId) {
+		fridgeFoodDAO.deleteFridgeFood(foodId);
+	}
 
 }
