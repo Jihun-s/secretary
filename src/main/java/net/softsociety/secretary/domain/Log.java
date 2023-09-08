@@ -12,12 +12,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 @Entity
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "secretary_logstat")
 @SequenceGenerator(name = "secretary_logstat_seq", sequenceName = "secretary_logstat_seq", allocationSize = 1)
 public class Log {
@@ -31,10 +32,10 @@ public class Log {
     private String userId;
     
     @Column(name = "login")
-    private Date login;
+    private Timestamp login;
     
     @Column(name = "logout")
-    private Date logout;
+    private Timestamp logout;
     
     @Column(name = "log_ip", nullable = false)
     private String logIp;
