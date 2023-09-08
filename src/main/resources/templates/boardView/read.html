@@ -59,7 +59,7 @@ function submitAnswer() {
 <body>
 <h1>[글읽기]</h1>
 <a th:href="@{/}">Home</a> 
-<a th:href="@{/board/list2}">목록</a>
+<a th:href="@{/board/list}">목록</a>
 <a th:href="@{/board/update(boardId=(${board.boardId}))}">수정</a>
 <a href="#" th:attr="onclick='deleteOne(\'' + ${board.boardId} + '\')'">삭제</a>
 

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>LOGS</title>
+</head>
+<body>
+<h1>로그 정보</h1>
+<table>
+        <tr>
+            
+            <th>사용자</th>
+            <th>메시지</th>
+            <th>로그인</th>
+            <th>로그아웃</th>
+            <th>아이피</th>
+        </tr>
+        <tr th:each="log : ${logs}">
+            
+            <td th:text="${log.userId}"></td>
+            <td th:text="${log.logMessage}"></td>
+            <td th:text="${log.login}"></td>
+            <td th:text="${log.logout}"></td>
+            <td th:text="${log.logIp}"></td>
+        </tr>
+    </table>
+
+</body>
+</html>
