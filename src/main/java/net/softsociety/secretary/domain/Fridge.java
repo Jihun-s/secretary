@@ -12,4 +12,5 @@ public class Fridge {
 	private int familyId;
 	private String fridgeName;
 	private String fridgeCategory;
+	private String currentFridgeName;
 }

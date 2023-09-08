@@ -12,13 +12,15 @@
 	    VALUES (Secretary_Fridge_SEQ.NEXTVAL, #{familyId}, #{fridgeName}, #{fridgeCategory})
 	</insert>
 
-    <update id="updateFridge">
+    <update id="updateFridge" parameterType="Fridge">
         UPDATE Secretary_Fridge
-        SET fridge_name = #{fridgeName}, fridge_category = #{fridgeCategory}
-        WHERE fridge_id = #{fridgeId}
+        SET fridge_name = #{fridgeName}
+        WHERE fridge_name = #{currentFridgeName}
+	    AND family_id = #{familyId}
+	    AND (fridge_category = '냉장실' OR fridge_category = '냉동실')
     </update>
 
-    <delete id="deleteFridge">
+    <delete id="deleteFridge" parameterType="int">
         DELETE FROM Secretary_Fridge WHERE fridge_id = #{fridgeId}
     </delete>
 </mapper>

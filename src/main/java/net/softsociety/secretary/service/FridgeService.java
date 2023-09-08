@@ -7,6 +7,6 @@ import net.softsociety.secretary.domain.Fridge;
 public interface FridgeService {
     List<Fridge> getAllFridges(int familyId);
     List<Integer> addFridge(Fridge fridge);
-    Fridge updateFridge(int id, Fridge fridge);
+    void updateFridge(Fridge fridge);
     void deleteFridge(int id);
 }
