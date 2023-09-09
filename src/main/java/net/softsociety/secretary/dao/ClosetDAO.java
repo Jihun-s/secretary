@@ -13,6 +13,10 @@ import net.softsociety.secretary.domain.ClothesManager;
 public interface ClosetDAO {
 	//옷장추가
 	int insertCloset(Closet closet);
+	//옷장삭제
+	int delCloset(Closet closet);
+	//옷장이름 수정
+	int modifyCloset(Closet closet);
 
 	//옷장리스트 출력
 	ArrayList<Closet> findAllCloset();
@@ -22,6 +26,8 @@ public interface ClosetDAO {
 
 	//옷장에 의류목록 출력
 	ArrayList<Clothes> findAllClothes(HashMap<String, Object> map);
+	ArrayList<Clothes> findAllClothesByCloset(Closet closet);
+
 	//옷장 옷 찾기
 	Clothes findClothes(HashMap<String, Integer> map);
 	//옷장 옷 삭제
@@ -35,5 +41,6 @@ public interface ClosetDAO {
 	void laundryIn(Clothes clothes);
 	//세탁물 다시 옷장으로
 	void laundryOut(HashMap<String, Integer> map);
+
 
 }

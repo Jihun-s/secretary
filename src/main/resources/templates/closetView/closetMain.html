@@ -628,15 +628,12 @@
                     <div class="card-body" id="ManageCloset">
                         <table th:each="closetItem:${closetList}">
                           <tr>
-                          	<td><p th:text="${closetItem.closetName}"></p>
+                          	<td><a th:href="|javascript:modifyCloset(${closetItem.closetNum})|"><img th:src="@{/images/fridgeimg/ModifyName.png}" class="modifyCloset"></a>
+                          		<a th:href="|javascript:delCloset(${closetItem.closetNum})|"><img th:src="@{/images/fridgeimg/Red_X.png}" class="delCloset"></a>
+                          		<p th:text="${closetItem.closetName}"></p>
                           		<a th:href="@{/closet/InCloset(closetNum=${closetItem.closetNum})}">
                           		<img th:src="@{/images/closetImg/wardrobe.png}">
                           		</a>
-                          	</td>
-                          </tr>
-                          <tr class="closetEditForUser">
-                          	<td>
-                          		<button class="btn-pink">수정</button> <button class="btn-pink">삭제</button>
                           	</td>
                           </tr>
                          </table>

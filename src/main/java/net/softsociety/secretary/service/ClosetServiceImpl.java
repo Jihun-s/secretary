@@ -25,6 +25,18 @@ public class ClosetServiceImpl implements ClosetService {
 		return dao.insertCloset(closet);
 	}
 	
+	//옷장삭제
+	@Override
+	public int delCloset(Closet closet) {
+		return dao.delCloset(closet);
+	}
+
+	//옷장이름 수정
+	@Override
+	public int modifyCloset(Closet closet) {
+		return dao.modifyCloset(closet);
+	}
+	
 	//옷장 리스트 출력
 	@Override
 	public ArrayList<Closet> findAllCloset() {
@@ -65,6 +77,12 @@ public class ClosetServiceImpl implements ClosetService {
 		return dao.findAllClothes(map);
 	}
 	
+	//옷장안에 모든의류 출력
+	@Override
+	public ArrayList<Clothes> findAllClothes(Closet closet) {
+		return dao.findAllClothesByCloset(closet);
+	}
+
 	//옷장안에 옷번호로 의류하나 찾기
 	@Override
 	public Clothes findClothes(int closetNum, int clothesNum) {
@@ -114,6 +132,7 @@ public class ClosetServiceImpl implements ClosetService {
 		map.put("clothesNum", clothesNum);
 		dao.laundryOut(map);
 	}
+
 
 	
 	

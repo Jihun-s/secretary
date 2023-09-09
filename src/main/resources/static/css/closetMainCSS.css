@@ -37,6 +37,20 @@
 	width:50%;
 }
 
+.delCloset{
+	position:absolute;
+	right:2em;;
+	width:1.5em;
+}
+
+
+.modifyCloset{
+	position:absolute;
+	right:4em;;
+	width:1.5em;
+}
+
+
 #diaryCSS{
 	display:inline-block; 
 	align: center;
@@ -49,11 +63,13 @@
 
 /* 옷장보기, 코디일지 css 끝*/
 
-
-
-
+#plusClosetBtn img {
+	width: 80%;
+	padding-left:2.2em;
+	cursor:pointer;
+}
 #closetNameForInsert {
-	width:8em;
+	padding-left:1em;
 }
 
 

@@ -159,7 +159,7 @@ $(document).ready(function(){
 	}
 	
 	function laundryAllOut(){
-		let res = confirm('정말로 비우시겠어요?');
+		let res = confirm('세탁바구니를 비우시겠어요?');
 		if(res){
 			$.ajax({
 				url:'laundryOut',

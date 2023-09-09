@@ -4,9 +4,13 @@
 
  $(document).ready(function(){
 	 	
-	 	$('.closetEditForUser').hide(); //옷장 편집(수정,삭제버튼) 숨기기
-		$('#insertClosetBtn').click(pluscloset); //옷장추가
-		$('#editClosetBtn').click(editCloset); //옷장편집
+	 	$('.delCloset').hide();
+	 	$('.modifyCloset').hide();
+		$('#editClosetBtn').on('click',function(){
+			$('.delCloset').toggle();
+			$('.modifyCloset').toggle();			
+		})
+		$('#insertClosetBtn').click(insertCloset); //옷장추가
 //!!!!!!!!!!!!!!!!!!!!!! 옷 찾기  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!	
 		//옷찾기 분류에서 소분류 숨겨놓기
 		$('#topCategory').hide();
@@ -51,22 +55,64 @@
 		
 });//document.ready 끝
 
-
-function editCloset(){
-	//$('.closetNameForUser').hide();
-	$('.closetEditForUser').show();
+function delCloset(closetNum){
+	console.log(closetNum);
+	let res = confirm('옷장을 삭제하시겠어요? 옷장 안에 저장된 옷들도 전부 삭제됩니다.');
+	if(res){
+		$.ajax({
+			url:'closet/delCloset',
+			type:'post',
+			data:{closetNum: closetNum, familyId: familyId, userId: userid},
+			success:function(){
+				location.reload(true);
+			},
+			error:function(e){
+				alert(JSON.stringify(e));
+			}			
+		});			
+	}//if문
 }
 
-function pluscloset(){
-    $('#ManageCloset').html('<table><tr><td>'+userid+'님</td></tr>\
-    				<tr><td>옷장 이름을<br>적어주세요</td></tr><tr>\
-    				<td><input type="text" id="closetNameForInsert"></td></tr>\
-    				<tr><td> </td></tr>\
-    				<tr><td><button	class="btn-pink" id="plusBtn">추가</button></td></tr>\
-    				</table>');
-    $('#plusBtn').on('click',function(){
-		let closetnum = 0;
+function modifyCloset(closetNum){
+	console.log(closetNum);
+	let modifyStr = '<table><tr><td><input type="text" placeholder="옷장이름 (3자 이상)" id="closetNameForModify" style="width:72%;">\
+								<button class="btn-pink" id="closetNameForModifyBtn">수정</button></td></tr>\
+					<tr><td><img src="images/closetImg/wardrobe.png"></td></tr></table>'
+	$('#ManageCloset').html(modifyStr);
+	$('#closetNameForModifyBtn').on('click',function(){
+		let n = $('#closetNameForModify').val();
+   		if(n.length <=1 || n.length >= 7){
+			alert('2글자 이상, 7글자 미만으로 입력해주세요');
+			return;   
+		}
+		$.ajax({
+			url:'closet/modifyCloset',
+			type:'post',
+			data:{closetNum:closetNum, familyId: familyId, userId: userid, closetName:n},
+			success:function(){
+				alert('옷장수정 성공');
+				location.reload(true);
+			},
+			error:function(e){
+				alert(JSON.stringify(e));
+			}
+		}); //ajax 끝		
+	}) //#closetNameForModifyBtn : click 함수 끝
+}
+
+
+function insertCloset(){
+	
+	let insertStr = '<table><tr><td id="plusClosetBtn"><img src="images/fridgeimg/PlusButton.png"></td></tr>\
+							<tr><td><br><input type="text" id="closetNameForInsert" placeholder="옷장이름 입력 (3자 이상)"></td></tr></table>'
+    $('#ManageCloset').html(insertStr);
+    $('#plusClosetBtn').on('click',function(){
    		let n = $('#closetNameForInsert').val();
+   		if(n.length <=1 || n.length >= 7){
+			alert('2글자 이상, 7글자 미만으로 입력해주세요');
+			return;   
+		}
+		let closetnum = 0;
    		familyId = parseInt(familyId);
 		$.ajax({
 			url:'closet/insertCloset',

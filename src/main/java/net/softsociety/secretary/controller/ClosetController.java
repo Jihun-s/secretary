@@ -60,6 +60,39 @@ public class ClosetController {
 		if(n != 1) {
 			log.debug("옷장 추가 실패");
 		}
+	}
+	
+	//옷장 수정
+	@ResponseBody
+	@PostMapping("modifyCloset")
+	public void modifyCloset(Closet closet) {
+		log.debug("{}",closet);
+		int n = service.modifyCloset(closet);
+		if(n != 1) {
+			log.debug("옷장 추가 실패");
+		}
+	}
+	
+	//옷장 삭제
+	@ResponseBody
+	@PostMapping("delCloset")
+	public void delCloset(Closet closet) {
+		log.debug("옷장삭제 매핑!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+		log.debug("삭제할 옷장:{}",closet);
+		//옷장안에 의류리스트 불러오기
+		ArrayList<Clothes> clothesList = service.findAllClothes(closet);	
+		log.debug("옷장안 의류리스트:{}", clothesList);
+		for(Clothes clothes : clothesList) {
+			if(clothes.getClothesImg() != null || clothes.getClothesImg() != "") {
+				String fullPath = uploadPath + "/" + clothes.getClothesImg();
+				FileService.deleteFile(fullPath);
+			}		
+		}
+		
+		int n = service.delCloset(closet);
+		if(n != 1) {
+			log.debug("옷장 추가 실패");
+		}		
 	}	
 	
 	//사진 편집

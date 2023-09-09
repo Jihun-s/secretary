@@ -10,6 +10,17 @@
 	values (Secretary_Closet_SEQ.nextval, #{familyId}, #{userId}, #{closetName})
 </insert>
 
+<!-- 옷장삭제 -->
+<delete id="delCloset" parameterType="Closet">
+	delete from Secretary_Closet where closet_num = #{closetNum} and family_id = #{familyId} and user_id =  #{userId}
+</delete>
+
+<!-- 옷장이름 수정 -->
+<update id="modifyCloset" parameterType="Closet">
+	update Secretary_Closet set closet_name = #{closetName}
+			where closet_num = #{closetNum} and family_id = #{familyId} and user_id = #{userId}
+</update>
+
 <!-- 옷장목록 전체 불러오기 -->
 <select id="findAllCloset" resultType="Closet">
 	select * from Secretary_Closet order by closet_num
@@ -85,6 +96,11 @@
 			</if>
 			</where>
 			order by clothes_num desc
+</select>
+
+<!-- 옷장안 의류전체 목록(옷장으로 찾기) -->
+<select id="findAllClothesByCloset" parameterType="Closet">
+	select * from Secretary_clothes where closet_num = #{closetNum} and family_id = #{familyId}
 </select>
 
 <!-- 옷장안 옷 찾기(옷장번호, 옷번호) -->
