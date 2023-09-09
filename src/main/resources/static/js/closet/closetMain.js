@@ -23,6 +23,8 @@
 		$("#clothesCategoryForSearch").on('change',clothesSearchAnimation);
 		$("#clothesSearchbtn").on('click',clothesSearch); //옷찾기 버튼 클릭하면 clothesSearch 함수실행
 //!!!!!!!!!!!!!!!!!!!!!! 옷 찾기  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!		
+		
+//!!!!!!!!!!!!!!!!!!! 세탁물 게이지 표시 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!		
 		let laundryCheck = true;
 		let closetNum = 0;
 		$.ajax({
@@ -129,8 +131,8 @@ function clothesSearch(){
 	}); 		
 	console.log(seasonArr);
 	console.log(typeof(seasonArr));
-		
-	$.ajax({
+	window.open("../secretary/closet/AllCloset");
+/*	$.ajax({
 		url:'inCloset',
 		type:'get',
 		traditional:true,
@@ -147,7 +149,7 @@ function clothesSearch(){
 		error:function(e){
 			alert(JSON.stringify(e));
 		}			
-	})
+	})*/
 }
 
 function clothesSearchAnimation(){

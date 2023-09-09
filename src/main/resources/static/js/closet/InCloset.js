@@ -42,7 +42,7 @@ $(document).ready(function(){
 				let str ='';
 				$(list).each(function(i,n){
 					let clothesNum = parseInt(n.clothesNum);
-					str +='<a onclick="readClothes('+clothesNum+')"><img src="../closet/clothesDownload?closetNum='+n.closetNum+'&clothesNum='+clothesNum+'"></a>';
+					str +='<a onclick="readClothes('+n.closetNum+','+clothesNum+')"><img src="../closet/clothesDownload?closetNum='+n.closetNum+'&clothesNum='+clothesNum+'"></a>';
 				});
 				$('#whatsInCloset').html(str); 
 			},
@@ -290,9 +290,9 @@ $(document).ready(function(){
 	
 	
 	//의류 자세히보기
-	function readClothes(clothesNum){
+	function readClothes(closetNum, clothesNum){
+		console.log(closetNum);
 		console.log(clothesNum);
-		closetNum = parseInt(closetNum);
 		$.ajax({
 			url:'readClothes',
 			type:'get',
@@ -321,7 +321,7 @@ $(document).ready(function(){
 					seasonresult = seasonMapping[clothes.clothesSeasons] || clothes.clothesSeasons;
 				}
 				
-				let imgStr =  '<img	src="../closet/clothesDownload?closetNum='+closetNum+'&clothesNum='+clothesNum+'">'
+				let imgStr =  '<img	src="../closet/clothesDownload?closetNum='+clothes.closetNum+'&clothesNum='+clothes.clothesNum+'">'
 				let str = '<br><table><tr>\
 							<td><button class="btn-pink">카테고리</button><td>\
 							<td>&nbsp;&nbsp;'+translatedCategory+'</td>\
@@ -329,7 +329,7 @@ $(document).ready(function(){
 							<td>&nbsp;&nbsp;'+seasonresult+'</td>\
 							<td>&nbsp;&nbsp;'+clothes.clothesSize+'</td></tr>'
 				let footer = '<br><button class="btn btn-primary" style="background-color: rgba(223,132,166,255); border-color: rgba(223,132,166,255); float:left"\
-								onclick="laundryIn('+clothesNum+')">세탁물 체크</button>\
+								onclick="laundryIn('+clothes.closetNum+','+clothes.clothesNum+')">세탁물 체크</button>\
 							<button type="button" class="btn btn-primary" style="background-color: rgba(223,132,166,255); border-color: rgba(223,132,166,255);" \
 								onclick="deleteClothes('+clothesNum+')"> 삭제 </button>\
 							<button type="button" class="btn btn-primary"	style="background-color: rgba(223,132,166,255); border-color: rgba(223,132,166,255);" \
@@ -537,8 +537,7 @@ $(document).ready(function(){
 	}
 	
 	//의류 세탁물 체크
-	function laundryIn(clothesNum){
-		closetNum = parseInt(closetNum);
+	function laundryIn(closetNum, clothesNum){
 		$.ajax({
 			url:'laundryIn',
 			type:'get',

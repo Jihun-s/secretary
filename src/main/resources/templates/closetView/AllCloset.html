@@ -29,17 +29,14 @@
       content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
     />
 
-    <title>옷장 :: 메인 페이지</title>
-    <script th:src="@{/js/jquery-3.7.0.js}"></script>
-    <script>
+    <title>옷장 :: 전체 옷장</title>
+	<script th:src="@{/js/jquery-3.7.0.js}"></script>
+	<script>
 	 /*외부 js파일에서 스트링에서 정수형으로 바꿔 써야하기 때문에
- 	const가 아닌 let으로 선언*/
- 	let familyId = '[[${loginUser.familyId}]]'; 
- 	let userid = '[[${loginUser.userId}]]';
- 	let userNickname = '[[${loginUser.userNickname}]]';
-    </script>
-    <script th:src="@{/js/closet/closetMain.js}"></script>
-	
+	 	const가 아닌 let으로 선언*/
+	 let familyId = '[[${loginUser.familyId}]]';
+	</script>
+	<script th:src="@{/js/closet/AllCloset.js}"></script>
     <meta name="description" content="" />
 
     <!-- Favicon -->
@@ -88,8 +85,8 @@
     <link rel="stylesheet" th:href="@{/css/index.css}" />
     
     <!-- 혜린 추가 CSS -->
-	<link rel="stylesheet" th:href="@{/css/closetMainCSS.css}">
-	
+	<link rel="stylesheet" th:href="@{/css/inClosetCSS.css}">
+
     <!-- Page CSS -->
 
     <!-- Helpers -->
@@ -98,8 +95,6 @@
     <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
     <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
     <script th:src="@{/assets/js/config.js}"></script>
-    
-  
   </head>
 
   <body>
@@ -121,10 +116,8 @@
                   style="width: 3rem"
                 />
               </span>
-              <span class="app-brand-text demo menu-text fw-bolder ms-2"
-                >생비서</span
-              >
-            </a>
+              <span class="app-brand-text demo menu-text fw-bolder ms-2">생비서</span>
+            </a> <!-- class="app-brand-link" -->
 
             <a
               href="javascript:void(0);"
@@ -132,7 +125,7 @@
             >
               <i class="bx bx-chevron-left bx-sm align-middle"></i>
             </a>
-          </div>
+          </div> <!-- class="app-brand demo" -->
 
           <div class="menu-inner-shadow"></div>
 
@@ -613,58 +606,23 @@
                     style="height: 4rem; width: 4rem; vertical-align: middle"
                   />
                   <!-- 메뉴이름 -->
-                  <h1 style="display: inline; vertical-align: middle">옷장</h1>
+                  <h1 style="display: inline; vertical-align: middle">전체 옷장</h1>
                 </span>
               </div>
 
-              <!-- 컨텐츠 -->
+            <!--  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!컨텐츠!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
               <div class="row">
                 <!-- 1열 -->
-                <div class="col-lg-3 mb-4">
-                  <div class="card">
-                  	<div style="line-height: 0; font-size: 0;">
-                    <button id="editClosetBtn" class="btn-pink">편집</button>                  
-                    <button id="insertClosetBtn" class="btn-pink">추가</button></div>
-                    <div class="card-body" id="ManageCloset">
-                        <table th:each="closetItem:${closetList}">
-                          <tr>
-                          	<td><p th:text="${closetItem.closetName}"></p>
-                          		<a th:href="@{/closet/InCloset(closetNum=${closetItem.closetNum})}">
-                          		<img th:src="@{/images/closetImg/wardrobe.png}">
-                          		</a>
-                          	</td>
-                          </tr>
-                          <tr class="closetEditForUser">
-                          	<td>
-                          		<button class="btn-pink">수정</button> <button class="btn-pink">삭제</button>
-                          	</td>
-                          </tr>
-                         </table>
-                    </div>
-                  </div> <!-- class="card" -->
-                  
-                  <br>
-                  <div class="card">
-                    <div class="d-flex align-items-end"></div>
-                    <div class="card-body" id="diaryCSS">
-                    	<p><strong>코디일지</strong></p>
-                    	<a><img th:src="@{/images/closetImg/styleDiary.png}"></a>
-                    </div>
-                  </div>
-                </div>
-                
-                
-                <!-- 2열 -->
-                <div class="col-lg-5 mb-4">
-                  <!-- 2열 1행 -->
-                  <div class="card">
+                <div class="col-lg-6 mb-4">
+                  <h3>나의 옷장</h3>
+                  <div class="card mb-4">
                     <div class="d-flex align-items-end"></div>
                     <div class="card-body">
         	 			<div id="accordionIcon" class="accordion mt-3 accordion-without-arrow" style="display:inline;">
 					      <div class="accordion-item card">
 					        <h2 class="accordion-header text-body d-flex justify-content-between" id="accordionIconOne" style="border:1;">
  						         <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#accordionIcon-1" aria-controls="accordionIcon-1">
- 							           <strong>전체 옷장에서 옷 찾기</strong> 
+ 							           <strong>옷 찾기</strong> 
  							      </button> <button class="btn btn-danger" id="clothesSearchbtn">Search</button>
 					        </h2>
 					        <div id="accordionIcon-1" class="accordion-collapse collapse" data-bs-parent="#accordionIcon">
@@ -672,8 +630,8 @@
 			<!-- 옷찾기 테이블 --><table>
 									<colgroup>
 									<col width="10%">
-									<col width="45%">
-									<col width="15%">
+									<col width="50%">
+									<col width="10%">
 									<col>
 									</colgroup>
 										<tr>
@@ -814,118 +772,39 @@
 								</div> <!-- class="accordion-body" -->
  				       		</div> <!-- id="accordionIcon-1" class="accordion-collapse collapse" -->
     					  </div><!-- class="accordion-item card" -->
-      					</div> <!-- id="accordionIcon" class="accordion mt-3 accordion-without-arrow" -->				
-                    </div> <!-- class="card-body" -->
-                  </div> <!-- class="card" -->
-					<br>
-                  <!-- 2열 2행 -->
-                  <div class="card">
-                    <div class="d-flex align-items-end"></div>
-                    <div class="card-body">
-                 		<figure>
-                  		<figcapton>&nbsp;&nbsp;<strong>세탁물 게이지</strong></figcapton>
-               	      <a th:href="@{/closet/laundryPage}">
-               	      	<div id="progessDetail" class="progress" style="height:3em"  data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true" title="" data-bs-original-title="<i class='bx bx-bell bx-xs' ></i> <span>세탁바구니 보러가기</span>"></div>
-               	      </a>	
-               	      	</figure>
+      					</div> <!-- id="accordionIcon" class="accordion mt-3 accordion-without-arrow" -->							                     					                     	
+                    <div class="card-body" id="whatsInCloset">
+                      <h4>의류 리스트(카테고리별 정렬)</h4>
+					
                     </div>
-                  </div>
-					<br>
-                  <!-- 2열 3행 -->
-                  <div class="card">
-                    <div class="d-flex align-items-end"></div>
-                    <div class="card-body">
-					<div id="ww_f3acdc27367ec" v='1.3' loc='id' a='{"t":"horizontal","lang":"ko","sl_lpl":1,"ids":[],"font":"Arial","sl_ics":"one_a","sl_sot":"celsius","cl_bkg":"image","cl_font":"#FFFFFF","cl_cloud":"#FFFFFF","cl_persp":"#81D4FA","cl_sun":"#FFC107","cl_moon":"#FFC107","cl_thund":"#FF5722","el_phw":3}'>More forecasts: <a href="https://sharpweather.com/ko/seoul/" id="ww_f3acdc27367ec_u" target="_blank">서울 날씨 시간별</a></div><script async src="https://app2.weatherwidget.org/js/?id=ww_f3acdc27367ec"></script>
-					<div></div>                    
                     </div>
-                  </div>
-                    
-                </div> <!-- class="col-lg-5 mb-4" -->
+                </div> 
+   				</div><!-- class="col-lg-6 mb-4" -->
+                  
+                
+                <!-- 2열 -->
+                <div class="col-lg-6 mb-4">
+                	<h3 style="display:inline-block;">의류 상세정보</h3>      
+                	<a th:href="@{/closet/laundryPage}"><button class="btn btn-primary" style="display:inline-block; float:right; background-color: rgba(223,132,166,255); border-color: rgba(223,132,166,255);">세탁바구니 보기</button></a>  
 
-                <!-- 3열 -->
-                <div class="col-lg-4 mb-4">
-                  <div class="card">
-                    <div class="card-body">
-                      <div class="notification">
-                        <div class="col-xl-6" style="width: 100%">
-                          <h6 class="text-muted">알림</h6>
-                          <div class="nav-align-top mb-4">
-                            <ul
-                              class="nav nav-pills mb-3 nav-fill"
-                              role="tablist"
-                            >
-                              <li class="nav-item">
-                                <button
-                                  type="button"
-                                  class="nav-link active"
-                                  role="tab"
-                                  data-bs-toggle="tab"
-                                  data-bs-target="#navs-pills-justified-home"
-                                  aria-controls="navs-pills-justified-home"
-                                  aria-selected="true"
-                                  style="background-color: rgba(223,132,166,255); border-color: rgba(223,132,166,255);"
-                                >
-                                  <i class="tf-icons bx bx-home"></i> 필수 알림
-                                  <span
-                                    class="badge rounded-pill badge-center h-px-20 w-px-20 bg-danger"
-                                    >3</span
-                                  >
-                                </button>
-                              </li>
-                              <li class="nav-item">
-                                <button
-                                  type="button"
-                                  class="nav-link"
-                                  role="tab"
-                                  data-bs-toggle="tab"
-                                  data-bs-target="#navs-pills-justified-profile"
-                                  aria-controls="navs-pills-justified-profile"
-                                  aria-selected="false"
-                                >
-                                  <i class="tf-icons bx bx-user"></i> 제안 알림
-                                </button>
-                              </li>
-                            </ul>
-                            <div
-                              class="tab-content flex-fill"
-                              style="height: 18rem"
-                            >
-                              <!-- 필수 알림 탭 내용 -->
-                              <div
-                                class="tab-pane fade show active"
-                                id="navs-pills-justified-home"
-                                role="tabpanel"
-                              >
-                                <p>8월 18일은 오늘입니다. 안녕하세요!</p>
-                                <p>8월 19일은 내일입니다. 안녕하세요!</p>
-                                <p>8월 19일은 내일입니다. 안녕하세요!</p>
-                                <p>8월 19일은 내일입니다. 안녕하세요!</p>
-                                <p>8월 19일은 내일입니다. 안녕하세요!</p>
-                              </div>
 
-                              <!-- 제안 알림 탭 내용 -->
-                              <div
-                                class="tab-pane fade"
-                                id="navs-pills-justified-profile"
-                                role="tabpanel"
-                              >
-                                <p>
-                                  8월 23일은 처서입니다. 여름옷을 정리해볼까요?
-                                </p>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+              	  <div class="card">
+              	  <div class="d-flex align-items-end"></div>
+                		<div class="card-body">
+							<div id="IMGdetail">
+							<p>의류 클릭해서 상세정보 보기 전에는<br>
+								통계정보 보여주기</p>
+							</div>
+							<div id="InfoDetail"></div>
+							<div id="ManageDetail"></div>
+							<div id="InfoFooter"></div>
+                		</div><!-- class="card-body" -->
+                	</div><!-- class="card" -->
+                </div> <!-- class="col-lg-6 mb-4" -->
+              </div><!-- class = "row" -->
+            </div> <!--  class="container-xxl flex-grow-1 container-p-y" -->
 
-            <!-- 컨텐트 박스 -->
-          </div>
-          <!-- / Content -->
+          </div> <!-- class="content-wrapper" -->
 
           <!-- Footer -->
           <footer class="content-footer footer bg-footer-theme">
