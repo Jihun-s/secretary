@@ -1,56 +1,50 @@
 @charset "UTF-8";
 
-#clothesSearchbtn{
-	background-color: rgba(223,132,166,255);
-	border-color: rgba(223,132,166,255);
-}
 
-/*옷장보기 css*/
-/* 가로스크롤 만들기*/
+/* !!!!!!!!!!!!옷장 css!!!!!!!!!!!!!!*/
+
 .col-lg-3 div.card {
-	overflow:auto; 
-	white-space: nowrap;
-}
+	overflow:auto; white-space: nowrap;
+} /* 가로스크롤 만들기*/
+
 #editClosetBtn {
-	display:inline-block;
-	width:50%;
-}
+	display:inline-block; width:50%;
+} /*메인화면 옷장편집 버튼*/
+
 #insertClosetBtn {
-	display:inline-block;
-	width:50%;
-}
+	display:inline-block; width:50%;
+} /*메인화면 옷장추가 버튼 */
+
+.delCloset{
+	position:absolute; right:2em;;
+	width:1.5em;
+} /*편집버튼 누르면 생기는 옷장삭제버튼*/
+.modifyCloset{
+	position:absolute; right:4em;;
+	width:1.5em;
+} /*편집버튼 누르면 생기는 옷장수정버튼*/ 
+
+#plusClosetBtn img {
+	width: 80%; padding-left:2.2em;
+	cursor:pointer;
+} /*추가버튼 누르면 생기는 옷장추가이미지*/
+#closetNameForInsert {
+	padding-left:1em;
+} /*추가버튼 누르면 생기는 옷장이름 입력칸*/
+
 #ManageCloset{
-	display:inline-block; 
-	align: center;
-	height: 250px;
-	padding-left: 2.2em;
+	display:inline-block; align: center;
+	height: 250px; padding-left: 2.2em;
 }
 #ManageCloset table{
 	margin-bottom: 2.2em;
 }
 #ManageCloset p{
-	margin-bottom: 0;
-	text-align:center;
+	margin-bottom: 0; text-align:center;
 }
+/* !!!!!!!!!!!!옷장 css!!!!!!!!!!!!!!*/
 
-.closetEditForUser button{
-	width:50%;
-}
-
-.delCloset{
-	position:absolute;
-	right:2em;;
-	width:1.5em;
-}
-
-
-.modifyCloset{
-	position:absolute;
-	right:4em;;
-	width:1.5em;
-}
-
-
+/* !!!!!!!!!!!!코디일지 css!!!!!!!!!!!!!!*/
 #diaryCSS{
 	display:inline-block; 
 	align: center;
@@ -60,17 +54,21 @@
 #diaryCSS img {
 	width:100%;
 }
+/* !!!!!!!!!!!!코디일지 css!!!!!!!!!!!!!!*/
 
-/* 옷장보기, 코디일지 css 끝*/
+/* !!!!!!!!!!!전체옷장에서 옷찾기!!!!!!!!*/
+#clothesSearchbtn{
+	background-color: rgba(223,132,166,255);
+	border-color: rgba(223,132,166,255);
+} /*옷찾기 버튼*/
 
-#plusClosetBtn img {
-	width: 80%;
-	padding-left:2.2em;
-	cursor:pointer;
+
+
+/*!!!!!!!!!!!!!  세탁물 게이지  !!!!!!!!!!!!!!!!!!!!*/
+#progessDetail{
+	height:3em;
 }
-#closetNameForInsert {
-	padding-left:1em;
-}
+
 
 
 .btn-pink{

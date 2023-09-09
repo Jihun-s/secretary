@@ -29,7 +29,7 @@
       content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
     />
 
-    <title>옷장 :: 1</title>
+    <title>옷장 :: 옷장 내부</title>
 	<script th:src="@{/js/jquery-3.7.0.js}"></script>
 	<script>
 	 /*외부 js파일에서 스트링에서 정수형으로 바꿔 써야하기 때문에
@@ -621,7 +621,7 @@
                     <div class="card-body">
         	 			<div id="accordionIcon" class="accordion mt-3 accordion-without-arrow" style="display:inline;">
 					      <div class="accordion-item card">
-					        <h2 class="accordion-header text-body d-flex justify-content-between" id="accordionIconOne" style="border:1;">
+					        <h2 class="accordion-header text-body d-flex justify-content-between" id="accordionIconOne" >
  						         <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#accordionIcon-1" aria-controls="accordionIcon-1">
  							           <strong>옷 찾기</strong> 
  							      </button> <button class="btn btn-danger" id="clothesSearchbtn">Search</button>
@@ -786,17 +786,19 @@
                 <!-- 2열 -->
                 <div class="col-lg-6 mb-4">
                 	<h3 style="display:inline-block;">의류 상세정보</h3>      
-                	<a th:href="@{/closet/laundryPage}"><button class="btn btn-primary" style="display:inline-block; position:relative; left:11em; background-color: rgba(223,132,166,255); border-color: rgba(223,132,166,255);">세탁바구니 보기</button></a>  
-                	<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#basicModal" style="display:inline-block; float:right; background-color: rgba(223,132,166,255); border-color: rgba(223,132,166,255); ">
+                	<a th:href="@{/closet/laundryPage}">
+                		<button class="btn btn-primary" id="TolaundryPageBtn">세탁바구니 보기</button>
+                	</a>  
+                	<button type="button" class="btn btn-primary" id="insertClothesBtn" data-bs-toggle="modal" data-bs-target="#basicModal">
             		의류 등록
           			</button>
-        <!-- 의류등록 모달!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->  			
+        			<!-- 의류등록 모달!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->  			
           			<div class="modal fade" id="basicModal" tabindex="-1" aria-hidden="true">
           			<div class="modal-dialog" role="document">
           			<div class="modal-content">
           			 	
           			 	<div class="modal-header">
-                	  	<h5 class="modal-title" id="exampleModalLabel1">Modal title</h5>
+                	  	<h5 class="modal-title" id="exampleModalLabel1"></h5>
                  	 	<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>          			 	
           			 	</div><!-- class="modal-header" 제목과 x버튼 -->
           			 	

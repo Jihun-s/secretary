@@ -4,7 +4,7 @@
 $(document).ready(function(){
 
 //!!!!!!!!!!!!!!!!!!!!!! 옷 찾기  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!	
-		//옷찾기 분류에서 소분류 숨겨놓기
+	//옷찾기 분류에서 소분류 숨겨놓기
 	$('#topCategory').hide();
 	$('#bottomCategory').hide();
 	$('#outerCategory').hide();
@@ -13,12 +13,14 @@ $(document).ready(function(){
 	$('#bagCategory').hide();
 	$('#accessoryCategory').hide();
 	$('#etcCategory').hide();
+	
 	//옷찾기에서 신발사이즈 숨겨놓기
 	$('#shoesSizeForSearch').hide();
+	
 	//옷찾기에서 분류를 선택하면 clothesSearchAnimation함수 실행	
 	$("#clothesCategoryForSearch").on('change',clothesSearchAnimation);
-	$("#clothesSearchbtn").on('click',clothesSearch); //옷찾기 버튼 클릭하면 clothesSearch 함수실행
-//!!!!!!!!!!!!!!!!!!!!!! 옷 찾기  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!		
+	//옷찾기 버튼 클릭하면 clothesSearch 함수실행
+	$("#clothesSearchbtn").on('click',clothesSearch);
 
 	let category = opener.$('#clothesCategoryForSearch option:selected').val();
 	let size;				
@@ -64,7 +66,7 @@ $(document).ready(function(){
 	console.log(seasonArr);
 	console.log(typeof(seasonArr));
 	
-	let closetNum = 0; // 스트링에서 정수형으로 변환
+	let closetNum = 0; //  전체 옷장에서 찾기
 		$.ajax({
 			url:'inCloset',
 			type:'get',
@@ -84,34 +86,8 @@ $(document).ready(function(){
 				alert(JSON.stringify(e));
 			}			
 		})
-
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!옷장안에 의류목록 출력!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-/*		closetNum = parseInt(closetNum); // 스트링에서 정수형으로 변환
-		var id = opener.$("#parent").val(); //부모창에서 id가 parent인 태그의 val()
-		$("#child").val(id); //자식창에서 id가 child인 val에 id를 넣기
 		
-		$.ajax({
-			url:'inCloset',
-			type:'get',
-			data:{closetNum: closetNum},
-			dataType:'json',
-			success:function(list){
-				let str ='';
-				$(list).each(function(i,n){
-					let clothesNum = parseInt(n.clothesNum);
-					str +='<a onclick="readClothes('+n.closetNum+','+clothesNum+')"><img src="../closet/clothesDownload?closetNum='+n.closetNum+'&clothesNum='+clothesNum+'"></a>';
-				});
-				$('#whatsInCloset').html(str); 
-			},
-			error:function(e){
-				alert(JSON.stringify(e));
-			}			
-		})	*/	
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!옷장안에 의류목록 출력!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-
-		
-	});//document.ready 끝
+});//document.ready 끝
 
 	
 	function clothesSearch(){
@@ -227,8 +203,6 @@ $(document).ready(function(){
 								onclick="laundryIn('+clothes.closetNum+','+clothes.clothesNum+')">세탁물 체크</button>\
 								<button class="btn btn-primary" style="background-color: rgba(223,132,166,255); border-color: rgba(223,132,166,255); float:right"\
 								onclick="ToInCloset('+clothes.closetNum+')">해당 옷장 보러가기</button>'
-								
-							
 
 				$('#IMGdetail').html(imgStr);
 				$('#InfoDetail').html(str);
@@ -256,9 +230,8 @@ $(document).ready(function(){
 			}			
 		})//관리정보 읽어오기
 		
-		
-		
-	}
+	}//의류 자세히보기
+
 
 	//의류 세탁물 체크
 	function laundryIn(closetNum, clothesNum){

@@ -4,13 +4,17 @@
 
  $(document).ready(function(){
 	 	
+	 	// 옷장 편집버튼 -> 수정,삭제 아이콘 숨어있다가 나타나기
 	 	$('.delCloset').hide();
 	 	$('.modifyCloset').hide();
 		$('#editClosetBtn').on('click',function(){
 			$('.delCloset').toggle();
 			$('.modifyCloset').toggle();			
 		})
-		$('#insertClosetBtn').click(insertCloset); //옷장추가
+		
+		//옷장 추가버튼
+		$('#insertClosetBtn').click(insertCloset); 
+		
 //!!!!!!!!!!!!!!!!!!!!!! 옷 찾기  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!	
 		//옷찾기 분류에서 소분류 숨겨놓기
 		$('#topCategory').hide();
@@ -21,11 +25,17 @@
 		$('#bagCategory').hide();
 		$('#accessoryCategory').hide();
 		$('#etcCategory').hide();
+		
 		//옷찾기에서 신발사이즈 숨겨놓기
 		$('#shoesSizeForSearch').hide();
+		
 		//옷찾기에서 분류를 선택하면 clothesSearchAnimation함수 실행	
 		$("#clothesCategoryForSearch").on('change',clothesSearchAnimation);
-		$("#clothesSearchbtn").on('click',clothesSearch); //옷찾기 버튼 클릭하면 clothesSearch 함수실행
+		
+		//옷찾기 버튼 클릭하면 전체옷장 의류목록 페이지로 이동
+		$("#clothesSearchbtn").on('click',function(){
+			window.open("../secretary/closet/AllCloset");
+		});
 //!!!!!!!!!!!!!!!!!!!!!! 옷 찾기  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!		
 		
 //!!!!!!!!!!!!!!!!!!! 세탁물 게이지 표시 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!		
@@ -57,7 +67,7 @@
 
 function delCloset(closetNum){
 	console.log(closetNum);
-	let res = confirm('옷장을 삭제하시겠어요? 옷장 안에 저장된 옷들도 전부 삭제됩니다.');
+	let res = confirm('옷장을 삭제하시겠어요? \n옷장 안에 저장된 옷들도 전부 삭제됩니다.');
 	if(res){
 		$.ajax({
 			url:'closet/delCloset',
@@ -129,74 +139,6 @@ function insertCloset(){
 	})
 }
 
-
-
-function clothesSearch(){
-	//console.log();
-	// 카테고리 category, 사이즈 size
-	let category = $('#clothesCategoryForSearch option:selected').val();
-	let size;				
-	if(category == 'top'){
-		category = $('#topCategory option:selected').val();
-	} else if(category == 'bottom'){
-		category = $('#bottomCategory option:selected').val();
-	} else if(category == 'clothesOuter'){
-		category = $('#outerCategory option:selected').val();
-	} else if(category == 'dress'){
-		category = $('#dressCategory option:selected').val();
-	} else if(category == 'shoes'){
-		//신발사이즈 체크된 값
-		size = $("input:checkbox[name='shoesSizeAll']:checked").val();
-		if(size==undefined){
-		size = $("input[name='shoesForSearch']").val();
-		}
-		category = $('#shoesCategory option:selected').val();
-	} else if(category == 'bag'){
-		category = $('#bagCategory option:selected').val();
-	} else if(category == 'accessory'){
-		category = $('#accessoryCategory option:selected').val();
-	} else if(category == 'etc'){
-		category = $('#etcCategory option:selected').val();
-	}
-	//신발이 아닌경우
-	if(size==undefined){
-		size = $('#clothesSizeForSearch option:selected').val();
-	}	 
-	console.log(category);
-	console.log(size);
-	
-	// 소재 material
-	let material = $('#materialListForSearch option:selected').val();
-	console.log(material);
-
-	// 계절 seasonArr
-	const seasonArr = [];
-	var seasonChecked = $("input:checkbox[name='seasonsForSearch']:checked");
-	$(seasonChecked).each(function(){
-		seasonArr.push($(this).val());
-	}); 		
-	console.log(seasonArr);
-	console.log(typeof(seasonArr));
-	window.open("../secretary/closet/AllCloset");
-/*	$.ajax({
-		url:'inCloset',
-		type:'get',
-		traditional:true,
-		data:{closetNum: closetNum, category:category, size:size
-			,seasonArr: seasonArr, material:material},
-		dataType:'json',
-		success:function(list){
-			let str ='';
-			$(list).each(function(i,n){
-				str +='<a onclick="readClothes('+n+')"><img src="../closet/clothesDownload?closetNum='+closetNum+'&clothesNum='+n+'"></a>';
-			});
-			$('#whatsInCloset').html(str); 
-		},
-		error:function(e){
-			alert(JSON.stringify(e));
-		}			
-	})*/
-}
 
 function clothesSearchAnimation(){
 	var result = $('#clothesCategoryForSearch option:selected').val();

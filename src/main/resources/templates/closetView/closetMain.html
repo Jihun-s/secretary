@@ -36,7 +36,6 @@
  	const가 아닌 let으로 선언*/
  	let familyId = '[[${loginUser.familyId}]]'; 
  	let userid = '[[${loginUser.userId}]]';
- 	let userNickname = '[[${loginUser.userNickname}]]';
     </script>
     <script th:src="@{/js/closet/closetMain.js}"></script>
 	
@@ -624,7 +623,8 @@
                   <div class="card">
                   	<div style="line-height: 0; font-size: 0;">
                     <button id="editClosetBtn" class="btn-pink">편집</button>                  
-                    <button id="insertClosetBtn" class="btn-pink">추가</button></div>
+                    <button id="insertClosetBtn" class="btn-pink">추가</button>
+                    </div>
                     <div class="card-body" id="ManageCloset">
                         <table th:each="closetItem:${closetList}">
                           <tr>
@@ -822,7 +822,7 @@
                  		<figure>
                   		<figcapton>&nbsp;&nbsp;<strong>세탁물 게이지</strong></figcapton>
                	      <a th:href="@{/closet/laundryPage}">
-               	      	<div id="progessDetail" class="progress" style="height:3em"  data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true" title="" data-bs-original-title="<i class='bx bx-bell bx-xs' ></i> <span>세탁바구니 보러가기</span>"></div>
+               	      	<div id="progessDetail" class="progress" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true" title="" data-bs-original-title="<i class='bx bx-bell bx-xs' ></i> <span>세탁바구니 보러가기</span>"></div>
                	      </a>	
                	      	</figure>
                     </div>

@@ -1,14 +1,32 @@
 @charset "UTF-8";
+
+
+/*옷찾기 Search 버튼*/
 #clothesSearchbtn{
 	background-color: rgba(223,132,166,255);
 	border-color: rgba(223,132,166,255);
 }
 
+/* 의류리스트 이미지*/
+#whatsInCloset img {
+	width:40%;
+}
+
+/*세탁바구니 보기 버튼*/
+#TolaundryPageBtn {
+	display:inline-block; position:relative; left:11em; 
+	background-color: rgba(223,132,166,255); border-color: rgba(223,132,166,255);
+}
+/*의류등록 버튼*/
+#insertClothesBtn{
+	display:inline-block; float:right; background-color: rgba(223,132,166,255); border-color: rgba(223,132,166,255);
+}
 
 /* 옷등록 사진 미리보기*/
 #imagePreview img{
 	width:100%;
 }
+
 
 /*input file태그 안보이게하기*/
 #uploadIMG {
@@ -37,9 +55,6 @@
 	font-size:10px; 
 }
 
-#whatsInCloset img {
-	width:40%;
-}
 
 
 
