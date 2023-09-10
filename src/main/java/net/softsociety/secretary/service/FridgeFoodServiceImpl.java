@@ -101,5 +101,9 @@ public class FridgeFoodServiceImpl implements FridgeFoodService {
 	public List<FridgeFood> getFoodsByFridgeId(int fridgeId) {
 		return fridgeFoodDAO.getFoodsByFridgeId(fridgeId);
 	}
-
+	
+	@Override
+	public List<FridgeFood> getAllFoodsByCategory(String category) {
+	    return fridgeFoodDAO.getAllFoodsByCategory(category);
+	}
 }

@@ -210,6 +210,8 @@
         </style>
         <script>
             $(document).ready(function () {
+                loadFridgesByCategory('냉장실');
+                loadAllFoodsByCategory('냉장실');
                 $(document).on('click', '.fridgeItem', function () {
                     event.preventDefault(); // <a> 태그의 기본 동작 중단
                     const fridgeId = $(this).find('a').attr('href').split('/').pop();
@@ -222,6 +224,8 @@
                         $('#foodItemsContainer').empty(); // 기존에 표시되던 음식 항목을 모두 제거합니다.
                         foods.forEach(displayFoodItem); // 각 음식 항목을 화면에 표시합니다.
                     });
+                    // 셀렉트 박스에서 해당 냉장고를 기본으로 선택
+                    $('.fridgeSelect').val(fridgeId);
                 });
 
                 let isFoodItemEditMode = false; // 편집 모드 상태를 저장하는 변수
@@ -347,7 +351,7 @@
                             console.log('수정되었습니다.');
                             fridgeItem.find('.fridgeName').text(updatedFridge.name).show();
                             fridgeItem.find('.fridgeNameInput, #confirmEditButton, #cancelEditButton').remove();
-                            loadFridges();
+                            loadFridgesByCategory(currentCategory); // 카테고리에 따른 냉장고 목록 로드
                             isItemEditMode = false;
                         },
                         error: function (jqXHR, textStatus, errorThrown) {
@@ -437,22 +441,33 @@
                 });
                 //</ 카테고리구현!>
 
-                // 페이지 로드 시 냉장고 목록 가져오기
-                loadFridges();
                 //냉동실/ 냉장실 전환
+                // 현재 모드 (냉장실 또는 냉동실)
+                let currentCategory = '냉장실'; // 초기값은 냉장실
 
+                // 냉장실/냉동실 전환 버튼 이벤트
                 document.getElementById('toggleButton').addEventListener('click', function () {
                     const button = this;
                     if (button.textContent === '냉장실 보기') {
+                        currentCategory = '냉장실';
                         button.textContent = '냉동실 보기';
                         button.classList.remove('btn-primary');
                         button.classList.add('btn-warning');
+                        loadFridgesByCategory(currentCategory);
+                        loadAllFoodsByCategory(currentCategory);
+                        document.getElementById('fName').textContent = '전체 냉장고';
                     } else {
+                        currentCategory = '냉동실';
                         button.textContent = '냉장실 보기';
                         button.classList.remove('btn-warning');
                         button.classList.add('btn-primary');
+                        loadFridgesByCategory(currentCategory);
+                        loadAllFoodsByCategory(currentCategory);
+                        document.getElementById('fName').textContent = '전체 냉동실';
                     }
+                    loadFridgesByCategory(currentCategory);
                 });
+
                 //</ 냉동실/ 냉장실 전환
 
                 //냉장고 추가!
@@ -523,6 +538,7 @@
                     this.scrollIntoView({ behavior: 'smooth', block: 'end' });
                 });
 
+                // 냉장고 추가 버튼 클릭 이벤트
                 $(document).on('click', '#addConfirmButton', function () {
                     if ($('#fridgeNameInput').val().length < 2) {
                         alert(`냉장고 이름은 2자 이상이어야 합니다.`);
@@ -543,7 +559,7 @@
                                 $('#addConfirmButton').remove();
                                 $('#addCancelButton').remove();
                                 // 냉장고 목록 새로고침
-                                loadFridges();
+                                loadFridgesByCategory(currentCategory); // 카테고리에 따른 냉장고 목록 로드
                                 isItemEditMode = false;
                             },
                             error: function (jqXHR, textStatus, errorThrown) {
@@ -675,44 +691,40 @@
                     // 생성한 음식 항목을 적절한 위치에 추가
                     $('#foodItemsContainer').append(foodItemElement);
                 }
-
-                // 페이지가 로드될 때 냉장고의 음식 항목을 로드하고 표시
-                loadFridgeItems();
-
-                function loadFridges() {
+                $('.fridgeSelect').on('change', function () {
+                    const selectedFridgeId = $(this).val();
+                    console.log('Selected Fridge ID:', selectedFridgeId);
+                });
+                // 카테고리별 냉장고 목록 불러오기
+                function loadFridgesByCategory(category) {
                     $.ajax({
                         url: 'fridge/getAllFridges',
                         type: 'GET',
                         success: function (data) {
-                            // 냉장고 컨테이너 초기화
+                            const filteredFridges = data.filter((fridge) => fridge.fridgeCategory === category);
                             $('#fridgeContainer').empty();
-                            // 냉장고 선택 dropdown 초기화
+                            // 셀렉트 박스의 기존 항목들을 제거
                             $('.fridgeSelect').empty();
-                            $('.fridgeSelect').append(
-                                '<option disabled="" selected="" value="">냉장고를 선택해주세요</option>'
-                            );
+                            // 셀렉트 박스에 냉장고 목록 추가
+                            filteredFridges.forEach(function (fridge) {
+                                var option = `<option value="${fridge.fridgeId}">${fridge.fridgeName}</option>`;
+                                $('.fridgeSelect').append(option);
+                            });
 
-                            data.forEach(function (fridge) {
-                                // 각 냉장고의 이미지와 이름을 포함하는 HTML 생성
-                                var fridgeElement = `
-                        <div class="fridgeItem">
-                            <div style="position: relative;">
-                                <a href="/fridge/${fridge.fridgeId}">
-                                    <img src="images/fridgeimg/노랑냉장고.jpg" alt="${fridge.fridgeName}" style="width: 90px; height: 90px">
-                                </a>
-                            </div>
-                            <div class="fridgeName" data-current-name="${fridge.fridgeName}">${fridge.fridgeName}</div>
+                            filteredFridges.forEach(function (fridge) {
+                                const fridgeElement = `
+                    <div class="fridgeItem">
+                        <div style="position: relative;">
+                            <a href="/fridge/${fridge.fridgeId}">
+                                <img src="images/fridgeimg/${
+                                    category === '냉장실' ? '노랑냉장고.jpg' : '파랑냉장고.jpg'
+                                }" alt="${fridge.fridgeName}" style="width: 90px; height: 90px">
+                            </a>
                         </div>
-                    `;
-
-                                // 생성한 HTML을 냉장고 컨테이너에 추가
+                        <div class="fridgeName" data-current-name="${fridge.fridgeName}">${fridge.fridgeName}</div>
+                    </div>
+                `;
                                 $('#fridgeContainer').append(fridgeElement);
-
-                                // 냉장실만을 대상으로 dropdown에 추가
-                                if (fridge.fridgeCategory === '냉장실') {
-                                    var option = `<option value="${fridge.fridgeId}">${fridge.fridgeName}</option>`;
-                                    $('.fridgeSelect').append(option);
-                                }
                             });
                         },
                         error: function (error) {
@@ -720,13 +732,15 @@
                         },
                     });
                 }
-                // 서버에서 냉장고의 모든 음식 항목을 가져오는 함수
-                function loadFridgeItems() {
+
+                // 카테고리별 음식 항목 불러오기
+                function loadAllFoodsByCategory(category) {
                     $.ajax({
-                        url: '/secretary/fridgeFood/getAllFoods',
+                        url: `fridgeFood/getAllFoodsByCategory/${category}`,
                         type: 'GET',
                         dataType: 'json',
                         success: function (data) {
+                            $('#foodItemsContainer').empty();
                             data.forEach(displayFoodItem);
                         },
                         error: function (error) {

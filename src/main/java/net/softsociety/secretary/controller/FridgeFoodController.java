@@ -146,5 +146,10 @@ public class FridgeFoodController {
         return fridgeFoodService.getFoodsByFridgeId(fridgeId);
     }
 
+    @ResponseBody
+    @GetMapping("/getAllFoodsByCategory/{category}")
+    public List<FridgeFood> getAllFoodsByCategory(@PathVariable String category) {
+        return fridgeFoodService.getAllFoodsByCategory(category);
+    }
 
 }

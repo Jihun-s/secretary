@@ -11,4 +11,5 @@ public interface FridgeFoodService {
     public void modifyFridgeFood(FridgeFood fridgeFood, int familyId);
     public void deleteFridgeFood(int foodId);
 	List<FridgeFood> getFoodsByFridgeId(int fridgeId);
+	List<FridgeFood> getAllFoodsByCategory(String category);
 }
