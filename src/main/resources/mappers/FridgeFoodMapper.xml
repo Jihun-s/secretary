@@ -102,4 +102,8 @@
 	    JOIN Secretary_Fridge r ON f.FRIDGE_ID = r.fridge_id
 	    WHERE r.fridge_category = #{fridgeCategory}
 	</select>
+	
+	<select id="getFoodCountByFridgeId" resultType="int">
+	    SELECT COUNT(*) FROM Secretary_FRIDGE_FOOD WHERE fridge_id = #{fridgeId}
+	</select>
 </mapper>

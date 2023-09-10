@@ -212,19 +212,51 @@
             $(document).ready(function () {
                 loadFridgesByCategory('냉장실');
                 loadAllFoodsByCategory('냉장실');
+                $('#foodForm').submit(function (event) {
+                    event.preventDefault();
+
+                    let formData = new FormData(this);
+
+                    $.ajax({
+                        type: 'POST',
+                        url: $(this).attr('action'),
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: handleFoodAddSuccess,
+                        error: handleFoodAddError,
+                    });
+                });
+
+                function handleFoodAddSuccess(response) {
+                    alert('음식 정보가 성공적으로 추가되었습니다.');
+                    $('#manualInputModal').modal('hide');
+
+                    const selectedFridgeId = $('.fridgeSelect').val();
+                    if (selectedFridgeId) {
+                        $.get(`fridgeFood/getFridgeFoods/${selectedFridgeId}`, function (foods) {
+                            $('#foodItemsContainer').empty();
+                            foods.forEach(displayFoodItem);
+                        });
+                    } else {
+                        loadAllFoodsByCategory(currentCategory);
+                    }
+                }
+
+                function handleFoodAddError(jqXHR, textStatus, errorThrown) {
+                    console.error('Error:', errorThrown); // 개발자를 위한 오류 로그
+                    alert(`음식 정보를 추가하는 데 실패했습니다. 오류: ${errorThrown}`);
+                }
                 $(document).on('click', '.fridgeItem', function () {
                     event.preventDefault(); // <a> 태그의 기본 동작 중단
                     const fridgeId = $(this).find('a').attr('href').split('/').pop();
                     const fridgeName = $(this).find('.fridgeName').data('current-name'); // 클릭된 냉장고의 이름을 가져옵니다.
 
-                    // 냉장고 이름을 표시하는 요소에 이름 설정
                     $('#fName').text(fridgeName);
-                    // 해당 냉장고의 음식 항목을 AJAX로 요청합니다.
                     $.get(`fridgeFood/getFridgeFoods/${fridgeId}`, function (foods) {
                         $('#foodItemsContainer').empty(); // 기존에 표시되던 음식 항목을 모두 제거합니다.
                         foods.forEach(displayFoodItem); // 각 음식 항목을 화면에 표시합니다.
                     });
-                    // 셀렉트 박스에서 해당 냉장고를 기본으로 선택
                     $('.fridgeSelect').val(fridgeId);
                 });
 
@@ -232,11 +264,9 @@
 
                 $('#foodItemModify').click(function () {
                     if (isFoodItemEditMode) {
-                        // 편집 모드라면, 아이콘들을 숨깁니다.
                         $('.food-editIcon').hide();
                         isFoodItemEditMode = false;
                     } else {
-                        // 편집 모드가 아니라면, 아이콘들을 표시합니다.
                         $('.food-editIcon').show();
                         isFoodItemEditMode = true;
                     }
@@ -246,14 +276,10 @@
 
                     const foodId = $(this).data('food-id');
 
-                    // 서버에 음식 아이템의 세부 정보를 요청합니다.
                     $.ajax({
                         url: 'fridgeFood/food/' + foodId,
                         type: 'GET',
                         success: function (foodItem) {
-                            // 성공적으로 데이터를 받았을 때
-
-                            // 모달의 입력 필드에 데이터를 채웁니다.
                             $('#foodName').val(foodItem.foodName);
                             $('.fridgeSelect').val(foodItem.fridgeId);
                             $('#foodCategory').val(foodItem.foodCategory);
@@ -263,25 +289,20 @@
                             $('#foodExpiryDate').val(foodItem.foodExpiryDate);
                             $('#foodMadeDate').val(foodItem.foodMadeDate);
 
-                            // "Submit" 버튼의 텍스트를 "Update"로 변경하고 버튼 색상도 변경합니다.
                             const submitBtn = $('#manualInputModal .btn-primary');
                             submitBtn.text('Update');
                             submitBtn.removeClass('btn-primary').addClass('btn-warning');
 
-                            // 폼의 action을 수정 모드에 맞게 변경합니다.
                             $('#manualInputModal form').attr('action', 'fridgeFood/modify/' + foodId);
 
-                            // 모달을 표시합니다.
                             $('#manualInputModal').modal('show');
                         },
                         error: function (error) {
-                            // 오류 발생 시 처리
                             console.error(error);
                         },
                     });
                 });
 
-                // 모달이 닫힐 때 설정을 원래대로 돌려놓습니다.
                 $('#manualInputModal').on('hidden.bs.modal', function () {
                     const submitBtn = $('#manualInputModal .btn-warning');
                     submitBtn.text('Submit');
@@ -297,15 +318,12 @@
                             type: 'POST',
                             success: function (response) {
                                 if (response === 'success') {
-                                    // 해당 아이템을 DOM에서 제거
                                     $('[data-food-id="' + foodId + '"]').remove();
                                 } else {
-                                    // 서버에서 예상치 못한 응답이 왔을 때
                                     console.error('Failed to delete the food item.');
                                 }
                             },
                             error: function (error) {
-                                // 오류 발생 시 처리
                                 console.error(error);
                             },
                         });
@@ -313,26 +331,22 @@
                     e.stopPropagation();
                 });
 
-                // 수정 이미지 버튼 클릭 시
                 $(document).on('click', '.modifyIcon', function () {
                     const fridgeItem = $(this).closest('.fridgeItem');
                     const fridgeNameDiv = fridgeItem.find('.fridgeName');
                     const currentName = fridgeNameDiv.text();
 
-                    // 입력 필드와 버튼들을 생성
                     const buttonContainer = `
-                                <div class="fridgeInputField mt-2" style="display: block;">
+                                    <div class="fridgeInputField mt-2" style="display: block;">
                                     <input type="text" value="${currentName}" class="fridgeNameInput form-control mb-2">
-                        <button type="button" class="btn btn-primary" id="confirmEditButton">수정</button>
-                        <button type="button" class="btn btn-secondary ml-2" id="cancelEditButton">취소</button>
-                    </div>`;
+                                    <button type="button" class="btn btn-primary" id="confirmEditButton">수정</button>
+                                    <button type="button" class="btn btn-secondary ml-2" id="cancelEditButton">취소</button>
+                                    </div>`;
 
-                    // fridgeName 대신 입력 필드와 버튼들을 표시
                     fridgeNameDiv.hide();
                     fridgeItem.append(buttonContainer);
                 });
 
-                // 수정 확인 버튼 클릭 시
                 $(document).on('click', '#confirmEditButton', function () {
                     const fridgeItem = $(this).closest('.fridgeItem');
                     const fridgeId = fridgeItem.find('.modifyIcon').data('fridge-id');
@@ -360,35 +374,45 @@
                     });
                 });
 
-                // 취소 버튼 클릭 시
                 $(document).on('click', '#cancelEditButton', function () {
                     const fridgeItem = $(this).closest('.fridgeItem');
                     fridgeItem.find('.fridgeName').show();
                     fridgeItem.find('.fridgeNameInput, #confirmEditButton, #cancelEditButton').remove();
                 });
-                // 삭제 이미지 버튼 클릭 시
                 $(document).on('click', '.deleteIcon', function () {
                     const fridgeId = $(this).data('fridge-id');
                     const fridgeName = $(this).closest('.fridgeItem').find('.fridgeName').text();
 
-                    if (confirm(`${fridgeName}를 삭제하시겠습니까?`)) {
-                        $.ajax({
-                            url: 'fridge/deleteFridge',
-                            type: 'POST',
-                            data: JSON.stringify({ fridgeId: fridgeId }),
-                            contentType: 'application/json',
-                            success: function () {
-                                alert(`${fridgeName}가 성공적으로 삭제되었습니다.`);
-                                location.reload();
-                            },
-                            error: function (jqXHR, textStatus, errorThrown) {
-                                alert('냉장고를 삭제하는 데 실패했습니다.');
-                            },
-                        });
-                    }
+                    $.get(`fridgeFood/getFoodCountInFridge/${fridgeId}`, function (foodCount) {
+                        if (foodCount > 0) {
+                            const isConfirmed = confirm(`${fridgeName}에 음식이 있습니다. 함께 삭제하시겠습니까?`);
+                            if (isConfirmed) {
+                                deleteFridge(fridgeId, fridgeName); // 냉장고를 삭제하는 함수 호출
+                            }
+                        } else {
+                            if (confirm(`${fridgeName}를 삭제하시겠습니까?`)) {
+                                deleteFridge(fridgeId, fridgeName); // 냉장고를 삭제하는 함수 호출
+                            }
+                        }
+                    });
                 });
 
-                //카테고리 구현!
+                function deleteFridge(fridgeId, fridgeName) {
+                    $.ajax({
+                        url: 'fridge/deleteFridge',
+                        type: 'POST',
+                        data: JSON.stringify({ fridgeId: fridgeId }),
+                        contentType: 'application/json',
+                        success: function () {
+                            alert(`${fridgeName}가 성공적으로 삭제되었습니다.`);
+                            location.reload();
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            alert('냉장고를 삭제하는 데 실패했습니다.');
+                        },
+                    });
+                }
+
                 $('#foodCategory').change(function () {
                     if ($(this).val() === 'custom') {
                         $('#customCategoryInput').show();
@@ -401,11 +425,9 @@
                     }
                 });
 
-                // 카테고리 추가 버튼 클릭 이벤트
                 $('#addCategoryBtn').click(function () {
                     const newCategory = $('#customCategoryInput').val().trim();
 
-                    // 중복 검사
                     let isDuplicate = false;
                     $('#foodCategory option').each(function () {
                         if (this.value === newCategory) {
@@ -415,16 +437,34 @@
                     });
 
                     if (!isDuplicate) {
-                        $('#foodCategory').append(`<option value="${newCategory}" selected>${newCategory}</option>`);
-                        $('#customCategoryInput').hide();
-                        $('#addCategoryBtn').hide();
-                        $('button[type="submit"]').prop('disabled', false); // Submit 버튼 활성화
+                        // 서버에 카테고리 추가 요청
+                        $.ajax({
+                            url: 'foodCategories',
+                            method: 'POST',
+                            data: JSON.stringify({ foodCategory: newCategory }),
+                            contentType: 'application/json',
+                            success: function (response) {
+                                if (response > 0) {
+                                    // 예를 들어, 서버에서 추가된 카테고리의 ID를 반환한다고 가정
+                                    $('#foodCategory').append(
+                                        `<option value="${newCategory}" selected>${newCategory}</option>`
+                                    );
+                                    $('#customCategoryInput').hide();
+                                    $('#addCategoryBtn').hide();
+                                    $('button[type="submit"]').prop('disabled', false); // Submit 버튼 활성화
+                                } else {
+                                    alert('카테고리 추가에 실패했습니다.');
+                                }
+                            },
+                            error: function (error) {
+                                console.error('Error adding category:', error);
+                            },
+                        });
                     } else {
                         alert('이미 존재하는 카테고리입니다.');
                     }
                 });
 
-                // 페이지 로드 시 저장된 모든 카테고리 조회
                 $.ajax({
                     url: 'foodCategories',
                     method: 'GET',
@@ -439,13 +479,9 @@
                         console.error('Error fetching categories:', error);
                     },
                 });
-                //</ 카테고리구현!>
 
-                //냉동실/ 냉장실 전환
-                // 현재 모드 (냉장실 또는 냉동실)
                 let currentCategory = '냉장실'; // 초기값은 냉장실
 
-                // 냉장실/냉동실 전환 버튼 이벤트
                 document.getElementById('toggleButton').addEventListener('click', function () {
                     const button = this;
                     if (button.textContent === '냉장실 보기') {
@@ -468,41 +504,33 @@
                     loadFridgesByCategory(currentCategory);
                 });
 
-                //</ 냉동실/ 냉장실 전환
-
-                //냉장고 추가!
                 let isItemEditMode = false; // 편집 모드 상태를 추적하는 변수
 
                 $('#editButton').on('click', function () {
                     if (isItemEditMode) {
-                        // 편집 모드라면
                         $('#addFridgeImage').remove(); // PlusButton.png 제거
-                        // 입력 필드와 버튼들도 제거
                         $('#fridgeNameInput').remove();
                         $('#addConfirmButton').remove();
                         $('#addCancelButton').remove();
 
-                        // 수정 및 삭제 아이콘 제거
                         $('.fridge-editIcon').css('display', 'none'); // 냉장고 편집 아이콘을 숨깁니다.
                         isItemEditMode = false;
                     } else {
-                        // 편집 모드가 아니라면
                         $('#fridgeContainer').append(
                             `<img src="images/fridgeimg/PlusButton.png" alt="추가버튼" style="width: 90px; height: 90px; margin-left:10px" id="addFridgeImage">`
                         );
 
-                        // 각 냉장고에 수정 및 삭제 아이콘 추가
                         $('.fridgeItem').each(function () {
                             const fridgeId = $(this).find('a').attr('href').split('/').pop();
 
                             const modifyIcon = `
-            <img src="images/fridgeimg/ModifyName.png" alt="수정" class="editIcon fridge-editIcon modifyIcon"
-                 data-fridge-id="${fridgeId}" style="position: absolute; top: 0; right: 20px;">
-            `;
+                                                                                            <img src="images/fridgeimg/ModifyName.png" alt="수정" class="editIcon fridge-editIcon modifyIcon"
+                                                                                            data-fridge-id="${fridgeId}" style="position: absolute; top: 0; right: 20px;">
+                                                                                            `;
                             const deleteIcon = `
-            <img src="images/fridgeimg/Red_X.png" alt="삭제" class="editIcon fridge-editIcon deleteIcon"
-                 data-fridge-id="${fridgeId}" style="position: absolute; top: 0; right: 0;">
-            `;
+                                                                                            <img src="images/fridgeimg/Red_X.png" alt="삭제" class="editIcon fridge-editIcon deleteIcon"
+                                                                                            data-fridge-id="${fridgeId}" style="position: absolute; top: 0; right: 0;">
+                                                                                            `;
 
                             $(this)
                                 .find('div[style="position: relative;"]')
@@ -522,12 +550,12 @@
                 $(document).on('click', '#addFridgeImage', function () {
                     $(this).attr('src', 'images/fridgeimg/노랑냉장고.jpg');
                     const inputField = `
-                <div class="fridgeInputField mt-2">
-                    <input type="text" class="form-control mb-2" placeholder="냉장고 이름을 입력하세요!" id="fridgeNameInput">
-                    <button type="button" class="btn btn-primary" id="addConfirmButton">추가</button>
-                    <button type="button" class="btn btn-secondary ml-2" id="addCancelButton">취소</button>
-                </div>
-            `;
+                                                                                    <div class="fridgeInputField mt-2">
+                                                                                    <input type="text" class="form-control mb-2" placeholder="냉장고 이름을 입력하세요!" id="fridgeNameInput">
+                                                                                    <button type="button" class="btn btn-primary" id="addConfirmButton">추가</button>
+                                                                                    <button type="button" class="btn btn-secondary ml-2" id="addCancelButton">취소</button>
+                                                                                    </div>
+                                                                                    `;
 
                     const fridgeBox = $(`<div class="fridgeBox"></div>`);
                     $(this).appendTo(fridgeBox);
@@ -538,7 +566,6 @@
                     this.scrollIntoView({ behavior: 'smooth', block: 'end' });
                 });
 
-                // 냉장고 추가 버튼 클릭 이벤트
                 $(document).on('click', '#addConfirmButton', function () {
                     if ($('#fridgeNameInput').val().length < 2) {
                         alert(`냉장고 이름은 2자 이상이어야 합니다.`);
@@ -553,12 +580,10 @@
                             contentType: 'application/json',
                             success: function (data) {
                                 console.log('냉장고가 추가되었습니다.', data);
-                                // UX 개선: 냉장고 추가 후 입력 필드와 버튼 제거
                                 $('#addFridgeImage').remove();
                                 $('#fridgeNameInput').remove();
                                 $('#addConfirmButton').remove();
                                 $('#addCancelButton').remove();
-                                // 냉장고 목록 새로고침
                                 loadFridgesByCategory(currentCategory); // 카테고리에 따른 냉장고 목록 로드
                                 isItemEditMode = false;
                             },
@@ -578,9 +603,7 @@
                     $('#addConfirmButton').remove();
                     isItemEditMode = false;
                 });
-                //</ 냉장고 추가!
 
-                //냉장고 이름 글자 수 제한!
                 const MAX_NAME_LENGTH = 8; // 원하는 글자 수로 설정
 
                 $(document).on('input', '#fridgeNameInput', function () {
@@ -589,9 +612,7 @@
                         alert(`냉장고 이름은 ${MAX_NAME_LENGTH}자 이하여야 합니다.`);
                     }
                 });
-                //</냉장고 이름 글자 수 제한!
 
-                // When a fridge item is clicked
                 $(document).on('click', '.food-item', function (e) {
                     e.stopPropagation();
                     let foodId = $(this).data('food-id');
@@ -600,12 +621,11 @@
                         url: 'fridgeFood/food/' + foodId,
                         type: 'GET',
                         success: function (data) {
-                            // Populate modal with data
                             $('#foodModal .modal-body').html(`
-                            <p><strong>Food Name:</strong> ${data.foodName}</p>
-                            <p><strong>Expiry Date:</strong> ${data.foodExpiryDate}</p>
-                            <!-- Add other details as needed -->
-                        `);
+                                                                                                    <p><strong>Food Name:</strong> ${data.foodName}</p>
+                                                                                                    <p><strong>Expiry Date:</strong> ${data.foodExpiryDate}</p>
+                                                                                                    <!-- Add other details as needed -->
+                                                                                                    `);
                             $('#foodModal').modal('show');
                         },
                         error: function (error) {
@@ -613,19 +633,15 @@
                         },
                     });
                 });
-                //Close버튼 안먹어서 응급처치
                 $('#foodModal .btn-danger').on('click', function () {
                     $('#foodModal').modal('hide');
                 });
 
-                // 가져온 음식 항목을 HTML의 냉장고 위치에 맞게 이미지로 표시하는 함수
                 function displayFoodItem(foodItem) {
-                    // foodSavedFile이 있는 경우 해당 경로를 사용하고, 없는 경우 기본 이미지를 사용
                     var imagePath = foodItem.foodSavedFile
                         ? 'fridgeFood/image/' + foodItem.foodSavedFile // Serve image from C:/secretaryfile/
                         : 'images/fridgeimg/DefaultFood.webp';
 
-                    // D-day 계산
                     var today = new Date();
                     var expiryDate = new Date(foodItem.foodExpiryDate);
                     var diffDays = Math.ceil((expiryDate - today) / (1000 * 60 * 60 * 24));
@@ -642,60 +658,68 @@
                         );
                     }
 
-                    // D-day에 따른 색상 설정
                     var dDayColor = 'blue'; // 기본 색상
                     if (diffDays <= 3) {
                         dDayColor = 'red';
                     }
 
-                    // 동적으로 음식 항목의 HTML 구조를 생성
                     const foodModifyIcon = `
-            <img src="images/fridgeimg/ModifyName.png" alt="수정" class="editIcon food-editIcon foodModifyIcon"
-                 data-food-id="${foodItem.foodId}" style="position: absolute; top: 0; right: 20px;">
-            `;
+                                                                                                    <img src="images/fridgeimg/ModifyName.png" alt="수정" class="editIcon food-editIcon foodModifyIcon"
+                                                                                                    data-food-id="${foodItem.foodId}" style="position: absolute; top: 0; right: 20px;">
+                                                                                                    `;
                     const foodDeleteIcon = `
-            <img src="images/fridgeimg/Red_X.png" alt="삭제" class="editIcon food-editIcon foodDeleteIcon"
-                 data-food-id="${foodItem.foodId}" style="position: absolute; top: 0; right: 0;">
-            `;
+                                                                                                    <img src="images/fridgeimg/Red_X.png" alt="삭제" class="editIcon food-editIcon foodDeleteIcon"
+                                                                                                    data-food-id="${foodItem.foodId}" style="position: absolute; top: 0; right: 0;">
+                                                                                                    `;
 
                     var foodItemElement = `
-            <div class="card mt-3 mb-4 food-item" data-food-id="${foodItem.foodId}">
-                <div class="card-body foodcard">
-                    <!-- Edit & Delete Icons -->
-                    ${foodModifyIcon}
-                    ${foodDeleteIcon}
-                    <!-- Food Image -->
-                    <div class="food-image-container">
-                        <img src="${imagePath}" alt="${foodItem.foodName}" class="food-image">
-                    </div>
-                    <!-- Food Details -->
-                    <div class="food-details">
-                        <span class="badge rounded-pill bg-success food-category centered-category">${
-                            foodItem.foodCategory
-                        }</span>
-                        <div class="food-name">${foodItem.foodName}</div>
-                        <div class="purchase-date">${
-                            foodItem.foodPurchaseDate && foodItem.foodPurchaseDate !== ''
-                                ? `구매: ${formatDate(foodItem.foodPurchaseDate)}`
-                                : `입력: ${formatDate(foodItem.foodInputDate)}`
-                        }</div>
+                                                                                                    <div class="card mt-3 mb-4 food-item" data-food-id="${
+                                                                                                        foodItem.foodId
+                                                                                                    }">
+                                                                                                    <div class="card-body foodcard">
+                                                                                                    <!-- Edit & Delete Icons -->
+                                                                                                ${foodModifyIcon}
+                                                                                            ${foodDeleteIcon}
+                                                                                            <!-- Food Image -->
+                                                                                            <div class="food-image-container">
+                                                                                            <img src="${imagePath}" alt="${
+                        foodItem.foodName
+                    }" class="food-image">
+                                                                                            </div>
+                                                                                            <!-- Food Details -->
+                                                                                            <div class="food-details">
+                                                                                            <span class="badge rounded-pill bg-success food-category centered-category">${
+                                                                                                foodItem.foodCategory
+                                                                                            }</span>
+                                                                                                <div class="food-name">${
+                                                                                                    foodItem.foodName
+                                                                                                }</div>
+                                                                                                <div class="purchase-date">${
+                                                                                                    foodItem.foodPurchaseDate &&
+                                                                                                    foodItem.foodPurchaseDate !==
+                                                                                                        ''
+                                                                                                        ? `구매: ${formatDate(
+                                                                                                              foodItem.foodPurchaseDate
+                                                                                                          )}`
+                                                                                                        : `입력: ${formatDate(
+                                                                                                              foodItem.foodInputDate
+                                                                                                          )}`
+                                                                                                }</div>
+                                                                                                    
+                                                                                                    <div class="expiry-date">기한: ${formatDate(
+                                                                                                        foodItem.foodExpiryDate
+                                                                                                    )} (D-<span class="d-day" style="color:${dDayColor}">${diffDays}</span>)</div>
+                                                                                                    </div>
+                                                                                                    </div>
+                                                                                                    </div>
+                                                                                                    `;
 
-                        <div class="expiry-date">기한: ${formatDate(
-                            foodItem.foodExpiryDate
-                        )} (D-<span class="d-day" style="color:${dDayColor}">${diffDays}</span>)</div>
-                    </div>
-                </div>
-            </div>
-            `;
-
-                    // 생성한 음식 항목을 적절한 위치에 추가
                     $('#foodItemsContainer').append(foodItemElement);
                 }
                 $('.fridgeSelect').on('change', function () {
                     const selectedFridgeId = $(this).val();
                     console.log('Selected Fridge ID:', selectedFridgeId);
                 });
-                // 카테고리별 냉장고 목록 불러오기
                 function loadFridgesByCategory(category) {
                     $.ajax({
                         url: 'fridge/getAllFridges',
@@ -703,9 +727,7 @@
                         success: function (data) {
                             const filteredFridges = data.filter((fridge) => fridge.fridgeCategory === category);
                             $('#fridgeContainer').empty();
-                            // 셀렉트 박스의 기존 항목들을 제거
                             $('.fridgeSelect').empty();
-                            // 셀렉트 박스에 냉장고 목록 추가
                             filteredFridges.forEach(function (fridge) {
                                 var option = `<option value="${fridge.fridgeId}">${fridge.fridgeName}</option>`;
                                 $('.fridgeSelect').append(option);
@@ -713,17 +735,28 @@
 
                             filteredFridges.forEach(function (fridge) {
                                 const fridgeElement = `
-                    <div class="fridgeItem">
-                        <div style="position: relative;">
-                            <a href="/fridge/${fridge.fridgeId}">
-                                <img src="images/fridgeimg/${
-                                    category === '냉장실' ? '노랑냉장고.jpg' : '파랑냉장고.jpg'
-                                }" alt="${fridge.fridgeName}" style="width: 90px; height: 90px">
-                            </a>
-                        </div>
-                        <div class="fridgeName" data-current-name="${fridge.fridgeName}">${fridge.fridgeName}</div>
-                    </div>
-                `;
+                                                                                                                <div class="fridgeItem">
+                                                                                                                <div style="position: relative;">
+                                                                                                                <a href="/fridge/${
+                                                                                                                    fridge.fridgeId
+                                                                                                                }">
+                                                                                                                <img src="images/fridgeimg/${
+                                                                                                                    category ===
+                                                                                                                    '냉장실'
+                                                                                                                        ? '노랑냉장고.jpg'
+                                                                                                                        : '파랑냉장고.jpg'
+                                                                                                                }" alt="${
+                                    fridge.fridgeName
+                                }" style="width: 90px; height: 90px">
+                                                                                                                    </a>
+                                                                                                                    </div>
+                                                                                                                    <div class="fridgeName" data-current-name="${
+                                                                                                                        fridge.fridgeName
+                                                                                                                    }">${
+                                    fridge.fridgeName
+                                }</div>
+                                                                                                                    </div>
+                                                                                                                    `;
                                 $('#fridgeContainer').append(fridgeElement);
                             });
                         },
@@ -733,7 +766,6 @@
                     });
                 }
 
-                // 카테고리별 음식 항목 불러오기
                 function loadAllFoodsByCategory(category) {
                     $.ajax({
                         url: `fridgeFood/getAllFoodsByCategory/${category}`,
@@ -1216,7 +1248,6 @@
                                     </div>
                                 </div>
                                 <!-- 2열 -->
-
                                 <div class="col-lg-5 mb-3">
                                     <!-- 2열 2행 -->
                                     <h3 class="mt-3 mb-3" style="margin-right: 3rem">물품 목록</h3>
@@ -1237,28 +1268,28 @@
                                             <!-- Modal -->
                                             <!-- 영수증 입력 Modal -->
                                             <!-- 영수증 입력 Modal -->
-                                            <div class="modal fade" id="receiptModal" tabindex="-1" aria-hidden="true">
+                                            <div aria-hidden="true" class="modal fade" id="receiptModal" tabindex="-1">
                                                 <div class="modal-dialog">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
                                                             <h5 class="modal-title">영수증 업로드</h5>
                                                             <button
-                                                                type="button"
+                                                                aria-label="Close"
                                                                 class="btn-close"
                                                                 data-bs-dismiss="modal"
-                                                                aria-label="Close"
+                                                                type="button"
                                                             ></button>
                                                         </div>
                                                         <form
-                                                            th:action="@{/fridgeFood/addFromReceipt}"
-                                                            method="post"
                                                             enctype="multipart/form-data"
                                                             id="addFromReceipt"
+                                                            method="post"
+                                                            th:action="@{/fridgeFood/addFromReceipt}"
                                                         >
                                                             <div class="modal-body">
                                                                 <!-- 영수증 이미지 업로드 부분 -->
                                                                 <div class="mb-3">
-                                                                    <label for="receiptUpload" class="form-label"
+                                                                    <label class="form-label" for="receiptUpload"
                                                                         >파일 선택</label
                                                                     >
                                                                     <input
@@ -1269,9 +1300,9 @@
                                                                 </div>
                                                                 <div class="text-center mb-3">
                                                                     <button
-                                                                        type="button"
                                                                         class="btn btn-primary"
                                                                         id="uploadReceiptButton"
+                                                                        type="button"
                                                                     >
                                                                         Upload
                                                                     </button>
@@ -1280,13 +1311,13 @@
                                                                 <hr />
                                                                 <!-- 냉장고 선택 부분 -->
                                                                 <div class="mb-3">
-                                                                    <label for="fridgeSelect" class="form-label"
+                                                                    <label class="form-label" for="fridgeSelect"
                                                                         >냉장고 선택</label
                                                                     >
                                                                     <select
                                                                         class="form-select fridgeSelect"
                                                                         name="fridgeId"
-                                                                        required
+                                                                        required=""
                                                                     >
                                                                         <option disabled="" selected="" value="">
                                                                             냉장고를 선택해주세요
@@ -1300,17 +1331,17 @@
                                                             <div class="modal-footer">
                                                                 <!-- 모달 창 닫기 버튼 -->
                                                                 <button
-                                                                    type="button"
                                                                     class="btn btn-outline-secondary"
                                                                     data-bs-dismiss="modal"
+                                                                    type="button"
                                                                 >
                                                                     Close
                                                                 </button>
                                                                 <!-- 분석 결과를 서버로 전송하는 버튼 -->
                                                                 <button
-                                                                    type="submit"
                                                                     class="btn btn-primary"
                                                                     id="submitDataButton"
+                                                                    type="submit"
                                                                 >
                                                                     Submit
                                                                 </button>
@@ -1350,9 +1381,10 @@
                                                             ></button>
                                                         </div>
                                                         <form
-                                                            th:action="@{/fridgeFood/add}"
-                                                            method="post"
                                                             enctype="multipart/form-data"
+                                                            id="foodForm"
+                                                            method="post"
+                                                            th:action="@{/fridgeFood/add}"
                                                         >
                                                             <div class="modal-body">
                                                                 <label class="form-label" for="fridgeSelect"
@@ -1361,7 +1393,7 @@
                                                                 <select
                                                                     class="form-select fridgeSelect"
                                                                     name="fridgeId"
-                                                                    required
+                                                                    required=""
                                                                 >
                                                                     <option disabled="" selected="" value="">
                                                                         냉장고를 선택해주세요
@@ -1375,18 +1407,18 @@
                                                                     <input
                                                                         class="form-control"
                                                                         id="foodName"
+                                                                        name="foodName"
                                                                         required=""
                                                                         type="text"
-                                                                        name="foodName"
                                                                     /><button class="voice-input-button">
                                                                         <img
+                                                                            id="recordFoodName"
                                                                             src="images/fridgeimg/MikeButton.png"
                                                                             style="
                                                                                 width: 30px;
                                                                                 height: 30px;
                                                                                 vertical-align: middle;
                                                                             "
-                                                                            id="recordFoodName"
                                                                         />
                                                                     </button>
                                                                 </div>
@@ -1412,32 +1444,31 @@
                                                                     </select>
                                                                     <input
                                                                         class="form-control"
-                                                                        type="text"
                                                                         id="customCategoryInput"
                                                                         placeholder="카테고리 입력"
                                                                         style="display: none"
+                                                                        type="text"
                                                                     />
                                                                     <button class="voice-input-button">
                                                                         <img
+                                                                            id="recordFoodCategory"
                                                                             src="images/fridgeimg/MikeButton.png"
                                                                             style="
                                                                                 width: 30px;
                                                                                 height: 30px;
                                                                                 vertical-align: middle;
                                                                             "
-                                                                            id="recordFoodCategory"
                                                                         />
                                                                     </button>
                                                                 </div>
                                                                 <button
-                                                                    id="addCategoryBtn"
                                                                     class="btn btn-primary"
+                                                                    id="addCategoryBtn"
                                                                     style="display: none"
                                                                     type="button"
                                                                 >
                                                                     카테고리 추가하기
                                                                 </button>
-
                                                                 <div style="display: flex; align-items: center">
                                                                     <label class="form-label" for="foodQuantity"
                                                                         >개수</label
@@ -1445,20 +1476,20 @@
                                                                     <input
                                                                         class="form-control"
                                                                         id="foodQuantity"
+                                                                        min="1"
                                                                         name="foodQuantity"
                                                                         type="number"
                                                                         value="1"
-                                                                        min="1"
                                                                     />
                                                                     <button class="voice-input-button">
                                                                         <img
-                                                                            th:src="@{/images/fridgeimg/MikeButton.png}"
+                                                                            id="recordFoodQuantity"
                                                                             style="
                                                                                 width: 30px;
                                                                                 height: 30px;
                                                                                 vertical-align: middle;
                                                                             "
-                                                                            id="recordFoodQuantity"
+                                                                            th:src="@{/images/fridgeimg/MikeButton.png}"
                                                                         />
                                                                     </button>
                                                                 </div>
@@ -1474,13 +1505,13 @@
                                                                     />
                                                                     <button class="voice-input-button">
                                                                         <img
-                                                                            th:src="@{/images/fridgeimg/MikeButton.png}"
+                                                                            id="recordFoodPrice"
                                                                             style="
                                                                                 width: 30px;
                                                                                 height: 30px;
                                                                                 vertical-align: middle;
                                                                             "
-                                                                            id="recordFoodPrice"
+                                                                            th:src="@{/images/fridgeimg/MikeButton.png}"
                                                                         />
                                                                     </button>
                                                                 </div>
@@ -1651,8 +1682,8 @@
                                             </ul>
                                         </div>
                                         <button
-                                            id="foodItemModify"
                                             class="btn btn-sm btn-warning no-wrap-text"
+                                            id="foodItemModify"
                                             type="button"
                                         >
                                             편집
@@ -1661,10 +1692,9 @@
                                     <!-- Fridge Item Display -->
                                     <div class="card mb-4 food-item">
                                         <div class="card-body foodbox">
-                                            <div id="foodItemsContainer" class="food-items-container"></div>
+                                            <div class="food-items-container" id="foodItemsContainer"></div>
                                         </div>
                                     </div>
-
                                     <!-- Food Detail Modal -->
                                     <div class="modal" id="foodModal">
                                         <div class="modal-dialog">
@@ -1676,7 +1706,7 @@
                                                     <!-- Food details will be loaded here -->
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <button type="button" class="btn btn-danger" data-dismiss="modal">
+                                                    <button class="btn btn-danger" data-dismiss="modal" type="button">
                                                         Close
                                                     </button>
                                                 </div>

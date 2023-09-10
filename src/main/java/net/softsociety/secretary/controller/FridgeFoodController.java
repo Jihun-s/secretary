@@ -152,4 +152,9 @@ public class FridgeFoodController {
         return fridgeFoodService.getAllFoodsByCategory(category);
     }
 
+    @ResponseBody
+    @GetMapping("/getFoodCountInFridge/{fridgeId}")
+    public int getFoodCountInFridge(@PathVariable int fridgeId) {
+        return fridgeFoodService.getFoodCountByFridgeId(fridgeId);
+    }
 }

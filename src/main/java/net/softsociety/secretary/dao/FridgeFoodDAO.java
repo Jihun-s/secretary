@@ -15,4 +15,5 @@ public interface FridgeFoodDAO {
     public int deleteFridgeFood(int foodId);
 	List<FridgeFood> getFoodsByFridgeId(int fridgeId);
 	List<FridgeFood> getAllFoodsByCategory(String category);
+	int getFoodCountByFridgeId(int fridgeId);
 }
