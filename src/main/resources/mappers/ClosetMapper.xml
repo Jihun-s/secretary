@@ -10,6 +10,17 @@
 	values (Secretary_Closet_SEQ.nextval, #{familyId}, #{userId}, #{closetName})
 </insert>
 
+<!-- 옷장삭제 -->
+<delete id="delCloset" parameterType="Closet">
+	delete from Secretary_Closet where closet_num = #{closetNum} and family_id = #{familyId} and user_id =  #{userId}
+</delete>
+
+<!-- 옷장이름 수정 -->
+<update id="modifyCloset" parameterType="Closet">
+	update Secretary_Closet set closet_name = #{closetName}
+			where closet_num = #{closetNum} and family_id = #{familyId} and user_id = #{userId}
+</update>
+
 <!-- 옷장목록 전체 불러오기 -->
 <select id="findAllCloset" resultType="Closet">
 	select * from Secretary_Closet order by closet_num
@@ -29,7 +40,7 @@
 
 <!-- 옷장안 의류수정 -->
 <update id="updateClothes" parameterType="Clothes">
-	update  Secretary_clothes set clothes_material = #{clothesMaterial}, clothes_category = #{clothesCategory}
+	update Secretary_clothes set clothes_material = #{clothesMaterial}, clothes_category = #{clothesCategory}
 								,clothes_seasons = #{clothesSeasons}, clothes_size = #{clothesSize}
 								,clothes_img = #{clothesImg}, clothes_originalFile = #{clothesOriginalFile}
 			where clothes_num = #{clothesNum} and closet_num = #{closetNum}
@@ -87,6 +98,11 @@
 			order by clothes_num desc
 </select>
 
+<!-- 옷장안 의류전체 목록(옷장으로 찾기) -->
+<select id="findAllClothesByCloset" parameterType="Closet">
+	select * from Secretary_clothes where closet_num = #{closetNum} and family_id = #{familyId}
+</select>
+
 <!-- 옷장안 옷 찾기(옷장번호, 옷번호) -->
 <select id="findClothes" parameterType="hashmap" resultType="Clothes">
 	select * from Secretary_clothes where closet_num = #{closetNum} and clothes_num = #{clothesNum}
@@ -101,4 +117,19 @@
 <select id="howToManageClothes" parameterType="string" resultType="ClothesManager">
 	select * from Secretary_clothesManager where clothes_material = #{clothesMaterial}
 </select>
+
+<!-- 세탁물 체크 -->
+<update id="laundryIn" parameterType="Clothes">
+	update Secretary_clothes set clothes_laundry = 1
+			where closet_num = #{closetNum} and clothes_num = #{clothesNum}
+</update>
+
+<!-- 세탁물 다시 옷장으로 -->
+<update id="laundryOut" parameterType="hashmap">
+	update Secretary_clothes set clothes_laundry = 0
+		<where><if test="closetNum != 0 and clothesNum != 0">
+			closet_num = #{closetNum} and clothes_num = #{clothesNum}
+				</if>
+		</where>	
+</update>
 </mapper>

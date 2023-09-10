@@ -45,6 +45,13 @@ public class ClosetPageController {
 		return "closetView/Laundry";
 	}
 	
+	//모든 옷장에서 의류목록 보기(메인페이지 검색기능)
+	@GetMapping("AllCloset")
+	public String AllClosetPage() {
+		return "closetView/AllCloset";		
+	}
+	
+	
 	// 옷장 상세2
 	@GetMapping("InCloset2")
 	public String closet2() {
