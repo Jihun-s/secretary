@@ -138,5 +138,23 @@ public class FridgeFoodController {
         fridgeFoodService.deleteFridgeFood(foodId);
         return "success";
     }
+    
+    @ResponseBody
+    @GetMapping("getFridgeFoods/{fridgeId}")
+    public List<FridgeFood> getFridgeFoods(@PathVariable int fridgeId) {
+        // FridgeService 또는 관련 서비스를 사용하여 해당 냉장고의 음식 목록을 가져옵니다.
+        return fridgeFoodService.getFoodsByFridgeId(fridgeId);
+    }
 
+    @ResponseBody
+    @GetMapping("/getAllFoodsByCategory/{category}")
+    public List<FridgeFood> getAllFoodsByCategory(@PathVariable String category) {
+        return fridgeFoodService.getAllFoodsByCategory(category);
+    }
+
+    @ResponseBody
+    @GetMapping("/getFoodCountInFridge/{fridgeId}")
+    public int getFoodCountInFridge(@PathVariable int fridgeId) {
+        return fridgeFoodService.getFoodCountByFridgeId(fridgeId);
+    }
 }

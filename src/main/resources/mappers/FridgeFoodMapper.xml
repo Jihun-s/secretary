@@ -59,6 +59,11 @@
 	    SELECT * FROM SECRETARY_FRIDGE_FOOD
 	</select>
 	
+	<!-- 특정 냉장고의 음식 출력하기 -->
+	<select id="getFoodsByFridgeId" resultType="FridgeFood">
+	    SELECT * FROM SECRETARY_FRIDGE_FOOD WHERE FRIDGE_ID = #{fridgeId}
+	</select>
+	
 	<update id="modifyFridgeFood" parameterType="FridgeFood">
 	    UPDATE SECRETARY_FRIDGE_FOOD
 	    SET 
@@ -90,4 +95,15 @@
 	<delete id="deleteFridgeFood" parameterType="int">
 	    DELETE FROM SECRETARY_FRIDGE_FOOD WHERE FOOD_ID = #{foodId}
 	</delete>
+	
+	<select id="getAllFoodsByCategory" resultType="FridgeFood">
+	    SELECT f.*
+	    FROM Secretary_FRIDGE_FOOD f
+	    JOIN Secretary_Fridge r ON f.FRIDGE_ID = r.fridge_id
+	    WHERE r.fridge_category = #{fridgeCategory}
+	</select>
+	
+	<select id="getFoodCountByFridgeId" resultType="int">
+	    SELECT COUNT(*) FROM Secretary_FRIDGE_FOOD WHERE fridge_id = #{fridgeId}
+	</select>
 </mapper>

@@ -4,7 +4,7 @@
 
 <mapper namespace="net.softsociety.secretary.dao.FridgeDAO">
 	<select id="getAllFridges" resultType="Fridge">
-        SELECT * FROM Secretary_Fridge WHERE family_id = #{familyId} and fridge_category = '냉장실'
+        SELECT * FROM Secretary_Fridge WHERE family_id = #{familyId}
     </select>
 
 	<insert id="addFridge">
