@@ -175,48 +175,50 @@ function deleteSch() {
     });
   }
 }
-/** 일정 수정 */
 
 /** 일정 수정 */
 function updateSch() {
 
-  
+  let isValid = validateUpdateSch();
+  console.log("수정해도 될까요:" + isValid.toString());
 
-  let schId = $('#schId').val();
-  let schType = $('#schTypeSelect').val();
-  let schCate = $('#schCateSelect').val();
-  let schContent = $('#schContent').val();
-  let schLevel = $('#schLevel').val();
-  let schStart = $('#schStart').val();
-  let schEnd = $('#schEnd').val();
-  let schAllday = $('#schAllday').val();
-  console.log(schId, schType, schCate, schContent, schLevel, schStart, schEnd, schAllday);
+  if(isValid) {
+    let schId = $('#schId').val();
+    let schType = $('#schTypeSelect').val();
+    let schCate = $('#schCateSelect').val();
+    let schContent = $('#schContent').val();
+    let schLevel = $('#schLevel').val();
+    let schStart = $('#schStart').val();
+    let schEnd = $('#schEnd').val();
+    let schAllday = $('#schAllday').val();
+    console.log(schId, schType, schCate, schContent, schLevel, schStart, schEnd, schAllday);
 
-  $.ajax({
-    url: '/secretary/schedule/updateSch',
-    type: 'POST',
-    data: { schId: schId, 
-            schType: schType, 
-            schCate: schCate,
-            schContent: schContent, 
-            schLevel: schLevel, 
-            schStart: schStart, 
-            schEnd: schEnd, 
-            schAllday: schAllday },
-    dataType: 'TEXT',
-    success: (data) => {
-      if(data == 1) {
-        alert('일정을 수정했습니다.');
-      } else {
-        alert('일정을 수정할 수 없습니다.');
+    $.ajax({
+      url: '/secretary/schedule/updateSch',
+      type: 'POST',
+      data: { schId: schId, 
+              schType: schType, 
+              schCate: schCate,
+              schContent: schContent, 
+              schLevel: schLevel, 
+              schStart: schStart, 
+              schEnd: schEnd, 
+              schAllday: schAllday },
+      dataType: 'TEXT',
+      success: (data) => {
+        if(data == 1) {
+          alert('일정을 수정했습니다.');
+        } else {
+          alert('일정을 수정할 수 없습니다.');
+        }
+        location.reload();
+      },
+      error: (e) => {
+        alert('일정 수정 전송 실패');
+        alert(JSON.stringify(e));
       }
-      location.reload();
-    },
-    error: (e) => {
-      alert('일정 수정 전송 실패');
-      alert(JSON.stringify(e));
-    }
-  });
+    });
+  }
 }
 
 ////////////////////////////////////////////////////////////////
@@ -288,7 +290,7 @@ function convertDateTimeToLocal(dateTimeStr) {
 /** 일정 입력 유효성 검사 */
 function validateSch() {
   
-  return validateSchContentInput() && validateDates() && validateSchTypeInput() && validateSchCateInput();
+  return validateSchContentInput() && validateDatesInput() && validateSchTypeInput() && validateSchCateInput();
 }
 
 /** 일정명 유효성 검사 */
@@ -318,7 +320,7 @@ function validateSchContentInput() {
 }
 
 /** 날짜 유효성 검사 */
-function validateDates() {
+function validateDatesInput() {
   let startDate = new Date($('#schStartInput').val());
   let endDate = new Date($('#schEndInput').val());
 
@@ -343,6 +345,76 @@ function validateSchTypeInput() {
 /** 카테고리 유효성 검사 */
 function validateSchCateInput() {
   let schCate = $('#schCateSelectInput').val();
+  if (schCate === "") {
+      alert("카테고리를 선택하세요");
+      return false;
+  }
+
+  return true;
+}
+
+
+////////////////////////////////////////////////////////////////
+
+
+/** 일정 수정 유효성 검사 */
+function validateUpdateSch() {
+  
+  return validateSchContent() && validateDates() && validateSchType() && validateSchCate();
+}
+
+/** 일정명 유효성 검사 */
+function validateSchContent() {
+  let content = $('#schContent').val();
+  let byteSize = 0;
+
+  for (var i = 0; i < content.length; i++) {
+      var char = content.charAt(i);
+      if (escape(char).length > 4) {  // 한글일 경우
+          byteSize += 3;
+      } else {
+          byteSize += 1;
+      }
+  }
+
+  if(byteSize == 0) {
+    alert("일정명을 입력하세요.");
+    return false;
+  }
+
+  if (byteSize > 50) {
+      alert("일정명은 50byte(한글 15글자)를 넘을 수 없습니다.");
+      return false;
+  }
+  return true;
+}
+
+/** 날짜 유효성 검사 */
+function validateDates() {
+  let startDate = new Date($('#schStart').val());
+  let endDate = new Date($('#schEnd').val());
+
+  if (startDate > endDate) {
+      alert("종료일이 시작일보다 이전 날짜일 수 없습니다.");
+      return false;
+  }
+  return true;
+}
+
+/** 유형 유효성 검사 */
+function validateSchType() {
+  let schType = $('#schTypeSelect').val();
+  if (schType === "") {
+      alert("유형을 선택하세요");
+      return false;
+  }
+
+  return true;
+}
+
+/** 카테고리 유효성 검사 */
+function validateSchCate() {
+  let schCate = $('#schCateSelect').val();
   if (schCate === "") {
       alert("카테고리를 선택하세요");
       return false;
