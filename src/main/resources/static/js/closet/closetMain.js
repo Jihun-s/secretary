@@ -3,7 +3,61 @@
  */
 
  $(document).ready(function(){
-	 	
+	let closetNum = 0;
+	let dataValue = new Array(8);
+	$.ajax({
+		url:'closet/chartValue',
+		type:'get',
+		data:{closetNum: closetNum},
+		dataType:'json',
+		success:function(valueList){
+			dataValue[0] = valueList.TOPCATEGORYCOUNT;
+			dataValue[1] = valueList.BOTTOMCATEGORYCOUNT;
+			dataValue[2] = valueList.OUTERCATEGORYCOUNT;
+			dataValue[3] = valueList.DRESSCATEGORYCOUNT;
+			dataValue[4] = valueList.SHOESCATEGORYCOUNT;
+			dataValue[5] = valueList.BAGCATEGORYCOUNT;
+			dataValue[6] = valueList.ACCESSORYCATEGORYCOUNT;
+			dataValue[7] = valueList.ETCCATEGORYCOUNT;
+		},
+		error:function(e){
+			console.log(JSON.stringify(e));
+		}			
+	})	
+	
+  const ctx = document.getElementById('myChart');
+  const data = {
+  	labels: ['상의','하의','아우터','원피스','신발','가방','악세사리','기타'],
+  	datasets: [{
+    			label: '개수',
+    			data: dataValue,
+    			backgroundColor: [
+					'rgb(244, 67, 54)',
+					'rgb(255, 111, 0)',
+					'rgb(255, 241, 118)',
+					'rgb(220, 231, 117)',
+      				'rgb(54, 162, 235)',
+      				'rgb(186, 104, 200)',
+      				'rgb(255, 99, 132)',
+      				'rgb(255, 205, 210)',
+    				],
+    			hoverOffset: 4
+  						}]
+	};
+				
+  new Chart(ctx, {
+    type: 'doughnut',
+    data: data,
+	  options: {
+  	  	plugins: {
+    		title: {
+        	display: true,
+        	text: '전체 옷장',
+      		}
+    	}//plugins
+  	  }//options 
+  });	
+  	
 	 	// 옷장 편집버튼 -> 수정,삭제 아이콘 숨어있다가 나타나기
 	 	$('.delCloset').hide();
 	 	$('.modifyCloset').hide();
@@ -40,7 +94,6 @@
 		
 //!!!!!!!!!!!!!!!!!!! 세탁물 게이지 표시 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!		
 		let laundryCheck = true;
-		let closetNum = 0;
 		$.ajax({
 			url:'closet/inCloset',
 			type:'get',

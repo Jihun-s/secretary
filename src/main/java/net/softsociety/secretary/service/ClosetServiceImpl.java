@@ -1,5 +1,6 @@
 package net.softsociety.secretary.service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -131,6 +132,12 @@ public class ClosetServiceImpl implements ClosetService {
 		map.put("closetNum", closetNum);
 		map.put("clothesNum", clothesNum);
 		dao.laundryOut(map);
+	}
+
+	//차트데이터 값 불러오기
+	@Override
+	public HashMap<String, BigDecimal> getChartValue(int closetNum) {
+		return dao.getChartValue(closetNum);
 	}
 
 

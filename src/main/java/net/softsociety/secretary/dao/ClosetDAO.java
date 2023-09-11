@@ -1,5 +1,6 @@
 package net.softsociety.secretary.dao;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -41,6 +42,9 @@ public interface ClosetDAO {
 	void laundryIn(Clothes clothes);
 	//세탁물 다시 옷장으로
 	void laundryOut(HashMap<String, Integer> map);
+	
+	//차트데이터 값 불러오기
+	HashMap<String, BigDecimal> getChartValue(int closetNum);
 
 
 }

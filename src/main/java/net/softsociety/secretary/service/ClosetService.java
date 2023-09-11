@@ -1,6 +1,8 @@
 package net.softsociety.secretary.service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import net.softsociety.secretary.domain.Closet;
 import net.softsociety.secretary.domain.Clothes;
@@ -37,6 +39,9 @@ public interface ClosetService {
 	void laundryIn(Clothes clothes);
 	//세탁물 다시 옷장으로
 	void laundryOut(int closetNum, int clothesNum);
+	
+	//차트데이터 값 불러오기
+	HashMap<String, BigDecimal> getChartValue(int closetNum);
 
 	
 }

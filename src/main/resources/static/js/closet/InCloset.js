@@ -2,6 +2,56 @@
  * 옷장 페이지
  */
 $(document).ready(function(){
+	let dataValue = new Array(8);
+	closetNum = parseInt(closetNum); // 스트링에서 정수형으로 변환
+	$.ajax({
+		url:'chartValue',
+		type:'get',
+		data:{closetNum: closetNum},
+		dataType:'json',
+		success:function(valueList){
+			console.log(valueList);
+			console.log(typeof(valueList));
+			console.log(valueList.ACCESSORYCATEGORYCOUNT);
+			dataValue[0] = valueList.TOPCATEGORYCOUNT;
+			dataValue[1] = valueList.BOTTOMCATEGORYCOUNT;
+			dataValue[2] = valueList.OUTERCATEGORYCOUNT;
+			dataValue[3] = valueList.DRESSCATEGORYCOUNT;
+			dataValue[4] = valueList.SHOESCATEGORYCOUNT;
+			dataValue[5] = valueList.BAGCATEGORYCOUNT;
+			dataValue[6] = valueList.ACCESSORYCATEGORYCOUNT;
+			dataValue[7] = valueList.ETCCATEGORYCOUNT;
+		},
+		error:function(e){
+			console.log(JSON.stringify(e));
+		}			
+	})	
+	
+  const ctx = document.getElementById('myChart');
+  const data = {
+  	labels: ['상의','하의','아우터','원피스','신발','가방','악세사리','기타'],
+  	datasets: [{
+    			label: '개수',
+    			data: dataValue,
+    			backgroundColor: [
+					'rgb(244, 67, 54)',
+					'rgb(255, 111, 0)',
+					'rgb(255, 241, 118)',
+					'rgb(220, 231, 117)',
+      				'rgb(54, 162, 235)',
+      				'rgb(186, 104, 200)',
+      				'rgb(255, 99, 132)',
+      				'rgb(255, 205, 210)',
+    				],
+    			hoverOffset: 4
+  						}]
+	};
+				
+  new Chart(ctx, {
+    type: 'doughnut',
+    data: data,
+  });	
+	
 
 //!!!!!!!!!!!!!!!!!!!!!! 옷 찾기  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!	
 		//옷찾기 분류에서 소분류 숨겨놓기
@@ -32,7 +82,6 @@ $(document).ready(function(){
 
 
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!옷장안에 의류목록 출력!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		closetNum = parseInt(closetNum); // 스트링에서 정수형으로 변환
 		$.ajax({
 			url:'inCloset',
 			type:'get',

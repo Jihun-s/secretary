@@ -52,13 +52,12 @@ public class ClosetPageController {
 	}
 	
 	
-	// 옷장 상세2
-	@GetMapping("InCloset2")
+	//코디일지 페이지
+	@GetMapping("styleDiary")
 	public String closet2() {
-		
-		return "closetView/InCloset2";
+		return "closetView/styleDiary";
 	}
-	
+
 	@GetMapping("webSearch")
 	public String webSearch() {
 		return "closetView/webSearch";

@@ -132,4 +132,19 @@
 				</if>
 		</where>	
 </update>
+
+<!-- 차트데이터 값 불러오기 -->
+<select id="getChartValue" parameterType="int" resultType="hashmap">
+	select COUNT(CASE WHEN clothes_category IN ('Tshirt', 'blouse', 'sweatshirt', 'knitwear') THEN 1 ELSE NULL END) AS topCategoryCount,
+    COUNT(CASE WHEN clothes_category IN ('skirt', 'pants', 'jeans', 'trainingPants') THEN 1 ELSE NULL END) AS bottomCategoryCount,
+    COUNT(CASE WHEN clothes_category IN ('coat', 'jacket', 'paddedJacket', 'zipupHoodie','cardigan') THEN 1 ELSE NULL END) AS outerCategoryCount,
+    COUNT(CASE WHEN clothes_category IN ('miniDress', 'longDress') THEN 1 ELSE NULL END) AS dressCategoryCount,
+    COUNT(CASE WHEN clothes_category IN ('sneakers', 'formalShoes', 'boots', 'sandals') THEN 1 ELSE NULL END) AS shoesCategoryCount,
+    COUNT(CASE WHEN clothes_category IN ('backpack', 'totebag', 'crossbodybag', 'clutchbag') THEN 1 ELSE NULL END) AS bagCategoryCount,
+    COUNT(CASE WHEN clothes_category IN ('hat', 'socks', 'jewelryOrWatch', 'scarf','belt','accessoryEtc') THEN 1 ELSE NULL END) AS accessoryCategoryCount,
+    COUNT(CASE WHEN clothes_category IN ('innerwear', 'sleepwear', 'swimsuit') THEN 1 ELSE NULL END) AS etcCategoryCount
+	from Secretary_clothes <where><if test="closetNum != 0">
+							closet_num = #{closetNum}
+							</if></where>
+</select>
 </mapper>
