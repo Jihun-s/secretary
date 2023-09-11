@@ -19,4 +19,7 @@ public interface ScheduleDAO {
 	/** 일정 삭제 */
 	int deleteSch(HashMap<String, Object> map);
 
+	/** 일정 수정 */
+	int updateSch(Schedule sch);
+
 }

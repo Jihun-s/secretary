@@ -68,6 +68,10 @@ $(document).ready(function () {
       // {"allDay":false,"title":"현대카드 대금 인출","start":"2023-09-13T00:00:00+09:00","id":"1",
       // "extendedProps":{"allday":true,"schId":1,"schContent":"현대카드 대금 인출","schStart":"2023-09-13 00:00:00","schEnd":"2023-09-13 00:00:00","schAllday":true,"schType":"가계부","schCate":"지출","schLevel":2}}
       
+      // 수정전송버튼, 수정취소버튼 숨기기
+      $('#schUpdateBt').hide();
+      $('#schCancelBt').hide();
+
       // 모달에 데이터 채우기
       $("#schId").val(schObj.schId); 
       $("#schContent").val(schObj.schContent);
@@ -81,10 +85,15 @@ $(document).ready(function () {
       // 유형에 따라 카테고리 옵션 업데이트하고 선택
       updateSchCateOptions(schObj.schType, schObj.schCate, 'schTypeSelect');      
 
+      // 모든 input을 readonly로 설정
+      $('#schDetailModal input').prop('readonly', true);
+      // 모든 select을 disabled로 설정
+      $('#schDetailModal select, #schDetailModal :checkbox').prop('disabled', true);
+
+
       // 모달 표시
       $('#schDetailModal').modal('show');
     },
-
 
   });
 
@@ -95,7 +104,38 @@ $(document).ready(function () {
 
     updateSchCateOptions(selectedType, null, triggerId);
   });
-  
+
+  /* 수정버튼 클릭 시 수정 뚫리기 */
+  $('#schDetailUpdateBt').click(function() {
+    // 모든 input 필드의 readonly 속성 제거
+    $('#schDetailModal input').prop('readonly', false);
+    // 모든 select 필드의 disabled 속성 제거
+    $('#schDetailModal select, #schDetailModal :checkbox').prop('disabled', false);
+    // 제목 수정
+    $('#schDetailModalTitle').html('일정 수정하기');
+    // 원래 수정 삭제 확인버튼 숨기기
+    $('#schDetailUpdateBt, #schDetailDeleteBt, #schDetailCloseBt').hide();
+    // 수정전송버튼, 수정취소버튼 나오기
+    $('#schUpdateBt, #schCancelBt').show();
+  });
+
+  /* 수정 취소 버튼 */
+  $('#schCancelBt').click(function() {
+    // 수정전송버튼, 수정취소버튼 숨기기
+    $('#schUpdateBt, #schCancelBt').hide();
+    // 원래 수정 삭제 확인버튼 나오기
+    $('#schDetailUpdateBt, #schDetailDeleteBt, #schDetailCloseBt').show();
+    // 제목 수정
+    $('#schDetailModalTitle').html('일정 상세보기');
+    // 모든 input 필드의 readonly 속성 추가
+    $('#schDetailModal input').prop('readonly', true);
+    // 모든 select 필드의 disabled 속성 추가
+    $('#schDetailModal select, #schDetailModal :checkbox').prop('disabled', true);
+
+  });
+
+  // 일정 수정
+  $('#schUpdateBt').click(updateSch);
 
   // 일정 삭제
   $('#schDetailDeleteBt').click(deleteSch);
@@ -104,86 +144,6 @@ $(document).ready(function () {
   calendar.render();
 
 }); // ready 함수
-
-
-/////////////////////////////////////////////////////////////////
-
-/** 풀캘린더 초기화 */
-function init() {
-  let calendar = new FullCalendar.Calendar(calendarEl, {
-    locale: 'ko',
-    initialDate: curDateFormat,
-    editable: true,
-    selectable: true,
-    businessHours: true,
-    dayMaxEvents: true,
-    events: function(info, successCallback, failureCallback) {
-      $.ajax({
-        url: "/secretary/schedule/list",
-        type: "GET",
-        dataType: "JSON",
-        success: (data) => {
-          let transformedData = data.map(function (sch) {
-            return {
-              // 기본 제공 프롭스
-              id: sch.schId,
-              title: sch.schContent,
-              start: sch.schStart,
-              end: sch.schEnd,
-              allday: sch.schAllday,
-              // 사용자 정의 프롭스
-              schId: sch.schId,
-              schContent: sch.schContent,
-              schStart: sch.schStart,
-              schEnd: sch.schEnd,
-              schAllday: sch.schAllday,
-              schType: sch.schType,
-              schCate: sch.schCate,
-              schLevel: sch.schLevel,
-            }          
-          })
-
-          successCallback(transformedData);
-        },
-        error: (e) => {
-          alert('일정 가져오기 실패');
-          alert(JSON.stringify(e));
-        }
-      });
-    },
-
-    // 날짜 클릭 -> Insert 모달 실행
-    dateClick: function(info) {
-      $('#schStartInput').val(info.dateStr + "T00:00"); // 클릭한 날짜로 시작일 설정
-      $('#schEndInput').val(info.dateStr + "T23:59"); // 클릭한 날짜로 종료일 설정
-      
-      $('#schInsertModal').modal('show'); // 모달 표시
-  },
-  
-    // 이벤트 클릭 -> Detail 모달 실행
-    eventClick: (data) => {
-      let schObj = data.event.extendedProps;
-      // alert(JSON.stringify(data.event));
-      // {"allDay":false,"title":"현대카드 대금 인출","start":"2023-09-13T00:00:00+09:00","id":"1",
-      // "extendedProps":{"allday":true,"schId":1,"schContent":"현대카드 대금 인출","schStart":"2023-09-13 00:00:00","schEnd":"2023-09-13 00:00:00","schAllday":true,"schType":"가계부","schCate":"지출","schLevel":2}}
-
-      // 모달에 데이터 채우기
-      $("#schId").val(schObj.schId); 
-      $("#schContent").val(schObj.schContent);
-      $("#schTypeSelect").val(schObj.schType);
-      $("#schLevel").val(schObj.schLevel); 
-      $("#schStart").val(convertDateTimeToLocal(schObj.schStart));
-      $("#schEnd").val(convertDateTimeToLocal(schObj.schEnd));
-      $("#schAllday").prop('checked', schObj.schAllday);
-  
-      // 유형에 따라 카테고리 옵션 업데이트하고 선택
-      updateSchCateOptions(schObj.schType, schObj.schCate);
-
-      // 모달 표시
-      $('#schDetailModal').modal('show');
-    },
-  });
-}
 
 
 ////////////////////////////////////////////////////////////////
@@ -214,6 +174,49 @@ function deleteSch() {
       }
     });
   }
+}
+/** 일정 수정 */
+
+/** 일정 수정 */
+function updateSch() {
+
+  
+
+  let schId = $('#schId').val();
+  let schType = $('#schTypeSelect').val();
+  let schCate = $('#schCateSelect').val();
+  let schContent = $('#schContent').val();
+  let schLevel = $('#schLevel').val();
+  let schStart = $('#schStart').val();
+  let schEnd = $('#schEnd').val();
+  let schAllday = $('#schAllday').val();
+  console.log(schId, schType, schCate, schContent, schLevel, schStart, schEnd, schAllday);
+
+  $.ajax({
+    url: '/secretary/schedule/updateSch',
+    type: 'POST',
+    data: { schId: schId, 
+            schType: schType, 
+            schCate: schCate,
+            schContent: schContent, 
+            schLevel: schLevel, 
+            schStart: schStart, 
+            schEnd: schEnd, 
+            schAllday: schAllday },
+    dataType: 'TEXT',
+    success: (data) => {
+      if(data == 1) {
+        alert('일정을 수정했습니다.');
+      } else {
+        alert('일정을 수정할 수 없습니다.');
+      }
+      location.reload();
+    },
+    error: (e) => {
+      alert('일정 수정 전송 실패');
+      alert(JSON.stringify(e));
+    }
+  });
 }
 
 ////////////////////////////////////////////////////////////////
@@ -300,6 +303,11 @@ function validateSchContentInput() {
       } else {
           byteSize += 1;
       }
+  }
+
+  if(byteSize == 0) {
+    alert("일정명을 입력하세요.");
+    return false;
   }
 
   if (byteSize > 50) {
