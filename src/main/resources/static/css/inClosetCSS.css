@@ -95,7 +95,10 @@
 	height:400px; 
 	overflow:hidden;
 }
-
+#myChart {
+	position:relative;
+	left:4.4em;
+}
 #IMGdetail img{
 	width:100%; 
 	height:100%; 

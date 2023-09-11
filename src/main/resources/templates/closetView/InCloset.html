@@ -37,6 +37,7 @@
 	 let closetNum = '[[${closetNum}]]';
 	 let familyId = '[[${loginUser.familyId}]]';
 	</script>
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 	<script th:src="@{/js/closet/InCloset.js}"></script>
     <meta name="description" content="" />
 
@@ -1089,8 +1090,7 @@
               	  <div class="d-flex align-items-end"></div>
                 		<div class="card-body">
 							<div id="IMGdetail">
-							<p>의류 클릭해서 상세정보 보기 전에는<br>
-								통계정보 보여주기</p>
+							<canvas id="myChart"></canvas>
 							</div>
 							<div id="InfoDetail"></div>
 							<div id="ManageDetail"></div>

@@ -4,11 +4,14 @@ package net.softsociety.secretary.controller;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 import java.net.URLEncoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map.Entry;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -285,6 +288,15 @@ public class ClosetController {
 			@RequestParam(name="clothesNum", defaultValue="0") int clothesNum) {
 		log.debug("laundryOut 매핑!");
 		service.laundryOut(closetNum,clothesNum);
+	}
+	
+	//차트데이터 값 불러오기
+	@ResponseBody
+	@GetMapping("chartValue")
+	public HashMap<String, BigDecimal> getChartValue(@RequestParam(name="closetNum", defaultValue="0") int closetNum) {
+		log.debug("chartValue 매핑!!!!!!!");
+		HashMap<String, BigDecimal> valueList = service.getChartValue(closetNum);
+		return valueList;
 	}
 	
 }
