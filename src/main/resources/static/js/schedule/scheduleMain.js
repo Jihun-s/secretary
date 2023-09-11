@@ -59,7 +59,7 @@ $(document).ready(function () {
       $('#schEndInput').val(info.dateStr + "T23:59"); // 클릭한 날짜로 종료일 설정
       
       $('#schInsertModal').modal('show'); // 모달 표시
-  },
+    },
   
     // 이벤트 클릭 -> Detail 모달 실행
     eventClick: (data) => {
@@ -67,18 +67,19 @@ $(document).ready(function () {
       // alert(JSON.stringify(data.event));
       // {"allDay":false,"title":"현대카드 대금 인출","start":"2023-09-13T00:00:00+09:00","id":"1",
       // "extendedProps":{"allday":true,"schId":1,"schContent":"현대카드 대금 인출","schStart":"2023-09-13 00:00:00","schEnd":"2023-09-13 00:00:00","schAllday":true,"schType":"가계부","schCate":"지출","schLevel":2}}
-
+      
       // 모달에 데이터 채우기
       $("#schId").val(schObj.schId); 
       $("#schContent").val(schObj.schContent);
       $("#schTypeSelect").val(schObj.schType);
+      $("#schCateSelect").val(schObj.schCate);
       $("#schLevel").val(schObj.schLevel); 
       $("#schStart").val(convertDateTimeToLocal(schObj.schStart));
       $("#schEnd").val(convertDateTimeToLocal(schObj.schEnd));
       $("#schAllday").prop('checked', schObj.schAllday);
-  
+      
       // 유형에 따라 카테고리 옵션 업데이트하고 선택
-      updateSchCateOptions(schObj.schType, schObj.schCate);
+      updateSchCateOptions(schObj.schType, schObj.schCate, 'schTypeSelect');      
 
       // 모달 표시
       $('#schDetailModal').modal('show');
@@ -91,8 +92,10 @@ $(document).ready(function () {
   $('#schTypeSelect, #schTypeSelectInput').change(function() {
     let selectedType = $(this).val();
     let triggerId = $(this).attr('id');
+
     updateSchCateOptions(selectedType, null, triggerId);
   });
+  
 
   // 일정 삭제
   $('#schDetailDeleteBt').click(deleteSch);
@@ -216,15 +219,17 @@ function deleteSch() {
 ////////////////////////////////////////////////////////////////
 
 /** schType -> schCate <option> 동적 변경 */ 
-function updateSchCateOptions(schType, schCate, triggerElId) {
+function updateSchCateOptions(schType, schCate, triggerId) {
+  console.log(schType, schCate, triggerId);
+
   let schCateSelect;
 
-  if (triggerElId === 'schTypeSelect') {
+  if (triggerId === 'schTypeSelect') {
     schCateSelect = $('#schCateSelect');
-  } else if (triggerElId === 'schTypeSelectInput') {
+  } else if (triggerId === 'schTypeSelectInput') {
     schCateSelect = $('#schCateSelectInput');
   } else {
-    return; // 만약 둘 다 아니면 함수를 종료합니다.
+    return; // 둘 다 아닌 경우
   }
 
   // 기존 옵션 삭제
