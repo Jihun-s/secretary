@@ -256,6 +256,7 @@
                     $.get(`fridgeFood/getFridgeFoods/${fridgeId}`, function (foods) {
                         $('#foodItemsContainer').empty(); // 기존에 표시되던 음식 항목을 모두 제거합니다.
                         foods.forEach(displayFoodItem); // 각 음식 항목을 화면에 표시합니다.
+                        $('#categoryDisplayButton').text('카테고리');
                     });
                     $('.fridgeSelect').val(fridgeId);
                 });
@@ -307,7 +308,7 @@
                     const submitBtn = $('#manualInputModal .btn-warning');
                     submitBtn.text('Submit');
                     submitBtn.removeClass('btn-warning').addClass('btn-primary');
-                    $('#manualInputModal form').attr('action', '/fridgeFood/add');
+                    $('#manualInputModal form').attr('action', 'fridgeFood/add');
                 });
 
                 $(document).on('click', '.foodDeleteIcon', function (e) {
@@ -444,7 +445,9 @@
                             data: JSON.stringify({ foodCategory: newCategory }),
                             contentType: 'application/json',
                             success: function (response) {
-                                if (response > 0) {
+                                if (response === -1) {
+                                    alert('미리 지정된 카테고리는 추가할 수 없습니다.');
+                                } else if (response > 0) {
                                     // 예를 들어, 서버에서 추가된 카테고리의 ID를 반환한다고 가정
                                     $('#foodCategory').append(
                                         `<option value="${newCategory}" selected>${newCategory}</option>`
@@ -472,6 +475,25 @@
                         categories.forEach(function (category) {
                             $('#foodCategory').append(
                                 `<option value="${category.foodCategory}">${category.foodCategory}</option>`
+                            );
+                        });
+                    },
+                    error: function (error) {
+                        console.error('Error fetching categories:', error);
+                    },
+                });
+
+                // 카테고리 목록 가져오기
+                $.ajax({
+                    url: 'foodCategories',
+                    method: 'GET',
+                    success: function (categories) {
+                        // 드롭다운에 카테고리 목록 추가
+                        const dropdownMenu = $('#categoryDisplayButton').siblings('.categoryDropdown');
+                        dropdownMenu.empty(); // 기존 목록 삭제
+                        categories.forEach(function (category) {
+                            dropdownMenu.append(
+                                `<li><a class="dropdown-item" href="javascript:void(0);" onclick="showFoodsByCategory('${category.foodCategory}')">${category.foodCategory}</a></li>`
                             );
                         });
                     },
@@ -675,7 +697,9 @@
                     var foodItemElement = `
                                                                                                     <div class="card mt-3 mb-4 food-item" data-food-id="${
                                                                                                         foodItem.foodId
-                                                                                                    }">
+                                                                                                    }" data-category="${
+                        foodItem.foodCategory
+                    }" data-food-input-date="${foodItem.foodInputDate}">
                                                                                                     <div class="card-body foodcard">
                                                                                                     <!-- Edit & Delete Icons -->
                                                                                                 ${foodModifyIcon}
@@ -780,9 +804,59 @@
                         },
                     });
                 }
+                // 위에서 정의한 변수입니다.
+                let isCategoryEditMode = false;
+
+                // 카테고리 수정 아이콘 클릭 이벤트
+                $('.category-editIcon').click(function () {
+                    if (isCategoryEditMode) {
+                        isCategoryEditMode = false;
+                    } else {
+                        isCategoryEditMode = true;
+                        // 카테고리 편집 모달 표시
+                        $('#categoryEditModal').modal('show');
+                    }
+                });
             });
-            function updateButtonText(text, buttonId) {
-                document.getElementById(buttonId).textContent = text;
+            function showFoodsByCategory(selectedCategory) {
+                // 모든 음식 목록에서 선택된 카테고리에 해당하는 음식만 화면에 표시
+                $('.food-item').each(function () {
+                    const foodCategory = $(this).data('category');
+                    if (foodCategory === selectedCategory) {
+                        $(this).show();
+                    } else {
+                        $(this).hide();
+                    }
+                });
+
+                // 선택된 카테고리로 버튼 텍스트 업데이트
+                $('#categoryDisplayButton').text(selectedCategory);
+            }
+            function updateSortOrder(sortOrder) {
+                $('#sortOrderButton').text(sortOrder);
+
+                let $foodItems = $('.food-item');
+                let sortedItems = [];
+
+                if (sortOrder === '유효기간 순') {
+                    sortedItems = $foodItems.sort((a, b) => {
+                        return parseInt($(a).find('.d-day').text()) - parseInt($(b).find('.d-day').text());
+                    });
+                } else if (sortOrder === '유효기간 역순') {
+                    sortedItems = $foodItems.sort((a, b) => {
+                        return parseInt($(b).find('.d-day').text()) - parseInt($(a).find('.d-day').text());
+                    });
+                } else if (sortOrder === '입력 날짜 순') {
+                    sortedItems = $foodItems.sort((a, b) => {
+                        return new Date($(a).data('food-input-date')) - new Date($(b).data('food-input-date'));
+                    });
+                } else if (sortOrder === '입력 날짜 역순') {
+                    sortedItems = $foodItems.sort((a, b) => {
+                        return new Date($(b).data('food-input-date')) - new Date($(a).data('food-input-date'));
+                    });
+                }
+
+                $('#foodItemsContainer').empty().append(sortedItems);
             }
         </script>
     </head>
@@ -1571,10 +1645,20 @@
                                         </div>
                                     </div>
                                     <div class="d-flex">
-                                        <div class="btn-group flex-fill">
+                                        <div class="btn-group flex-fill position-relative">
+                                            <!-- position-relative 추가 -->
+                                            <!-- 카테고리 수정 아이콘 위치 변경 시작 -->
+                                            <img
+                                                src="images/fridgeimg/ModifyName.png"
+                                                alt="카테고리 수정"
+                                                class="category-editIcon position-absolute"
+                                                style="top: 0; left: 0; height: 25px; width: 25px; z-index: 999"
+                                            />
+                                            <!-- position-absolute 추가 -->
+                                            <!-- 카테고리 수정 아이콘 위치 변경 끝 -->
                                             <button
                                                 class="btn btn-sm btn-info no-wrap-text"
-                                                id="infoButton1"
+                                                id="categoryDisplayButton"
                                                 style="pointer-events: none"
                                                 type="button"
                                             >
@@ -1588,48 +1672,42 @@
                                             >
                                                 <span class="visually-hidden">Toggle Dropdown</span>
                                             </button>
-                                            <ul class="dropdown-menu">
-                                                <li>
-                                                    <a
-                                                        class="dropdown-item"
-                                                        href="javascript:void(0);"
-                                                        onclick="updateButtonText('Action', 'infoButton1')"
-                                                        >Action</a
-                                                    >
-                                                </li>
-                                                <li>
-                                                    <a
-                                                        class="dropdown-item"
-                                                        href="javascript:void(0);"
-                                                        onclick="updateButtonText('Another action', 'infoButton1')"
-                                                        >Another action</a
-                                                    >
-                                                </li>
-                                                <li>
-                                                    <a
-                                                        class="dropdown-item"
-                                                        href="javascript:void(0);"
-                                                        onclick="updateButtonText('Something else here', 'infoButton1')"
-                                                        >Something else here</a
-                                                    >
-                                                </li>
-                                                <li>
-                                                    <hr class="dropdown-divider" />
-                                                </li>
-                                                <li>
-                                                    <a
-                                                        class="dropdown-item"
-                                                        href="javascript:void(0);"
-                                                        onclick="updateButtonText('Separated link', 'infoButton1')"
-                                                        >Separated link</a
-                                                    >
-                                                </li>
-                                            </ul>
+                                            <ul class="dropdown-menu categoryDropdown"></ul>
                                         </div>
+
+                                        <!-- 카테고리 편집 모달 시작 -->
+                                        <div class="modal" tabindex="-1" id="categoryEditModal">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">카테고리 편집</h5>
+                                                        <button
+                                                            type="button"
+                                                            class="btn-close"
+                                                            data-bs-dismiss="modal"
+                                                            aria-label="Close"
+                                                        ></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <!-- 여기에 카테고리 리스트를 표시합니다 -->
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button
+                                                            type="button"
+                                                            class="btn btn-secondary"
+                                                            data-bs-dismiss="modal"
+                                                        >
+                                                            닫기
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- 카테고리 편집 모달 끝 -->
                                         <div class="btn-group flex-fill" style="margin: 0 3px">
                                             <button
                                                 class="btn btn-sm btn-info no-wrap-text"
-                                                id="infoButton2"
+                                                id="sortOrderButton"
                                                 style="pointer-events: none"
                                                 type="button"
                                             >
@@ -1648,39 +1726,37 @@
                                                     <a
                                                         class="dropdown-item"
                                                         href="javascript:void(0);"
-                                                        onclick="updateButtonText('Action', 'infoButton2')"
-                                                        >Action</a
+                                                        onclick="updateSortOrder('유효기간 순')"
+                                                        >유효기간 순</a
                                                     >
                                                 </li>
                                                 <li>
                                                     <a
                                                         class="dropdown-item"
                                                         href="javascript:void(0);"
-                                                        onclick="updateButtonText('Another action', 'infoButton2')"
-                                                        >Another action</a
+                                                        onclick="updateSortOrder('유효기간 역순')"
+                                                        >유효기간 역순</a
                                                     >
                                                 </li>
                                                 <li>
                                                     <a
                                                         class="dropdown-item"
                                                         href="javascript:void(0);"
-                                                        onclick="updateButtonText('Something else here', 'infoButton2')"
-                                                        >Something else here</a
+                                                        onclick="updateSortOrder('입력 날짜 순')"
+                                                        >입력 날짜 순</a
                                                     >
-                                                </li>
-                                                <li>
-                                                    <hr class="dropdown-divider" />
                                                 </li>
                                                 <li>
                                                     <a
                                                         class="dropdown-item"
                                                         href="javascript:void(0);"
-                                                        onclick="updateButtonText('Separated link', 'infoButton2')"
-                                                        >Separated link</a
+                                                        onclick="updateSortOrder('입력 날짜 역순')"
+                                                        >입력 날짜 역순</a
                                                     >
                                                 </li>
                                             </ul>
                                         </div>
+
                                         <button
                                             class="btn btn-sm btn-warning no-wrap-text"
                                             id="foodItemModify"
@@ -1690,7 +1766,7 @@
                                         </button>
                                     </div>
                                     <!-- Fridge Item Display -->
-                                    <div class="card mb-4 food-item">
+                                    <div class="card mb-4 food-item-box">
                                         <div class="card-body foodbox">
                                             <div class="food-items-container" id="foodItemsContainer"></div>
                                         </div>
