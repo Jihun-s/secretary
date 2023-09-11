@@ -671,43 +671,59 @@
             <div class="modal-body" id="eventDetails">
               <div class="row">
                 <div class="col mb-3">
-                  <label for="" class="form-label">일정명</label>
+                  <label for="schContent" class="form-label">일정명</label>
                   <input type="text" id="schContent" class="form-control" placeholder="일정을 입력하세요">
                 </div>
               </div>
               <div class="row g-2">
-                <div class="col mb-0">
-                  <label for="" class="form-label">유형</label>
-                  <input type="text" id="schType" class="form-control" placeholder="유형을 선택하세요">
+                <div class="col mb-3">
+                  <label for="schTypeDiv" class="form-label">유형</label>
+                  <div id="schTypeDiv">
+                    <select class="form-select" id="schTypeSelect" aria-label="Default select example">
+                      <option value="">유형을 선택하세요</option>
+                      <option value="일정">일정</option>
+                      <option value="냉장고">냉장고</option>
+                      <option value="생활용품">생활용품</option>
+                      <option value="옷장">옷장</option>
+                      <option value="가계부">가계부</option>
+                    </select>
+                  </div>
                 </div>
               </div>
               <div class="row g-2">
-                <div class="col mb-0">
-                  <label for="" class="form-label">카테고리</label>
-                  <input type="text" id="schCate" class="form-control" placeholder="카테고리를 선택하세요">
+                <div class="col mb-3">
+                  <label for="schCateDiv" class="form-label">카테고리</label>
+                  <div id="schCateDiv">
+                    <select class="form-select" id="schCateSelect" aria-label="Default select example">
+                      <option value="">카테고리를 선택하세요</option>
+                      <option value="1">One</option>
+                      <option value="2">Two</option>
+                      <option value="3">Three</option>
+                    </select>
+                  </div>
                 </div>
               </div>
               <div class="row g-2">
-                <div class="col mb-0">
-                  <label for="" class="form-label">중요도</label>
-                  <input type="text" id="schLevel" class="form-control" placeholder="중요도를 선택하세요">
+                <div class="col mb-3">
+                  <label for="schLevel" class="form-label">중요도</label>
+                  <input type="range" class="form-range" min="0" max="2" step="1" id="schLevel">
                 </div>
               </div>
               <div class="row g-2">
-                <div class="col mb-0">
-                  <label for="" class="form-label">시작일</label>
+                <div class="col mb-3">
+                  <label for="schStart" class="form-label">시작일</label>
                   <input class="form-control" type="datetime-local" value="" id="schStart">
                 </div>
               </div>
               <div class="row g-2">
-                <div class="col mb-0">
-                  <label for="" class="form-label">종료일</label>
+                <div class="col mb-3">
+                  <label for="schEnd" class="form-label">종료일</label>
                   <input class="form-control" type="datetime-local" value="" id="schEnd">
                 </div>
               </div>
               <div class="row g-2">
-                <div class="col mb-0">
-                  <label for="" class="form-label">종일</label>
+                <div class="col mb-3">
+                  <label for="schAllday" class="form-label">종일</label>
                   <input class="form-check-input" type="checkbox" id="schAllday">
                 </div>
               </div>

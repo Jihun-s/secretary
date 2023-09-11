@@ -52,6 +52,7 @@ $(document).ready(function () {
         }
       });
     },
+    // 이벤트 클릭하면 실행되는 함수 정의
     eventClick: (data) => {
       let schObj = data.event.extendedProps;
       // alert(JSON.stringify(data.event));
@@ -59,25 +60,38 @@ $(document).ready(function () {
       // "extendedProps":{"allday":true,"schId":1,"schContent":"현대카드 대금 인출","schStart":"2023-09-13 00:00:00","schEnd":"2023-09-13 00:00:00","schAllday":true,"schType":"가계부","schCate":"지출","schLevel":2}}
 
       // 모달에 데이터 채우기
-      $("#schId").val(schObj.schId); // 일정 아이디
-      $("#schContent").val(schObj.schContent); // 일정 내용
-      $("#schType").val(schObj.schType); // 유형
-      $("#schCate").val(schObj.schCate); // 카테고리
-      $("#schLevel").val(schObj.schLevel); // 중요도
-      $("#schStart").val(schObj.schStart); // 시작일
-      $("#schEnd").val(schObj.schEnd); // 종료일
-      $("#schAllday").val(schObj.schAllday); // 종일 여부
-      
-      // 모달을 표시
+      $("#schId").val(schObj.schId); 
+      $("#schContent").val(schObj.schContent);
+      $("#schTypeSelect").val(schObj.schType);
+      $("#schLevel").val(schObj.schLevel); 
+      $("#schStart").val(convertDateTimeToLocal(schObj.schStart));
+      $("#schEnd").val(convertDateTimeToLocal(schObj.schEnd));
+      $("#schAllday").prop('checked', schObj.schAllday);
+  
+      // 유형에 따라 카테고리 옵션 업데이트하고 선택
+      updateSchCateOptions(schObj.schType, schObj.schCate);
+
+      // 모달 표시
       $('#schDetailModal').modal('show');
-    },    
+    },
+
+
+  });
+
+  // schType select 변경
+  $('#schTypeSelect').change(function() {
+    const selectedType = $(this).val();
+    updateSchCateOptions(selectedType);
   });
 
   // 일정 삭제
   $('#schDetailDeleteBt').click(deleteSch);
 
+  // 달력 렌더링
   calendar.render();
-});
+
+}); // ready 함수
+
 
 /** 일정 삭제 */
 function deleteSch() {
@@ -105,5 +119,53 @@ function deleteSch() {
       }
     });
   }
+}
 
+/** schType -> schCate <option> 동적 변경 */ 
+function updateSchCateOptions(schType, schCate) {
+  const schCateSelect = $('#schCateSelect');
+
+  // 기존 옵션 삭제
+  schCateSelect.empty();
+  schCateSelect.append('<option value="">카테고리를 선택하세요</option>');
+
+  let options = [];
+
+  // 타입 별 카테고리 옵션 대입
+  switch (schType) {
+      case '일정':
+          options = ['생일', '경조사', '명절', '공휴일', '시험', '약속', '일정'];
+          break;
+      case '냉장고':
+          options = ['구매예정일', '소비기한'];
+          break;
+      case '생활용품':
+          options = ['구매예정일', '소비기한'];
+          break;
+      case '옷장':
+          options = ['미정'];
+          break;
+      case '가계부':
+          options = ['지출', '수입'];
+          break;
+      default:
+          break;
+  }
+
+  // 리스트에 있는 값 <option>으로 추가
+  options.forEach(option => {
+    schCateSelect.append(`<option value="${option}">${option}</option>`);
+  });
+
+  // 카테고리 선택
+  if (schCate) {
+      $('#schCateSelect').val(schCate);
+  }
+}
+
+/** 날짜 포맷 변환 */
+// YYYY-MM-DD' 'HH24:MI:SS -> YYYY-MM-DD'T'HH24:MI:SS 
+function convertDateTimeToLocal(dateTimeStr) {
+
+  return dateTimeStr.replace(" ", "T");
 }
