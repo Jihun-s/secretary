@@ -46,6 +46,24 @@ public class ScheduleRestController {
 	}
 	
 	
+	/** 일정 추가 */
+	@PostMapping("insertSch")
+	public int insertSch(
+			Model model
+			, Schedule sch) {
+		log.debug("컨트롤러에 넘어온 입력할 일정 정보:{}", sch);
+		
+		User loginUser = (User) model.getAttribute("loginUser");
+		sch.setFamilyId(loginUser.getFamilyId());
+		sch.setUserId(loginUser.getUserId());
+		log.debug("DAO에 보낼 입력할 일정 정보:{}", sch);
+		
+		int n = dao.insertSch(sch);
+		
+		return n;
+	}
+	
+	
 	/** 일정 삭제 */
 	@PostMapping("deleteSch")
 	public int deleteSch(
