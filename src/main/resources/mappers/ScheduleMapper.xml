@@ -23,4 +23,67 @@
 		family_id = #{familyId}
 </select>
 
+<!-- 일정 추가 -->
+<insert id="insertSch" parameterType="Schedule">
+	INSERT INTO 
+    Secretary_Schedule
+        (sch_id
+        , user_id
+        , family_id
+        , sch_type
+        , sch_cate
+        , sch_level
+        , sch_content
+        , sch_start
+        , sch_end
+        , sch_allday)
+    VALUES 
+        (Secretary_Schedule_SEQ.nextval
+        , #{userId}
+        , #{familyId}
+        , #{schType}
+        , #{schCate}
+        , #{schLevel}
+        , #{schContent}
+        , TO_DATE(#{schStart}, 'YYYY-MM-DD"T"HH24:MI')
+        , TO_DATE(#{schEnd}, 'YYYY-MM-DD"T"HH24:MI')
+        , 
+        <choose>
+            <when test="schAllday == true">1</when>
+            <otherwise>0</otherwise>
+        </choose>
+        )
+</insert>
+
+<!-- 일정 삭제 -->
+<delete id="deleteSch" parameterType="hashmap">
+	DELETE FROM
+		Secretary_Schedule
+	WHERE
+		sch_id = #{schId}
+		<!-- AND user_id = #{userId} -->
+		AND family_id = #{familyId}
+</delete>
+
+<!-- 일정 수정 -->
+<update id="updateSch" parameterType="Schedule">
+	UPDATE
+		Secretary_Schedule
+	SET
+		sch_type = #{schType}
+        , sch_cate = #{schCate}
+        , sch_level = #{schLevel}
+        , sch_content = #{schContent}
+        , sch_start = TO_DATE(#{schStart}, 'YYYY-MM-DD"T"HH24:MI')
+        , sch_end = TO_DATE(#{schEnd}, 'YYYY-MM-DD"T"HH24:MI')
+        , sch_allday = 
+        <choose>
+	        <when test="schAllday == true">1</when>
+	        <otherwise>0</otherwise>
+        </choose>
+	WHERE
+		sch_id = #{schId}
+		<!-- AND user_id = #{userId} -->
+		AND family_id = #{familyId}
+</update>
 </mapper>

@@ -18,7 +18,7 @@ public class Schedule {
 	private String schContent;
 	private String schStart;
 	private String schEnd;
-	private int schAllday;
+	private boolean schAllday;
 	
 	public String getId() {
 	    return String.valueOf(schId);
@@ -27,10 +27,6 @@ public class Schedule {
 	public String getTitle() {
 		// 이벤트의 제목으로 schContent 사용
 	    return schContent; 
-	}
-
-	public boolean isAllDay() {
-	    return schAllday == 1;
 	}
 	
 }
