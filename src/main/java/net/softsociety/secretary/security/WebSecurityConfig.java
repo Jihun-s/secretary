@@ -95,8 +95,5 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         tokenRepository.setDataSource(dataSource);
         return tokenRepository;
     }
-    @Bean
-    public logEventListner authenticationSuccessEventListener() {
-        return new logEventListner();
-}
+
 }

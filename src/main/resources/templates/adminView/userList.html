@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="UTF-8">
+<title>userList</title>
+<script th:src="@{/js/jquery-3.7.0.js}"></script>
+<script>
+     $(document).ready(function () {
+    	userList();
+
+      // 카테고리 선택이 변경될 때마다 검색 수행
+      document.getElementById('category1').addEventListener('change', userList);
+
+      // 검색어 입력이 변경될 때마다 검색 수행
+      document.getElementById('title').addEventListener('input', userList);
+      });
+
+      function userList() {
+      // 카테고리 선택에 따른 필터링
+      const selectedCategory = document.getElementById('category1').value;
+
+      // 타이틀 검색에 따른 필터링
+      const searchTitle = document.getElementById('title').value;
+
+      $.ajax({
+          url: 'userList',
+          type: 'get',
+          dataType: 'json',
+          success: function (list) {
+          let filteredList = list;
+       // 카테고리 선택에 따른 필터링
+       if (selectedCategory !== 'all') {
+             filteredList = list.filter((item) => item.category1 === selectedCategory);
+         }
+
+       // 타이틀 검색에 따른 필터링
+       if (searchTitle) {
+             filteredList = filteredList.filter((item) => item.userId.includes(searchTitle));
+       }
+
+       // 결과를 테이블에 표시
+       let htmlContent = '';
+       filteredList.forEach((item) => {
+       htmlContent += `
+       <tr>
+       	<td>${item.enabled}</td>
+       	<td><a href="read?userId=${item.userId}">${item.userId}</a></td>
+       	<td>${item.userName}</td>
+       	<td>${item.rolename}</td>
+       	<td>${item.familyId}</td>       
+       </tr>
+        `;
+       });
+       $('#searchList').html(htmlContent);
+       },
+       error: function (e) {
+          alert(JSON.stringify(e));
+     },
+  });
+}
+        </script>
+</head>
+<body>
+	<h1>[ 회원 목록 ]</h1>
+        <select name="category1" id="category1">
+            <option value="all">전체</option>
+            <option value="sex">성별</option>
+            <option value="role">권한</option> 
+            <option value="suspended">정지 계정</option>
+        </select>
+        <input type="text" id="title" />
+        <table>
+            <thead>
+                <tr>
+                	<th>enabled</th>
+                    <th>유저ID</th>
+                    <th>이름</th>
+                    <th>권한</th>
+                    <th>familyId</th>
+                </tr>
+            </thead>
+            <tbody id="searchList"></tbody>
+        </table>
+</body>
+</html>
