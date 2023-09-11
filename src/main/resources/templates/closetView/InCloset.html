@@ -810,17 +810,17 @@
                       <div class="insertClothes">
                       <table>
                       	<tr> <!-- 1행 -->
-                      		<td><label for="uploadIMG" id="cssuploadIMG"><span>사진 등록</span></label>
-                      			<input type="file" value="사진 등록" id="uploadIMG" accept="image/*"></td>
-                      		<td><input type="button" value="편집" id="editIMGbtn"></td>
-                      		<td><input type="button" value="웹에서 찾기" id="webSearchbtn"></td>
+                      		<td colspan="2" style="text-align:right;"><label for="uploadIMG" id="cssuploadIMG"><span>사진 등록</span></label>
+                      			<input type="file" value="사진 등록" id="uploadIMG" accept="image/*">
+                      			<button id="editIMGbtn" class="btn-pink" style="background-color:#FFFFFF; color:grey;">편집</button></td>
+                      		<td><button id="webSearchbtn" class="btn-pink" style="background-color:#FFFFFF; color:grey;">웹에서 찾기</button></td>
                       	</tr>
                       	<tr> <!-- 2행 -->
-                      		<td>
+                      		<td colspan="2">
                       		<label for="clothesCategory">분류</label>
                       		</td>
-                      		<td colspan="2">
-                      		<select id="clothesCategory">
+                      		<td>
+                      		<select id="clothesCategory" class="form-control">
                       			<optgroup label="상의">
                       				<option value="Tshirt">티셔츠</option>
                       				<option value="blouse">블라우스/셔츠</option>
@@ -873,9 +873,9 @@
                       		</td>
                       	</tr>
                       	<tr> <!-- 3행 -->
-                      		<td><label for="materialList">소재</label></td>
-                      		<td colspan="2">
-								<select id=materialList>
+                      		<td colspan="2"><label for="materialList">소재</label></td>
+                      		<td>
+								<select id=materialList class="form-control">
 									<option value="none">해당 없음</option>
 									<option value="cotton">면</option>
 									<option value="linen">린넨</option>
@@ -897,17 +897,17 @@
                       		</td>
                       	</tr>
                       	<tr> <!-- 4행 -->
-                      		<td>계절</td>
-                      		<td colspan="2">
+                      		<td colspan="2">계절</td>
+                      		<td>
                       			<input type="checkbox" name="seasons" value="spring"><label for="spirng"><small>봄</small></label>
                       			<input type="checkbox" name="seasons" value="summer"><label for="summer"><small>여름</small></label>
                       			<input type="checkbox" name="seasons" value="fall"><label for="fall"><small>가을</small></label>
                       			<input type="checkbox" name="seasons" value="winter"><label for="winter"><small>겨울</small></label></td>
                       	</tr>
                       	<tr id = "clothesSize"> <!-- 5행 -->
-                      		<td><label for="clothesSize">사이즈</label></td>
-                      		<td colspan="2">
-                      			<select name="clothesSize">
+                      		<td colspan="2"><label for="clothesSize">사이즈</label></td>
+                      		<td>
+                      			<select name="clothesSize" class="form-control">
                       					<option value="none">해당없음</option>
                       					<option value="free">FREE</option>
                       					<option value="XS">XS</option>
@@ -920,9 +920,9 @@
                       		</td>
                       	</tr>
                       	<tr id="shoesSize">
-                      		<td><label for="shoesSize">신발사이즈</label></td>
-                      		<td colspan="2">
-                      			<input type="number" name="shoesSize" value="210" min="210" max="300" step="5">
+                      		<td colspan="2"><label for="shoesSize">신발사이즈</label></td>
+                      		<td>
+                      			<input type="number" name="shoesSize" value="210" min="210" max="300" step="5" class="form-control">
                       		</td>
                       	</tr>
                       </table>
@@ -956,17 +956,17 @@
                       <div class="insertClothes">
                       <table>
                       	<tr> <!-- 1행 -->
-                      		<td><label for="updateIMG" id="cssupdateIMG"><span>사진 등록</span></label>
-                      			<input type="file" value="사진 등록" id="updateIMG" accept="image/*"></td>
-                      		<td><input type="button" value="편집" id="updateEditIMGbtn"></td>
-                      		<td><input type="button" value="웹에서 찾기" id="webSearchbtn"></td>
+                      		<td colspan="2" style="text-align:right;"><label for="updateIMG" id="cssupdateIMG"><span>사진 등록</span></label>
+                      			<input type="file" value="사진 등록" id="updateIMG" accept="image/*">
+                      			<button id="updateEditIMGbtn" class="btn-pink" style="background-color:#FFFFFF; color:grey;">편집</button></td>
+                      		<td><button id="webSearchbtn" class="btn-pink" style="background-color:#FFFFFF; color:grey;">웹에서 찾기</button></td>
                       	</tr>
                       	<tr> <!-- 2행 -->
-                      		<td>
+                      		<td colspan="2">
                       		<label for="updateclothesCategory">분류</label>
                       		</td>
-                      		<td colspan="2">
-                      		<select id="updateclothesCategory">
+                      		<td>
+                      		<select id="updateclothesCategory" class="form-control">
                       			<optgroup label="상의">
                       				<option value="Tshirt">티셔츠</option>
                       				<option value="blouse">블라우스/셔츠</option>
@@ -1019,9 +1019,9 @@
                       		</td>
                       	</tr>
                       	<tr> <!-- 3행 -->
-                      		<td><label for="updateMaterialList">소재</label></td>
-                      		<td colspan="2">
-								<select id=updateMaterialList>
+                      		<td colspan="2"><label for="updateMaterialList">소재</label></td>
+                      		<td>
+								<select id=updateMaterialList class="form-control">
 									<option value="none">해당 없음</option>
 									<option value="cotton">면</option>
 									<option value="linen">린넨</option>
@@ -1043,17 +1043,18 @@
                       		</td>
                       	</tr>
                       	<tr> <!-- 4행 -->
-                      		<td>계절</td>
-                      		<td colspan="2">
-                      			<input type="checkbox" name="updateSeasons" value="spring"><label for="spirng"><small>봄</small></label>
-                      			<input type="checkbox" name="updateSeasons" value="summer"><label for="summer"><small>여름</small></label>
-                      			<input type="checkbox" name="updateSeasons" value="fall"><label for="fall"><small>가을</small></label>
-                      			<input type="checkbox" name="updateSeasons" value="winter"><label for="winter"><small>겨울</small></label></td>
+                      		<td colspan="2">계절</td>
+                      		<td>
+                      			<input type="checkbox" name="updateSeasons" value="spring"><small>봄&nbsp;&nbsp;</small>&nbsp;&nbsp;
+                      			<input type="checkbox" name="updateSeasons" value="summer"><label for="summer"><small>여름</small></label>&nbsp;&nbsp;
+                      			<input type="checkbox" name="updateSeasons" value="fall"><label for="fall"><small>가을</small></label>&nbsp;&nbsp;
+                      			<input type="checkbox" name="updateSeasons" value="winter"><label for="winter"><small>겨울</small></label>
+                      		</td>
                       	</tr>
                       	<tr id = "updateClothesSize"> <!-- 5행 -->
-                      		<td><label for="updateClothesSize">사이즈</label></td>
-                      		<td colspan="2">
-                      			<select name="updateClothesSize">
+                      		<td colspan="2"><label for="updateClothesSize">사이즈</label></td>
+                      		<td>
+                      			<select name="updateClothesSize" class="form-control">
                       					<option value="none">해당없음</option>
                       					<option value="free">FREE</option>
                       					<option value="XS">XS</option>
@@ -1066,9 +1067,9 @@
                       		</td>
                       	</tr>
                       	<tr id="updateShoesSize">
-                      		<td><label for="updateShoesSize">신발사이즈</label></td>
-                      		<td colspan="2">
-                      			<input type="number" name="updateShoesSize" value="210" min="210" max="300" step="5">
+                      		<td colspan="2"><label for="updateShoesSize">신발사이즈</label></td>
+                      		<td>
+                      			<input type="number" name="updateShoesSize" value="210" min="210" max="300" step="5" class="form-control">
                       		</td>
                       	</tr>
                       	<tr><td><input type="hidden" value="0" id="clothesNumForUpdate"></td></tr>

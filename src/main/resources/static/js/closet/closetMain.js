@@ -57,9 +57,7 @@
     	}//plugins
   	  }//options 
   });	
-  
-  
-   	
+  	
 	 	// 옷장 편집버튼 -> 수정,삭제 아이콘 숨어있다가 나타나기
 	 	$('.delCloset').hide();
 	 	$('.modifyCloset').hide();
