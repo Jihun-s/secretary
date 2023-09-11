@@ -23,4 +23,13 @@
 		family_id = #{familyId}
 </select>
 
+<!-- 일정 삭제 -->
+<delete id="deleteSch" parameterType="hashmap">
+	DELETE FROM
+		Secretary_Schedule
+	WHERE
+		sch_id = #{schId}
+		<!-- AND user_id = #{userId} -->
+		AND family_id = #{familyId}
+</delete>
 </mapper>
