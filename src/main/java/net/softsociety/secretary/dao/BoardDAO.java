@@ -28,7 +28,7 @@ public interface BoardDAO {
 	//현재페이지
 	public int getTotal(HashMap<String, String> map);
 	
-	public ArrayList<Board> list2(HashMap<String, Object> map, RowBounds rb);
+	public ArrayList<Board> list(HashMap<String, Object> map, RowBounds rb);
 	//조회수
 	public int addhits(int boardId);
 	//글수정 (문의)

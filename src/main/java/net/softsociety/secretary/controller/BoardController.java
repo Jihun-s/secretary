@@ -3,6 +3,8 @@ package net.softsociety.secretary.controller;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -19,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.rpc.context.AttributeContext.Request;
+
 import lombok.extern.slf4j.Slf4j;
 import net.softsociety.secretary.dao.BoardDAO;
 import net.softsociety.secretary.domain.Answer;
@@ -33,6 +37,7 @@ import net.softsociety.secretary.util.PageNavigator;
 @Slf4j
 @RequestMapping("board")
 public class BoardController {
+	
 	@Autowired
 	BoardService service;
 	@Autowired
@@ -53,9 +58,9 @@ public class BoardController {
 	@Value("${user.board.group}")
 	int pagePerGroup;
 	
-	//리스트2 이게 지금 되는거
-	@GetMapping("list2")
-	public String list2 (Model m, @RequestParam(name="boardCategory2", defaultValue="all")String boardCategory2,
+	//글목록 불러오기
+	@GetMapping("list")
+	public String list (Model m, @RequestParam(name="boardCategory2", defaultValue="all")String boardCategory2,
 						@RequestParam(name = "boardCategory1", defaultValue = "inquiry") String boardCategory1,
 						@RequestParam(name="page", defaultValue="1")int page ) {
 		PageNavigator navi = service.getPageNavigator(pagePerGroup, countPerPage, page, boardCategory1, boardCategory2);
@@ -67,7 +72,7 @@ public class BoardController {
 		m.addAttribute("boardCategory1",boardCategory1);
 		m.addAttribute("boardCategory2",boardCategory2);
 		
-		return "boardView/list2";
+		return "boardView/list";
 	}
 	
 	//1:1 문의글 등록으로 이동
@@ -90,7 +95,7 @@ public class BoardController {
     	
     	log.debug("cont : {}", b);
     	service.write(b);
-	    return "redirect:/board/list2";
+	    return "redirect:/board/list";
     }
     //문의 글 읽기
     @GetMapping("read")
@@ -131,7 +136,7 @@ public class BoardController {
     	
     	service.update(b);
     	
-    	return "redirect:/board/list2";
+    	return "redirect:/board/list";
     }
     //문의 글 삭제
     @GetMapping("deleteOne")
@@ -143,7 +148,7 @@ public class BoardController {
     		log.debug("삭제실패");
     		return "redirect:/board/read?boardId=" + boardId;
     	}
-    	return "redirect:/board/list2";
+    	return "redirect:/board/list";
     }
     //답글 삭제
     @GetMapping("deleteAnswer")
@@ -151,7 +156,7 @@ public class BoardController {
     	log.debug("deleteAnswer :{}", answerId);
     	int n = Aservice.deleteAnswer(answerId);
     	
-    	return "redirect:/board/list2";
+    	return "redirect:/board/list";
     }
     //답글 달기
     @PostMapping("answer")
@@ -167,21 +172,7 @@ public class BoardController {
     	
     	return "redirect:/board/read?boardId="+boardId + "&reload=true";
     }
-//    //답글달기 ajax
-//    @ResponseBody
-//    @PostMapping("answer")
-//    public String answer(@AuthenticationPrincipal UserDetails user, Answer answer) {
-//    	User u = userservice.findByEmailOrUserId(user.getUsername()); 
-//    	
-//    	answer.setUserId(u.getUserId());    	
-//    	
-//    	int n = Aservice.insertAnswer(answer);
-//    	// 답글이 추가된 후, 해당 게시글의 상태를 업데이트
-//        int boardId = answer.getBoardId(); 
-//        service.updateBoardStatus(boardId);
-//    	
-//    	return "redirect:/board/read?boardId="+boardId + "&reload=true";
-//    }
+
     
     
    

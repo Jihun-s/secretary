@@ -59,8 +59,8 @@ public class BoardServiceImpl implements BoardService {
 		
 		RowBounds rb =new RowBounds(navi.getStartRecord(), navi.getCountPerPage());
 
-		ArrayList<Board> list2 = dao.list2(map, rb);
-		return list2;
+		ArrayList<Board> list = dao.list(map, rb);
+		return list;
 	}
 	//페이지 정보
 	@Override

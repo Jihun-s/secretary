@@ -29,11 +29,6 @@ values
  	board_id = #{boardId} 
 </select>
 
-<!-- 답글 삭제 
-<delete id="deleteAnswer" parameterType="Answer">
-delete from secretary_answer where answer_id = #{answerId}  and user_id=#{userId} 
-</delete>-->
-
 <!-- 답글 삭제 -->
 <delete id="deleteAnswer" parameterType="int">
 delete from secretary_answer where answer_id = #{answerId}  

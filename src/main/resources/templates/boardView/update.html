@@ -63,7 +63,7 @@
     비밀글<input type="checkbox" name="boardIsPublic" id="boardIsPublic" value="1" onchange="checkboxChange()" th:checked="${b.boardIsPublic}"><br>
     <input type="submit" value="수정">   
 </form>
-<form th:action="@{/board/list2}" method="get">
+<form th:action="@{/board/list}" method="get">
 	 <input type="submit" value="취소">
 </form>
 
