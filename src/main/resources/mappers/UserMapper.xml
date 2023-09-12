@@ -23,6 +23,7 @@
 	    SET enabled = 1
 	    WHERE verification_token = #{token}
 	</update>
+	
 	<select id="findByEmailOrUserId" resultType="User">
 	    SELECT * FROM secretary_user
 	    WHERE user_email = #{emailOrUserId} OR user_id = #{emailOrUserId}

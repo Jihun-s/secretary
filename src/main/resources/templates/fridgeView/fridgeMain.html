@@ -102,6 +102,7 @@
                 height: 20px;
                 top: 0;
                 z-index: 10;
+                display: none;
             }
 
             .modifyIcon {
@@ -204,11 +205,12 @@
                 width: 100%; /* 이미지가 부모 요소의 폭에 맞게 조정됩니다. */
             }
 
-            .editIcon {
+            .category-editIcon {
                 display: none;
             }
         </style>
         <script>
+            const DEFAULT_CATEGORIES = ['일반', '야채', '생선', '육류', '과일'];
             $(document).ready(function () {
                 loadFridgesByCategory('냉장실');
                 loadAllFoodsByCategory('냉장실');
@@ -261,15 +263,15 @@
                     $('.fridgeSelect').val(fridgeId);
                 });
 
-                let isFoodItemEditMode = false; // 편집 모드 상태를 저장하는 변수
+                let isEditMode = false; // 편집 모드 상태를 저장하는 변수
 
                 $('#foodItemModify').click(function () {
-                    if (isFoodItemEditMode) {
-                        $('.food-editIcon').hide();
-                        isFoodItemEditMode = false;
+                    if (isEditMode) {
+                        $('.food-editIcon, .category-editIcon').hide();
+                        isEditMode = false;
                     } else {
-                        $('.food-editIcon').show();
-                        isFoodItemEditMode = true;
+                        $('.food-editIcon, .category-editIcon').show();
+                        isEditMode = true;
                     }
                 });
                 $(document).on('click', '.foodModifyIcon', function (e) {
@@ -491,6 +493,13 @@
                         // 드롭다운에 카테고리 목록 추가
                         const dropdownMenu = $('#categoryDisplayButton').siblings('.categoryDropdown');
                         dropdownMenu.empty(); // 기존 목록 삭제
+                        dropdownMenu.append(
+                            `<li><a class="dropdown-item" href="javascript:void(0);" onclick="showFoodsByCategory('일반')">일반</a></li>
+                            <li><a class="dropdown-item" href="javascript:void(0);" onclick="showFoodsByCategory('야채')">야채</a></li>
+                            <li><a class="dropdown-item" href="javascript:void(0);" onclick="showFoodsByCategory('생선')">생선</a></li>
+                            <li><a class="dropdown-item" href="javascript:void(0);" onclick="showFoodsByCategory('육류')">육류</a></li>
+                            <li><a class="dropdown-item" href="javascript:void(0);" onclick="showFoodsByCategory('과일')">과일</a></li>`
+                        );
                         categories.forEach(function (category) {
                             dropdownMenu.append(
                                 `<li><a class="dropdown-item" href="javascript:void(0);" onclick="showFoodsByCategory('${category.foodCategory}')">${category.foodCategory}</a></li>`
@@ -817,6 +826,49 @@
                         $('#categoryEditModal').modal('show');
                     }
                 });
+                // 카테고리 편집 모달이 표시될 때 이 함수를 호출
+                $('#categoryEditModal').on('show.bs.modal', populateCategoryModal);
+                $('#categoryEditModal').on('hidden.bs.modal', function () {
+                    // 모달이 완전히 닫힌 후 이벤트 리스너를 다시 바인딩
+                    $('.category-editIcon')
+                        .off('click')
+                        .on('click', function () {
+                            $('#categoryEditModal').modal('show');
+                        });
+                });
+                function populateCategoryModal() {
+                    $.ajax({
+                        url: 'foodCategories',
+                        type: 'GET',
+                        dataType: 'json',
+                        success: function (categories) {
+                            const modalBody = $('#categoryEditModal .modal-body');
+                            modalBody.empty(); // 기존 목록 삭제
+
+                            // 기본 카테고리 출력
+                            ['일반', '야채', '생선', '육류', '과일'].forEach(function (categoryName) {
+                                modalBody.append(`
+            <div class="category-item">
+                <span class="category-name">${categoryName}</span>
+                <!-- 기본 카테고리는 수정/삭제 불가능하므로 아이콘을 출력하지 않습니다. -->
+            </div>
+        `);
+                            });
+
+                            // 사용자 정의 카테고리 출력
+                            categories.forEach(function (category) {
+                                modalBody.append(`
+            <div class="category-item">
+                <span class="category-name">${category.foodCategory}</span>
+                <img src="images/fridgeimg/ModifyName.png" style="height:25px; width:25px" alt="수정" class="category-modal-editIcon modal-category-editIcon" data-category-id="${category.categoryId}">
+                <img src="images/fridgeimg/Red_X.png" style="height:25px; width:25px" alt="삭제" class="category-modal-editIcon modalcategory-deleteIcon" data-category-id="${category.categoryId}">
+            </div>
+        `);
+                            });
+                        },
+                        error: function (e) {},
+                    });
+                }
             });
             function showFoodsByCategory(selectedCategory) {
                 // 모든 음식 목록에서 선택된 카테고리에 해당하는 음식만 화면에 표시
@@ -1647,15 +1699,6 @@
                                     <div class="d-flex">
                                         <div class="btn-group flex-fill position-relative">
                                             <!-- position-relative 추가 -->
-                                            <!-- 카테고리 수정 아이콘 위치 변경 시작 -->
-                                            <img
-                                                src="images/fridgeimg/ModifyName.png"
-                                                alt="카테고리 수정"
-                                                class="category-editIcon position-absolute"
-                                                style="top: 0; left: 0; height: 25px; width: 25px; z-index: 999"
-                                            />
-                                            <!-- position-absolute 추가 -->
-                                            <!-- 카테고리 수정 아이콘 위치 변경 끝 -->
                                             <button
                                                 class="btn btn-sm btn-info no-wrap-text"
                                                 id="categoryDisplayButton"
@@ -1664,6 +1707,14 @@
                                             >
                                                 카테고리
                                             </button>
+                                            <!-- 카테고리 수정 아이콘 위치 변경 시작 -->
+                                            <img
+                                                src="images/fridgeimg/ModifyName.png"
+                                                alt="카테고리 수정"
+                                                class="category-editIcon position-absolute"
+                                                style="top: 0; left: 0; height: 25px; width: 25px; z-index: 999"
+                                            />
+                                            <!-- 카테고리 수정 아이콘 위치 변경 끝 -->
                                             <button
                                                 aria-expanded="false"
                                                 class="btn btn-sm btn-info dropdown-toggle dropdown-toggle-split"
@@ -1688,7 +1739,7 @@
                                                             aria-label="Close"
                                                         ></button>
                                                     </div>
-                                                    <div class="modal-body">
+                                                    <div class="modal-body category-modify-modal">
                                                         <!-- 여기에 카테고리 리스트를 표시합니다 -->
                                                     </div>
                                                     <div class="modal-footer">
