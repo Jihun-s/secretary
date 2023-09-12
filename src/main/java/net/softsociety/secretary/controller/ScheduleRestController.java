@@ -33,6 +33,7 @@ public class ScheduleRestController {
 	@GetMapping("loadSch")
 	public ArrayList<Schedule> loadSCh(
 			Model model) {
+		
 		// DAO에 보낼 map 만들기
 		User loginUser = (User) model.getAttribute("loginUser");
 		HashMap<String, Object> map = new HashMap<>();
@@ -44,25 +45,7 @@ public class ScheduleRestController {
 
 		return result;
 	}
-	
-	/** 일정 목록 불러오기 */
-//	@GetMapping("getList")
-//	public ArrayList<Schedule> getList(
-//			Model model
-//			, String groupBy) {
-//		log.debug("{}로 정렬하기로 했어염", groupBy);
-//		// DAO에 보낼 map 만들기
-//		User loginUser = (User) model.getAttribute("loginUser");
-//		HashMap<String, Object> map = new HashMap<>();
-//		map.put("userId", loginUser.getUserId());
-//		map.put("familyId", loginUser.getFamilyId());
-//
-//		ArrayList<Schedule> result = dao.selectAllSche(map);
-//		log.debug("DAO에서 받아온 일정 목록:{}", result);
-//		
-//		return result;
-//	}
-	
+
 
 	/** 일정 삭제 */
 	@PostMapping("deleteSch")
@@ -70,6 +53,7 @@ public class ScheduleRestController {
 			Model model
 			, int schId) {
 		log.debug("삭제 컨트롤러 도착했어염!");
+		
 		// DAO에 보낼 map 만들기
 		User loginUser = (User) model.getAttribute("loginUser");
 		HashMap<String, Object> map = new HashMap<>();
@@ -91,6 +75,7 @@ public class ScheduleRestController {
 			Model model
 			, Schedule sch) {
 		log.debug("컨트롤러 도착한 수정할 일정:{}", sch);
+		
 		User loginUser = (User) model.getAttribute("loginUser");
 		sch.setFamilyId(loginUser.getFamilyId());
 		sch.setUserId(loginUser.getUserId());
@@ -100,5 +85,27 @@ public class ScheduleRestController {
 		log.debug("일정 수정했나염?:{}", n);
 		
 		return n;
+	}
+	
+	
+	/** 일정 하나 불러오기 */
+	@PostMapping("selectOne")
+	public Schedule selectOne(
+			int schId
+			, Model model) {
+		log.debug("컨트롤러로 {}번 일정을 찾아올거예요", schId);
+		
+		// DAO에 보낼 map 만들기
+		User loginUser = (User) model.getAttribute("loginUser");
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("userId", loginUser.getUserId());
+		map.put("familyId", loginUser.getFamilyId());
+		map.put("schId", schId);
+		log.debug("DAO로 보낼 일정 찾는 map:{}", map);
+		
+		Schedule result = dao.selectOne(map);
+		log.debug("컨트롤러가 찾아온 일정 하나:{}", result);
+		
+		return result;
 	}
 }
