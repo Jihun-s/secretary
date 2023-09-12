@@ -25,6 +25,9 @@ $(document).ready(function () {
         dataType: "JSON",
         success: (data) => {
           let transformedData = data.map(function (sch) {
+            // 배경색 + 글자색 + 테두리색
+            let colorInfo = getColorBySchType(sch.schType, sch.schCate);
+
             return {
               // 기본 제공 프롭스
               id: sch.schId,
@@ -32,6 +35,9 @@ $(document).ready(function () {
               start: sch.schStart,
               end: sch.schEnd,
               allday: sch.schAllday,
+              backgroundColor: colorInfo.bgColor, // 배경색
+              textColor: colorInfo.textColor,     // 글자색
+              borderColor: colorInfo.borderColor, // 테두리색
               // 사용자 정의 프롭스
               schId: sch.schId,
               schContent: sch.schContent,
@@ -421,4 +427,70 @@ function validateSchCate() {
   }
 
   return true;
+}
+
+////////////////////////////////////////////////////////////////
+
+/** schType, schCate별 색상 매핑 */
+function getColorBySchType(schType, schCate) {
+  // 'danger' color
+  if (schType === '일정') {
+    if (schCate === '명절' || schCate === '공휴일') {
+      return {
+        bgColor: '#FF3E1D',
+        textColor: '#FFE0DB', 
+        borderColor: '#FF3E1D'
+      };
+    }
+  }
+  
+  switch (schType) {
+    // 'primary' color
+    case '일정':
+      return {
+        bgColor: '#696CFF',
+        textColor: '#E7E7FF',
+        borderColor: '#696CFF'
+      };
+    
+    // 'warning' color
+    case '냉장고':
+      return {
+        bgColor: '#FFAB00',
+        textColor: '#FFF2D6',
+        borderColor: '#FFAB00'
+      };
+
+    // 'info' color
+    case '생활용품':
+      return {
+        bgColor: '#03C3EC',
+        textColor: '#D7F5FC',
+        borderColor: '#03C3EC'
+      };
+
+    // 혜린핑크.
+    case '옷장':
+      return {
+        bgColor: '#DF84A6',
+        textColor: '#FFDCE7',
+        borderColor: '#DF84A6'
+      };
+
+    // 'success' color
+    case '가계부':
+      return {
+        bgColor: '#71DD37',
+        textColor: '#E8FADF',
+        borderColor: '#71DD37'
+      };
+
+    // 'secondary' color
+    default:
+      return {
+        bgColor: '#EBEEF0',
+        textColor: '#8592A3',
+        borderColor: '#EBEEF0'
+      };
+  }
 }
