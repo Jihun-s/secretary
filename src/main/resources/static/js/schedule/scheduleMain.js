@@ -103,7 +103,7 @@ $(document).ready(function () {
 
   });
 
-  // schType select 변경
+  /* schType select 변경 */
   $('#schTypeSelect, #schTypeSelectInput').change(function() {
     let selectedType = $(this).val();
     let triggerId = $(this).attr('id');
@@ -111,8 +111,23 @@ $(document).ready(function () {
     updateSchCateOptions(selectedType, null, triggerId);
   });
 
+  /* 일정 수정 & 수정 취소 */ 
+  let originalValues = {};
+
   /* 수정버튼 클릭 시 수정 뚫리기 */
   $('#schDetailUpdateBt').click(function() {
+    // 원래 값 저장해두기
+    originalValues = {
+      schId: $("#schId").val(),
+      schContent: $("#schContent").val(),
+      schType: $("#schTypeSelect").val(),
+      schCate: $("#schCateSelect").val(),
+      schLevel: $("#schLevel").val(),
+      schStart: $("#schStart").val(),
+      schEnd: $("#schEnd").val(),
+      schAllday: $("#schAllday").prop('checked')
+    };
+
     // 모든 input 필드의 readonly 속성 제거
     $('#schDetailModal input').prop('readonly', false);
     // 모든 select 필드의 disabled 속성 제거
@@ -127,6 +142,18 @@ $(document).ready(function () {
 
   /* 수정 취소 버튼 */
   $('#schCancelBt').click(function() {
+    // 값 원래대로 돌리기
+    $("#schId").val(originalValues.schId);
+    $("#schContent").val(originalValues.schContent);
+    $("#schTypeSelect").val(originalValues.schType);
+    // 유형에 따라 카테고리 바꿔주기
+    updateSchCateOptions(originalValues.schType, originalValues.schCate, 'schTypeSelect');
+    $("#schCateSelect").val(originalValues.schCate);
+    $("#schLevel").val(originalValues.schLevel);
+    $("#schStart").val(originalValues.schStart);
+    $("#schEnd").val(originalValues.schEnd);
+    $("#schAllday").prop('checked', originalValues.schAllday);
+
     // 수정전송버튼, 수정취소버튼 숨기기
     $('#schUpdateBt, #schCancelBt').hide();
     // 원래 수정 삭제 확인버튼 나오기
@@ -139,6 +166,7 @@ $(document).ready(function () {
     $('#schDetailModal select, #schDetailModal :checkbox').prop('disabled', true);
 
   });
+
 
   // 일정 수정
   $('#schUpdateBt').click(updateSch);
