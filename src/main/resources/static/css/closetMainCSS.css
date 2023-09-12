@@ -35,6 +35,8 @@
 #ManageCloset{
 	display:inline-block; align: center;
 	height: 250px; padding-left: 2.2em;
+	overflow-y: auto; /* 세로 스크롤을 활성화합니다. */
+    position: relative; 
 }
 #ManageCloset table{
 	margin-bottom: 2.2em;
