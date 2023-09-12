@@ -9,6 +9,14 @@ $(document).ready(function () {
   let curDate = now.getDate().toString().padStart(2, '0');
   let curDateFormat = curYear + '-' + curMonth + '-' + curDate;  
 
+  /* 일자별 데이터 가져오기 */
+  loadSchedule('일자별');
+
+  /* 그루핑 라디오 박스 이벤트 */
+  $('input[name="groupBy"]').change(function() {
+    let groupByValue = $(this).val();
+    loadSchedule(groupByValue);
+  });
 
   /** 풀캘린더 */
   let calendar = new FullCalendar.Calendar(calendarEl, {
@@ -20,7 +28,7 @@ $(document).ready(function () {
     dayMaxEvents: true,
     events: function(info, successCallback, failureCallback) {
       $.ajax({
-        url: "/secretary/schedule/list",
+        url: "/secretary/schedule/loadSch",
         type: "GET",
         dataType: "JSON",
         success: (data) => {
@@ -181,6 +189,119 @@ $(document).ready(function () {
 
 
 ////////////////////////////////////////////////////////////////
+
+/** 일정 목록 불러오기 */
+function loadSchedule(groupBy) {
+  console.log(groupBy + "로 일정을 불러올게요");
+
+  $.ajax({
+      url: '/secretary/schedule/loadSch',
+      method: 'GET',
+      dataType: 'JSON',
+      success: function(data) {
+          let html = "";
+          if (groupBy === "일자별") {
+              // 일정을 schStartYmd 기준으로 그룹화
+              let groupedByDate = {};
+              data.forEach(sch => {
+                  if (!groupedByDate[sch.schStartYmd]) {
+                      groupedByDate[sch.schStartYmd] = [];
+                  }
+                  groupedByDate[sch.schStartYmd].push(sch);
+              });
+
+              // 그룹화된 데이터를 기반으로 HTML 생성
+              for (let date in groupedByDate) {
+                  html += `<small class="text-light fw-semibold">${date}</small>`;
+                  groupedByDate[date].forEach(sch => {
+                      html += `
+                          <a href="javascript:void(0);" class="list-group-item list-group-item-action" onclick="schDetailModal(${sch.schId})">
+                              <span class="badge rounded-pill ${getBadgeClass(sch.schType)}">${sch.schCate}</span>
+                              ${sch.schContent}
+                          </a>
+                      `;
+                  });
+              }
+          } else if (groupBy === "유형별") {
+            let groupedByType = {};
+            data.forEach(sch => {
+                if (!groupedByType[sch.schType]) {
+                    groupedByType[sch.schType] = [];
+                }
+                groupedByType[sch.schType].push(sch);
+            });
+
+            for (let type in groupedByType) {
+                html += `<small class="text-light fw-semibold">${type}</small>`;
+                groupedByType[type].forEach(sch => {
+                  html += `
+                      <a href="javascript:void(0);" class="list-group-item list-group-item-action" onclick="schDetailModal(${sch.schId})">
+                          <span class="badge rounded-pill ${getBadgeClass(sch.schType)}">${sch.schCate}</span>
+                          ${sch.schContent}
+                      </a>
+                  `;
+              });
+            }
+          } else if (groupBy === "중요도별") {
+              let groupedByLevel = { 2: [], 1: [], 0: [] };
+
+              data.forEach(sch => {
+                  if (typeof groupedByLevel[sch.schLevel] !== "undefined") {
+                    groupedByLevel[sch.schLevel].push(sch);
+                  }
+              });
+
+              [2, 1, 0].forEach(level => {
+                  if (groupedByLevel[level].length > 0) {
+                      html += `<small class="text-light fw-semibold">중요도: ${level}</small>`;
+                      groupedByLevel[level].forEach(sch => {
+                          html += `
+                              <a href="javascript:void(0);" class="list-group-item list-group-item-action" onclick="schDetailModal(${sch.schId})">
+                                  <span class="badge rounded-pill ${getBadgeClass(sch.schType)}">${sch.schCate}</span>
+                                  ${sch.schContent}
+                              </a>
+                          `;
+                      });
+                  }
+              });
+          }
+
+          $("#schListDiv").html(html);
+      },
+      error: function(e) {
+          alert(JSON.stringify(e));
+          alert('일정 목록 서버 전송 실패');
+      }
+  });
+}
+
+/** 일정 목록 뱃지 색 지정 */
+function getBadgeClass(type) {
+  let classes = {
+      '일정': 'bg-primary',
+      '냉장고': 'bg-warning',
+      '생활용품': 'bg-info',
+      '옷장': 'bg-danger',
+      '가계부': 'bg-success'
+  };
+  return classes[type] || 'bg-primary';
+}
+
+function schDetailModal(schId) {
+  // 모달 실행 로직
+  alert(schId + '로 데이터 불러와서 모달에 뿌린 다음 모달 열기');
+}
+
+
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////
 
 /** 일정 삭제 */
 function deleteSch() {

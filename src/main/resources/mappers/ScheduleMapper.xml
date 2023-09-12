@@ -15,12 +15,16 @@
 		, sch_level
 		, sch_content
 		, sch_start
+		, TO_CHAR(sch_start, 'YYYY-MM-DD') AS sch_start_ymd
+	    , TO_CHAR(sch_start, 'HH24:MI') AS sch_start_hm
 		, sch_end
 		, sch_allday
 	FROM
 		Secretary_Schedule
 	WHERE
 		family_id = #{familyId}
+	ORDER BY
+		sch_Start
 </select>
 
 <!-- 일정 추가 -->

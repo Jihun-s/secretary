@@ -18,6 +18,8 @@ public class Schedule {
 	private String schContent;
 	private String schStart;
 	private String schEnd;
+	private String schStartYmd;
+	private String schStartHm;
 	private boolean schAllday;
 	
 	public String getId() {

@@ -29,9 +29,9 @@ public class ScheduleRestController {
 	@Autowired
 	ScheduleDAO dao;
 	
-	/** 일정 목록 불러오기 */
-	@GetMapping("list")
-	public ArrayList<Schedule> list(
+	/** 일정 불러오기 */
+	@GetMapping("loadSch")
+	public ArrayList<Schedule> loadSCh(
 			Model model) {
 		// DAO에 보낼 map 만들기
 		User loginUser = (User) model.getAttribute("loginUser");
@@ -44,6 +44,24 @@ public class ScheduleRestController {
 
 		return result;
 	}
+	
+	/** 일정 목록 불러오기 */
+//	@GetMapping("getList")
+//	public ArrayList<Schedule> getList(
+//			Model model
+//			, String groupBy) {
+//		log.debug("{}로 정렬하기로 했어염", groupBy);
+//		// DAO에 보낼 map 만들기
+//		User loginUser = (User) model.getAttribute("loginUser");
+//		HashMap<String, Object> map = new HashMap<>();
+//		map.put("userId", loginUser.getUserId());
+//		map.put("familyId", loginUser.getFamilyId());
+//
+//		ArrayList<Schedule> result = dao.selectAllSche(map);
+//		log.debug("DAO에서 받아온 일정 목록:{}", result);
+//		
+//		return result;
+//	}
 	
 
 	/** 일정 삭제 */

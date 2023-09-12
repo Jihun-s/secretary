@@ -608,6 +608,26 @@
                   <div class="card mb-4">
                     <div class="d-flex align-items-end"></div>
                     <div class="card-body">
+                      <!-- 그루핑 라디오 박스 -->
+                      <div class="col mb-4">
+                        <small class="text-light fw-semibold d-block">기준</small>
+                        <div class="form-check form-check-inline mt-3">
+                          <input class="form-check-input" type="radio" name="groupBy" id="groupByDate" value="일자별" checked>
+                          <label class="form-check-label" for="groupByDate">일자별로 보기</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                          <input class="form-check-input" type="radio" name="groupBy" id="groupByType" value="유형별">
+                          <label class="form-check-label" for="groupByType">유형별로 보기</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                          <input class="form-check-input" type="radio" name="groupBy" id="groupByLevel" value="중요도별">
+                          <label class="form-check-label" for="groupByType">중요도별로 보기</label>
+                        </div>
+                      </div>
+                      <!-- 리스트 -->
+                      <div id="schListDiv" class="col mb-4 mb-xl-0">
+                        <!-- 일정 목록 출력되는 부분 -->
+                      </div>
                     </div>
                   </div>
                 </div>
