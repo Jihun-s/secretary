@@ -22,4 +22,7 @@ public interface ScheduleDAO {
 	/** 일정 수정 */
 	int updateSch(Schedule sch);
 
+	/** 일정 하나 찾기 */
+	Schedule selectOne(HashMap<String, Object> map);
+
 }

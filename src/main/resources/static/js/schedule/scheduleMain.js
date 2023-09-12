@@ -22,10 +22,10 @@ $(document).ready(function () {
   let calendar = new FullCalendar.Calendar(calendarEl, {
     locale: 'ko',
     initialDate: curDateFormat,
-    editable: true,
-    selectable: true,
-    businessHours: true,
-    dayMaxEvents: true,
+    editable: false,
+    selectable: false,
+    businessHours: false,
+    dayMaxEvents: false,
     events: function(info, successCallback, failureCallback) {
       $.ajax({
         url: "/secretary/schedule/loadSch",
@@ -81,10 +81,17 @@ $(document).ready(function () {
       // alert(JSON.stringify(data.event));
       // {"allDay":false,"title":"현대카드 대금 인출","start":"2023-09-13T00:00:00+09:00","id":"1",
       // "extendedProps":{"allday":true,"schId":1,"schContent":"현대카드 대금 인출","schStart":"2023-09-13 00:00:00","schEnd":"2023-09-13 00:00:00","schAllday":true,"schType":"가계부","schCate":"지출","schLevel":2}}
-      
+
       // 수정전송버튼, 수정취소버튼 숨기기
-      $('#schUpdateBt').hide();
-      $('#schCancelBt').hide();
+      $('#schUpdateBt, #schCancelBt').hide();
+      // 원래 수정 삭제 확인버튼 나오기
+      $('#schDetailUpdateBt, #schDetailDeleteBt, #schDetailCloseBt').show();
+      // 제목 수정
+      $('#schDetailModalTitle').html('일정 상세보기');
+      // 모든 input 필드의 readonly 속성 추가
+      $('#schDetailModal input').prop('readonly', true);
+      // 모든 select 필드의 disabled 속성 추가
+      $('#schDetailModal select, #schDetailModal :checkbox').prop('disabled', true);
 
       // 모달에 데이터 채우기
       $("#schId").val(schObj.schId); 
@@ -212,13 +219,18 @@ function loadSchedule(groupBy) {
 
               // 그룹화된 데이터를 기반으로 HTML 생성
               for (let date in groupedByDate) {
-                  html += `<small class="text-light fw-semibold">${date}</small>`;
+                  html += `<br><small class="text-light fw-semibold">${date}</small>`;
                   groupedByDate[date].forEach(sch => {
                       html += `
-                          <a href="javascript:void(0);" class="list-group-item list-group-item-action" onclick="schDetailModal(${sch.schId})">
-                              <span class="badge rounded-pill ${getBadgeClass(sch.schType)}">${sch.schCate}</span>
-                              ${sch.schContent}
+                        <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                          <a href="javascript:openDetailModal(${sch.schId});">
+                            <div>
+                                <span class="badge rounded-pill ${getBadgeClass(sch.schType, sch.schCate)}">${sch.schCate}</span>
+                                ${convertTimeToKor(sch.schStartHm)}&nbsp;${sch.schContent}
+                            </div>
                           </a>
+                          <i class="bx bx-x" style="cursor: pointer;" onclick="deleteSch(${sch.schId});"></i>
+                        </div>
                       `;
                   });
               }
@@ -232,13 +244,18 @@ function loadSchedule(groupBy) {
             });
 
             for (let type in groupedByType) {
-                html += `<small class="text-light fw-semibold">${type}</small>`;
+                html += `<br><small class="text-light fw-semibold">${type}</small>`;
                 groupedByType[type].forEach(sch => {
                   html += `
-                      <a href="javascript:void(0);" class="list-group-item list-group-item-action" onclick="schDetailModal(${sch.schId})">
-                          <span class="badge rounded-pill ${getBadgeClass(sch.schType)}">${sch.schCate}</span>
-                          ${sch.schContent}
+                    <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                      <a href="javascript:openDetailModal(${sch.schId});">
+                        <div>
+                            <span class="badge rounded-pill ${getBadgeClass(sch.schType, sch.schCate)}">${sch.schCate}</span>
+                            ${convertDateToKor(sch.schStartYmd)}&nbsp;${sch.schContent}
+                        </div>
                       </a>
+                      <i class="bx bx-x" style="cursor: pointer;" onclick="deleteSch(${sch.schId});"></i>
+                    </div>
                   `;
               });
             }
@@ -253,14 +270,19 @@ function loadSchedule(groupBy) {
 
               [2, 1, 0].forEach(level => {
                   if (groupedByLevel[level].length > 0) {
-                      html += `<small class="text-light fw-semibold">중요도: ${level}</small>`;
+                      html += `<br><small class="text-light fw-semibold">중요도: ${level}</small>`;
                       groupedByLevel[level].forEach(sch => {
-                          html += `
-                              <a href="javascript:void(0);" class="list-group-item list-group-item-action" onclick="schDetailModal(${sch.schId})">
-                                  <span class="badge rounded-pill ${getBadgeClass(sch.schType)}">${sch.schCate}</span>
-                                  ${sch.schContent}
-                              </a>
-                          `;
+                        html += `
+                          <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                            <a href="javascript:openDetailModal(${sch.schId});">
+                              <div>
+                                  <span class="badge rounded-pill ${getBadgeClass(sch.schType, sch.schCate)}">${sch.schCate}</span>
+                                  ${convertDateToKor(sch.schStartYmd)}&nbsp;${sch.schContent}
+                              </div>
+                            </a>
+                            <i class="bx bx-x" style="cursor: pointer;" onclick="deleteSch(${sch.schId});"></i>
+                          </div>
+                        `;
                       });
                   }
               });
@@ -276,28 +298,63 @@ function loadSchedule(groupBy) {
 }
 
 /** 일정 목록 뱃지 색 지정 */
-function getBadgeClass(type) {
+function getBadgeClass(type, cate) {
   let classes = {
       '일정': 'bg-primary',
       '냉장고': 'bg-warning',
       '생활용품': 'bg-info',
-      '옷장': 'bg-danger',
+      '옷장': 'bg-label-danger',
       '가계부': 'bg-success'
   };
+
+  if (type === '일정' && (cate === '명절' || cate === '공휴일')) {
+      return 'bg-danger';
+  }
+
   return classes[type] || 'bg-primary';
 }
 
-function schDetailModal(schId) {
-  // 모달 실행 로직
-  alert(schId + '로 데이터 불러와서 모달에 뿌린 다음 모달 열기');
+
+/** 일정 하나 당 모달 열기 */
+function openDetailModal(schId) {
+  // 값 불러오기
+  $.ajax({
+    url: '/secretary/schedule/selectOne',
+    type: 'POST',
+    data: { schId: schId },
+    dataType: 'JSON',
+    success: (schObj) => {
+      // 수정전송버튼, 수정취소버튼 숨기기
+      $('#schUpdateBt').hide();
+      $('#schCancelBt').hide();
+
+      // 모달에 데이터 채우기
+      $("#schId").val(schObj.schId); 
+      $("#schContent").val(schObj.schContent);
+      $("#schTypeSelect").val(schObj.schType);
+      $("#schCateSelect").val(schObj.schCate);
+      $("#schLevel").val(schObj.schLevel); 
+      $("#schStart").val(convertDateTimeToLocal(schObj.schStart));
+      $("#schEnd").val(convertDateTimeToLocal(schObj.schEnd));
+      $("#schAllday").prop('checked', schObj.schAllday);
+      
+      // 유형에 따라 카테고리 옵션 업데이트하고 선택
+      updateSchCateOptions(schObj.schType, schObj.schCate, 'schTypeSelect');      
+
+      // 모든 input을 readonly로 설정
+      $('#schDetailModal input').prop('readonly', true);
+      // 모든 select을 disabled로 설정
+      $('#schDetailModal select, #schDetailModal :checkbox').prop('disabled', true);
+
+      // 모달 표시
+      $('#schDetailModal').modal('show');
+    },
+    error: (e) => {
+      alert(JSON.stringify(e));
+      alert('일정 하나 불러오기 전송 실패');
+    }
+  });
 }
-
-
-
-
-
-
-
 
 
 
@@ -306,6 +363,33 @@ function schDetailModal(schId) {
 /** 일정 삭제 */
 function deleteSch() {
   let schId = $('#schId').val();
+  console.log("삭제할 일정의 schId는 " + schId);
+  
+  if(confirm("일정을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.")) {
+    $.ajax({
+      url: '/secretary/schedule/deleteSch',
+      type: 'POST',
+      data: { schId: schId },
+      dataType: 'TEXT',
+      success: (data) => {
+        if(data == 1) {
+          alert('일정을 삭제했습니다.');
+        } else {
+          alert('일정을 삭제할 수 없습니다.');
+        }
+  
+        location.reload();
+      },
+      error: (e) => {
+        alert('일정 삭제 전송 실패');
+        alert(JSON.stringify(e));
+      }
+    });
+  }
+}
+
+/** 일정 삭제 매개변수 있음 */
+function deleteSch(schId) {
   console.log("삭제할 일정의 schId는 " + schId);
   
   if(confirm("일정을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.")) {
@@ -437,6 +521,20 @@ function updateSchCateOptions(schType, schCate, triggerId) {
 function convertDateTimeToLocal(dateTimeStr) {
 
   return dateTimeStr.replace(" ", "T");
+}
+
+// YYYY-MM-DD -> MM월 DD일
+function convertDateToKor(dateString) {
+  let date = new Date(dateString);
+
+  return `${date.getMonth() + 1}월 ${date.getDate()}일`;
+}
+
+// YYYY-MM-DD' 'HH24:MI:SS -> HH24시
+function convertTimeToKor(dateTimeStr) {
+  let hour = dateTimeStr.slice(0, 2);
+
+  return `${hour}시`;
 }
 
 ////////////////////////////////////////////////////////////////
