@@ -35,7 +35,7 @@ $(document).ready(function(){
 				let laundryCnt = 0; //세탁물 갯수
 				$(list).each(function(i,n){
 					let clothesNum = parseInt(n.clothesNum);
-					str += '<a onclick="readClothes('+n.closetNum+','+clothesNum+')"><img src="../closet/clothesDownload?closetNum='+n.closetNum+'&clothesNum='+clothesNum+'">';
+					str += '<div><a onclick="readClothes('+n.closetNum+','+clothesNum+')"><img src="../closet/clothesDownload?closetNum='+n.closetNum+'&clothesNum='+clothesNum+'"></div>';
 					laundryCnt += 1;
 				});
 				if(str != ''){
@@ -67,7 +67,7 @@ $(document).ready(function(){
 				let str ='';
 				$(list).each(function(i,n){
 					let clothesNum = parseInt(n.clothesNum);
-					str += '<a onclick="readClothes('+n.closetNum+','+clothesNum+')"><img src="../closet/clothesDownload?closetNum='+n.closetNum+'&clothesNum='+clothesNum+'">';
+					str += '<div><a onclick="readClothes('+n.closetNum+','+clothesNum+')"><img src="../closet/clothesDownload?closetNum='+n.closetNum+'&clothesNum='+clothesNum+'"></div>';
 				});
 				if(str != ''){
 					$('#whatsInCloset').html(str); 
@@ -252,7 +252,7 @@ $(document).ready(function(){
 			success:function(list){
 				let str ='';
 				$(list).each(function(i,n){
-					str +='<a onclick="readClothes('+n.clothesNum+')"><img src="../closet/clothesDownload?closetNum='+n.closetNum+'&clothesNum='+n.clothesNum+'"></a>';
+					str +='<div><a onclick="readClothes('+n.clothesNum+')"><img src="../closet/clothesDownload?closetNum='+n.closetNum+'&clothesNum='+n.clothesNum+'"></a></div>';
 				});
 				$('#whatsInCloset').html(str); 
 			},

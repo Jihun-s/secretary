@@ -820,11 +820,20 @@
                       <h4>옷장에 옷이 하나도 없네요</h4>
                     </div>	            	
               	</div><!-- 왼쪽 div 끝 -->
-<!-- 오른쪽 코디정보 --><div class="col">
+<!-- 오른쪽 코디정보 --><div class="col" style="overflow:hidden;">
 				<div id="imagePreview">
-				 <img th:src="@{/images/closetImg/shirt.png}">
-				</div>
+					<div class="imagePreview1"></div>
+					<div class="imagePreview2"></div>
+					<div class="imagePreview3"></div>
+					<div class="imagePreview4"></div>
+					<div class="imagePreview5"></div>
+					<div class="imagePreview6"></div>
+					<div class="imagePreview7"></div>
+					<div class="imagePreview8"></div>
+					<div class="imagePreview9"></div>
+				</div><br>
 				<div class="insertStyle">
+				<button class="btn-pink" onclick="styleImgCreate()">생성하기</button>
 				<table>
                  <tr> <!-- 1행 -->
                     <td colspan="2">계절</td>

@@ -114,4 +114,23 @@ public class FileService {
 		}
 		return false;
 	}
+	
+	public static String mergedImgName(String uploadPath) {
+		//저장할 파일명을 오늘 날짜의 년월일로 생성
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+		String savedFilename = sdf.format(new Date());
+		
+		//저장할 전체 경로와 파일명을 포함한 File 객체
+		File serverFile = null;
+		
+		//같은 이름의 파일이 있는 경우의 처리
+		while (true) {
+			serverFile = new File(uploadPath + "/" + savedFilename + ".png");
+			//같은 이름의 파일이 없으면 반복 종료.
+			if ( !serverFile.isFile()) break;	
+			//같은 이름의 파일이 있으면 이름 뒤에 long 타입의 시간정보를 덧붙임.
+			savedFilename += new Date().getTime();
+		}
+		return savedFilename + ".png";
+	}	
 }

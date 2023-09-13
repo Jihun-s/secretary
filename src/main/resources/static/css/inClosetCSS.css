@@ -8,8 +8,22 @@
 }
 
 /* 의류리스트 이미지*/
-#whatsInCloset img {
-	width:40%;
+#whatsInCloset{
+	text-align:center;
+}
+#whatsInCloset > div{
+	margin-right:1em;
+	margin-bottom:1em;
+	border-color: pink; 
+	border:1px;
+	border-style:solid;
+	border-radius:3%;
+	display:inline-block;
+	position:relative;
+}
+#whatsInCloset img{
+	width:15em;
+	height:10em;
 }
 
 /*세탁바구니 보기 버튼*/

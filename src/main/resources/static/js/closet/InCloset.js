@@ -91,7 +91,10 @@ $(document).ready(function(){
 				let str ='';
 				$(list).each(function(i,n){
 					let clothesNum = parseInt(n.clothesNum);
-					str +='<a onclick="readClothes('+n.closetNum+','+clothesNum+')"><img src="../closet/clothesDownload?closetNum='+n.closetNum+'&clothesNum='+clothesNum+'"></a>';
+					str +='<div>\
+							<a onclick="readClothes('+n.closetNum+','+clothesNum+')">\
+							<img src="../closet/clothesDownload?closetNum='+n.closetNum+'&clothesNum='+clothesNum+'">\
+							</a></div>';
 				});
 				$('#whatsInCloset').html(str); 
 			},
@@ -327,7 +330,7 @@ $(document).ready(function(){
 			success:function(list){
 				let str ='';
 				$(list).each(function(i,n){
-					str +='<a onclick="readClothes('+n.clothesNum+')"><img src="../closet/clothesDownload?closetNum='+closetNum+'&clothesNum='+n.clothesNum+'"></a>';
+					str +='<div><a onclick="readClothes('+n.clothesNum+')"><img src="../closet/clothesDownload?closetNum='+closetNum+'&clothesNum='+n.clothesNum+'"></a></div>';
 				});
 				$('#whatsInCloset').html(str); 
 			},
