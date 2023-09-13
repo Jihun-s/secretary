@@ -13,51 +13,51 @@ $(document).ready(function() {
       initialView: 'dayGridMonth',
       locale: 'ko',
       initialDate: curDateFormat,
-       events: function(info, successCallback, failureCallback) {
-        // 현재 달력 연월 추출
-        let date = new Date(info.start);
-        date.setDate(date.getDate() + 15);  // 중간값 작업
-        let calYear = date.getFullYear();
-        let calMonth = date.getMonth() + 1;
-        // alert("events 함수에서 읽은 연월:" + calYear + " " + calMonth);
-    
-        $.ajax({
-            url: "/secretary/cashbook/trans/loadCalInEx",
-            type: "GET",
-            data: { calYear: calYear, calMonth: calMonth },
-            dataType: "JSON",
-            success: (data) => {
-              // console.log(calYear + "년 " + calMonth + "월의 데이터:" + JSON.stringify(data));
-              let transformedData = [];
-          
-              data.forEach(trans => {
-                  
-                  // 수입이 0이 아닌 경우 이벤트 추가
-                  if (trans.calIncome !== 0) {
-                      transformedData.push({
-                          title: `+${numberWithCommas(trans.calIncome)}`,
-                          start: trans.calDate,
-                          extendedProps: {
-                              type: '수입',
-                              income: trans.calIncome
-                          }
-                      });
-                  }
-                  
-                  // 지출이 0이 아닌 경우 이벤트 추가
-                  if (trans.calExpense !== 0) {
-                      transformedData.push({
-                          title: `-${numberWithCommas(trans.calExpense)}`,
-                          start: trans.calDate,
-                          extendedProps: {
-                              type: '지출',
-                              expense: trans.calExpense
-                          }
-                      });
-                  }
-              });
-          
-              successCallback(transformedData);
+      events: function(info, successCallback, failureCallback) {
+      // 현재 달력 연월 추출
+      let date = new Date(info.start);
+      date.setDate(date.getDate() + 15);  // 중간값 작업
+      let calYear = date.getFullYear();
+      let calMonth = date.getMonth() + 1;
+      // alert("events 함수에서 읽은 연월:" + calYear + " " + calMonth);
+  
+      $.ajax({
+          url: "/secretary/cashbook/trans/loadCalInEx",
+          type: "GET",
+          data: { calYear: calYear, calMonth: calMonth },
+          dataType: "JSON",
+          success: (data) => {
+            // console.log(calYear + "년 " + calMonth + "월의 데이터:" + JSON.stringify(data));
+            let transformedData = [];
+        
+            data.forEach(trans => {
+                
+              // 수입이 0이 아닌 경우 이벤트 추가
+              if (trans.calIncome !== 0) {
+                  transformedData.push({
+                      title: `+${numberWithCommas(trans.calIncome)}`,
+                      start: trans.calDate,
+                      extendedProps: {
+                        type: '수입',
+                        income: trans.calIncome
+                      }
+                  });
+              }
+              
+              // 지출이 0이 아닌 경우 이벤트 추가
+              if (trans.calExpense !== 0) {
+                  transformedData.push({
+                      title: `-${numberWithCommas(trans.calExpense)}`,
+                      start: trans.calDate,
+                      extendedProps: {
+                        type: '지출',
+                        expense: trans.calExpense
+                      }
+                  });
+              }
+            });
+        
+            successCallback(transformedData);
           },
           error: (e) => {
               alert('달력 수입지출 가져오기 실패');
@@ -66,7 +66,29 @@ $(document).ready(function() {
       });
     },
     eventClick: function(info) {
-        alert('클릭했어염');
+      // 현재 달력 연월 추출
+      let eventDate = new Date(info.event.start); // 이벤트의 시작 날짜를 가져옵니다.
+      let calYear = eventDate.getFullYear();
+      let calMonth = eventDate.getMonth() + 1; // 월은 0부터 시작하므로 1을 더해줍니다.
+      let calDate = eventDate.getDate();
+      let transType = info.event.extendedProps.type;
+      // alert(calYear + "년 " + calMonth + "월 " + calDate + "일의 " + transType + "을 클릭");
+
+      // 해당 날짜의 해당 유형의 거래내역을 가져오는 ajax 함수
+      $.ajax({
+        url: '/secretary/cashbook/trans/getDetailList',
+        type: 'GET',
+        data: { calYear: calYear, calMonth: calMonth, calDate: calDate, transType: transType },
+        dataType: 'JSON',
+        success: (data) => {
+          console.log(JSON.stringify(data));
+          
+        },
+        error: (e) => {
+          alert(JSON.stringify(e));
+          alert("달력 내역 상세 목록 전송 실패");
+        }
+      });
     }
   
   });
