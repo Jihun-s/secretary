@@ -292,7 +292,7 @@
                             $('#foodExpiryDate').val(foodItem.foodExpiryDate);
                             $('#foodMadeDate').val(foodItem.foodMadeDate);
 
-                            const submitBtn = $('#manualInputModal .btn-primary');
+                            const submitBtn = $('#manualInputModal .addsubmitBtn');
                             submitBtn.text('Update');
                             submitBtn.removeClass('btn-primary').addClass('btn-warning');
 
@@ -652,11 +652,28 @@
                         url: 'fridgeFood/food/' + foodId,
                         type: 'GET',
                         success: function (data) {
+                            const imagePath = data.foodSavedFile
+                                ? 'fridgeFood/image/' + data.foodSavedFile
+                                : 'images/fridgeimg/DefaultFood.webp';
+                            const madeDate = data.foodMadeDate ? data.foodMadeDate : '미입력';
+
                             $('#foodModal .modal-body').html(`
-                                                                                                    <p><strong>Food Name:</strong> ${data.foodName}</p>
-                                                                                                    <p><strong>Expiry Date:</strong> ${data.foodExpiryDate}</p>
-                                                                                                    <!-- Add other details as needed -->
-                                                                                                    `);
+                <div class="row">
+                    <div class="col-md-6">
+                        <img src="${imagePath}" alt="${data.foodName}" class="img-fluid">
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>음식의 이름:</strong> ${data.foodName}</p>
+                        <p><strong>카테고리:</strong> ${data.foodCategory}</p>
+                        <p><strong>수량:</strong> ${data.foodQuantity}</p>
+                        <p><strong>구매일:</strong> ${
+                            data.foodPurchaseDate ? data.foodPurchaseDate : data.foodInputDate
+                        }</p>
+                        <p><strong>제조일:</strong> ${madeDate}</p>
+                        <p><strong>유효기간:</strong> ${data.foodExpiryDate}</p>
+                    </div>
+                </div>
+            `);
                             $('#foodModal').modal('show');
                         },
                         error: function (error) {
@@ -664,6 +681,7 @@
                         },
                     });
                 });
+
                 $('#foodModal .btn-danger').on('click', function () {
                     $('#foodModal').modal('hide');
                 });
@@ -846,30 +864,179 @@
                             modalBody.empty(); // 기존 목록 삭제
 
                             // 기본 카테고리 출력
+                            modalBody.append(
+                                '<div class="card mb-4"><div class="card-header"><b>기본 카테고리</b></div><ul class="list-group list-group-flush default-categories">'
+                            );
                             ['일반', '야채', '생선', '육류', '과일'].forEach(function (categoryName) {
-                                modalBody.append(`
-            <div class="category-item">
-                <span class="category-name">${categoryName}</span>
-                <!-- 기본 카테고리는 수정/삭제 불가능하므로 아이콘을 출력하지 않습니다. -->
-            </div>
-        `);
+                                modalBody.find('.default-categories').append(`
+        <li class="list-group-item d-flex align-items-center">
+            <span class="category-name flex-grow-1">${categoryName}</span>
+            <!-- 기본 카테고리는 수정/삭제 불가능하므로 아이콘을 출력하지 않습니다. -->
+        </li>
+    `);
                             });
+                            modalBody.append('</ul></div>');
 
                             // 사용자 정의 카테고리 출력
+                            modalBody.append('<div class="user-defined-categories">');
                             categories.forEach(function (category) {
                                 modalBody.append(`
-            <div class="category-item">
-                <span class="category-name">${category.foodCategory}</span>
-                <img src="images/fridgeimg/ModifyName.png" style="height:25px; width:25px" alt="수정" class="category-modal-editIcon modal-category-editIcon" data-category-id="${category.categoryId}">
-                <img src="images/fridgeimg/Red_X.png" style="height:25px; width:25px" alt="삭제" class="category-modal-editIcon modalcategory-deleteIcon" data-category-id="${category.categoryId}">
-            </div>
-        `);
+    <div class="category-item d-flex align-items-center mb-2 p-2 border rounded">
+        <span class="category-name flex-grow-1 p-2 border rounded">${category.foodCategory}</span>
+        <img src="images/fridgeimg/ModifyName.png" style="height:25px; width:25px; margin-left: 5px;" alt="수정" class="category-modal-editIcon modal-category-editIcon" data-category-id="${category.categoryId}">
+        <img src="images/fridgeimg/Red_X.png" style="height:25px; width:25px; margin-left: 5px;" alt="삭제" class="category-modal-editIcon modal-category-deleteIcon" data-category-id="${category.categoryId}">
+    </div>
+`);
                             });
+                            modalBody.append('</div>');
                         },
                         error: function (e) {},
                     });
                 }
+
+                // 모달 내부의 카테고리 수정 아이콘 클릭 이벤트
+                $(document).on('click', '.modal-category-editIcon', function () {
+                    const categoryItem = $(this).closest('.category-item');
+                    const categoryNameSpan = categoryItem.find('.category-name');
+                    const categoryName = categoryNameSpan.text();
+
+                    // 기존 카테고리 이름을 숨기고, 입력란과 버튼을 같은 행에 추가합니다.
+                    categoryNameSpan
+                        .after(
+                            `
+    <div class="d-flex align-items-center justify-content-between" style="width: 100%;">
+        <input type="text" class="form-control category-input" value="${categoryName}" style="flex: 1; margin-right: 5px;" />
+        <div>
+            <button class="btn btn-sm btn-warning confirm-edit">수정</button>
+            <button class="btn btn-sm btn-outline-secondary cancel-edit" style="margin-left: 5px;">취소</button>
+        </div>
+    </div>
+`
+                        )
+                        .hide();
+
+                    $(this).hide();
+                    categoryItem.find('.modal-category-deleteIcon').hide();
+                });
+
+                //음식 카테고리 수정 기능!
+                $(document).on('click', '.cancel-edit', function () {
+                    const categoryItem = $(this).closest('.category-item');
+
+                    categoryItem.find('.d-flex').remove();
+
+                    categoryItem.find('.category-name').show();
+                    categoryItem.find('.modal-category-editIcon, .modal-category-deleteIcon').show();
+                });
+
+                $(document).on('click', '.confirm-edit', function () {
+                    const categoryItem = $(this).closest('.category-item');
+                    const newCategoryName = categoryItem.find('.category-input').val();
+                    const originalCategoryName = categoryItem.find('.category-name').text();
+
+                    // 기본 카테고리 중복 확인
+                    if (DEFAULT_CATEGORIES.includes(newCategoryName)) {
+                        alert('기본 카테고리명과 중복됩니다. 다른 이름을 선택해주세요.');
+                        return;
+                    }
+
+                    // 데이터베이스 중복 확인
+                    $.ajax({
+                        url: 'foodCategories/checkCategoryDuplication',
+                        type: 'POST',
+                        dataType: 'json',
+                        data: JSON.stringify({
+                            foodCategory: newCategoryName,
+                        }),
+                        contentType: 'application/json',
+                        success: function (isDuplicated) {
+                            if (isDuplicated) {
+                                alert('이미 존재하는 카테고리 이름입니다.');
+                                return;
+                            }
+
+                            // 해당 카테고리를 사용하는 음식의 수 확인
+                            $.ajax({
+                                url: 'foodCategories/countFoodsUsingCategory',
+                                type: 'POST',
+                                dataType: 'json',
+                                data: JSON.stringify({
+                                    foodCategory: originalCategoryName,
+                                }),
+                                contentType: 'application/json',
+                                success: function (count) {
+                                    const isConfirmed = confirm(
+                                        `총 ${count}개의 음식이 해당 카테고리 명을 사용중입니다. 일괄 변경하시겠습니까?`
+                                    );
+                                    if (isConfirmed) {
+                                        updateCategory(originalCategoryName, newCategoryName);
+                                    }
+                                },
+                            });
+                        },
+                    });
+                });
+
+                function updateCategory(originalName, newName) {
+                    $.ajax({
+                        url: 'foodCategories/updateCategory',
+                        type: 'POST',
+                        data: {
+                            originalName: originalName,
+                            newName: newName,
+                        },
+                        success: function () {
+                            alert('카테고리가 성공적으로 수정되었습니다.');
+                            location.reload(); // 페이지 새로고침
+                        },
+                    });
+                }
+
+                //삭제
+                $(document).on('click', '.modal-category-deleteIcon', function () {
+                    const categoryItem = $(this).closest('.category-item');
+                    const categoryToDelete = categoryItem.find('.category-name').text();
+
+                    // 해당 카테고리를 사용하는 음식의 수 확인
+                    $.ajax({
+                        url: 'foodCategories/countFoodsUsingCategory',
+                        type: 'POST',
+                        dataType: 'json',
+                        data: JSON.stringify({
+                            foodCategory: categoryToDelete,
+                        }),
+                        contentType: 'application/json',
+                        success: function (count) {
+                            const isConfirmed = confirm(
+                                `총 ${count}개의 음식이 '${categoryToDelete}' 카테고리 명을 사용중입니다. 모든 음식을 '일반' 카테고리로 일괄 변경하시겠습니까?`
+                            );
+
+                            if (isConfirmed) {
+                                deleteCategory(categoryToDelete);
+                            }
+                        },
+                    });
+                });
+
+                function deleteCategory(categoryName) {
+                    $.ajax({
+                        url: 'foodCategories/deleteCategory',
+                        type: 'POST',
+                        data: {
+                            foodCategory: categoryName,
+                        },
+                        success: function () {
+                            alert('카테고리가 성공적으로 삭제되었습니다.');
+                            location.reload(); // 페이지 새로고침
+                        },
+                        error: function () {
+                            alert('카테고리 삭제에 실패하였습니다.');
+                        },
+                    });
+                }
             });
+            //Ready_End;
+
             function showFoodsByCategory(selectedCategory) {
                 // 모든 음식 목록에서 선택된 카테고리에 해당하는 음식만 화면에 표시
                 $('.food-item').each(function () {
@@ -1686,7 +1853,10 @@
                                                                 >
                                                                     Close
                                                                 </button>
-                                                                <button class="btn btn-primary" type="submit">
+                                                                <button
+                                                                    class="btn btn-primary addsubmitBtn"
+                                                                    type="submit"
+                                                                >
                                                                     Submit
                                                                 </button>
                                                             </div>
