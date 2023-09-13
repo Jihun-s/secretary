@@ -46,5 +46,4 @@ public interface ClosetDAO {
 	//차트데이터 값 불러오기
 	HashMap<String, BigDecimal> getChartValue(int closetNum);
 
-
 }
