@@ -23,4 +23,8 @@ public interface UserService {
     void resetPassword(User user, String newPassword);
     //관리자 기능 유저목록-인찬
 	ArrayList<User> findALL();
+	//관리자 기능 유저정보 편집
+	int editUser(User updatedUser);
+	//관리자 기능 유저 정보 열람
+	//User readUser(String userId);
 }

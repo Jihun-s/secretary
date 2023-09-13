@@ -1,7 +1,10 @@
 package net.softsociety.secretary.domain;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Date;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -43,6 +46,10 @@ public class User implements UserDetails{
     public String getUsername() {
         return userEmail;
     }
+    
+    public String getUserRealName() {
+    	return userName;
+    }
 
     @Override
     public boolean isAccountNonExpired() {
@@ -63,4 +70,16 @@ public class User implements UserDetails{
     public boolean isEnabled() {
         return enabled;
     }
+    //생일 yyyyMMDD 형식으로 수정
+    public String formatBirthday() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date parsedDate = null;
+        try {
+            parsedDate = dateFormat.parse(this.birthday);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return dateFormat.format(parsedDate);
+    }
+
 }

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script th:src="@{/js/jquery-3.7.0.js}"></script>
+<script>
+function check() {
+	let con1 = document.getElementById('userNickname');
+	let con2 = document.getElementById('sex');
+	let con3 = document.getElementById('rolename');
+	let con4 = document.getElementById('enabled');
+	let con5 = document.getElementById('familyId');
+	
+	if (con1.value == '' || con2.value =='' || con3.value ==''|| con4.value ==''|| con5.value =='') {
+		alert('내용을 입력하세요');
+		return false;
+	}
+	return true;
+}
+</script>
+</head>
+<body>
+<h1>수정</h1>
+<form th:action="@{/admin/editUser}" method="post" onsubmit="return check();">
+
+    <!-- 기존 게시글 정보를 Thymeleaf 변수로 받아옴 -->
+    
+    사용자ID<input type="text" name="userId" id="userId" th:value="${u.userId}" readonly><br>
+    
+    이메일<input type="text" name="userEmail" id="userEmail" th:value="${u.userEmail}" readonly><br>
+    
+    이름<input type="text" name="userRealName" id="userRealName" th:value="${u.userRealName}" readonly><br>   
+    
+    닉네임<input type="text" name="userNickname" id="userNickname" th:value="${u.userNickname}"maxlength="19"><br>  
+    
+    생일<input type = "text" name="birthday" id="birthday" th:value="${u.formatBirthday()}" readonly><br>
+    
+    성별<input type="radio" name="sex" id="male" value="1" th:checked="${u.sex == 1}">남자
+       <input type="radio" name="sex" id="female" value="0" th:checked="${u.sex == 0}">여자<br>
+                                                   
+    권한<select name="rolename" id="rolename">
+    	<option value="ROLE_ADMIN" th:selected="${u.rolename == 'ROLE_ADMIN'}">관리자</option>
+    	<option value="ROLE_USER1" th:selected="${u.rolename == 'ROLE_USER1'}">가장</option>
+    	<option value="ROLE_USER2" th:selected="${u.rolename == 'ROLE_USER2'}">구성원</option>
+	   </select><br>
+    
+   enabled<input type="radio" name="enabled" id="enabled" value="true" th:checked="${u.enabled}" />허용
+          <input type="radio" name="enabled" id="disabled" value="false" th:checked="${!u.enabled}" />정지 <br>
+          
+	familyId<input type = "text" name="familyId" id="familyId" th:value="${u.familyId}"><br>
+	
+    <input type="submit" value="수정">   
+</form>
+
+<form th:action="@{/admin/list}" method="get">
+	 <input type="submit" value="취소">
+</form>							   
+							
+</body>
+</html>

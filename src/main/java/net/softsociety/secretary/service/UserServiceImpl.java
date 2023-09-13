@@ -2,6 +2,7 @@ package net.softsociety.secretary.service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import lombok.extern.slf4j.Slf4j;
 import net.softsociety.secretary.dao.UserMapper;
+import net.softsociety.secretary.domain.Board;
 import net.softsociety.secretary.domain.User;
 
 @Slf4j
@@ -143,5 +145,17 @@ public class UserServiceImpl implements UserService {
 		ArrayList<User> findeALL = userMapper.findALL();
 		return findeALL;
 	}
+	//관리자 기능 유저 정보 편집
+	@Override
+	public int editUser(User updatedUser) {
+		int n= userMapper.editUser(updatedUser);
+		return n;
+	}
+	//관리자기능 유저정보 열람
+//	@Override
+//	public User readUser(String userId) {
+//		User u = userMapper.readUser(userId);
+//		return u;
+//	}
 
 }
