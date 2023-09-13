@@ -39,7 +39,7 @@ public class logEventListener implements ApplicationListener<AbstractAuthenticat
     }
 
     private void handleLoginEvent(AuthenticationSuccessEvent event) {
-        // 로그인 로그 기록
+        // 로그인 기록
         String userEmail = event.getAuthentication().getName();
         log.debug("로그인 성공 - 사용자: {}", userEmail);
         User user = userService.findByEmailOrUserId(userEmail);
@@ -52,7 +52,7 @@ public class logEventListener implements ApplicationListener<AbstractAuthenticat
     }
 
     private void handleLogoutEvent(LogoutSuccessEvent event) {
-        // 로그아웃 로그 기록
+        // 로그아웃기록
         String userEmail = event.getAuthentication().getName();
         log.debug("로그아웃 - 사용자: {}", userEmail);
         User user = userService.findByEmailOrUserId(userEmail);

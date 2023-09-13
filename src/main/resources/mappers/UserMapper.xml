@@ -50,4 +50,19 @@
 	<select id="findALL" resultType="User">
 	select * from secretary_user
 	</select>
+	<!-- 유저 정보 열람 -->
+	<select id="readUser" parameterType="String" resultType="User">
+	select*from secretary_user where user_id = #{userId}
+	</select>
+	<!-- 관리자 기능 유저 정보 편집 -->
+	<update id = "editUser" parameterType="User">
+	UPDATE secretary_user
+	SET  
+		 user_nickname = #{userNickname}
+         ,enabled = #{enabled}
+         ,rolename = #{rolename}
+         ,family_id = #{familyId}
+         ,sex  = #{sex}     
+	WHERE user_id = #{userId}
+	</update>
 </mapper>

@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -33,4 +35,34 @@ public class AdminController {
 		
 		return  userList;
 	}
+	//회원정보 열람
+	@GetMapping("readUser")
+	public String readUser(String userId, Model m) {
+		log.debug("userId:  {}" , userId);
+		User u = userservice.findByEmailOrUserId(userId);
+		m.addAttribute("user", u);
+		return "adminView/readUser";
+	}
+	//수정 요청
+	@GetMapping("editUser")
+	public String editUser(String userId, Model m) {
+		log.debug("userId:  {}" , userId);
+		User u = userservice.findByEmailOrUserId(userId);
+		
+		m.addAttribute("u", u);
+		return "adminView/editUser";
+	}
+	//회원정보 수정
+	@PostMapping("editUser")
+	public String editUser(@ModelAttribute User updatedUser) {
+		int enabled;
+		if(updatedUser.isEnabled()==true) {
+			enabled = 1;
+		}else enabled =0;
+		userservice.editUser(updatedUser);
+		
+		return "redirect:/admin/list";
+	}
+
+
 }
