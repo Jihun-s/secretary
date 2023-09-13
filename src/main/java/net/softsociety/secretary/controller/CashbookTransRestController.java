@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.extern.slf4j.Slf4j;
 import net.softsociety.secretary.dao.CashbookDAO;
 import net.softsociety.secretary.dao.UserMapper;
+import net.softsociety.secretary.domain.CalInEx;
 import net.softsociety.secretary.domain.Category1;
 import net.softsociety.secretary.domain.Category2;
 import net.softsociety.secretary.domain.Transaction;
@@ -276,7 +277,28 @@ public class CashbookTransRestController {
 		return result;
 	}
 	
-	
+	/** 달력 일별 수입 지출 총액 */
+	@GetMapping("loadCalInEx")
+	public ArrayList<CalInEx> loadCalInEx(
+			int calYear
+			, int calMonth
+			, Model model) {
+		log.debug("로드캘인엑스 컨트롤러 도착스");
+		
+		// DAO에 보낼 map 만들기
+		User loginUser = (User) model.getAttribute("loginUser");
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("userId", loginUser.getUserId());
+		map.put("familyId", loginUser.getFamilyId());
+		map.put("calYear", calYear);
+		map.put("calMonth", calMonth);
+		log.debug("DAO에서 일별 수입지출액 뽑아올 map:{}", map);
+		
+		ArrayList<CalInEx> result = dao.loadCalInEx(map);
+		log.debug("컨트롤러에 가져온 일별 수입지출액 목록:{}", result);
+		
+		return result;
+	}
 	
 }
 	

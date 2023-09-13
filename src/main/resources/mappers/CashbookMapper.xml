@@ -330,15 +330,15 @@ INSERT INTO
 		budget_month = #{budgetMonth}
 		AND budget_year = #{budgetYear}
 		AND family_id = #{familyId} -->
-		SELECT 
-		    CASE 
-		        WHEN COUNT(*) > 0 THEN 1
-		        ELSE 0
-		    END AS exists_flag
-		FROM Secretary_Budget
-		WHERE family_id = ${familyId}
-		AND budget_year = ${budgetYear}
-		AND budget_month = #{budgetMonth}
+	SELECT 
+	    CASE 
+	        WHEN COUNT(*) > 0 THEN 1
+	        ELSE 0
+	    END AS exists_flag
+	FROM Secretary_Budget
+	WHERE family_id = ${familyId}
+	AND budget_year = ${budgetYear}
+	AND budget_month = #{budgetMonth}
 </select>
 
 <!-- 예산 가져오기 -->
@@ -395,15 +395,29 @@ INSERT INTO
 <!-- 예산 평균, 직전 3개월 예산 -->
 <select id="selectBudgetAvgXXX" parameterType="map" resultType="map">
 	SELECT
-    AVG(budget_amount) AS budgetAvg,
-    MAX(CASE WHEN budget_month = #{budgetMonth}-1 THEN budget_amount END) AS budgetAmountX,
-    MAX(CASE WHEN budget_month = #{budgetMonth}-2 THEN budget_amount END) AS budgetAmountXx,
-    MAX(CASE WHEN budget_month = #{budgetMonth}-3 THEN budget_amount END) AS budgetAmountXxx
+	    AVG(budget_amount) AS budgetAvg,
+	    MAX(CASE WHEN budget_month = #{budgetMonth}-1 THEN budget_amount END) AS budgetAmountX,
+	    MAX(CASE WHEN budget_month = #{budgetMonth}-2 THEN budget_amount END) AS budgetAmountXx,
+	    MAX(CASE WHEN budget_month = #{budgetMonth}-3 THEN budget_amount END) AS budgetAmountXxx
+	FROM
+	    Secretary_Budget
+	WHERE
+	    family_id = #{familyId} AND
+	    budget_year = #{budgetYear} AND
+	    budget_month BETWEEN #{budgetMonth}-3 AND #{budgetMonth}-1
+</select>
+
+<!-- 일별 수입지출액 -->
+<select id="loadCalInEx" parameterType="hashmap" resultType="CalInEx">
+SELECT 
+    DISTINCT TO_CHAR(trans_date, 'YYYY-MM-DD') AS cal_date,
+    SUM(CASE WHEN trans_type = '수입' THEN trans_amount ELSE 0 END) OVER(PARTITION BY to_char(trans_date, 'YYYYMMDD')) AS cal_income,
+    SUM(CASE WHEN trans_type = '지출' THEN trans_amount ELSE 0 END) OVER(PARTITION BY to_char(trans_date, 'YYYYMMDD')) AS cal_expense
 FROM
-    Secretary_Budget
+    Secretary_Transaction
 WHERE
-    family_id = #{familyId} AND
-    budget_year = #{budgetYear} AND
-    budget_month BETWEEN #{budgetMonth}-3 AND #{budgetMonth}-1
+    family_id = #{familyId}
+    AND EXTRACT(YEAR FROM trans_date) = #{calYear}
+    AND EXTRACT(MONTH FROM trans_date) = #{calMonth}
 </select>
 </mapper>

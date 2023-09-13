@@ -36,10 +36,10 @@ $(document).ready(function () {
       // 현재 달력의 년도와 월을 추출
       let date = new Date(info.start);
       let schYear = date.getFullYear();
-      let schMonth = date.getMonth() + 1;  // JavaScript의 월은 0부터 시작하기 때문에 1을 더합니다.
+      let schMonth = date.getMonth() + 1;
   
       // loadSchedule 함수 호출
-      loadSchedule(schYear, schMonth+1, "일자별");  // 마지막 인자("일자별")는 원하는 그룹화 방식을 사용하세요.
+      loadSchedule(schYear, schMonth+1, "일자별");
   
       $.ajax({
         url: "/secretary/schedule/loadSch",
@@ -130,7 +130,7 @@ $(document).ready(function () {
       $('#schDetailModal').modal('show');
     },
 
-  });
+  }); 
 
   /* schType select 변경 */
   $('#schTypeSelect, #schTypeSelectInput').change(function() {

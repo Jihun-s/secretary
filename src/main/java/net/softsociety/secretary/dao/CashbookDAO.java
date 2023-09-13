@@ -9,6 +9,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import lombok.extern.slf4j.Slf4j;
 import net.softsociety.secretary.domain.Budget;
+import net.softsociety.secretary.domain.CalInEx;
 import net.softsociety.secretary.domain.Category1;
 import net.softsociety.secretary.domain.Category2;
 import net.softsociety.secretary.domain.Transaction;
@@ -97,5 +98,8 @@ public interface CashbookDAO {
 
 	/** 총수입 총지출 예산용 */
 	HashMap<String, Object> selectInExSumMonthBudget(HashMap<String, Object> map);
+
+	/** 일별 수입지출액 */
+	ArrayList<CalInEx> loadCalInEx(HashMap<String, Object> map);
 
 }

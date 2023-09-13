@@ -67,6 +67,13 @@ public class CashbookPageController {
 		
 		return "cashbookView/transaction";
 	}
+	
+	/** 내역 달력 */
+	@GetMapping("transCal")
+	public String cashbookTransCal() {
+		
+		return "cashbookView/transactionCalendar";
+	}
 
 	/** 예산 */
 	@GetMapping("budget")
