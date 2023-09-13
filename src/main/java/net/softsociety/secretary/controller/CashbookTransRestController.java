@@ -277,6 +277,8 @@ public class CashbookTransRestController {
 		return result;
 	}
 	
+
+	
 	/** 달력 일별 수입 지출 총액 */
 	@GetMapping("loadCalInEx")
 	public ArrayList<CalInEx> loadCalInEx(
@@ -296,6 +298,33 @@ public class CashbookTransRestController {
 		
 		ArrayList<CalInEx> result = dao.loadCalInEx(map);
 		log.debug("컨트롤러에 가져온 일별 수입지출액 목록:{}", result);
+		
+		return result;
+	}
+	
+	/** 달력 상세 목록 */
+	@GetMapping("getDetailList")
+	public ArrayList<Transaction> getDetailList(
+			Model model
+			, int calYear
+			, int calMonth
+			, int calDate
+			, String transType) {
+		log.debug("{}년 {}월 {}일 {}유형 상세목록 불러오기", calYear, calMonth, calDate, transType);
+		
+		// DAO에 보낼 map 만들기
+		User loginUser = (User) model.getAttribute("loginUser");
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("userId", loginUser.getUserId());
+		map.put("familyId", loginUser.getFamilyId());
+		map.put("calYear", calYear);
+		map.put("calMonth", calMonth);
+		map.put("calDate", calDate);
+		map.put("transType", transType);
+		log.debug("DAO에서 일별 상세내역 뽑아올 map:{}", map);
+		
+		ArrayList<Transaction> result = dao.selectDetailTrans(map);
+		log.debug("컨트롤러에 가져온 일별 {} 목록:{}", transType, result);
 		
 		return result;
 	}

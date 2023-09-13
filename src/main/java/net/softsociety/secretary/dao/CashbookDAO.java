@@ -102,4 +102,7 @@ public interface CashbookDAO {
 	/** 일별 수입지출액 */
 	ArrayList<CalInEx> loadCalInEx(HashMap<String, Object> map);
 
+	/** 내역 상세 목록 조회 */
+	ArrayList<Transaction> selectDetailTrans(HashMap<String, Object> map);
+
 }

@@ -12,25 +12,24 @@ $(document).ready(function() {
 
     // 목록 불러오기
     init();
-    $('#prevYear, #prevMonth, #nextYear, #nextMonth').click(init);
+    $('body').on('click', '#prevYear, #prevMonth, #nextYear, #nextMonth', init);
 
     $("#transCategoriesDiv").hide();
     $("#transSearchCategory2Div").hide();
 
     // 내역 검증 후 입력
-    $('#setTransBt').click(setTrans);
-
+    $('body').on('click', '#setTransBt', setTrans);
     // 모달 검증 후 내역 수정
-    $('#setTransBtModal').click(updateTrans); 
+    $('body').on('click', '#setTransBtModal', updateTrans); 
 
    // 거래유형 클릭 이벤트 (대분류 출력)
-   $("input[name='transType']").change(function() {
+   $('body').on('change', "input[name='transType']", function() {
     showTransCategoriesDiv();
     loadMainCategories($(this).val());
    });
 
    // 대분류 선택 이벤트 (소분류 출력 or 기본값)
-   $("#cate1Name").change(function() {
+   $('body').on('change', "#cate1Name", function() {
         const selectedCate1Name = $(this).val();
         if (selectedCate1Name !== "대분류를 선택하세요") {
             loadSubCategories(selectedCate1Name);
@@ -41,13 +40,13 @@ $(document).ready(function() {
    });
 
    // 모달 거래유형 클릭 이벤트 (대분류 출력)
-   $("input[name='transType']").change(function() {
+   $('body').on('change', "input[name='transType']", function() {
     showTransCategoriesDivModal();
     loadMainCategoriesModal($(this).val());
    });
 
    // 모달 대분류 선택 이벤트 (소분류 출력 or 기본값)
-   $("#cate1NameModal").change(function() {
+   $('body').on('change', "#cate1NameModal", function() {
         const selectedCate1NameModal = $(this).val();
         if (selectedCate1NameModal !== "대분류를 선택하세요") {
             loadSubCategoriesModal(selectedCate1NameModal);
@@ -59,7 +58,7 @@ $(document).ready(function() {
    });
 
     // 소분류 선택 이벤트 (소분류 먼저 선택할 수 없음)
-    $("#cate2Name").click(function() {
+    $('body').on('click', "#cate2Name", function() {
         if ($("input[name='transType']:checked").length === 0) {
             alert("거래 유형을 먼저 선택하세요.");
             return;
@@ -70,7 +69,7 @@ $(document).ready(function() {
     });
 
     // 모달 소분류 선택 이벤트 (소분류 먼저 선택할 수 없음)
-    $("#cate2NameModal").click(function() {
+    $('body').on('click', "#cate2NameModal", function() {
         if ($("input[name='transType']:checked").length === 0) {
             alert("거래 유형을 먼저 선택하세요.");
             return;
@@ -81,7 +80,7 @@ $(document).ready(function() {
     });
 
     // 대분류 커스텀 카테고리 추가
-    $('#cate1Name').change(function() {
+    $('body').on('change', '#cate1Name', function() {
         const selectedOptionText = $(this).find("option:selected").text();
 
         // 입력한 선택지가 '직접입력'인 경우
@@ -110,7 +109,7 @@ $(document).ready(function() {
     });
 
     // 1000단위 콤마 찍기
-    $('#transAmount').on('input', function() {
+    $('body').on('input', '#transAmount', function() {
         let amount = $(this).val().replace(/,/g, '');  // 현재 입력된 값에서 콤마를 제거합니다.
         
         if (!amount) {  // 입력값이 없는 경우
@@ -127,7 +126,7 @@ $(document).ready(function() {
     });   
     
     // 모달 1000단위 콤마 찍기
-    $('#transAmountModal').on('input', function() {
+    $('body').on('input', '#transAmountModal', function() {
         let amount = $(this).val().replace(/,/g, '');  // 현재 입력된 값에서 콤마를 제거합니다.
         
         if (!amount) {  // 입력값이 없는 경우
@@ -146,7 +145,7 @@ $(document).ready(function() {
     
     // 검색용 전체 대분류 & 에 맞는 소분류 출력
     loadMainCategoriesSearch();
-    $("#transSearchCategory1Div").change(function() {
+    $('body').on('change', "#transSearchCategory1Div", function() {
         selectConditionTrans();
         const selectedCate1NameSearch = $(this).val();
         if (selectedCate1NameSearch !== "대분류를 선택하세요") {
@@ -159,13 +158,13 @@ $(document).ready(function() {
     
     // 조건 & 검색 & 정렬 
     // 검색어 입력
-    $('#searchSubmitBt').click(selectConditionTrans);
-    $('#selectCondition input, #selectCondition select').change(selectConditionTrans);
-    $('#transSearchCheckIncome').click(selectConditionTrans);
-    $('#transSearchCheckExpense').click(selectConditionTrans);
-    $('#transSearchCheckUserId').click(selectConditionTrans);
-    $('#transSearchCategoriesDiv').click(selectConditionTrans);
-    $('#sortBy').change(selectConditionTrans);
+    $('body').on('click', '#searchSubmitBt', selectConditionTrans);
+    $('body').on('change', '#selectCondition input, #selectCondition select', selectConditionTrans);
+    $('body').on('click', '#transSearchCheckIncome', selectConditionTrans);
+    $('body').on('click', '#transSearchCheckExpense', selectConditionTrans);
+    $('body').on('click', '#transSearchCheckUserId', selectConditionTrans);
+    $('body').on('click', '#transSearchCategoriesDiv', selectConditionTrans);
+    $('body').on('change', '#sortBy', selectConditionTrans);
 
 });
 
