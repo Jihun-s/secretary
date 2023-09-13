@@ -91,6 +91,20 @@
 	        </if>
 	    WHERE FOOD_ID = #{foodId}
 	</update>
+	
+	<!-- 해당 카테고리를 사용하는 음식 수 확인 -->
+	<select id="countFoodsUsingCategory" resultType="int" parameterType="net.softsociety.secretary.domain.FoodCategory">
+	    SELECT COUNT(*) FROM Secretary_FRIDGE_FOOD F
+	    JOIN Secretary_Fridge R ON F.FRIDGE_ID = R.fridge_id
+	    WHERE F.FOOD_CATEGORY = #{foodCategory} AND R.family_id = #{familyId}
+	</select>
+	
+	<update id="updateFoodsCategoryName" parameterType="map">
+	    UPDATE Secretary_FRIDGE_FOOD
+	    SET FOOD_CATEGORY = #{newName}
+	    WHERE FOOD_CATEGORY = #{originalName}
+	    AND FRIDGE_ID IN (SELECT fridge_id FROM Secretary_Fridge WHERE family_id = #{familyId})
+	</update>
 
 	<delete id="deleteFridgeFood" parameterType="int">
 	    DELETE FROM SECRETARY_FRIDGE_FOOD WHERE FOOD_ID = #{foodId}

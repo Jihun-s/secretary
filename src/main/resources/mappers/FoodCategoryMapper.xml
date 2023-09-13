@@ -15,15 +15,22 @@
     </select>
 
     <!-- 카테고리 수정 -->
-    <update id="updateCategory" parameterType="FoodCategory">
+    <update id="updateCategoryName" parameterType="map">
         UPDATE Secretary_FOOD_CATEGORY
-        SET FOOD_CATEGORY = #{foodCategory}
-        WHERE CATEGORY_ID = #{categoryId} AND FAMILY_ID = #{familyId}
+        SET FOOD_CATEGORY = #{newName}
+        WHERE FOOD_CATEGORY = #{originalName} AND FAMILY_ID = #{familyId}
     </update>
+    
+    <!-- 카테고리 중복 확인 -->
+    <select id="checkCategoryDuplication" resultType="int">
+        SELECT COUNT(*) FROM Secretary_FOOD_CATEGORY
+        WHERE FOOD_CATEGORY = #{foodCategory} AND FAMILY_ID = #{familyId}
+    </select>
 
     <!-- 카테고리 삭제 -->
-    <delete id="deleteCategory" parameterType="int">
-        DELETE FROM Secretary_FOOD_CATEGORY WHERE CATEGORY_ID = #{categoryId}
+    <delete id="deleteCategoryName" parameterType="FoodCategory">
+        DELETE FROM Secretary_FOOD_CATEGORY
+    	WHERE FOOD_CATEGORY = #{foodCategory} AND FAMILY_ID = #{familyId}
     </delete>
     
     <!-- 존재 여부 -->
