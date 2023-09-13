@@ -25,4 +25,7 @@ public interface ScheduleDAO {
 	/** 일정 하나 찾기 */
 	Schedule selectOne(HashMap<String, Object> map);
 
+	/** 일정 목록 불러오기 오른쪽 */
+	ArrayList<Schedule> selectAllScheList(HashMap<String, Object> map);
+
 }

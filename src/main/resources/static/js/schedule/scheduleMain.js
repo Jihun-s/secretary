@@ -9,14 +9,20 @@ $(document).ready(function () {
   let curDate = now.getDate().toString().padStart(2, '0');
   let curDateFormat = curYear + '-' + curMonth + '-' + curDate;  
 
-  /* 일자별 데이터 가져오기 */
-  loadSchedule('일자별');
-
   /* 그루핑 라디오 박스 이벤트 */
   $('input[name="groupBy"]').change(function() {
+    // FullCalendar의 현재 날짜 얻기
+    let currentCalendarDate = calendar.getDate();
+    let schYear = currentCalendarDate.getFullYear();
+    let schMonth = currentCalendarDate.getMonth() + 1;  // JavaScript의 월은 0부터 시작하기 때문에 1을 더합니다.
+    
+    // 라디오 버튼에서 선택된 값 얻기
     let groupByValue = $(this).val();
-    loadSchedule(groupByValue);
+    
+    // 현재 달력의 연/월과 선택된 그룹 방식을 사용하여 loadSchedule 호출
+    loadSchedule(schYear, schMonth, groupByValue);
   });
+
 
   /** 풀캘린더 */
   let calendar = new FullCalendar.Calendar(calendarEl, {
@@ -27,6 +33,14 @@ $(document).ready(function () {
     businessHours: false,
     dayMaxEvents: false,
     events: function(info, successCallback, failureCallback) {
+      // 현재 달력의 년도와 월을 추출
+      let date = new Date(info.start);
+      let schYear = date.getFullYear();
+      let schMonth = date.getMonth() + 1;  // JavaScript의 월은 0부터 시작하기 때문에 1을 더합니다.
+  
+      // loadSchedule 함수 호출
+      loadSchedule(schYear, schMonth+1, "일자별");  // 마지막 인자("일자별")는 원하는 그룹화 방식을 사용하세요.
+  
       $.ajax({
         url: "/secretary/schedule/loadSch",
         type: "GET",
@@ -198,12 +212,13 @@ $(document).ready(function () {
 ////////////////////////////////////////////////////////////////
 
 /** 일정 목록 불러오기 */
-function loadSchedule(groupBy) {
-  console.log(groupBy + "로 일정을 불러올게요");
+function loadSchedule(schYear, schMonth, groupBy) {
+  console.log(schYear + "년 " + schMonth + "월 " + groupBy + "로 일정을 불러올게요");
 
   $.ajax({
-      url: '/secretary/schedule/loadSch',
+      url: '/secretary/schedule/loadSchList',
       method: 'GET',
+      data: { schYear: schYear, schMonth: schMonth },
       dataType: 'JSON',
       success: function(data) {
           let html = "";
