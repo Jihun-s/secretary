@@ -3,7 +3,10 @@
  */
 
  $(document).ready(function(){
-	let closetNum = 0;
+	let closetNum = 0; //전체 옷장
+	
+// !!!!!!!!!!!!!!!!!!			차트 그리기			!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!	
+	//dataValue 배열변수에 카테고리별 옷 개수 집어넣기
 	let dataValue = new Array(8);
 	$.ajax({
 		url:'closet/chartValue',
@@ -19,78 +22,51 @@
 			dataValue[5] = valueList.BAGCATEGORYCOUNT;
 			dataValue[6] = valueList.ACCESSORYCATEGORYCOUNT;
 			dataValue[7] = valueList.ETCCATEGORYCOUNT;
+			
+			chartDraw(dataValue);
 		},
 		error:function(e){
 			console.log(JSON.stringify(e));
 		}			
-	})	
-	
-  const ctx = document.getElementById('myChart');
-  const data = {
-  	labels: ['상의','하의','아우터','원피스','신발','가방','악세사리','기타'],
-  	datasets: [{
-    			label: '개수',
-    			data: dataValue,
-    			backgroundColor: [
-					'rgb(244, 67, 54)',
-					'rgb(255, 111, 0)',
-					'rgb(255, 241, 118)',
-					'rgb(220, 231, 117)',
-      				'rgb(54, 162, 235)',
-      				'rgb(186, 104, 200)',
-      				'rgb(255, 99, 132)',
-      				'rgb(255, 205, 210)',
-    				],
-    			hoverOffset: 4
-  						}]
-	};
-				
-  new Chart(ctx, {
-    type: 'doughnut',
-    data: data,
-	  options: {
-  	  	plugins: {
-    		title: {
-        	display: true,
-        	text: '전체 옷장',
-      		}
-    	}//plugins
-  	  }//options 
-  });	
-  	
-	 	// 옷장 편집버튼 -> 수정,삭제 아이콘 숨어있다가 나타나기
-	 	$('.delCloset').hide();
-	 	$('.modifyCloset').hide();
-		$('#editClosetBtn').on('click',function(){
-			$('.delCloset').toggle();
-			$('.modifyCloset').toggle();			
-		})
+	})//ajax
+// !!!!!!!!!!!!!!!!!!			차트 그리기			!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!	
+
+
+	// 옷장 편집버튼 -> 수정,삭제 아이콘 숨어있다가 나타나기
+	 $('.delCloset').hide();
+	 $('.modifyCloset').hide();
+	 $('#editClosetBtn').on('click',function(){
+		$('.delCloset').toggle();
+		$('.modifyCloset').toggle();			
+	 })
 		
-		//옷장 추가버튼
-		$('#insertClosetBtn').click(insertCloset); 
+	//옷장 추가버튼
+	$('#insertClosetBtn').click(insertCloset); 
 		
 //!!!!!!!!!!!!!!!!!!!!!! 옷 찾기  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!	
-		//옷찾기 분류에서 소분류 숨겨놓기
-		$('#topCategory').hide();
-		$('#bottomCategory').hide();
-		$('#outerCategory').hide();
-		$('#dressCategory').hide();
-		$('#shoesCategory').hide();
-		$('#bagCategory').hide();
-		$('#accessoryCategory').hide();
-		$('#etcCategory').hide();
+	//옷찾기 분류에서 소분류 숨겨놓기
+	$('#topCategory').hide();
+	$('#bottomCategory').hide();
+	$('#outerCategory').hide();
+	$('#dressCategory').hide();
+	$('#shoesCategory').hide();
+	$('#bagCategory').hide();
+	$('#accessoryCategory').hide();
+	$('#etcCategory').hide();
 		
-		//옷찾기에서 신발사이즈 숨겨놓기
-		$('#shoesSizeForSearch').hide();
+	//옷찾기에서 신발사이즈 숨겨놓기
+	$('#shoesSizeForSearch').hide();
 		
-		//옷찾기에서 분류를 선택하면 clothesSearchAnimation함수 실행	
-		$("#clothesCategoryForSearch").on('change',clothesSearchAnimation);
+	//옷찾기에서 분류를 선택하면 clothesSearchAnimation함수 실행	
+	$("#clothesCategoryForSearch").on('change',clothesSearchAnimation);
 		
-		//옷찾기 버튼 클릭하면 전체옷장 의류목록 페이지로 이동
-		$("#clothesSearchbtn").on('click',function(){
-			window.open("../secretary/closet/AllCloset");
-		});
+	//옷찾기 버튼 클릭하면 전체옷장 의류목록 페이지로 이동
+	$("#clothesSearchbtn").on('click',function(){
+		window.open("../secretary/closet/AllCloset");
+	});
 //!!!!!!!!!!!!!!!!!!!!!! 옷 찾기  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!		
+		
+		
 		
 //!!!!!!!!!!!!!!!!!!! 세탁물 게이지 표시 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!		
 		let laundryCheck = true;
@@ -117,6 +93,43 @@
 		})	
 		
 });//document.ready 끝
+
+ function chartDraw(dataValue){
+	
+  let chartdata = {
+  	labels: ['상의','하의','아우터','원피스','신발','가방','악세사리','기타'],
+  	datasets: [{
+    			label: '개수',
+    			data: dataValue,
+    			backgroundColor: [
+					'rgb(244, 67, 54)',
+					'rgb(255, 111, 0)',
+					'rgb(255, 241, 118)',
+					'rgb(220, 231, 117)',
+      				'rgb(54, 162, 235)',
+      				'rgb(186, 104, 200)',
+      				'rgb(255, 99, 132)',
+      				'rgb(255, 205, 210)',
+    				],
+    			hoverOffset: 4
+  				}]//datasets
+	};//let chartdata	 
+	 
+	let context = document.getElementById('myChart').getContext('2d');
+ 	window.myChart = new Chart(context, {
+   			type: 'doughnut',
+    		data: chartdata,
+			options: {
+			animation: false,
+  	  		plugins: {
+    		title: {
+        		display: true,
+        		text: '전체 옷장',
+      				}
+    			}//plugins
+  	  		}//options 
+  		});//new Chart 
+ }//function chartDraw
 
 function delCloset(closetNum){
 	console.log(closetNum);

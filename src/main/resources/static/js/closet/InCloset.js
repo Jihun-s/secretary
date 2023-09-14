@@ -2,8 +2,10 @@
  * 옷장 페이지
  */
 $(document).ready(function(){
-	let dataValue = new Array(8);
 	closetNum = parseInt(closetNum); // 스트링에서 정수형으로 변환
+
+// !!!!!!!!!!!!!!!!!!			차트 그리기			!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!	
+	let dataValue = new Array(8);
 	$.ajax({
 		url:'chartValue',
 		type:'get',
@@ -21,37 +23,16 @@ $(document).ready(function(){
 			dataValue[5] = valueList.BAGCATEGORYCOUNT;
 			dataValue[6] = valueList.ACCESSORYCATEGORYCOUNT;
 			dataValue[7] = valueList.ETCCATEGORYCOUNT;
+			
+			chartDraw(dataValue);
 		},
 		error:function(e){
 			console.log(JSON.stringify(e));
 		}			
 	})	
-	
-  const ctx = document.getElementById('myChart');
-  const data = {
-  	labels: ['상의','하의','아우터','원피스','신발','가방','악세사리','기타'],
-  	datasets: [{
-    			label: '개수',
-    			data: dataValue,
-    			backgroundColor: [
-					'rgb(244, 67, 54)',
-					'rgb(255, 111, 0)',
-					'rgb(255, 241, 118)',
-					'rgb(220, 231, 117)',
-      				'rgb(54, 162, 235)',
-      				'rgb(186, 104, 200)',
-      				'rgb(255, 99, 132)',
-      				'rgb(255, 205, 210)',
-    				],
-    			hoverOffset: 4
-  						}]
-	};
-				
-  new Chart(ctx, {
-    type: 'doughnut',
-    data: data,
-  });	
-	
+// !!!!!!!!!!!!!!!!!!			차트 그리기			!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!	
+
+
 
 //!!!!!!!!!!!!!!!!!!!!!! 옷 찾기  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!	
 		//옷찾기 분류에서 소분류 숨겨놓기
@@ -160,6 +141,48 @@ $(document).ready(function(){
 		
 	});//document.ready 끝
 	
+
+function chartDraw(dataValue){
+	
+  let chartdata = {
+  	labels: ['상의','하의','아우터','원피스','신발','가방','악세사리','기타'],
+  	datasets: [{
+    			label: '개수',
+    			data: dataValue,
+    			backgroundColor: [
+					'rgb(244, 67, 54)',
+					'rgb(255, 111, 0)',
+					'rgb(255, 241, 118)',
+					'rgb(220, 231, 117)',
+      				'rgb(54, 162, 235)',
+      				'rgb(186, 104, 200)',
+      				'rgb(255, 99, 132)',
+      				'rgb(255, 205, 210)',
+    				],
+    			hoverOffset: 4
+  				}]//datasets
+	};//let chartdata	 
+	 
+	let context = document.getElementById('myChart').getContext('2d');
+ 	window.myChart = new Chart(context, {
+   			type: 'doughnut',
+    		data: chartdata,
+			options: {
+			responsive: false,
+  	  		plugins: {
+    		title: {
+        		display: true,
+        		text: '전체 옷장',
+      				}
+    			}//plugins
+  	  		}//options 
+  		});//new Chart 
+ }//function chartDraw
+
+
+
+
+
 
 	//사진 편집여부 체크하는 변수
 	let imgEditCheck = 0;
