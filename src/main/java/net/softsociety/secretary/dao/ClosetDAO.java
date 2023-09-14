@@ -49,5 +49,7 @@ public interface ClosetDAO {
 	
 	//코디일지 : 코디일지 작성
 	void createStyle(ClosetStyleDiary diary);
+	//코디일지 : 코디일지 찾기
+	ClosetStyleDiary findDiary(HashMap<String, Object> map);
 
 }

@@ -150,9 +150,13 @@
 
 <!-- 코디일지: 코디일지 등록 -->
 <insert id="createStyle" parameterType="ClosetStyleDiary">
-	insert into Secretary_StyleDiary (style_num, sytle_seasons, style_TPO, style_description, style_info, style_img)
-	values (Secretary_StyleDiary_SEQ.nextval, #{styleSeasons}, #{styleTPO}, #{styleDescription}, #{styleInfo}, #{styleImg})
+	insert into Secretary_StyleDiary (style_num, user_id, sytle_seasons, style_TPO, style_description, style_info, style_img)
+	values (Secretary_StyleDiary_SEQ.nextval, #{userId}, #{styleSeasons}, #{styleTPO}, #{styleDescription}, #{styleInfo}, #{styleImg})
 </insert>
 
+<!-- 코디일지 찾기(일지번호, 유저아이디) -->
+<select id="findDiary" parameterType="hashmap" resultType="ClosetStyleDiary">
+	select * from Secretary_StyleDiary where style_num = #{styleNum} and user_id = #{userId}
+</select>
 
 </mapper>

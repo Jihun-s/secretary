@@ -46,6 +46,10 @@ public interface ClosetService {
 	
 	//코디일지 - 코디일지 등록
 	void createStyle(ClosetStyleDiary diary);
+	//코디일지 - 코디일지 찾기
+	ClosetStyleDiary findDiary(int styleNum, String userId);
+	//코디일지 - 일지목록 출력&검색
+	ArrayList<ClosetStyleDiary> findAllDiary(String userId, String[] seasonArr, String styleTPO, String searchWord);
 
 	
 }

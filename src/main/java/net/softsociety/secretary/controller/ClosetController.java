@@ -246,7 +246,6 @@ public class ClosetController {
 			in.close();
 			out.close();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

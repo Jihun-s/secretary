@@ -4,59 +4,7 @@
 $(document).ready(function(){
 	
 	let closetNum = 0; //  전체 옷장에서 찾기
-	let dataValue = new Array(8);
-	$.ajax({
-		url:'chartValue',
-		type:'get',
-		data:{closetNum: closetNum},
-		dataType:'json',
-		success:function(valueList){
-			dataValue[0] = valueList.TOPCATEGORYCOUNT;
-			dataValue[1] = valueList.BOTTOMCATEGORYCOUNT;
-			dataValue[2] = valueList.OUTERCATEGORYCOUNT;
-			dataValue[3] = valueList.DRESSCATEGORYCOUNT;
-			dataValue[4] = valueList.SHOESCATEGORYCOUNT;
-			dataValue[5] = valueList.BAGCATEGORYCOUNT;
-			dataValue[6] = valueList.ACCESSORYCATEGORYCOUNT;
-			dataValue[7] = valueList.ETCCATEGORYCOUNT;
-		},
-		error:function(e){
-			console.log(JSON.stringify(e));
-		}			
-	})	
-	
-  const ctx = document.getElementById('myChart');
-  const data = {
-  	labels: ['상의','하의','아우터','원피스','신발','가방','악세사리','기타'],
-  	datasets: [{
-    			label: '개수',
-    			data: dataValue,
-    			backgroundColor: [
-					'rgb(244, 67, 54)',
-					'rgb(255, 111, 0)',
-					'rgb(255, 241, 118)',
-					'rgb(220, 231, 117)',
-      				'rgb(54, 162, 235)',
-      				'rgb(186, 104, 200)',
-      				'rgb(255, 99, 132)',
-      				'rgb(255, 205, 210)',
-    				],
-    			hoverOffset: 4
-  						}]
-	};
-				
-  new Chart(ctx, {
-    type: 'doughnut',
-    data: data,
-	  options: {
-  	  	plugins: {
-    		title: {
-        	display: true,
-        	text: '전체 옷장',
-      		}
-    	}//plugins
-  	  }//options 
- 	});//Chart
+
 
 //!!!!!!!!!!!!!!!!!!!!!! 옷 찾기  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!	
 		//옷찾기 분류에서 소분류 숨겨놓기
@@ -75,8 +23,21 @@ $(document).ready(function(){
 		$("#clothesSearchbtn").on('click',clothesSearch); //옷찾기 버튼 클릭하면 clothesSearch 함수실행
 //!!!!!!!!!!!!!!!!!!!!!! 옷 찾기  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!		
 
+// 코디일지 목록안에 일지목록 출력
+		$.ajax({
+			url:'inStyleDiary',
+			type:'get',
+			data:{userId:userId},
+			dataType:'json',
+			success:function(list){
+				console.log('성공');
+			},
+			error:function(e){
+				alert(JSON.stringify(e));
+			}			
+		})		
 
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!옷장안에 의류목록 출력!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!(코디등록) 옷장안에 의류목록 출력!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		$.ajax({
 			url:'inCloset',
 			type:'get',
@@ -96,7 +57,7 @@ $(document).ready(function(){
 				alert(JSON.stringify(e));
 			}			
 		})		
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!옷장안에 의류목록 출력!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!(코디등록) 옷장안에 의류목록 출력!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		
 });//document.ready 끝
 
@@ -145,7 +106,10 @@ function addImageToSlot(slotIndex, closetNum, clothesNum) {
         imageSlots[slotIndex] = undefined;
     });
 }
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!코디등록 imagePreview에 의류추가 미리보기 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!	
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!코디등록 imagePreview에 의류추가 미리보기 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+	
 function styleCreate(){
 	//계절 배열변수에 담기
 	let seasonArr = [];
@@ -200,9 +164,10 @@ function styleCreate(){
 		type:'post',
 		traditional:true,
 		data:{array: JSON.stringify(ImgToSend), //의류이미지
-				styleSeasons : seasonArr, //계절 변수
-				styleTPO : tpo,			 //TPO 변수
-				styleDescription:description}, //메모 변수	
+				styleSeasons : seasonArr, 		//계절 변수
+				styleTPO : tpo,			 		//TPO 변수
+				styleDescription:description, 	//메모 변수
+				userId: userId}, 	
 		success:function(){
 			location.reload(true); // 성공했으면 새로고침
 		},

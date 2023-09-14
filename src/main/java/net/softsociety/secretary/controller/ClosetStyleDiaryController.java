@@ -5,6 +5,9 @@ package net.softsociety.secretary.controller;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -12,13 +15,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.FileCopyUtils;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -116,5 +124,45 @@ public class ClosetStyleDiaryController {
 		 
 		 closetService.createStyle(diary);
 	}//styleImgCreate
+	
+	
+	
+	//코디일지 일지목록
+	@ResponseBody
+	@GetMapping("inStyleDiary")
+	public ArrayList<ClosetStyleDiary> diaryListInStyleDiary(@RequestParam(name="userId") String userId,
+											String[] seasonArr, String styleTPO, String searchWord){
+		log.debug("유저아이디:{}", userId);
+		ArrayList<ClosetStyleDiary> diaryList = closetService.findAllDiary(userId, seasonArr, styleTPO, searchWord);
+		return diaryList;
+	}
+	
+	
+	
+	//코디일지 이미지 다운로드
+	@GetMapping("styleDiaryDownload")
+	public void styleDiaryDownload(@RequestParam(name="styleNum") int styleNum,
+								@RequestParam(name="userId") String userId,
+								HttpServletRequest request, HttpServletResponse response) {
+		ClosetStyleDiary diary = closetService.findDiary(styleNum, userId);
+		log.debug("diary객체 찾았나요?:{}", diary);
+		String fullPath = uploadPath + "/" + diary.getStyleImg();
+		
+		try {
+			response.setHeader("Content-Disposition", " attachment;filename=" + URLEncoder.encode(diary.getStyleImg(), "UTF-8"));
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}		
+		
+		try {
+		FileInputStream in = new FileInputStream(fullPath);
+		ServletOutputStream out = response.getOutputStream();
+		FileCopyUtils.copy(in, out);
+		in.close();
+		out.close();
+	    } catch (Exception e) {
+	    	e.printStackTrace();
+	    }
+	}//styleDiaryDownload
 	
 }

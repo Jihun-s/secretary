@@ -146,7 +146,25 @@ public class ClosetServiceImpl implements ClosetService {
 	public void createStyle(ClosetStyleDiary diary) {
 		dao.createStyle(diary);
 	}
+	
+	//코디일지 : 일지찾기
+	@Override
+	public ClosetStyleDiary findDiary(int styleNum, String userId) {
+		//일지번호, 유저 아이디 담을 해쉬맵
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("styleNum", styleNum);
+		map.put("userId", userId);
+		return dao.findDiary(map);
+	}
 
+	//코디일지 : 일지 목록 출력
+	@Override
+	public ArrayList<ClosetStyleDiary> findAllDiary(String userId, String[] seasonArr, String styleTPO,
+			String searchWord) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 
 	
 	

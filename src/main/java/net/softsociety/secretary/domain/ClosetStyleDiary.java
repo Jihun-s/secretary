@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 public class ClosetStyleDiary {
 	int styleNum;
+	private String userId;
 	String styleDescription;
 	String styleTPO;
 	String styleSeasons;
