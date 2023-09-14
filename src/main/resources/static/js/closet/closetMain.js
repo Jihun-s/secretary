@@ -86,6 +86,7 @@
 				background-color: rgba(223,132,166,255); border-color: rgba(223,132,166,255);" \
 				aria-valuenow="'+proVal+'" aria-valuemin="0" aria-valuemax="50"></div>';
 				$('#progessDetail').html(proStr);
+				$('#laundryCntDetail').html('<p>세탁바구니에 세탁물이 '+laundryCnt+'개 쌓여있어요</p>')
 			},
 			error:function(e){
 				alert(JSON.stringify(e));

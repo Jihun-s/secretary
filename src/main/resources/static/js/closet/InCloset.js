@@ -180,10 +180,6 @@ function chartDraw(dataValue){
  }//function chartDraw
 
 
-
-
-
-
 	//사진 편집여부 체크하는 변수
 	let imgEditCheck = 0;
 	
@@ -353,7 +349,8 @@ function chartDraw(dataValue){
 			success:function(list){
 				let str ='';
 				$(list).each(function(i,n){
-					str +='<div><a onclick="readClothes('+n.clothesNum+')"><img src="../closet/clothesDownload?closetNum='+closetNum+'&clothesNum='+n.clothesNum+'"></a></div>';
+					let clothesNum = parseInt(n.clothesNum);
+					str += '<div><a onclick="readClothes('+n.closetNum+','+clothesNum+')"><img src="../closet/clothesDownload?closetNum='+n.closetNum+'&clothesNum='+clothesNum+'"></div>';
 				});
 				$('#whatsInCloset').html(str); 
 			},
@@ -427,10 +424,14 @@ function chartDraw(dataValue){
 			data:{closetNum: closetNum, clothesNum: clothesNum},
 			dataType:'json',
 			success:function(manageTip){
-				console.log('howToManageClothes 매핑')
+				if(manageTip.clothesMaterial != "none"){
+				console.log('howToManageClothes 매핑');
 				let manageTipStr = '<tr><td><button class="btn-pink">관리방법</button></td>\
-				<td colspan="4">&nbsp;&nbsp;'+manageTip.howToWash+'&nbsp;'+manageTip.howToKeep+'</td></tr></table>';
+				<td colspan="4">&nbsp;&nbsp;'+manageTip.howToWash+manageTip.howToKeep+'</td></tr></table>';
 				$('#ManageDetail').html(manageTipStr); 
+				} else {
+					$('#ManageDetail').html('');
+				}
 			},
 			error:function(e){
 				alert(JSON.stringify(e));

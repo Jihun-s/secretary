@@ -285,10 +285,14 @@ $(document).ready(function(){
 			data:{closetNum: closetNum, clothesNum: clothesNum},
 			dataType:'json',
 			success:function(manageTip){
-				console.log('howToManageClothes 매핑')
+				if(manageTip.clothesMaterial != "none"){
+				console.log('howToManageClothes 매핑');
 				let manageTipStr = '<tr><td><button class="btn-pink">관리방법</button></td>\
-				<td colspan="4">&nbsp;&nbsp;'+manageTip.howToWash+'&nbsp;'+manageTip.howToKeep+'</td></tr></table>';
+				<td colspan="4">&nbsp;&nbsp;'+manageTip.howToWash+manageTip.howToKeep+'</td></tr></table>';
 				$('#ManageDetail').html(manageTipStr); 
+				} else {
+					$('#ManageDetail').html('');
+				}
 			},
 			error:function(e){
 				alert(JSON.stringify(e));
