@@ -120,4 +120,18 @@
 	<select id="getFoodCountByFridgeId" resultType="int">
 	    SELECT COUNT(*) FROM Secretary_FRIDGE_FOOD WHERE fridge_id = #{fridgeId}
 	</select>
+	
+	<!-- 음식 수량 감소 -->
+	<update id="reduceFoodQuantity" parameterType="FridgeFood">
+	    UPDATE Secretary_FRIDGE_FOOD
+	    SET food_quantity = food_quantity - #{foodQuantity}
+	    WHERE food_id = #{foodId}
+	</update>
+	
+	<!-- 음식 수량 확인 -->
+	<select id="checkFoodQuantity" parameterType="FridgeFood" resultType="int">
+	    SELECT food_quantity
+	    FROM Secretary_FRIDGE_FOOD
+	    WHERE food_id = #{foodId}
+	</select>
 </mapper>

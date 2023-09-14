@@ -208,6 +208,26 @@
             .category-editIcon {
                 display: none;
             }
+
+            #consumptionHistoryContainer {
+                height: 300px; /* 4개의 아이템이 약 300px에 해당될 것으로 예상됩니다. 조절이 필요하면 값을 변경해 주세요. */
+                overflow-y: auto; /* 세로 스크롤 */
+                font-size: 10px;
+            }
+
+            .consumption-item {
+                padding: 10px 0;
+                border-bottom: 1px solid #eaeaea; /* 아이템 사이에 선 추가 */
+            }
+
+            .used-food-name {
+                font-size: 14px;
+                margin-bottom: 5px;
+            }
+
+            .used-date {
+                font-size: 12px;
+            }
         </style>
         <script>
             const DEFAULT_CATEGORIES = ['일반', '야채', '생선', '육류', '과일'];
@@ -652,10 +672,32 @@
                         url: 'fridgeFood/food/' + foodId,
                         type: 'GET',
                         success: function (data) {
+                            // 버튼의 data 속성 업데이트
+                            $('.consume-btn').data('food-id', data.foodId);
+                            $('.consume-btn').data('food-quantity', data.foodQuantity);
+                            $('.consume-btn').data('fridge-id', data.fridgeId);
+                            $('.consume-btn').data('food-name', data.foodName);
+
                             const imagePath = data.foodSavedFile
                                 ? 'fridgeFood/image/' + data.foodSavedFile
                                 : 'images/fridgeimg/DefaultFood.webp';
                             const madeDate = data.foodMadeDate ? data.foodMadeDate : '미입력';
+
+                            // D-Day 계산
+                            const today = new Date();
+                            const expiryDate = new Date(data.foodExpiryDate);
+                            const diffDays = Math.ceil((expiryDate - today) / (1000 * 60 * 60 * 24));
+                            const dDayColor = diffDays <= 3 ? 'red' : 'blue';
+
+                            // 날짜 형식 변환 함수
+                            function formatDate(dateStr) {
+                                const date = new Date(dateStr);
+                                const year = date.getFullYear().toString().substr(2, 2);
+                                return `${year}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date
+                                    .getDate()
+                                    .toString()
+                                    .padStart(2, '0')}`;
+                            }
 
                             $('#foodModal .modal-body').html(`
                 <div class="row">
@@ -667,10 +709,14 @@
                         <p><strong>카테고리:</strong> ${data.foodCategory}</p>
                         <p><strong>수량:</strong> ${data.foodQuantity}</p>
                         <p><strong>구매일:</strong> ${
-                            data.foodPurchaseDate ? data.foodPurchaseDate : data.foodInputDate
+                            data.foodPurchaseDate
+                                ? `${formatDate(data.foodPurchaseDate)}`
+                                : `${formatDate(data.foodInputDate)}`
                         }</p>
                         <p><strong>제조일:</strong> ${madeDate}</p>
-                        <p><strong>유효기간:</strong> ${data.foodExpiryDate}</p>
+                        <p><strong>유효기간:</strong> ${formatDate(
+                            data.foodExpiryDate
+                        )} (D-<span class="d-day" style="color:${dDayColor}">${diffDays}</span>)</p>
                     </div>
                 </div>
             `);
@@ -1034,8 +1080,75 @@
                         },
                     });
                 }
+
+                //소비 버튼
+                $(document).on('click', '.consume-btn', function () {
+                    const foodId = $(this).data('food-id');
+                    const maxQuantity = $(this).data('food-quantity');
+                    const fridgeId = $(this).data('fridge-id');
+                    const responseFromPrompt = prompt(`소비할 수량을 입력하세요 (최대: ${maxQuantity})`);
+                    const foodName = $(this).data('food-name');
+
+                    if (responseFromPrompt === null) {
+                        // 프롬프트에서 취소 버튼을 누름
+                        return; // 아무 것도 하지 않고 종료
+                    }
+                    const quantityToConsume = parseInt(responseFromPrompt);
+
+                    if (quantityToConsume > 0 && quantityToConsume <= maxQuantity) {
+                        // 서버에 소비 처리 요청
+                        $.ajax({
+                            url: 'fridgeUsed/consumeFood',
+                            type: 'POST',
+                            data: JSON.stringify({
+                                foodId: foodId,
+                                foodQuantity: quantityToConsume,
+                                fridgeId: fridgeId,
+                                foodName: foodName,
+                            }),
+
+                            contentType: 'application/json',
+                            success: function (response) {
+                                alert('소비 처리가 완료되었습니다.');
+                                $('#foodModal').modal('hide');
+                                loadAllFoodsByCategory(currentCategory);
+                                refreshConsumptionHistory();
+                            },
+                            error: function (error) {
+                                console.log('Error consuming food:', error);
+                                alert('소비 처리에 실패하였습니다.');
+                            },
+                        });
+                    } else {
+                        alert('올바른 수량을 입력하세요.');
+                    }
+                });
+
+                function refreshConsumptionHistory() {
+                    $.ajax({
+                        type: 'GET',
+                        url: 'fridgeUsed/consumptionHistory',
+                        success: function (data) {
+                            let content = '';
+                            data.forEach((item) => {
+                                content += `
+                    <div class="consumption-item">
+                        <h5 class="used-food-name">${item.fridgeFoodName}을/를 ${
+                                    item.fridgeQuantityUsed
+                                }개 소비하셨습니다!</h5>
+                        <p class="used-date">${new Date(item.fridgeUsedDate).toLocaleString()}</p>
+                    </div>
+                `;
+                            });
+                            $('#consumptionHistoryContainer').html(content); // 해당 id를 갖는 div 내용 갱신
+                        },
+                    });
+                }
+
+                // 사용자가 소비를 할 때 해당 함수를 호출
+                refreshConsumptionHistory();
             });
-            //Ready_End;
+            //ready_End;
 
             function showFoodsByCategory(selectedCategory) {
                 // 모든 음식 목록에서 선택된 카테고리에 해당하는 음식만 화면에 표시
@@ -1536,7 +1649,7 @@
                                     <h3>소비 이력</h3>
                                     <div class="card mb-4">
                                         <div class="card-body">
-                                            <h5>1열 1행</h5>
+                                            <div id="consumptionHistoryContainer"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -1997,12 +2110,22 @@
                                         <div class="modal-dialog">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h4 class="modal-title">Food Details</h4>
+                                                    <h4 class="modal-title">상세 정보</h4>
                                                 </div>
                                                 <div class="modal-body">
                                                     <!-- Food details will be loaded here -->
                                                 </div>
+                                                <!-- In your foodModal's modal-footer -->
                                                 <div class="modal-footer">
+                                                    <button
+                                                        class="btn btn-primary consume-btn"
+                                                        data-food-id="${data.foodId}"
+                                                        data-food-quantity="${data.foodQuantity}"
+                                                        data-fridge-id="${data.fridgeId}"
+                                                        data-food-name="${data.foodName}"
+                                                    >
+                                                        소비
+                                                    </button>
                                                     <button class="btn btn-danger" data-dismiss="modal" type="button">
                                                         Close
                                                     </button>
