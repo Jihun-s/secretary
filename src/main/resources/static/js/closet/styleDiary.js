@@ -146,8 +146,31 @@ function addImageToSlot(slotIndex, closetNum, clothesNum) {
     });
 }
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!코디등록 imagePreview에 의류추가 미리보기 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!	
-function styleImgCreate(){
-	let dataToSend = [];
+function styleCreate(){
+	//계절 배열변수에 담기
+	let seasonArr = [];
+	var seasonChecked = $("input:checkbox[name='seasons']:checked");
+	$(seasonChecked).each(function(){
+		seasonArr.push($(this).val());
+	}); 
+	console.log(seasonArr);
+	
+	//TPO 변수
+	let tpo = $("select[name='styleTPO'] option:selected").val();
+	console.log(tpo);
+	
+	//사용자 스타일메모 변수
+	let description = $("textarea[name='styleDescription']").val();
+	console.log(description);
+	
+	//사용자가 추가한 의류 확인
+	if(imageSlots.length == 0){
+		alert('의류를 하나 이상 추가해주세요!');
+		return;
+	}
+	
+	
+	let ImgToSend = [];
 	for(var i = 0; i < maxImages; i++){
 	 if(imageSlots[i]){	
 	// 이미지 태그의 src 속성에서 closetNum과 clothesNum 추출
@@ -164,21 +187,24 @@ function styleImgCreate(){
 
    	 		console.log('closetNum:', closetNum);
    	 		console.log('clothesNum:', clothesNum);
-   	 		dataToSend.push({'closetNum':parseInt(closetNum), 'clothesNum':parseInt(clothesNum)})
+   	 		ImgToSend.push({'closetNum':parseInt(closetNum), 'clothesNum':parseInt(clothesNum)})
 		} else {
     	console.log('closetNum 또는 clothesNum을 추출할 수 없습니다.');
 		}
 	 }
 	}//for문
-	console.log(dataToSend);
+	console.log(ImgToSend);
 	
 	$.ajax({
-		url:'styleDiary/styleImgCreate',
+		url:'styleDiary/styleCreate',
 		type:'post',
-		data:{array: JSON.stringify(dataToSend)},	
+		traditional:true,
+		data:{array: JSON.stringify(ImgToSend), //의류이미지
+				styleSeasons : seasonArr, //계절 변수
+				styleTPO : tpo,			 //TPO 변수
+				styleDescription:description}, //메모 변수	
 		success:function(){
-			console.log('전달 성공');
-
+			location.reload(true); // 성공했으면 새로고침
 		},
 		error:function(e){
 			console.log(JSON.stringify(e));

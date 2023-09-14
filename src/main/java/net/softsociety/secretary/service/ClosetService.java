@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import net.softsociety.secretary.domain.Closet;
+import net.softsociety.secretary.domain.ClosetStyleDiary;
 import net.softsociety.secretary.domain.Clothes;
 import net.softsociety.secretary.domain.ClothesManager;
 
@@ -42,6 +43,9 @@ public interface ClosetService {
 	
 	//차트데이터 값 불러오기
 	HashMap<String, BigDecimal> getChartValue(int closetNum);
+	
+	//코디일지 - 코디일지 등록
+	void createStyle(ClosetStyleDiary diary);
 
 	
 }

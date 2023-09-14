@@ -25,6 +25,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.extern.slf4j.Slf4j;
+import net.softsociety.secretary.domain.ClosetStyleDiary;
 import net.softsociety.secretary.domain.Clothes;
 import net.softsociety.secretary.service.ClosetService;
 import net.softsociety.secretary.util.FileService;
@@ -45,19 +46,26 @@ public class ClosetStyleDiaryController {
 	private Map<Integer, BufferedImage> imageMap = new HashMap<Integer, BufferedImage>();
 	
 	@ResponseBody
-	@PostMapping("styleImgCreate")
-	public void styleImgCreate(String array,HttpServletRequest request) throws Exception {
+	@PostMapping("styleCreate")
+	public void styleImgCreate(String array,HttpServletRequest request, ClosetStyleDiary diary) throws Exception {
+		log.debug("ClosetStyleDiary 객체 전송됐나요?:{}", diary);
+		
+		//의류 객체정보 String array로 전송받음
 		if(array == null) {
 			log.debug("array : null");
 			return;
 		}
 		log.debug("전달받은 문자열: {}", array);
+		//의류객체정보 diary객체에 저장
+		diary.setStyleInfo(array);
 		
+		//Clothes 객체 리스트로 변환
 		ObjectMapper objectMapper = new ObjectMapper();
 		ArrayList<Clothes> list = objectMapper.readValue(array, new TypeReference<ArrayList<Clothes>>() {});
 		log.debug("변환결과 리스트:{}", list);
 		log.debug("변환결과 리스트:{}", list.size());
 		
+		///Clothes 이미지파일 경로 추출
 		ArrayList<String> imagePaths = new ArrayList<>();
 		for(Clothes selectedList : list) {
 			Clothes clothes = closetService.findClothes(selectedList.getClosetNum(), selectedList.getClothesNum());
@@ -76,6 +84,7 @@ public class ClosetStyleDiaryController {
 			y = 100;
 		}
 		
+		// 의류 각 이미지 조절하고, 합성해서 하나로 반환
 		BufferedImage mergedImage = new BufferedImage(520, 370, BufferedImage.TYPE_INT_ARGB); 
 		Graphics2D graphics = mergedImage.createGraphics();
 		
@@ -100,8 +109,12 @@ public class ClosetStyleDiaryController {
 		 graphics.dispose();
 		 
 		 String savedPath = FileService.mergedImgName(uploadPath);
-		 ImageIO.write(mergedImage, "png", new File(uploadPath + "/" +savedPath));
-
+		 ImageIO.write(mergedImage, "png", new File(uploadPath + "/" +savedPath)); //합성이미지 파일 생성&저장
+		 //이미지파일경로 diary객체에 저장
+		 diary.setStyleImg(savedPath);
+		 log.debug("ClosetStyleDiary 객체 완성됐나요?:{}", diary);
+		 
+		 closetService.createStyle(diary);
 	}//styleImgCreate
 	
 }

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import lombok.extern.slf4j.Slf4j;
 import net.softsociety.secretary.dao.ClosetDAO;
 import net.softsociety.secretary.domain.Closet;
+import net.softsociety.secretary.domain.ClosetStyleDiary;
 import net.softsociety.secretary.domain.Clothes;
 import net.softsociety.secretary.domain.ClothesManager;
 
@@ -138,6 +139,12 @@ public class ClosetServiceImpl implements ClosetService {
 	@Override
 	public HashMap<String, BigDecimal> getChartValue(int closetNum) {
 		return dao.getChartValue(closetNum);
+	}
+	
+	//코디일지 : 코디일지 등록
+	@Override
+	public void createStyle(ClosetStyleDiary diary) {
+		dao.createStyle(diary);
 	}
 
 

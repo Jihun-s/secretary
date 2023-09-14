@@ -7,6 +7,7 @@ import java.util.HashMap;
 import org.apache.ibatis.annotations.Mapper;
 
 import net.softsociety.secretary.domain.Closet;
+import net.softsociety.secretary.domain.ClosetStyleDiary;
 import net.softsociety.secretary.domain.Clothes;
 import net.softsociety.secretary.domain.ClothesManager;
 
@@ -45,5 +46,8 @@ public interface ClosetDAO {
 	
 	//차트데이터 값 불러오기
 	HashMap<String, BigDecimal> getChartValue(int closetNum);
+	
+	//코디일지 : 코디일지 작성
+	void createStyle(ClosetStyleDiary diary);
 
 }

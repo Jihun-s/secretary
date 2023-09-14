@@ -147,4 +147,12 @@
 							closet_num = #{closetNum}
 							</if></where>
 </select>
+
+<!-- 코디일지: 코디일지 등록 -->
+<insert id="createStyle" parameterType="ClosetStyleDiary">
+	insert into Secretary_StyleDiary (style_num, sytle_seasons, style_TPO, style_description, style_info, style_img)
+	values (Secretary_StyleDiary_SEQ.nextval, #{styleSeasons}, #{styleTPO}, #{styleDescription}, #{styleInfo}, #{styleImg})
+</insert>
+
+
 </mapper>
