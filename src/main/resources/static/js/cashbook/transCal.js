@@ -195,20 +195,21 @@ function getColorBytransType(transType) {
     // 'success' color
     case '수입':
       return {
-        bgColor: '#71DD37',
-        textColor: '#E8FADF',
-        borderColor: '#71DD37'
+        textColor: '#71DD37',
+        borderColor: 'transparent',
+        backgroundColor: 'transparent'
       };
 
     // 'warning' color
     case '지출':
       return {
-        bgColor: '#FFAB00',
-        textColor: '#FFF2D6',
-        borderColor: '#FFAB00'
+        textColor: '#FFC0CB',
+        borderColor: 'transparent',
+        backgroundColor: 'transparent'
       };
   }
 }
+
 
 /** 숫자에 1000 단위로 , 찍기 */
 function numberWithCommas(x) {
@@ -358,34 +359,43 @@ function showCalendar() {
           dataType: "JSON",
           success: (data) => {
             // console.log(calYear + "년 " + calMonth + "월의 데이터:" + JSON.stringify(data));
+            let colorInfo = getColorBytransType(data.transType);
             let transformedData = [];
         
             data.forEach(trans => {
                 
-              // 수입이 0이 아닌 경우 이벤트 추가
-              if (trans.calIncome !== 0) {
-                  transformedData.push({
-                      title: `+${numberWithCommas(trans.calIncome)}`,
-                      start: trans.calDate,
-                      extendedProps: {
-                        type: '수입',
-                        income: trans.calIncome
-                      }
-                  });
-              }
-              
-              // 지출이 0이 아닌 경우 이벤트 추가
-              if (trans.calExpense !== 0) {
-                  transformedData.push({
-                      title: `-${numberWithCommas(trans.calExpense)}`,
-                      start: trans.calDate,
-                      extendedProps: {
-                        type: '지출',
-                        expense: trans.calExpense
-                      }
-                  });
-              }
-            });
+            // 수입이 0이 아닌 경우 이벤트 추가
+            if (trans.calIncome !== 0) {
+              let colorInfoIncome = getColorBytransType('수입');
+              transformedData.push({
+                  title: `+${numberWithCommas(trans.calIncome)}`,
+                  start: trans.calDate,
+                  textColor: colorInfoIncome.textColor,
+                  borderColor: colorInfoIncome.borderColor,
+                  backgroundColor: colorInfoIncome.backgroundColor,
+                  extendedProps: {
+                    type: '수입',
+                    income: trans.calIncome
+                  }
+              });
+            }
+                  
+            // 지출이 0이 아닌 경우 이벤트 추가
+            if (trans.calExpense !== 0) {
+              let colorInfoExpense = getColorBytransType('지출');
+              transformedData.push({
+                  title: `-${numberWithCommas(trans.calExpense)}`,
+                  start: trans.calDate,
+                  textColor: colorInfoExpense.textColor,
+                  borderColor: colorInfoExpense.borderColor,
+                  backgroundColor: colorInfoExpense.backgroundColor,
+                  extendedProps: {
+                    type: '지출',
+                    expense: trans.calExpense
+                  }
+              });
+            }
+          });
         
             successCallback(transformedData);
           },
@@ -397,6 +407,7 @@ function showCalendar() {
     },
     eventClick: function(info) {
       // 현재 달력 연월 추출
+      let detailListDiv = $('#detailListDiv');
       let eventDate = new Date(info.event.start); // 이벤트의 시작 날짜를 가져옵니다.
       let calYear = eventDate.getFullYear();
       let calMonth = eventDate.getMonth() + 1; // 월은 0부터 시작하므로 1을 더해줍니다.
@@ -410,10 +421,76 @@ function showCalendar() {
         type: 'GET',
         data: { calYear: calYear, calMonth: calMonth, calDate: calDate, transType: transType },
         dataType: 'JSON',
-        success: (data) => {
-          console.log(JSON.stringify(data));
+        success: (list) => {
+          // console.log(JSON.stringify(list));
+
+          if(list.length == 0 || list == null) {
+            transListDiv.html("내역이 존재하지 않습니다.");
+        } else {
+            let groupedData = {};
+
+        // 일자별로 데이터 그룹화
+        $(list).each(function(idx, ta) {
+            let date = ta.transDate;  // 거래날짜를 가져옵니다. (예: "2023-08-28")
+            if (!groupedData[date]) {
+                groupedData[date] = [];
+            }
+            groupedData[date].push(ta);
+        });
+
+        let table = `<table class="table">`;
+
+        // 일자별로 테이블 생성
+        for (let date in groupedData) {
+            table += `<thead>
+                        <tr>
+                            <th colspan="6">${formatDate(date)}</th>
+                        </tr>
+                        <tr>
+                            <th>카테고리</th>
+                            <th>시간</th>
+                            <th>내용</th>
+                            <th>메모</th>
+                            <th>거래금액</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-border-bottom-0">`;
+
+            $(groupedData[date]).each(function(idx, ta) {
+                table += `<tr>
+                            <td style="width: 5rem;">
+                                <span class="badge bg-label-${ta.labelColor} me-1">${ta.cate2Name || ta.cate1Name || '미분류'}</span>
+                                <input type="hidden" value="${ta.transId}">
+                            </td>
+                            <td style="width: 5rem;">${ta.transTime}</td>
+                            <td><i class="fab fa-react fa-lg text-info me-3"></i> <strong>${ta.transPayee}</strong></td>
+                            <td>${ta.transMemo || ''}</td>
+                            <td style="width: 5rem;">${parseInt(ta.transAmount).toLocaleString('en-US')}</td>
+                            <td>
+                            <div class="dropdown">
+                                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></button>
+                                <div class="dropdown-menu">
+                                <a class="dropdown-item" href="javascript:openModalUpdate(${ta.transId});"><i class="bx bx-edit-alt me-2"></i> 수정</a>
+                                <a class="dropdown-item" href="javascript:deleteTrans(${ta.transId});"><i class="bx bx-trash me-2"></i> 삭제</a>
+                                </div>
+                            </div>
+                            </td>
+                        </tr>`;
+            });
+
+            table += `</tbody>`;
+        }
+
+        table += `</table>`;
+
+        detailListDiv.html(table);
+        }
+      
           
-        },
+          // 모달 활성화
+          $('#ModalDetailList').modal('show');  // Bootstrap의 모달을 활성화합니다.
+      },
         error: (e) => {
           alert(JSON.stringify(e));
           alert("달력 내역 상세 목록 전송 실패");
@@ -424,5 +501,6 @@ function showCalendar() {
   });
 
   $('#transViewDiv').html('');
+
   calendar.render();
 }
