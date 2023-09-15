@@ -1162,7 +1162,7 @@ function selectConditionTrans() {
         dataType: 'JSON',
         success: (list) => {
             // 넘어올 값: 내역리스트
-            if(list.length == 0) {
+            if(list.length == 0 || list == null) {
                 transListDiv.html("내역이 존재하지 않습니다.");
             } else {
                 let groupedData = {};
