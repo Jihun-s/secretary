@@ -20,4 +20,7 @@ public interface FridgeFoodDAO {
 	int getFoodCountByFridgeId(int fridgeId);
 	void updateFoodsCategoryName(@Param("originalName") String originalName, @Param("newName") String newName, @Param("familyId") int familyId);
 	int countFoodsUsingCategory(FoodCategory foodCategory);
+	
+	int checkFoodQuantity(FridgeFood fridgeFood);
+	void reduceFoodQuantity(FridgeFood fridgeFood);
 }
