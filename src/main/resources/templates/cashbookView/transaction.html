@@ -844,88 +844,107 @@
 
     <!-- 수정 모달 modal -->
     <div class="modal fade" id="ModalUpdate" data-bs-backdrop="static" tabindex="-1" style="display: none;" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel1">내역 수정하기</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <form>
-            <input type="hidden" name="transId" id="transIdModal" value="">
-            <input type="hidden" name="familyId" id="familyIdModal" value="">
-            <input type="hidden" name="cashbookId" id="cashbookIdModal" value="">
-            <input type="hidden" name="labelColor" id="labelColorModal" value="">
-            <div class="mb-3">
-              <label class="form-label" for="transDate">거래일자</label>
-              <input class="form-control" type="datetime-local" name="transDate" value="" id="transDateModal">
-            </div>
-            <div class="mb-3">
-              <label class="form-label" for="transType">내역 유형</label>
-              <div class="col-md" id="transTypeModal">
-                <div class="form-check form-check-inline mt-3">
-                  <input class="form-check-input" type="radio" name="transType" id="inlineRadio1Modal" value="수입">
-                  <label class="form-check-label" for="inlineRadio1">수입</label>
-                </div>
-                <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="transType" id="inlineRadio2Modal" value="지출">
-                  <label class="form-check-label" for="inlineRadio2">지출</label>
-                </div>
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel1">내역 수정하기</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <input type="hidden" name="transId" id="transIdModal" value="">
+              <input type="hidden" name="familyId" id="familyIdModal" value="">
+              <input type="hidden" name="cashbookId" id="cashbookIdModal" value="">
+              <input type="hidden" name="labelColor" id="labelColorModal" value="">
+              <div class="mb-3">
+                <label class="form-label" for="transDate">거래일자</label>
+                <input class="form-control" type="datetime-local" name="transDate" value="" id="transDateModal">
               </div>
-              <div>
-                <p id="transTypeErrorModal"></p>
-              </div>
-            </div>
-            <div id="transCategoriesDivModal" class="mb-3">
-              <label class="form-label" for="transCategory">카테고리</label>
-              <div>
-                <div id="transCategory1DivModal">
-                  <select id="cate1NameModal" name="cate1Name" class="form-select">
-                  </select>
+              <div class="mb-3">
+                <label class="form-label" for="transType">내역 유형</label>
+                <div class="col-md" id="transTypeModal">
+                  <div class="form-check form-check-inline mt-3">
+                    <input class="form-check-input" type="radio" name="transType" id="inlineRadio1Modal" value="수입">
+                    <label class="form-check-label" for="inlineRadio1">수입</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="transType" id="inlineRadio2Modal" value="지출">
+                    <label class="form-check-label" for="inlineRadio2">지출</label>
+                  </div>
                 </div>
-                <div id="transCategory2DivModal">
-                  <select id="cate2NameModal" name="cate2Name" class="form-select">
-                  </select>
+                <div>
+                  <p id="transTypeErrorModal"></p>
                 </div>
               </div>
-              <div>
-                <p id="transCategoryErrorModal"></p>
+              <div id="transCategoriesDivModal" class="mb-3">
+                <label class="form-label" for="transCategory">카테고리</label>
+                <div>
+                  <div id="transCategory1DivModal">
+                    <select id="cate1NameModal" name="cate1Name" class="form-select">
+                    </select>
+                  </div>
+                  <div id="transCategory2DivModal">
+                    <select id="cate2NameModal" name="cate2Name" class="form-select">
+                    </select>
+                  </div>
+                </div>
+                <div>
+                  <p id="transCategoryErrorModal"></p>
+                </div>
+                <!-- <div class="form-text"> You can use letters, numbers &amp; periods </div> -->
               </div>
-              <!-- <div class="form-text"> You can use letters, numbers &amp; periods </div> -->
-            </div>
-            <div class="mb-3">
-              <label class="form-label" for="transPayee">거래내용</label>
-              <input type="text" name="transPayee" id="transPayeeModal" class="form-control phone-mask" placeholder="거래처를 입력하세요">
-              <div>
-                <p id="transPayeeErrorModal"></p>
+              <div class="mb-3">
+                <label class="form-label" for="transPayee">거래내용</label>
+                <input type="text" name="transPayee" id="transPayeeModal" class="form-control phone-mask" placeholder="거래처를 입력하세요">
+                <div>
+                  <p id="transPayeeErrorModal"></p>
+                </div>
               </div>
-            </div>
-            <div class="mb-3">
-              <label class="form-label" for="transMemo">메모</label>
-              <textarea name="transMemo" id="transMemoModal" class="form-control" placeholder="(선택)"></textarea>
-              <div>
-                <p id="transMemoError"></p>
+              <div class="mb-3">
+                <label class="form-label" for="transMemo">메모</label>
+                <textarea name="transMemo" id="transMemoModal" class="form-control" placeholder="(선택)"></textarea>
+                <div>
+                  <p id="transMemoError"></p>
+                </div>
               </div>
-            </div>
-            <div class="mb-3">
-              <label class="form-label" for="transAmount">거래금액</label>
-              <div class="input-group mb-3">
-                <span class="input-group-text" id="basic-addon11">₩</span>
-                <input type="text" name="transAmount" id="transAmountModal" class="form-control" placeholder="금액을 입력하세요" aria-label="Username" aria-describedby="basic-addon11">
+              <div class="mb-3">
+                <label class="form-label" for="transAmount">거래금액</label>
+                <div class="input-group mb-3">
+                  <span class="input-group-text" id="basic-addon11">₩</span>
+                  <input type="text" name="transAmount" id="transAmountModal" class="form-control" placeholder="금액을 입력하세요" aria-label="Username" aria-describedby="basic-addon11">
+                </div>
+                <div>
+                  <p id="transAmountErrorModal"></p>
+                </div>
               </div>
-              <div>
-                <p id="transAmountErrorModal"></p>
-              </div>
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">취소</button>
-          <button type="button" id="setTransBtModal" class="btn btn-primary">수정</button>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">취소</button>
+            <button type="button" id="setTransBtModal" class="btn btn-primary">수정</button>
+          </div>
         </div>
       </div>
     </div>
 
+    <!-- 상세 목록 모달 modal -->
+    <div class="modal fade" id="ModalDetailList" data-bs-backdrop="static" tabindex="-1" style="display: none;" aria-hidden="true">
+      <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel1">일별 내역</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div id="detailListDiv"></div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">취소</button>
+            <button type="button" id="" class="btn btn-primary">버튼</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!-- / Layout wrapper -->
 
