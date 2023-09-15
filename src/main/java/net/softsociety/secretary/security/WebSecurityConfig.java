@@ -35,6 +35,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 "/user/login",
                 "/user/forgotPw",
                 "/user/confirm",
+                "/user/idcheck",
+                "/user/emailcheck",
                 "/homeView/home",
                 "/boardView/list",
                 "/boardView/list2",

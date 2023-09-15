@@ -111,7 +111,7 @@
 	</delete>
 	
 	<select id="getAllFoodsByCategory" resultType="FridgeFood">
-	    SELECT f.*
+	    SELECT f.*, r.fridge_name AS fridgeName
 	    FROM Secretary_FRIDGE_FOOD f
 	    JOIN Secretary_Fridge r ON f.FRIDGE_ID = r.fridge_id
 	    WHERE r.fridge_category = #{fridgeCategory}

@@ -9,4 +9,7 @@ public interface FridgeUsedService {
 	void consumeFood(FridgeFood fridgeFood);
 
 	List<FridgeUsed> getUsedFoodsHistory();
+
+	List<FridgeFood> getFoodsNotAccessedForDays(int days);
+
 }
