@@ -863,6 +863,8 @@
                     });
                 }
 
+                let allFoods = [];
+
                 function loadAllFoodsByCategory(category) {
                     $.ajax({
                         url: `fridgeFood/getAllFoodsByCategory/${category}`,
@@ -877,6 +879,91 @@
                         },
                     });
                 }
+
+                function loadFoodsForNotification(category, callback) {
+                    $.ajax({
+                        url: `fridgeFood/getAllFoodsByCategory/${category}`,
+                        type: 'GET',
+                        dataType: 'json',
+                        success: function (data) {
+                            allFoods = allFoods.concat(data);
+                            callback();
+                        },
+                        error: function (error) {
+                            console.error('Error fetching fridge items for notification:', error);
+                        },
+                    });
+                }
+
+                function loadData() {
+                    // 냉장실 음식 아이템 데이터 가져오기
+                    loadFoodsForNotification('냉장실', function () {
+                        // 냉동실 음식 아이템 데이터 가져오기
+                        loadFoodsForNotification('냉동실', function () {
+                            // 데이터가 모두 로드된 후 알림 생성 및 표시
+                            createEssentialNotifications();
+                            createSuggestedNotifications();
+                        });
+                    });
+                }
+
+                function createEssentialNotifications() {
+                    const today = new Date();
+                    const oneWeekFromNow = new Date(today);
+                    oneWeekFromNow.setDate(today.getDate() + 7);
+
+                    const essentialItems = allFoods.filter((food) => {
+                        const expiryDate = new Date(food.foodExpiryDate);
+                        return expiryDate <= oneWeekFromNow;
+                    });
+                    essentialItems.sort((a, b) => {
+                        const expiryDateA = new Date(a.foodExpiryDate);
+                        const expiryDateB = new Date(b.foodExpiryDate);
+                        return expiryDateA - expiryDateB;
+                    });
+
+                    essentialItems.forEach((item) => {
+                        const expiryDate = new Date(item.foodExpiryDate);
+                        const diffDays = Math.ceil((expiryDate - today) / (1000 * 60 * 60 * 24));
+                        const color = diffDays <= 3 ? 'red' : 'blue';
+                        const notification = `<div style="margin-bottom: 10px;">
+                                  <p style="margin-bottom: 0;">[${item.fridgeName}]의 ${item.foodName} 유통기한 <span style="color:${color}">${diffDays}일</span> 남았습니다!</p>
+                                  <a href="https://www.google.com/search?q=${item.foodName}을 활용한 요리 레시피" target="_blank" style="margin-top: -5px;">- 레시피 제안</a>
+                              </div>`;
+                        $('#navs-pills-justified-home').append(notification);
+                    });
+                }
+
+                function createSuggestedNotifications() {
+                    $.ajax({
+                        url: `fridgeUsed/getFoodsNotAccessedForDays`,
+                        type: 'GET',
+                        dataType: 'json',
+                        success: function (data) {
+                            displaySuggestedNotifications(data.foods15Days, 15);
+                            displaySuggestedNotifications(data.foods30Days, 30);
+                        },
+                        error: function (error) {
+                            console.error('Error fetching suggested notifications:', error);
+                        },
+                    });
+                }
+
+                function displaySuggestedNotifications(foods, days) {
+                    foods.forEach((item) => {
+                        const notification = `
+            <div>
+                <p>[${item.fridgeName}]의 ${item.foodName}을 사용하지 않은 지 <span style="color:red">${days}일</span>이 지났습니다!</p>
+                <a href="https://www.google.com/search?q=${item.foodName}을 활용한 요리 레시피" target="_blank">- 레시피 제안</a>
+            </div>
+        `;
+                        $('#navs-pills-justified-profile').append(notification);
+                    });
+                }
+
+                // 데이터 로드 및 알림 생성 및 표시 시작
+                loadData();
+
                 // 위에서 정의한 변수입니다.
                 let isCategoryEditMode = false;
 
@@ -2155,7 +2242,8 @@
                                                                 <i class="tf-icons bx bx-home"></i> 필수 알림
                                                                 <span
                                                                     class="badge rounded-pill badge-center h-px-20 w-px-20 bg-danger"
-                                                                    >3</span
+                                                                    id="essential-notification-count"
+                                                                    >0</span
                                                                 >
                                                             </button>
                                                         </li>
@@ -2173,18 +2261,18 @@
                                                             </button>
                                                         </li>
                                                     </ul>
-                                                    <div class="tab-content flex-fill" style="height: 18rem">
+                                                    <div
+                                                        class="tab-content flex-fill"
+                                                        id="fridge-notification"
+                                                        style="height: 33rem; overflow-y: auto"
+                                                    >
                                                         <!-- 필수 알림 탭 내용 -->
                                                         <div
                                                             class="tab-pane fade show active"
                                                             id="navs-pills-justified-home"
                                                             role="tabpanel"
                                                         >
-                                                            <p>8월 18일은 오늘입니다. 안녕하세요!</p>
-                                                            <p>8월 19일은 내일입니다. 안녕하세요!</p>
-                                                            <p>8월 19일은 내일입니다. 안녕하세요!</p>
-                                                            <p>8월 19일은 내일입니다. 안녕하세요!</p>
-                                                            <p>8월 19일은 내일입니다. 안녕하세요!</p>
+                                                            <!-- 필수 알림 내용이 여기에 동적으로 추가됩니다 -->
                                                         </div>
                                                         <!-- 제안 알림 탭 내용 -->
                                                         <div
@@ -2192,7 +2280,7 @@
                                                             id="navs-pills-justified-profile"
                                                             role="tabpanel"
                                                         >
-                                                            <p>8월 23일은 처서입니다. 여름옷을 정리해볼까요?</p>
+                                                            <!-- 제안 알림 내용이 여기에 동적으로 추가됩니다 -->
                                                         </div>
                                                     </div>
                                                 </div>

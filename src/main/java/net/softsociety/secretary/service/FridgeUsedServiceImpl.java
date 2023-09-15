@@ -63,4 +63,11 @@ public class FridgeUsedServiceImpl implements FridgeUsedService {
 	public List<FridgeUsed> getUsedFoodsHistory() {
 		return fridgeUsedDAO.getAllUsedFoods();
 	}
+
+	@Override
+	public List<FridgeFood> getFoodsNotAccessedForDays(int days) {
+		return fridgeUsedDAO.getFoodsNotAccessedForDays(days);
+	}
+	
+
 }
