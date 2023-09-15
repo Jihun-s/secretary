@@ -50,6 +50,8 @@ public interface ClosetService {
 	ClosetStyleDiary findDiary(int styleNum, String userId);
 	//코디일지 - 일지목록 출력&검색
 	ArrayList<ClosetStyleDiary> findAllDiary(String userId, String[] seasonArr, String styleTPO, String searchWord);
+	//코디일지 - 차트데이터 값 불러오기
+	HashMap<String, BigDecimal> getDiaryChartValue(String userId);
 
 	
 }

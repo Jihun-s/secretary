@@ -1,5 +1,31 @@
 @charset "UTF-8";
 
+.accordion-body table {
+  width:100%;
+  border-spacing: 0.3em;
+  border-collapse: separate; 
+}
+
+/* 의류리스트 이미지*/
+#whatsInStyleDiary{
+	max-height: 40em; /* 스크롤 가능한 최대 높이를 지정 (필요에 따라 조정) */
+ 	overflow-y: auto; /* 세로 스크롤을 활성화 */	
+	text-align:center;
+}
+#whatsInStyleDiary > div{
+	margin-right:1em;
+	margin-bottom:1em;
+	border-color: pink; 
+	border:1px;
+	border-style:solid;
+	border-radius:3%;
+	display:inline-block;
+	position:relative;
+}
+#whatsInStyleDiary img{
+	width:14.5em;
+	height:10em;
+}
 
 /*옷찾기 Search 버튼(코디등록 모달)*/
 #clothesSearchbtn{
@@ -11,12 +37,10 @@
 	border-color: rgba(223,132,166,255);
 }
 
+/* 의류리스트 이미지*/
 #whatsInCloset {
 	max-height: 40em; /* 스크롤 가능한 최대 높이를 지정 (필요에 따라 조정) */
  	overflow-y: auto; /* 세로 스크롤을 활성화 */
-}
-/* 의류리스트 이미지*/
-#whatsInCloset{
 	text-align:center;
 }
 #whatsInCloset > div{
@@ -139,7 +163,7 @@
 
 #IMGdetail{
 	width:100%;
-	height:400px; 
+	height:500px; 
 	overflow:hidden;
 }
 #myChart {

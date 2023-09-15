@@ -629,7 +629,42 @@
 					        </h2>
 					        <div id="accordionIcon-1" class="accordion-collapse collapse" data-bs-parent="#accordionIcon">
  						      <div class="accordion-body">
-
+<!-- 코디일지 찾기 테이블 --><table>
+							<colgroup>
+							<col width="10%">
+							<col width="45%">
+							<col width="10%">
+							<col>
+							</colgroup>
+							<tr> <!-- 1행 -->
+							<td>계절</td>
+							<td>
+							<input type="checkbox" name="seasonsForDiarySearch" value="spring"><label for="spirng"><small>봄</small></label>
+                      		<input type="checkbox" name="seasonsForDiarySearch" value="summer"><label for="summer"><small>여름</small></label>
+                      		<input type="checkbox" name="seasonsForDiarySearch" value="fall"><label for="fall"><small>가을</small></label>
+                      		<input type="checkbox" name="seasonsForDiarySearch" value="winter"><label for="winter"><small>겨울</small></label>
+							</td>
+							<td>TPO</td>
+							<td>
+							<select name="styleTPOforSearch">
+                				<option value="AllTPO">전체</option>
+                				<option value="office">회사</option>
+                				<option value="gathering">모임</option>
+                				<option value="daily">일상</option>
+                				<option value="friend">친구</option>
+                				<option value="date">데이트</option>
+                				<option value="break">휴식</option>
+                				<option value="exercise">운동</option>
+                				<option value="trip">여행</option>
+                				<option value="etcTPO">기타</option>
+                			</select>
+							</td>	
+							</tr><!-- 1행 끝 -->
+							<tr><!-- 2행 -->
+							<td>메모</td>
+							<td colspan="3"><input type="text" class="form-control" placeholder="메모 내용을 검색해주세요" id="descriptionForSearch"></td>
+							</tr>
+							</table>
 								</div> <!-- class="accordion-body" -->
  				       		</div> <!-- id="accordionIcon-1" class="accordion-collapse collapse" -->
     					  </div><!-- class="accordion-item card" -->

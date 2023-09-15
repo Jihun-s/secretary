@@ -161,8 +161,32 @@ public class ClosetServiceImpl implements ClosetService {
 	@Override
 	public ArrayList<ClosetStyleDiary> findAllDiary(String userId, String[] seasonArr, String styleTPO,
 			String searchWord) {
-		// TODO Auto-generated method stub
-		return null;
+		HashMap<String, String> map = new HashMap<>();
+		
+		//계절
+		if(seasonArr == null) {
+			log.debug("계절 Null");
+		}else {
+			StringBuilder temp = new StringBuilder();
+			for(String s : seasonArr) {
+				temp.append(s+',');
+			}
+			String season = temp.toString();
+			season = season.substring(0, season.length()-1);
+			log.debug("계절:{}", season);
+			map.put("seasons", season);
+		}
+		map.put("userId", userId);
+		map.put("styleTPO", styleTPO);
+		map.put("searchWord", searchWord);
+	
+		return dao.findAllDiary(map);
+	}
+
+	//코디일지- 차트데이터 값 불러오기
+	@Override
+	public HashMap<String, BigDecimal> getDiaryChartValue(String userId) {
+		return dao.getDiaryChartValue(userId);
 	}
 	
 

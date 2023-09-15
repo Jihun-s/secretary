@@ -7,10 +7,9 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 import java.net.URLEncoder;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -46,7 +45,6 @@ public class ClosetStyleDiaryController {
 	@Autowired
 	ClosetService closetService;
 	
-
 	//파일저장 경로
 	@Value("${spring.servlet.multipart.location}")
 	String uploadPath;
@@ -133,6 +131,16 @@ public class ClosetStyleDiaryController {
 	public ArrayList<ClosetStyleDiary> diaryListInStyleDiary(@RequestParam(name="userId") String userId,
 											String[] seasonArr, String styleTPO, String searchWord){
 		log.debug("유저아이디:{}", userId);
+		if(seasonArr == null) {
+			log.debug("계절 해당없음");
+		} else {
+		for(String season:seasonArr) {
+			log.debug("계절:{}", season);
+			}
+		};		
+		log.debug("TPO:{}", styleTPO);
+		log.debug("검색어:{}", searchWord);
+		
 		ArrayList<ClosetStyleDiary> diaryList = closetService.findAllDiary(userId, seasonArr, styleTPO, searchWord);
 		return diaryList;
 	}
@@ -164,5 +172,21 @@ public class ClosetStyleDiaryController {
 	    	e.printStackTrace();
 	    }
 	}//styleDiaryDownload
+	
+	@ResponseBody
+	@GetMapping("readDiary")
+	public ClosetStyleDiary readDiary(@RequestParam(name="styleNum") int styleNum,
+			@RequestParam(name="userId") String userId) {
+		ClosetStyleDiary diary = closetService.findDiary(styleNum, userId);
+		return diary;
+	}
+	
+	@ResponseBody
+	@GetMapping("chartValue")
+	public HashMap<String, BigDecimal> getChartValue(@RequestParam(name="userId") String userId) {
+		
+		HashMap<String, BigDecimal> valueList = closetService.getDiaryChartValue(userId);
+		return valueList;
+	}
 	
 }

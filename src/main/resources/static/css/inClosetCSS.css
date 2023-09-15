@@ -10,6 +10,8 @@
 /* 의류리스트 이미지*/
 #whatsInCloset{
 	text-align:center;
+	max-height: 40em; /* 스크롤 가능한 최대 높이를 지정 (필요에 따라 조정) */
+ 	overflow-y: auto; /* 세로 스크롤을 활성화 */	
 }
 #whatsInCloset > div{
 	margin-right:1em;
@@ -22,7 +24,7 @@
 	position:relative;
 }
 #whatsInCloset img{
-	width:15em;
+	width:14.5em;
 	height:10em;
 }
 
