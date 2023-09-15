@@ -28,7 +28,7 @@
 }
 
 /*옷찾기 Search 버튼(코디등록 모달)*/
-#clothesSearchbtn{
+#clothesSearchbtn, #clothesSearchbtnForUpdateDiary{
 	background-color: rgba(223,132,166,255);
 	border-color: rgba(223,132,166,255);
 } 
@@ -38,12 +38,12 @@
 }
 
 /* 의류리스트 이미지*/
-#whatsInCloset {
+#whatsInCloset, #whatsInClosetForUpdateDiary {
 	max-height: 40em; /* 스크롤 가능한 최대 높이를 지정 (필요에 따라 조정) */
  	overflow-y: auto; /* 세로 스크롤을 활성화 */
 	text-align:center;
 }
-#whatsInCloset > div{
+#whatsInCloset > div, #whatsInClosetForUpdateDiary > div{
 	margin-right:1em;
 	margin-bottom:1em;
 	border-color: pink; 
@@ -53,7 +53,7 @@
 	display:inline-block;
 	position:relative;
 }
-#whatsInCloset img{
+#whatsInCloset img, #whatsInClosetForUpdateDiary img {
 	width:13em;
 	height:10em;
 }
@@ -70,7 +70,7 @@
 }
 
 /* 옷등록 사진 미리보기*/
-#imagePreview {
+#imagePreview, #imagePreviewForUpdateDiary {
 	width:35em;
 	height:25em;
 	border: 2px; border-style:solid; border-color:rgba(223,132,166,255); border-radius:2%;

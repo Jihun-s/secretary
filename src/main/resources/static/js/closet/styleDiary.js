@@ -34,7 +34,7 @@ $(document).ready(function(){
 
 
 	$('#styleSearchbtn').on('click', diarySearch);
-//!!!!!!!!!!!!!!!!!!!!!! 옷 찾기  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!	
+//!!!!!!!!!!!!!!!!!!!!!! 코디일지 코디등록 모달에서 옷 찾기  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!	
 	//옷찾기 분류에서 소분류 숨겨놓기
 	$('#topCategory').hide();
 	$('#bottomCategory').hide();
@@ -49,7 +49,23 @@ $(document).ready(function(){
 	//옷찾기에서 분류를 선택하면 clothesSearchAnimation함수 실행	
 	$("#clothesCategoryForSearch").on('change',clothesSearchAnimation);
 	$("#clothesSearchbtn").on('click',clothesSearch); //옷찾기 버튼 클릭하면 clothesSearch 함수실행
-//!!!!!!!!!!!!!!!!!!!!!! 옷 찾기  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!		
+
+//!!!!!!!!!!!!!!!!!!!!!! 코디일지 수정모달에서 옷 찾기  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!	
+	//옷찾기 분류에서 소분류 숨겨놓기
+	$('#topCategoryForUpdateDiary').hide();
+	$('#bottomCategoryForUpdateDiary').hide();
+	$('#outerCategoryForUpdateDiary').hide();
+	$('#dressCategoryForUpdateDiary').hide();
+	$('#shoesCategoryForUpdateDiary').hide();
+	$('#bagCategoryForUpdateDiary').hide();
+	$('#accessoryCategoryForUpdateDiary').hide();
+	$('#etcCategoryForUpdateDiary').hide();
+	//옷찾기에서 신발사이즈 숨겨놓기
+	$('#shoesSizeForSearchForUpdateDiary').hide();
+	//옷찾기에서 분류를 선택하면 clothesSearchAnimation함수 실행	
+	$("#clothesCategoryForSearchForUpdateDiary").on('change',clothesSearchForUpdateDiaryAnimation);
+	$("#clothesSearchbtnForUpdateDiary").on('click',clothesSearchForUpdateDiary); //옷찾기 버튼 클릭하면 clothesSearch 함수실행
+//!!!!!!!!!!!!!!!!!!!!!! 옷 찾기  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 	$.ajax({
 		url:'styleDiary/inStyleDiary',
@@ -79,13 +95,18 @@ $(document).ready(function(){
 			dataType:'json',
 			success:function(list){
 				let str ='';
+				let updateStr = '';
 				$(list).each(function(i,n){
 					let clothesNum = parseInt(n.clothesNum);
 					str +='<div><a onclick="deliverImg('+n.closetNum+','+clothesNum+')">\
 					<img src="../closet/clothesDownload?closetNum='+n.closetNum+'&clothesNum='+clothesNum+'">\
 						   </a></div>';
+					updateStr += '<div><a>\
+					<img src="../closet/clothesDownload?closetNum='+n.closetNum+'&clothesNum='+clothesNum+'">\
+						   </a></div>';	 
 				});
 				$('#whatsInCloset').html(str); 
+				$('#whatsInClosetForUpdateDiary').html(updateStr); 
 			},
 			error:function(e){
 				alert(JSON.stringify(e));
@@ -259,6 +280,7 @@ function readDiary(styleNum){
 		data:{styleNum: styleNum, userId: userId},
 		dataType:'json',
 		success:function(diary){
+			console.log(diary.styleSeasons);
 			const translatedTPO = tpoMapping[diary.styleTPO] || diary.styleTPO;
 			let seasonresult = '';
 			if(!diary.styleSeasons){
@@ -276,7 +298,7 @@ function readDiary(styleNum){
 				seasonresult = translatedSeasons.join(', ');
 			} else {
 				//쉼표 없이 계절 하나일 경우
-				seasonresult = seasonMapping[diary.styleSeasons] || clothes.clothesSeasons;
+				seasonresult = seasonMapping[diary.styleSeasons] || diary.styleSeasons;
 			}
 			
 			let DiaryImgStr = '<img src="../closet/styleDiary/styleDiaryDownload?styleNum='+styleNum+'&userId='+userId+'">';
@@ -300,6 +322,12 @@ function readDiary(styleNum){
 	})//ajax	
 }
 
+
+function openUpdateModal(styleNum){
+    // 모달 열기
+   	const updateModal = new bootstrap.Modal(document.getElementById('openUpdateDiary'));
+    updateModal.show();	
+}
 function clothesSearch(){
 	//console.log();
 	// 카테고리 category, 사이즈 size
@@ -368,6 +396,11 @@ function clothesSearch(){
 		}			
 	})
 }
+
+function clothesSearchForUpdateDiary(){
+	
+}
+
 
 function chartDraw(dataValue){
 	
@@ -527,5 +560,118 @@ function clothesSearchAnimation(){
 		$('#shoesSizeForSearch').hide();
 			
 		$('#clothesSizeForSearch').show();				
+	}
+}
+
+function clothesSearchForUpdateDiaryAnimation(){
+	var result = $('#clothesCategoryForSearchForUpdateDiary option:selected').val();
+	if(result=='top'){
+		$('#bottomCategoryForUpdateDiary').hide();
+		$('#outerCategoryForUpdateDiary').hide();
+		$('#dressCategoryForUpdateDiary').hide();
+		$('#shoesCategoryForUpdateDiary').hide();
+		$('#bagCategoryForUpdateDiary').hide();
+		$('#accessoryCategoryForUpdateDiary').hide();
+		$('#etcCategoryForUpdateDiary').hide();
+		$('#shoesSizeForSearchForUpdateDiary').hide();
+			
+		$('#clothesSizeForSearchForUpdateDiary').show();
+		$('#topCategoryForUpdateDiary').show();
+	}else if(result =='bottom'){
+		$('#topCategoryForUpdateDiary').hide();
+		$('#outerCategoryForUpdateDiary').hide();
+		$('#dressCategoryForUpdateDiary').hide();
+		$('#shoesCategoryForUpdateDiary').hide();
+		$('#bagCategoryForUpdateDiary').hide();
+		$('#accessoryCategoryForUpdateDiary').hide();
+		$('#etcCategoryForUpdateDiary').hide();
+		$('#shoesSizeForSearchForUpdateDiary').hide();
+			
+		$('#clothesSizeForSearchForUpdateDiary').show();			
+		$('#bottomCategoryForUpdateDiary').show();
+	}else if(result =='clothesOuter'){
+		$('#topCategoryForUpdateDiary').hide();
+		$('#bottomCategoryForUpdateDiary').hide();
+		$('#dressCategoryForUpdateDiary').hide();
+		$('#shoesCategoryForUpdateDiary').hide();
+		$('#bagCategoryForUpdateDiary').hide();
+		$('#accessoryCategoryForUpdateDiary').hide();
+		$('#etcCategoryForUpdateDiary').hide();
+		$('#shoesSizeForSearchForUpdateDiary').hide();
+			
+		$('#clothesSizeForSearchForUpdateDiary').show();			
+		$('#outerCategoryForUpdateDiary').show();
+	}else if(result =='dress'){
+		$('#topCategoryForUpdateDiary').hide();
+		$('#bottomCategoryForUpdateDiary').hide();
+		$('#outerCategoryForUpdateDiary').hide();
+		$('#shoesCategoryForUpdateDiary').hide();
+		$('#bagCategoryForUpdateDiary').hide();
+		$('#accessoryCategoryForUpdateDiary').hide();
+		$('#etcCategoryForUpdateDiary').hide();
+		$('#shoesSizeForSearchForUpdateDiary').hide();
+			
+		$('#clothesSizeForSearchForUpdateDiary').show();			
+		$('#dressCategoryForUpdateDiary').show();
+	}else if(result =='shoes'){
+		$('#topCategoryForUpdateDiary').hide();
+		$('#bottomCategoryForUpdateDiary').hide();
+		$('#outerCategoryForUpdateDiary').hide();
+		$('#dressCategoryForUpdateDiary').hide();
+		$('#bagCategoryForUpdateDiary').hide();
+		$('#accessoryCategoryForUpdateDiary').hide();
+		$('#etcCategoryForUpdateDiary').hide();
+		$('#clothesSizeForSearchForUpdateDiary').hide();
+			
+		$('#shoesSizeForSearchForUpdateDiary').show();
+		$('#shoesCategoryForUpdateDiary').show();
+	}else if(result =='bag'){
+		$('#topCategoryForUpdateDiary').hide();
+		$('#bottomCategoryForUpdateDiary').hide();
+		$('#outerCategoryForUpdateDiary').hide();
+		$('#dressCategoryForUpdateDiary').hide();
+		$('#shoesCategoryForUpdateDiary').hide();
+		$('#accessoryCategoryForUpdateDiary').hide();
+		$('#etcCategoryForUpdateDiary').hide();	
+		$('#shoesSizeForSearchForUpdateDiary').hide();
+			
+		$('#clothesSizeForSearchForUpdateDiary').show();					
+		$('#bagCategoryForUpdateDiary').show();
+	}else if(result =='accessory'){
+		$('#topCategoryForUpdateDiary').hide();
+		$('#bottomCategoryForUpdateDiary').hide();
+		$('#outerCategoryForUpdateDiary').hide();
+		$('#dressCategoryForUpdateDiary').hide();
+		$('#shoesCategoryForUpdateDiary').hide();
+		$('#bagCategoryForUpdateDiary').hide();
+		$('#etcCategoryForUpdateDiary').hide();
+		$('#shoesSizeForSearchForUpdateDiary').hide();
+			
+		$('#clothesSizeForSearchForUpdateDiary').show();			
+		$('#accessoryCategoryForUpdateDiary').show();
+	}else if(result =='etc'){
+		$('#topCategoryForUpdateDiary').hide();
+		$('#bottomCategoryForUpdateDiary').hide();
+		$('#outerCategoryForUpdateDiary').hide();
+		$('#dressCategoryForUpdateDiary').hide();
+		$('#shoesCategoryForUpdateDiary').hide();
+		$('#bagCategoryForUpdateDiary').hide();
+		$('#accessoryCategoryForUpdateDiary').hide();
+		$('#shoesSizeForSearchForUpdateDiary').hide();
+			
+		$('#clothesSizeForSearchForUpdateDiary').show();			
+		$('#etcCategoryForUpdateDiary').show();			
+	}else if(result== 'CategoryAll'){
+		$('#topCategoryForUpdateDiary').hide();
+		$('#bottomCategoryForUpdateDiary').hide();
+		$('#outerCategoryForUpdateDiary').hide();
+		$('#dressCategoryForUpdateDiary').hide();
+		$('#shoesCategoryForUpdateDiary').hide();
+		$('#bagCategoryForUpdateDiary').hide();
+		$('#accessoryCategoryForUpdateDiary').hide();
+		$('#etcCategoryForUpdateDiary').hide();		
+		$('#shoesSizeForSearchForUpdateDiary').hide();
+			
+		$('#clothesSizeForSearchForUpdateDiary').show();				
 	}
 }

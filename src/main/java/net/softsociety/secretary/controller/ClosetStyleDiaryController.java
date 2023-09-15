@@ -178,6 +178,7 @@ public class ClosetStyleDiaryController {
 	public ClosetStyleDiary readDiary(@RequestParam(name="styleNum") int styleNum,
 			@RequestParam(name="userId") String userId) {
 		ClosetStyleDiary diary = closetService.findDiary(styleNum, userId);
+		log.debug("readDiary 객체:{}", diary);
 		return diary;
 	}
 	

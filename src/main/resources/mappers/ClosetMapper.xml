@@ -150,13 +150,13 @@
 
 <!-- 코디일지: 코디일지 등록 -->
 <insert id="createStyle" parameterType="ClosetStyleDiary">
-	insert into Secretary_StyleDiary (style_num, user_id, sytle_seasons, style_TPO, style_description, style_info, style_img)
+	insert into Secretary_StyleDiary (style_num, user_id, style_seasons, style_TPO, style_description, style_info, style_img)
 	values (Secretary_StyleDiary_SEQ.nextval, #{userId}, #{styleSeasons}, #{styleTPO}, #{styleDescription}, #{styleInfo}, #{styleImg})
 </insert>
 
 <!-- 코디일지 찾기(일지번호, 유저아이디) -->
 <select id="findDiary" parameterType="hashmap" resultType="ClosetStyleDiary">
-	select * from Secretary_StyleDiary where style_num = #{styleNum} and user_id = #{userId}
+	select * from Secretary_StyleDiary where user_id = #{userId} and style_num = #{styleNum}
 </select>
 
 <!-- 코디일지 전체 목록(검색기능 포함) -->
@@ -164,7 +164,7 @@
 	select * from Secretary_StyleDiary <where>
 			<if test="userId !=null">user_id = #{userId}</if>
 			<if test="seasons != null">
-			and upper(sytle_seasons) like upper('%' || #{seasons} || '%')		
+			and upper(style_seasons) like upper('%' || #{seasons} || '%')		
 			</if>
 			<if test="styleTPO != null and styleTPO !='AllTPO'">
 			and style_TPO = #{styleTPO}

@@ -794,7 +794,7 @@
                       					  </td><!-- 의류 소분류 끝 -->
                       					  <td><label for="materialListForSearch">소재</label></td>
                       					  <td>
-											<select id=materialListForSearch>
+											<select id="materialListForSearch">
 												<option value="materialAll">전체</option>
 												<option value="none">해당 없음</option>
 												<option value="cotton">면</option>
@@ -913,7 +913,231 @@
           </div><!-- class="modal-dialog modal-xl"  -->
         </div> <!-- class="modal fade" id="exLargeModal" -->
       
-
+  <!-- 코디일지 수정 Modal -->
+        <div class="modal fade" id="openUpdateDiary" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel4"></h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body row" style="height:43.5em;">
+ <!-- 왼쪽 의류리스트 --> <div class="col">
+                           <div id="accordionIcon" class="accordion mt-3 accordion-without-arrow" style="display:inline;">
+                            <div class="accordion-item card">
+                              <h2 class="accordion-header text-body d-flex justify-content-between" id="accordionIconOne" style="border:1;">
+                                    <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#accordionIcon-1" aria-controls="accordionIcon-1">
+                                          <strong>전체 옷장에서 옷 찾기</strong> 
+                                     </button> <button class="btn btn-danger" id="clothesSearchbtnForUpdateDiary">Search</button>
+                              </h2>
+                              <div id="accordionIcon-1" class="accordion-collapse collapse" data-bs-parent="#accordionIcon">
+                                 <div class="accordion-body">
+              <!-- 옷찾기 테이블 --><table>
+                                      <colgroup>
+                                      <col width="10%">
+                                      <col width="50%">
+                                      <col width="10%">
+                                      <col>
+                                      </colgroup>
+                                          <tr>
+                                            <td><label for="clothesCategoryForSearchForUpdateDiary">분류</label></td>
+                                              <td> <!-- 의류 대분류 -->
+                                                  <select id="clothesCategoryForSearchForUpdateDiary">
+                                                      <option value="CategoryAll" selected>전체</option>
+                                                      <option value="top">상의</option>
+                                                      <option value="bottom">하의</option>
+                                                      <option value="clothesOuter">아우터</option>
+                                                      <option value="dress">원피스</option>
+                                                      <option value="shoes">신발</option>
+                                                      <option value="bag">가방</option>
+                                                      <option value="accessory">악세사리</option>
+                                                      <option value="etc">기타</option>
+                                                  </select>
+                                              
+                                                       <!-- 의류 소분류 -->
+                                                  <select id="topCategoryForUpdateDiary" >
+                                                    <option value="topAll" selected>상의 전체</option>
+                                                    <option value="Tshirt">티셔츠</option>
+                                                    <option value="blouse">블라우스/셔츠</option>
+                                                    <option value="sweatshirt">맨투맨/후디</option>
+                                                    <option value="knitwear">니트</option>												
+                                                  </select>
+  
+                                                  <select id="bottomCategoryForUpdateDiary">
+                                                  <option value="bottomAll">하의 전체</option>
+                                                  <option value="skirt">치마</option>
+                                                    <option value="pants">바지</option>
+                                                    <option value="jeans">청바지</option>
+                                                    <option value="trainingPants">트레이닝/조거</option>
+                                                  </select>
+                                                  
+                                                  <select id="outerCategoryForUpdateDiary">
+                                                    <option value="clothesOuterAll" selected>아우터 전체</option>
+                                                    <option value="coat">코트</option>
+                                                    <option value="jacket">자켓/점퍼</option>
+                                                    <option value="paddedJacket">패딩</option>                      			
+                                                    <option value="zipupHoodie">후드집업</option>                      			
+                                                    <option value="cardigan">가디건/베스트</option>												
+                                                  </select>
+                                                  
+                                                  <select id="dressCategoryForUpdateDiary">
+                                                  <option value="dressAll" selected>원피스 전체</option>
+                                                  <option value="miniDress">미니원피스</option>
+                                                  <option value="longDress">롱원피스</option>			
+                                                  </select>
+                                                  
+                                                  <select id="shoesCategoryForUpdateDiary">
+                                                    <option value="shoesAll" selected>신발 전체</option>                     			
+                                                    <option value="sneakers">운동화</option>                     			
+                                                    <option value="formalShoes">구두</option>                     			
+                                                    <option value="boots">부츠</option>
+                                                    <option value="sandals">샌들</option>												
+                                                  </select>
+                                                  
+                                                  <select id="bagCategoryForUpdateDiary">
+                                                    <option value="bagAll" selected>가방 전체</option>
+                                                    <option value="backpack">백팩</option>
+                                                    <option value="totebag">숄더/토트백</option>
+                                                    <option value="crossbodybag">크로스백</option>
+                                                    <option value="clutchbag">클러치</option>												
+                                                  </select>
+                                                  
+                                                  <select id="accessoryCategoryForUpdateDiary">
+                                                    <option value="accessoryAll" selected>악세사리 전체</option>
+                                                    <option value="hat">모자</option>
+                                                    <option value="socks">양말</option>
+                                                    <option value="jewelryOrWatch">쥬얼리/시계</option>
+                                                    <option value="scarf">머플러/스카프</option>
+                                                    <option value="belt">벨트</option>
+                                                    <option value="accessoryEtc">기타</option>												
+                                                  </select>
+                                                  
+                                                  <select id="etcCategoryForUpdateDiary">
+                                                    <option value="etcAll" selected>기타 전체</option>
+                                                    <option value="innerwear">이너웨어</option>
+                                                    <option value="sleepwear">잠옷</option>
+                                                    <option value="swimsuit">수영복</option>												
+                                                  </select>
+                                              </td><!-- 의류 소분류 끝 -->
+                                              <td><label for="materialListForSearch">소재</label></td>
+                                              <td>
+                                              <select id="materialListForSearchForUpdateDiary">
+                                                  <option value="materialAll">전체</option>
+                                                  <option value="none">해당 없음</option>
+                                                  <option value="cotton">면</option>
+                                                  <option value="linen">린넨</option>
+                                                  <option value="polyester">폴리에스테르</option>
+                                                  <option value="denim">데님</option>
+                                                  <option value="knit">니트</option>
+                                                  <option value="wool">울</option>
+                                                  <option value="acryl">아크릴</option>
+                                                  <option value="corduroy">코듀로이</option>
+                                                  <option value="silk">실크</option>
+                                                  <option value="woolen">모직</option>
+                                                  <option value="nylon">나일론</option>
+                                                  <option value="suede">스웨이드</option>
+                                                  <option value="leather">가죽</option>
+                                                  <option value="rayon">레이온</option>
+                                                  <option value="oxford">옥스퍼드</option>
+                                                  <option value="napping">기모</option>
+                                              </select>
+                                            </td>
+                                          </tr> <!-- 옷 찾기 1행 끝 -->
+                                          <tr> <!-- 2행 -->
+                                          <td>계절</td>
+                                          <td>
+                                          <input type="checkbox" name="seasonsForSearchForUpdateDiary" value="spring"><label for="spirng"><small>봄</small></label>
+                                            <input type="checkbox" name="seasonsForSearchForUpdateDiary" value="summer"><label for="summer"><small>여름</small></label>
+                                            <input type="checkbox" name="seasonsForSearchForUpdateDiary" value="fall"><label for="fall"><small>가을</small></label>
+                                            <input type="checkbox" name="seasonsForSearchForUpdateDiary" value="winter"><label for="winter"><small>겨울</small></label>
+                                          </td>
+                                            <td><label for="sizeForSearch">사이즈</label></td>
+                                            <td>
+                                                <select id="clothesSizeForSearchForUpdateDiary">
+                                                <option value="SizeAll">전체</option>
+                                                <option value="none">해당없음</option>
+                                                <option value="free">FREE</option>
+                                                <option value="XS">XS</option>
+                                                <option value="S">S</option>
+                                                <option value="M">M</option>
+                                                <option value="L">L</option>
+                                                <option value="XL">XL</option>
+                                                <option value="XXL">XXL</option>
+                                                </select>
+                                                
+                                                <table id="shoesSizeForSearchForUpdateDiary">
+                                                <tr>
+                                                <td><input type="checkbox" name="shoesSizeAllForUpdateDiary" value="SizeAll"><small>전체</small></td>
+                                              <td><input type="number" name="shoesForSearchForUpdateDiary" value="210" min="210" max="300" step="5"></td>
+                                              </tr>
+                                              </table>
+                                            </td>										
+                                          </tr>
+                                      </table>
+                                  </div> <!-- class="accordion-body" -->
+                                  </div> <!-- id="accordionIcon-1" class="accordion-collapse collapse" -->
+                            </div><!-- class="accordion-item card" -->
+                            </div> <!-- id="accordionIcon" class="accordion mt-3 accordion-without-arrow" -->  
+                        <div class="card-body" id="whatsInClosetForUpdateDiary">
+                        <h4>옷장에 옷이 하나도 없네요</h4>
+                      </div>	            	
+                    </div><!-- 왼쪽 div 끝 -->
+  <!-- 오른쪽 코디정보 --><div class="col" style="overflow:hidden;">
+                  <div id="imagePreviewForUpdateDiary">
+                      <div class="imagePreview1"></div>
+                      <div class="imagePreview2"></div>
+                      <div class="imagePreview3"></div>
+                      <div class="imagePreview4"></div>
+                      <div class="imagePreview5"></div>
+                      <div class="imagePreview6"></div>
+                      <div class="imagePreview7"></div>
+                      <div class="imagePreview8"></div>
+                      <div class="imagePreview9"></div>
+                  </div><br>
+                  <div class="insertStyle">
+                  <table>
+                   <tr> <!-- 1행 -->
+                      <td colspan="2">계절</td>
+                       <td>
+                             <input type="checkbox" name="seasonsForUpdateDiary" value="spring"><label for="spirng"><small>봄</small></label>
+                            <input type="checkbox" name="seasonsForUpdateDiary" value="summer"><label for="summer"><small>여름</small></label>
+                             <input type="checkbox" name="seasonsForUpdateDiary" value="fall"><label for="fall"><small>가을</small></label>
+                             <input type="checkbox" name="seasonsForUpdateDiary" value="winter"><label for="winter"><small>겨울</small></label>
+                          </td>
+                  </tr>
+                  <tr> <!-- 2행 -->
+                      <td colspan="2">TPO</td>
+                      <td>
+                          <select name="styleTPOForUpdateDiary" class="form-control">
+                              <option value="office">회사</option>
+                              <option value="gathering">모임</option>
+                              <option value="daily">일상</option>
+                              <option value="friend">친구</option>
+                              <option value="date">데이트</option>
+                              <option value="break">휴식</option>
+                              <option value="exercise">운동</option>
+                              <option value="trip">여행</option>
+                              <option value="etcTPO">기타</option>
+                          </select>
+                      </td>
+                  </tr>
+                  <tr> <!-- 3행 -->
+                      <td colspan="2">메모</td>
+                      <td>
+                          <textarea class="form-control" name="styleDescriptionForUpdateDiary" rows="4">메모해주세요.</textarea>
+                      </td>
+                  </tr>			
+                  </table>
+                  </div>
+                  </div><!-- 오른쪽 div 끝 -->
+                </div><!-- class="modal-body" -->
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-primary" style="background-color: rgba(223,132,166,255); border-color: rgba(223,132,166,255);">Save changes</button>
+                </div>
+              </div>
+            </div>
+          </div>
               	  <div class="card">
               	  <div class="d-flex align-items-end"></div>
                 		<div class="card-body">
