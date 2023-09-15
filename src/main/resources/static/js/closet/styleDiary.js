@@ -287,7 +287,12 @@ function readDiary(styleNum){
 						<td>&nbsp;&nbsp;'+translatedTPO+'</td></tr>\
 						<tr><td><button class="btn-pink">메모내용</button><td>\
 						<td colspan="2">&nbsp;&nbsp;'+diary.styleDescription+'</td></tr>'
-			$('#InfoDetail').html(DiaryStr);			
+			$('#InfoDetail').html(DiaryStr);
+			let footer = '<br><button type="button" class="btn btn-primary" style="background-color: rgba(223,132,166,255); border-color: rgba(223,132,166,255);" \
+							onclick="deleteDiary('+styleNum+')"> 삭제 </button>\
+						<button type="button" class="btn btn-primary"	style="background-color: rgba(223,132,166,255); border-color: rgba(223,132,166,255);" \
+							onclick="openUpdateModal('+styleNum+')"> 수정 </button>'
+		 	$('#InfoFooter').html(footer);						
 		 },
 		error:function(e){
 			alert(JSON.stringify(e));
