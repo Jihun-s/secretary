@@ -161,6 +161,12 @@
 								,style_img = #{styleImg}
 			where style_num = #{styleNum} and user_id = #{userId}
 </update>
+
+<!-- 코디일지: 삭제 -->
+<delete id="deleteStyleDiary" parameterType="ClosetStyleDiary">
+	delete from Secretary_StyleDiary where style_num = #{styleNum} and user_id = #{userId} 
+</delete>
+
 <!-- 코디일지 찾기(일지번호, 유저아이디) -->
 <select id="findDiary" parameterType="hashmap" resultType="ClosetStyleDiary">
 	select * from Secretary_StyleDiary where user_id = #{userId} and style_num = #{styleNum}

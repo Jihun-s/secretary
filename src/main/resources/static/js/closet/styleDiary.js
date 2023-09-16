@@ -468,6 +468,21 @@ function openUpdateModal(styleNum){
 	});//styleUpdate (사용자가 수정버튼 클릭하면)
 }
 
+function deleteDiary(styleNum){
+	$.ajax({
+		url:'styleDiary/styleDelete',
+		type:'post',
+		data:{styleNum: styleNum, 
+				userId: userId}, 	
+		success:function(){
+			location.reload(true); // 성공했으면 새로고침
+		},
+		error:function(e){
+			console.log(JSON.stringify(e));
+		}			
+	})//ajax	
+}
+
 function clothesSearch(){
 	//console.log();
 	// 카테고리 category, 사이즈 size

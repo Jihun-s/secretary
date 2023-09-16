@@ -54,6 +54,8 @@ public interface ClosetService {
 	HashMap<String, BigDecimal> getDiaryChartValue(String userId);
 	//코디일지 - 코디일지 수정
 	void updateStyle(ClosetStyleDiary diary);
+	//코디일지 - 코디일지 삭제
+	int deleteStyleDiary(ClosetStyleDiary diary);
 
 	
 }

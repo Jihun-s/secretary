@@ -201,6 +201,24 @@ public class ClosetStyleDiaryController {
 	}//styleUpdate(코디일지 수정)
 	
 	
+	@ResponseBody
+	@PostMapping("styleDelete")
+	public void deleteStyleDiary(@RequestParam(name="styleNum") int styleNum, 
+							@RequestParam(name="userId") String userId) {
+		log.debug("styleDelete 매핑!!");
+		ClosetStyleDiary diary = closetService.findDiary(styleNum, userId);
+		if(diary.getStyleImg() != null || diary.getStyleImg() !="") {
+			String fullPath = uploadPath + "/" + diary.getStyleImg();
+			FileService.deleteFile(fullPath);
+		}
+		int n = closetService.deleteStyleDiary(diary);
+		if( n == 0) {
+			log.debug("코디일지 삭제 실패");
+		} else {
+			log.debug("코디일지 삭제 성공");
+		}
+	}
+	
 	//코디일지 일지목록
 	@ResponseBody
 	@GetMapping("inStyleDiary")
