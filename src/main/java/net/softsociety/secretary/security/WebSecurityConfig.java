@@ -37,6 +37,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 "/user/confirm",
                 "/user/idcheck",
                 "/user/emailcheck",
+                "/user/forgot-password",
+                "/user/reset-password",
+                "/user/register",
+                "/user/verify",
+                "/user/failed-verification",
+                "/user/confirm",
+                "/user/check-email",
                 "/homeView/home",
                 "/boardView/list",
                 "/boardView/list2",
@@ -97,5 +104,4 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         tokenRepository.setDataSource(dataSource);
         return tokenRepository;
     }
-
 }
