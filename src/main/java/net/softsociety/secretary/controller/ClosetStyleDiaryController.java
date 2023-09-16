@@ -124,6 +124,82 @@ public class ClosetStyleDiaryController {
 	}//styleImgCreate
 	
 	
+	//코디일지 수정
+	@ResponseBody
+	@PostMapping("styleUpdate")
+	public void styleImgUpdate(String array,HttpServletRequest request, ClosetStyleDiary diary) throws Exception{
+		log.debug("ClosetStyleDiary 객체 전송됐나요?:{}", diary);
+		log.debug("array :{} ",array);
+		//변경할 코디일지 이전 정보 가져오기
+		ClosetStyleDiary oldDiary = closetService.findDiary(diary.getStyleNum(), diary.getUserId());
+		//의류 객체정보 String array로 전송받음 & 이미지 변경 안했을 경우
+		if(array == null || array.equals("[]")) {
+			log.debug("이미지 변경 안함");
+			diary.setStyleInfo(oldDiary.getStyleInfo());
+			diary.setStyleImg(oldDiary.getStyleImg());
+		} else {
+			//과거 이미지파일 삭제하기
+			if(oldDiary.getStyleImg() !=null || oldDiary.getStyleImg() !="") {
+				String fullPath = uploadPath + "/" + oldDiary.getStyleImg();
+				FileService.deleteFile(fullPath);
+			}
+			diary.setStyleInfo(array);
+			//Clothes 객체 리스트로 변환
+			ObjectMapper objectMapper = new ObjectMapper();
+			ArrayList<Clothes> list = objectMapper.readValue(array, new TypeReference<ArrayList<Clothes>>() {});
+			log.debug("변환결과 리스트:{}", list);
+			log.debug("변환결과 리스트:{}", list.size());
+			///Clothes 이미지파일 경로 추출
+			ArrayList<String> imagePaths = new ArrayList<>();
+			for(Clothes selectedList : list) {
+				Clothes clothes = closetService.findClothes(selectedList.getClosetNum(), selectedList.getClothesNum());
+				imagePaths.add(uploadPath+"/"+clothes.getClothesImg());
+				log.debug("이미지 경로:{}", clothes.getClothesImg());
+			}
+			
+			int x = 0;
+			int y = 0;
+			if(list.size()>=7) {
+				y=0;
+			} else if(list.size() >=4) {
+				y= 50;
+			} else if(list.size() < 4) {
+				y = 100;
+			}
+			
+			// 의류 각 이미지 조절하고, 합성해서 하나로 반환
+			BufferedImage mergedImage = new BufferedImage(520, 370, BufferedImage.TYPE_INT_ARGB); 
+			Graphics2D graphics = mergedImage.createGraphics();
+			
+			for(String imgPath : imagePaths) {
+				BufferedImage originalImage = ImageIO.read(new File(imgPath));
+				
+				//각 이미지 크기를 조절
+				BufferedImage resizedImage = new BufferedImage(520 / 3, 370 / 3, BufferedImage.TYPE_INT_ARGB);
+	            Graphics2D g = resizedImage.createGraphics();
+	            g.drawImage(originalImage, 0, 0, 520 / 3, 370 / 3, null);
+	            g.dispose();
+	            
+	            // 합성 이미지에 그리기
+	            graphics.drawImage(resizedImage, x, y, null);
+
+	            x += 520 / 3;
+	            if (x >= 518) {
+	                x = 0;
+	                y += 370 / 3;
+	            }
+			}
+			 graphics.dispose();
+			 
+			 String savedPath = FileService.mergedImgName(uploadPath);
+			 ImageIO.write(mergedImage, "png", new File(uploadPath + "/" +savedPath)); //합성이미지 파일 생성&저장
+			 //이미지파일경로 diary객체에 저장
+			 diary.setStyleImg(savedPath);
+			 log.debug("ClosetStyleDiary 객체 수정 완성됐나요?:{}", diary);			
+		}//else문 끝 ( 이미지 변경 했을 경우)
+		closetService.updateStyle(diary);
+	}//styleUpdate(코디일지 수정)
+	
 	
 	//코디일지 일지목록
 	@ResponseBody

@@ -30,11 +30,12 @@ $(document).ready(function(){
 			console.log(JSON.stringify(e));
 		}			
 	})	
-// !!!!!!!!!!!!!!!!!!			차트 그리기			!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!	
+// !!!!!!!!!!!!!!!!!!	    차트 그리기	끝		!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!	
 
-
+	//코디일지 찾기버튼
 	$('#styleSearchbtn').on('click', diarySearch);
-//!!!!!!!!!!!!!!!!!!!!!! 코디일지 코디등록 모달에서 옷 찾기  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!	
+	
+//!!!!!!!!!!!!!!!!!!!!!! (코디등록 모달) 옷장 의류 찾기  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!	
 	//옷찾기 분류에서 소분류 숨겨놓기
 	$('#topCategory').hide();
 	$('#bottomCategory').hide();
@@ -50,7 +51,7 @@ $(document).ready(function(){
 	$("#clothesCategoryForSearch").on('change',clothesSearchAnimation);
 	$("#clothesSearchbtn").on('click',clothesSearch); //옷찾기 버튼 클릭하면 clothesSearch 함수실행
 
-//!!!!!!!!!!!!!!!!!!!!!! 코디일지 수정모달에서 옷 찾기  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!	
+//!!!!!!!!!!!!!!!!!!!!!! (코디수정 모달) 옷장 의류 찾기  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!	
 	//옷찾기 분류에서 소분류 숨겨놓기
 	$('#topCategoryForUpdateDiary').hide();
 	$('#bottomCategoryForUpdateDiary').hide();
@@ -65,8 +66,9 @@ $(document).ready(function(){
 	//옷찾기에서 분류를 선택하면 clothesSearchAnimation함수 실행	
 	$("#clothesCategoryForSearchForUpdateDiary").on('change',clothesSearchForUpdateDiaryAnimation);
 	$("#clothesSearchbtnForUpdateDiary").on('click',clothesSearchForUpdateDiary); //옷찾기 버튼 클릭하면 clothesSearch 함수실행
-//!!!!!!!!!!!!!!!!!!!!!! 옷 찾기  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
+	
+	
+//코디일지 목록 출력
 	$.ajax({
 		url:'styleDiary/inStyleDiary',
 		type:'get',
@@ -87,7 +89,7 @@ $(document).ready(function(){
 		}			
 	})//ajax	
 
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!(코디등록) 옷장안에 의류목록 출력!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// (코디등록, 수정) 옷장안에 의류목록 출력!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		$.ajax({
 			url:'inCloset',
 			type:'get',
@@ -101,7 +103,7 @@ $(document).ready(function(){
 					str +='<div><a onclick="deliverImg('+n.closetNum+','+clothesNum+')">\
 					<img src="../closet/clothesDownload?closetNum='+n.closetNum+'&clothesNum='+clothesNum+'">\
 						   </a></div>';
-					updateStr += '<div><a>\
+					updateStr += '<div><a onclick="deliverImgForUpdateDiary('+n.closetNum+','+clothesNum+')">\
 					<img src="../closet/clothesDownload?closetNum='+n.closetNum+'&clothesNum='+clothesNum+'">\
 						   </a></div>';	 
 				});
@@ -112,13 +114,13 @@ $(document).ready(function(){
 				alert(JSON.stringify(e));
 			}			
 		})		
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!(코디등록) 옷장안에 의류목록 출력!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//(코디등록,수정) 옷장안에 의류목록 출력 끝 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		
 });//document.ready 끝
 
 
 
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!코디등록 imagePreview에 의류추가 미리보기 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!    코디등록     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 var imageIndex = 1;
 var maxImages = 9;
 var imageSlots = [];
@@ -126,7 +128,7 @@ var imageSlots = [];
 function deliverImg(closetNum, clothesNum){
     console.log(closetNum);
     console.log(clothesNum);
-
+	
     // 이미지 슬롯을 확인하고 비어있는 슬롯에 이미지를 추가합니다.
     for (var i = 0; i < maxImages; i++) {
         if (!imageSlots[i]) {
@@ -161,10 +163,7 @@ function addImageToSlot(slotIndex, closetNum, clothesNum) {
         imageSlots[slotIndex] = undefined;
     });
 }
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!코디등록 imagePreview에 의류추가 미리보기 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-
-	
 function styleCreate(){
 	//계절 배열변수에 담기
 	let seasonArr = [];
@@ -231,6 +230,65 @@ function styleCreate(){
 		}			
 	})//ajax
 }
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!    코디등록  끝   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!코디수정 imagePreview에 의류추가 미리보기 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+var imageIndexForUpdateDiary = 1;
+var maxImagesForUpdateDiary = 9;
+var imageSlotsForUpdateDiary = [];
+
+function deliverImgForUpdateDiary(closetNum, clothesNum){
+    console.log(closetNum);
+    console.log(clothesNum);
+    
+    /*이미지를 클릭해서 deliverImgForUpdateDiary가 실행되면
+    imagePreviewForUpdateDiary div태그의 배경이미지 없애고,
+    이미지 슬롯 다시 나타나게 하기*/
+    $('#imagePreviewForUpdateDiary').css({"background":"url('')"});
+    $('.imagePreviewForUpdateDiary1').show();
+    $('.imagePreviewForUpdateDiary2').show();
+    $('.imagePreviewForUpdateDiary3').show();
+    $('.imagePreviewForUpdateDiary4').show();
+    $('.imagePreviewForUpdateDiary5').show();
+    $('.imagePreviewForUpdateDiary6').show();
+    $('.imagePreviewForUpdateDiary7').show();
+    $('.imagePreviewForUpdateDiary8').show();
+    $('.imagePreviewForUpdateDiary9').show();
+    
+    // 이미지 슬롯을 확인하고 비어있는 슬롯에 이미지를 추가
+    for (var i = 0; i < maxImagesForUpdateDiary; i++) {
+        if (!imageSlotsForUpdateDiary[i]) {
+            addImageToSlotForUpdateDiary(i, closetNum, clothesNum);
+            return;
+        }
+    }
+    // 모든 슬롯이 이미지로 채워진 경우 알림을 표시합니다.
+    alert('10개까지만 추가할 수 있어요~');
+}
+
+function addImageToSlotForUpdateDiary(slotIndex, closetNum, clothesNum) {
+    var imageUrl = '../closet/clothesDownload?closetNum=' + closetNum + '&clothesNum=' + clothesNum;
+    var imagePreview = document.querySelector('.imagePreviewForUpdateDiary' + (slotIndex + 1));
+
+    // 새로운 이미지 엘리먼트 생성
+    var img = new Image();
+    img.src = imageUrl;
+
+    // 이미지를 현재 div에 추가
+    imagePreview.appendChild(img);
+
+    // 이미지 슬롯을 기록합니다.
+    imageSlotsForUpdateDiary[slotIndex] = img;
+    
+    // 이미지 클릭 이벤트 리스너 추가
+    img.addEventListener('click', function () {
+        // 이미지 삭제
+        img.remove();
+        // 슬롯을 비웁니다.
+        imageSlotsForUpdateDiary[slotIndex] = undefined;
+    });
+}
+
 
 function diarySearch(){
 	// 계절
@@ -324,10 +382,92 @@ function readDiary(styleNum){
 
 
 function openUpdateModal(styleNum){
-    // 모달 열기
+    // 코디수정 모달 열기
    	const updateModal = new bootstrap.Modal(document.getElementById('openUpdateDiary'));
-    updateModal.show();	
+    updateModal.show();
+   
+   	//imagePreviewForUpdateDiary div태그안 이미지 슬롯 숨기고,
+   	//기존 코디일지 이미지를 배경이미지로 보여줌
+    $('.imagePreviewForUpdateDiary1').hide();
+    $('.imagePreviewForUpdateDiary2').hide();
+    $('.imagePreviewForUpdateDiary3').hide();
+    $('.imagePreviewForUpdateDiary4').hide();
+    $('.imagePreviewForUpdateDiary5').hide();
+    $('.imagePreviewForUpdateDiary6').hide();
+    $('.imagePreviewForUpdateDiary7').hide();
+    $('.imagePreviewForUpdateDiary8').hide();
+    $('.imagePreviewForUpdateDiary9').hide();
+    var backgroundImageUrl = "../closet/styleDiary/styleDiaryDownload?styleNum=" +styleNum+ '&userId=' + userId;
+	$('#imagePreviewForUpdateDiary').css({"background":"url("+backgroundImageUrl+")"});
+	$('#imagePreviewForUpdateDiary').css({'background-repeat': 'no-repeat'});
+
+
+    $('#styleUpdate').on('click', function(){
+		
+	console.log('코디일지 번호:'+ styleNum);
+	//계절 배열변수에 담기
+	let seasonArr = [];
+	var seasonChecked = $("input:checkbox[name='seasonsForUpdateDiary']:checked");
+	$(seasonChecked).each(function(){
+		seasonArr.push($(this).val());
+	}); 
+	console.log('계절: '+seasonArr);
+	
+	//TPO 변수
+	let tpo = $("select[name='styleTPOForUpdateDiary'] option:selected").val();
+	console.log(tpo);
+	
+	//사용자 스타일메모 변수
+	let description = $("textarea[name='styleDescriptionForUpdateDiary']").val();
+	console.log(description);
+	
+	//사용자가 추가한 의류 확인
+	let ImgToSendForUpdateDiary = [];	
+	if(imageSlotsForUpdateDiary.length != 0){
+		for(var i = 0; i < maxImagesForUpdateDiary; i++){
+		 if(imageSlotsForUpdateDiary[i]){	
+			// 이미지 태그의 src 속성에서 closetNum과 clothesNum 추출
+			var imageSrc = imageSlotsForUpdateDiary[i].src;
+			var closetNumRegexForUpdateDiary = /closetNum=(\d+)/;
+			var clothesNumRegexForUpdateDiary = /clothesNum=(\d+)/;
+
+			var closetNumMatchForUpdateDiary = imageSrc.match(closetNumRegexForUpdateDiary);
+			var clothesNumMatchForUpdateDiary = imageSrc.match(clothesNumRegexForUpdateDiary);
+
+			if (closetNumMatchForUpdateDiary && clothesNumMatchForUpdateDiary) {
+   	 			var closetNumForUpdateDiary = closetNumMatchForUpdateDiary[1]; // 매치된 값에서 숫자 부분을 추출
+   	 			var clothesNumForUpdateDiary = clothesNumMatchForUpdateDiary[1]; // 매치된 값에서 숫자 부분을 추출
+
+   	 			console.log('closetNum:', closetNumForUpdateDiary);
+   	 			console.log('clothesNum:', clothesNumForUpdateDiary);
+   	 			ImgToSendForUpdateDiary.push({'closetNum':parseInt(closetNumForUpdateDiary), 'clothesNum':parseInt(clothesNumForUpdateDiary)})
+				} else {
+    			console.log('closetNum 또는 clothesNum을 추출할 수 없습니다.');
+				}
+	 		}
+		}//for문
+	} //if문 끝남 (사용자가 추가한 의류 확인)
+	console.log(ImgToSendForUpdateDiary);
+	$.ajax({
+		url:'styleDiary/styleUpdate',
+		type:'post',
+		traditional:true,
+		data:{array: JSON.stringify(ImgToSendForUpdateDiary), //의류이미지
+				styleNum: styleNum, 			//일지번호
+				styleSeasons : seasonArr, 		//계절 변수
+				styleTPO : tpo,			 		//TPO 변수
+				styleDescription:description, 	//메모 변수
+				userId: userId}, 	
+		success:function(){
+			location.reload(true); // 성공했으면 새로고침
+		},
+		error:function(e){
+			console.log(JSON.stringify(e));
+		}			
+	})//ajax	
+	});//styleUpdate (사용자가 수정버튼 클릭하면)
 }
+
 function clothesSearch(){
 	//console.log();
 	// 카테고리 category, 사이즈 size
@@ -398,12 +538,78 @@ function clothesSearch(){
 }
 
 function clothesSearchForUpdateDiary(){
-	
+	//console.log();
+	// 카테고리 category, 사이즈 size
+	let category = $('#clothesCategoryForSearchForUpdateDiary option:selected').val();
+	let size;				
+	if(category == 'top'){
+		category = $('#topCategoryForUpdateDiary option:selected').val();
+	} else if(category == 'bottom'){
+		category = $('#bottomCategoryForUpdateDiary option:selected').val();
+	} else if(category == 'clothesOuter'){
+		category = $('#outerCategoryForUpdateDiary option:selected').val();
+	} else if(category == 'dress'){
+		category = $('#dressCategoryForUpdateDiary option:selected').val();
+	} else if(category == 'shoes'){
+		//신발사이즈 체크된 값
+		size = $("input:checkbox[name='shoesSizeAllForUpdateDiary']:checked").val();
+		if(size==undefined){
+			size = $("input[name='shoesForSearchForUpdateDiary']").val();
+		}
+		category = $('#shoesCategoryForUpdateDiary option:selected').val();
+	} else if(category == 'bag'){
+		category = $('#bagCategoryForUpdateDiary option:selected').val();
+	} else if(category == 'accessory'){
+		category = $('#accessoryCategoryForUpdateDiary option:selected').val();
+	} else if(category == 'etc'){
+		category = $('#etcCategoryForUpdateDiary option:selected').val();
+	}
+	//신발이 아닌경우
+	if(size==undefined){
+			size = $('#clothesSizeForSearchForUpdateDiary option:selected').val();
+	}	 
+	console.log(category);
+	console.log(size);
+		
+	// 소재 material
+	let material = $('#materialListForSearchForUpdateDiary option:selected').val();
+	console.log(material);
+
+	// 계절 seasonArr
+	const seasonArr = [];
+	var seasonChecked = $("input:checkbox[name='seasonsForSearchForUpdateDiary']:checked");
+	$(seasonChecked).each(function(){
+		seasonArr.push($(this).val());
+	}); 		
+	console.log(seasonArr);
+	console.log(typeof(seasonArr));
+		
+	let closetNum = 0; //  전체 옷장에서 찾기
+	$.ajax({
+		url:'inCloset',
+		type:'get',
+		traditional:true,
+		data:{closetNum: closetNum, category:category, size:size
+			,seasonArr: seasonArr, material:material},
+		dataType:'json',
+		success:function(list){
+			let updateStr ='';
+			$(list).each(function(i,n){
+				let clothesNum = parseInt(n.clothesNum);
+				updateStr += '<div><a onclick="deliverImgForUpdateDiary('+n.closetNum+','+clothesNum+')">\
+					<img src="../closet/clothesDownload?closetNum='+n.closetNum+'&clothesNum='+clothesNum+'">\
+						   </a></div>';	 				
+			});
+			$('#whatsInClosetForUpdateDiary').html(updateStr); 
+		},
+		error:function(e){
+			alert(JSON.stringify(e));
+		}			
+	})	
 }
 
 
 function chartDraw(dataValue){
-	
   let chartdata = {
   	labels: ['회사','모임','일상','친구','데이트','휴식','운동','여행', '기타'],
   	datasets: [{

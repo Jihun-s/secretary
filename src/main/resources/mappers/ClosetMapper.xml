@@ -154,6 +154,13 @@
 	values (Secretary_StyleDiary_SEQ.nextval, #{userId}, #{styleSeasons}, #{styleTPO}, #{styleDescription}, #{styleInfo}, #{styleImg})
 </insert>
 
+<!-- 코디일지: 코디일지 수정 -->
+<update id="updateStyle" parameterType="ClosetStyleDiary">
+	update Secretary_StyleDiary set style_seasons = #{styleSeasons}, style_TPO = #{styleTPO}
+								,style_description = #{styleDescription}, style_info = #{styleInfo}
+								,style_img = #{styleImg}
+			where style_num = #{styleNum} and user_id = #{userId}
+</update>
 <!-- 코디일지 찾기(일지번호, 유저아이디) -->
 <select id="findDiary" parameterType="hashmap" resultType="ClosetStyleDiary">
 	select * from Secretary_StyleDiary where user_id = #{userId} and style_num = #{styleNum}
@@ -189,4 +196,5 @@
 	COUNT(CASE WHEN style_TPO = 'etcTPO' THEN 1 ELSE NULL END) AS ETCTPO
 	FROM Secretary_StyleDiary WHERE user_id = #{userId}
 </select>
+
 </mapper>
