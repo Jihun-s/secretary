@@ -10,11 +10,15 @@
 #editClosetBtn {
 	display:inline-block; width:50%;
 } /*메인화면 옷장편집 버튼*/
-
+#editClosetBtn:hover {
+	transform: translate3d(1px,0.5px,1px);
+}
 #insertClosetBtn {
 	display:inline-block; width:50%;
 } /*메인화면 옷장추가 버튼 */
-
+#insertClosetBtn:hover {
+	transform: translate3d(-0.5px,0.5px,1px);
+}
 .delCloset{
 	position:absolute; right:2em;;
 	width:1.5em;
@@ -24,6 +28,9 @@
 	width:1.5em;
 } /*편집버튼 누르면 생기는 옷장수정버튼*/ 
 
+#closetNameForModifyBtn:hover{
+	transform: translate3d(1px,0.5px,1px);
+}
 #plusClosetBtn img {
 	width: 80%; padding-left:2.2em;
 	cursor:pointer;
@@ -44,6 +51,10 @@
 #ManageCloset p{
 	margin-bottom: 0; text-align:center;
 }
+
+#ManageCloset a img:hover{
+	transform: translate3d(1px,1px,1px);
+}
 /* !!!!!!!!!!!!옷장 css!!!!!!!!!!!!!!*/
 
 /* !!!!!!!!!!!!코디일지 css!!!!!!!!!!!!!!*/
@@ -55,6 +66,9 @@
 }
 #diaryCSS img {
 	width:100%;
+}
+#diaryCSS img:hover {
+	transform: translate3d(1px,1px,1px);
 }
 /* !!!!!!!!!!!!코디일지 css!!!!!!!!!!!!!!*/
 

@@ -152,7 +152,7 @@ function delCloset(closetNum){
 
 function modifyCloset(closetNum){
 	console.log(closetNum);
-	let modifyStr = '<table><tr><td><input type="text" placeholder="옷장이름 (3자 이상)" id="closetNameForModify" style="width:72%;">\
+	let modifyStr = '<table><tr><td><input class="form-control" style="display:inline-block; width:72%;" type="text" placeholder="이름 (3자 이상)" id="closetNameForModify">\
 								<button class="btn-pink" id="closetNameForModifyBtn">수정</button></td></tr>\
 					<tr><td><img src="images/closetImg/wardrobe.png"></td></tr></table>'
 	$('#ManageCloset').html(modifyStr);

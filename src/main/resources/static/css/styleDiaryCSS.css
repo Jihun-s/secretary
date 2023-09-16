@@ -26,6 +26,11 @@
 	width:14.5em;
 	height:10em;
 }
+#whatsInStyleDiary div:hover{
+	transform: translate3d(1px,1px,1px);
+	cursor:pointer;
+}
+
 
 /*옷찾기 Search 버튼(코디등록 모달)*/
 #clothesSearchbtn, #clothesSearchbtnForUpdateDiary{
@@ -56,6 +61,14 @@
 #whatsInCloset img, #whatsInClosetForUpdateDiary img {
 	width:13em;
 	height:10em;
+}
+#whatsInCloset div:hover{
+	transform: translate3d(1px,1px,1px);
+	cursor:pointer;	
+}
+#whatsInClosetForUpdateDiary div:hover{
+	transform: translate3d(1px,1px,1px);
+	cursor:pointer;	
 }
 
 
