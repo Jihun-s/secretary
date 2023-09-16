@@ -188,6 +188,18 @@ public class ClosetServiceImpl implements ClosetService {
 	public HashMap<String, BigDecimal> getDiaryChartValue(String userId) {
 		return dao.getDiaryChartValue(userId);
 	}
+
+	//코디일지- 코디일지 수정
+	@Override
+	public void updateStyle(ClosetStyleDiary diary) {
+		dao.updateStyle(diary);
+	}
+	
+	//코디일지 - 삭제
+	@Override
+	public int deleteStyleDiary(ClosetStyleDiary diary) {
+		return dao.deleteStyleDiary(diary);
+	}
 	
 
 	

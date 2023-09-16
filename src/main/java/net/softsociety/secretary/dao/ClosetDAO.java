@@ -55,5 +55,9 @@ public interface ClosetDAO {
 	ArrayList<ClosetStyleDiary> findAllDiary(HashMap<String, String> map);
 	//코디일지 : 차트 데이터값 불러오기
 	HashMap<String, BigDecimal> getDiaryChartValue(String userId);
+	//코디일지 : 코디일지 수정
+	void updateStyle(ClosetStyleDiary diary);
+	//코디일지 : 코디일지 삭제
+	int deleteStyleDiary(ClosetStyleDiary diary);
 
 }
