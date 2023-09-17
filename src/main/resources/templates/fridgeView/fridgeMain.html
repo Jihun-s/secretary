@@ -1234,6 +1234,28 @@
 
                 // 사용자가 소비를 할 때 해당 함수를 호출
                 refreshConsumptionHistory();
+
+                // 검색창 요소 선택
+                let $searchInput = $('#foodSearchInput');
+
+                // 검색창에 키 입력 이벤트 추가
+                $searchInput.on('keyup', function () {
+                    let searchTerm = $(this).val(); // 사용자가 입력한 검색어
+
+                    $.ajax({
+                        url: 'fridgeFood/search', // 백엔드 검색 엔드포인트
+                        method: 'GET',
+                        data: { query: searchTerm }, // 검색어를 쿼리 파라미터로 전달
+                        success: function (response) {
+                            // 응답에서 받아온 검색 결과를 화면에 표시
+                            $('#foodItemsContainer').empty(); // 기존에 표시되던 음식 항목을 모두 제거합니다.
+                            response.forEach(displayFoodItem); // 각 검색된 음식 항목을 화면에 표시합니다.
+                        },
+                        error: function (error) {
+                            console.error('Error fetching search results:', error);
+                        },
+                    });
+                });
             });
             //ready_End;
 
@@ -1535,9 +1557,10 @@
                                 <div class="nav-item d-flex align-items-center">
                                     <i class="bx bx-search fs-4 lh-0"></i>
                                     <input
+                                        id="foodSearchInput"
                                         aria-label="검색어를 입력하세요"
                                         class="form-control border-0 shadow-none"
-                                        placeholder="검색어를 입력하세요"
+                                        placeholder="냉장고 물품 검색"
                                         type="text"
                                     />
                                 </div>

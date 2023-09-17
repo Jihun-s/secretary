@@ -23,4 +23,5 @@ public interface FridgeFoodDAO {
 	
 	int checkFoodQuantity(FridgeFood fridgeFood);
 	void reduceFoodQuantity(FridgeFood fridgeFood);
+	List<FridgeFood> searchFoods(String query);
 }

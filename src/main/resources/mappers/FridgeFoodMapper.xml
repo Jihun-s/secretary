@@ -134,4 +134,10 @@
 	    FROM Secretary_FRIDGE_FOOD
 	    WHERE food_id = #{foodId}
 	</select>
+	
+	<!-- 이름 검색 -->
+	<select id="searchFoods" parameterType="string" resultType="FridgeFood">
+		SELECT * FROM Secretary_FRIDGE_FOOD
+		WHERE LOWER(FOOD_NAME) LIKE '%' || LOWER(#{query}) || '%'
+	</select>
 </mapper>

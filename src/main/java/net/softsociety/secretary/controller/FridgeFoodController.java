@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -156,5 +157,12 @@ public class FridgeFoodController {
     @GetMapping("/getFoodCountInFridge/{fridgeId}")
     public int getFoodCountInFridge(@PathVariable int fridgeId) {
         return fridgeFoodService.getFoodCountByFridgeId(fridgeId);
+    }
+    
+ // 검색 엔드포인트
+    @ResponseBody
+    @GetMapping("/search")
+    public List<FridgeFood> searchFridgeFoods(@RequestParam String query) {
+        return fridgeFoodService.searchFoods(query);
     }
 }

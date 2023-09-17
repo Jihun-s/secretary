@@ -13,4 +13,5 @@ public interface FridgeFoodService {
 	List<FridgeFood> getFoodsByFridgeId(int fridgeId);
 	List<FridgeFood> getAllFoodsByCategory(String category);
 	int getFoodCountByFridgeId(int fridgeId);
+	List<FridgeFood> searchFoods(String query);
 }
