@@ -639,7 +639,7 @@ function init() {
 
 /** 날짜 형식 변환 */
 function formatDate(inputDate) {
-    // YYYY-MM-DD 형식의 문자열을 받아서 "월 일 요일" 형식으로 반환하는 함수입니다.
+    // YYYY-MM-DD 형식의 문자열을 받아서 "월 일 요일" 형식으로 반환하는 함수
     let dateObj = new Date(inputDate);
     let month = dateObj.getMonth() + 1;
     let date = dateObj.getDate();
@@ -733,9 +733,8 @@ function updateTrans() {
 /** 내역 수정 Ajax 호출 */
 function updateTransAjax() {
     let transId = $('#transIdModal');
-    let familyId = $('#familyIdModal');
     let cashbookId = $('#cashbookIdModal');
-    let transDate = $('#transDateModal');
+    let transDate = $('#transDateModal').val().replace("T", " ");
     let transType = $("#transTypeModal input[name='transType']:checked"); 
     let cate1Name = $('#cate1NameModal');
     let cate2Name = $('#cate2NameModal');
@@ -744,18 +743,17 @@ function updateTransAjax() {
     let transAmount = $('#transAmountModal').val().replace(/,/g, '');
     let labelColor = $('#labelColorModal');
 
-    // alert("수정할 값들:" + transId.val() + familyId.val() + cashbookId.val() + transDate.val()
-    //  + transType.val() + cate1Name.val() + cate2Name.val() + transPayee.val()
-    //   + transMemo.val()  + transAmount + labelColor.val());
+    alert("수정할 값들:" + transId.val() + cashbookId.val() + transDate
+     + transType.val() + cate1Name.val() + cate2Name.val() + transPayee.val()
+      + transMemo.val()  + transAmount + labelColor.val());
 
     $.ajax({
         url: '/secretary/cashbook/trans/updateTrans',
         type: 'POST',
         data: { 
             transId: transId.val(),
-            familyId: familyId.val(),
             cashbookId: cashbookId.val(),
-            transDate: transDate.val(), 
+            transDate: transDate, 
             transType: transType.val(), 
             cate1Name: cate1Name.val(),
             cate2Name: cate2Name.val(),

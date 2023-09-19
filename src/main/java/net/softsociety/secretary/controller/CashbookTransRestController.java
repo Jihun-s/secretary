@@ -41,17 +41,15 @@ public class CashbookTransRestController {
 	
 	/** 내역 입력 */
 	@PostMapping("setTrans")
-	public void setTrans(Transaction trans, @AuthenticationPrincipal UserDetails user) {
+	public void setTrans(Transaction trans
+			, Model model) {
 		log.debug("넘어온 거래내역:{}", trans);
+
+		// DAO에 보낼 map 만들기
+		User loginUser = (User) model.getAttribute("loginUser");
+		trans.setUserId(loginUser.getUserId());
+		trans.setFamilyId(loginUser.getFamilyId());
 		
-		// 유저id 불러오기
-		String userId = userdao.findByEmailOrUserId(user.getUsername()).getUserId();
-		// 유저id 입력 
-		trans.setUserId(userId);
-		
-		// cashbookId, familyId 임의로 입력
-		trans.setCashbookId(1);
-		trans.setFamilyId(1);
 		log.debug("입력할 거래내역:{}", trans);
 		log.debug("입력할 cashbookId:{}", trans.getCashbookId());
 		
@@ -98,13 +96,14 @@ public class CashbookTransRestController {
 	
 	/** 내역 수정 */
 	@PostMapping("updateTrans")
-	public void updateTrans(Transaction trans, @AuthenticationPrincipal UserDetails user) {
+	public void updateTrans(Transaction trans
+			, Model model) {
 		log.debug("컨트롤러에 넘어온 수정할 거래내역:{}", trans);
 		
-		// 유저id 불러오기
-		String userId = userdao.findByEmailOrUserId(user.getUsername()).getUserId();
-		// 유저id 입력 
-		trans.setUserId(userId);
+		User loginUser = (User) model.getAttribute("loginUser");
+		trans.setUserId(loginUser.getUserId());
+		trans.setFamilyId(loginUser.getFamilyId());
+		
 		log.debug("수정 들어갈 거래내역:{}", trans);
 		
 		int n = service.updateTrans(trans);
