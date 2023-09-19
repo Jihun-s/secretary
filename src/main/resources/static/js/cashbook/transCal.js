@@ -39,7 +39,7 @@ function getColorBytransType(transType) {
     // 'warning' color
     case '지출':
       return {
-        textColor: '#FFC0CB',
+        textColor: '#FFAB00',
         borderColor: 'transparent',
         backgroundColor: 'transparent'
       };
@@ -290,14 +290,14 @@ function showCalendar() {
 
             $(groupedData[date]).each(function(idx, ta) {
                 table += `<tr>
-                            <td style="width: 5rem;">
+                            <td>
                                 <span class="badge bg-label-${ta.labelColor} me-1">${ta.cate2Name || ta.cate1Name || '미분류'}</span>
                                 <input type="hidden" value="${ta.transId}">
                             </td>
-                            <td style="width: 5rem;">${ta.transTime}</td>
+                            <td>${ta.transTime}</td>
                             <td><i class="fab fa-react fa-lg text-info me-3"></i> <strong>${ta.transPayee}</strong></td>
                             <td>${ta.transMemo || ''}</td>
-                            <td style="width: 5rem;">${parseInt(ta.transAmount).toLocaleString('en-US')}</td>
+                            <td>${parseInt(ta.transAmount).toLocaleString('en-US')}</td>
                         </tr>`;
             });
 
@@ -311,7 +311,7 @@ function showCalendar() {
       
           
           // 모달 활성화
-          $('#ModalDetailList').modal('show');  // Bootstrap의 모달을 활성화합니다.
+          $('#ModalDetailList').modal('show'); 
       },
         error: (e) => {
           alert(JSON.stringify(e));
@@ -367,7 +367,7 @@ function showList() {
   // 날짜 설정
   setCurDate();
   initializeDateSelector();
-  
+
   // 목록 불러오기
   init();
   $('body').on('click', '#prevYear, #prevMonth, #nextYear, #nextMonth', init);

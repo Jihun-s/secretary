@@ -374,7 +374,6 @@ function validateTransAmount() {
 function setTrans() {
     if(validateTrans()) {
         setTransAjax();
-        init();
     }
 }
 
@@ -530,19 +529,19 @@ function init() {
     let nowYear = $('#nowYear').html();
     let nowMonth = $('#nowMonth').html();
 
-    // 내역 수 가져오기 
-    $.ajax({
-        url: '/secretary/cashbook/trans/cntMonth',
-        type: 'GET',
-        data: { nowYear: nowYear, nowMonth: nowMonth },
-        dataType: 'text',
-        success: (cnt) => {
-            transCntMonth.html(cnt);
-        },
-        error: () => {
-            alert('내역 개수 전송 실패');
-        }
-    });
+    // // 내역 수 가져오기 
+    // $.ajax({
+    //     url: '/secretary/cashbook/trans/cntMonth',
+    //     type: 'GET',
+    //     data: { nowYear: nowYear, nowMonth: nowMonth },
+    //     dataType: 'text',
+    //     success: (cnt) => {
+    //         transCntMonth.html(cnt);
+    //     },
+    //     error: () => {
+    //         alert('내역 개수 전송 실패');
+    //     }
+    // });
 
     // 총지출 총수입 가져오기 
     $.ajax({
@@ -578,7 +577,7 @@ function init() {
 
             // 일자별로 데이터 그룹화
             $(list).each(function(idx, ta) {
-                let date = ta.transDate;  // 거래날짜를 가져옵니다. (예: "2023-08-28")
+                let date = ta.transDate;
                 if (!groupedData[date]) {
                     groupedData[date] = [];
                 }
@@ -631,10 +630,11 @@ function init() {
 
             table += `</table>`;
 
+            transCntMonth.html(list.length);
             transListDiv.html(table);
         },
         error: function() {
-            alert('내역 리스트 전송 실패');
+            console.log('내역 리스트 전송 실패');
         }
     });
     
@@ -1119,6 +1119,7 @@ function setCustomCategory2() {
 /** 조건별 보기 */
 function selectConditionTrans() {
     let transListDiv = $('#transListDiv');
+    let transCntMonth = $('#transCntMonth');
     transListDiv.html("");
 
     let incomeSelected = false;
@@ -1224,6 +1225,7 @@ function selectConditionTrans() {
 
             table += `</table>`;
 
+            transCntMonth.html(list.length);
             transListDiv.html(table);
             }
 
