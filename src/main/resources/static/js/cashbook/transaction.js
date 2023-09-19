@@ -163,11 +163,13 @@ $(document).ready(function() {
     $('body').on('click', '#transSearchCheckIncome', selectConditionTrans);
     $('body').on('click', '#transSearchCheckExpense', selectConditionTrans);
     $('body').on('click', '#transSearchCheckUserId', selectConditionTrans);
-    $('body').on('click', '#transSearchCategoriesDiv', selectConditionTrans);
+    $('body').on('change', '#transSearchCategoriesDiv', selectConditionTrans);
     $('body').on('change', '#sortBy', selectConditionTrans);
 
 });
 
+
+////////////////////////////////////////////////////////////////////////
 
 
 /** 사진 입력 버튼 */
@@ -267,6 +269,8 @@ function initializeDateSelector() {
         monthElement.text(currentMonth);
     });
 }
+
+////////////////////////////////////////////////////////////////
 
 
 /** 내역 입력 유효성 검사 */

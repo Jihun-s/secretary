@@ -623,9 +623,6 @@
                       </div>
                       <h4>직접 입력</h4>
                       <form>
-                        <!-- 나중에 model에 담아 뿌리도록 수정 -->
-                        <!-- <input type="hidden" name="familyId" id="familyId" value="1">
-                        <input type="hidden" name="cashbookId" id="cashbookId" value="1"> -->
                         <div class="mb-3">
                           <label class="form-label" for="transDate">거래일자</label>
                           <input class="form-control" type="datetime-local" name="transDate" value="2021-06-18T12:30:00" id="transDate">
@@ -702,7 +699,7 @@
                       <h3 class="">내역</h3>
                     </div>
                     <div class="col">
-                      <a href="javascript:location.reload()"><i class="bx bx-md bx-list-ul"></i></a>
+                      <a href="javascript:showList()"><i class="bx bx-md bx-list-ul"></i></a>
                       <a href="javascript:showCalendar()"><i class="bx bx-md bx-calendar"></i></a>
                     </div>
                   </div>
@@ -939,8 +936,7 @@
             <div id="detailListDiv"></div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">취소</button>
-            <button type="button" id="" class="btn btn-primary">버튼</button>
+            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">확인</button>
           </div>
         </div>
       </div>
