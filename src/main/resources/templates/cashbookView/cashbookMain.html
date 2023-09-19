@@ -1,17 +1,4 @@
 <!DOCTYPE html>
-
-<!-- =========================================================
-* Sneat - Bootstrap 5 HTML Admin Template - Pro | v1.0.0
-==============================================================
-
-* Product Page: https://themeselection.com/products/sneat-bootstrap-html-admin-template/
-* Created by: ThemeSelection
-* License: You must have a valid license purchased in order to legally use the theme for your project.
-* Copyright ThemeSelection (https://themeselection.com)
-
-=========================================================
- -->
-<!-- beautify ignore:start -->
 <html
   lang="en"
   class="light-style layout-menu-fixed"
@@ -83,6 +70,8 @@
     <!-- 소영 추가 JS -->
     <script th:src="@{/js/jquery-3.7.0.js}"></script>
     <script th:src="@{/js/cashbook/cashbookMain.js}"></script>
+    <script th:src="@{/js/cashbook/mainTransCal.js}"></script>
+    <script th:src="@{/js/fullcalendar/dist/index.global.js}"></script>
 
     <!-- Helpers -->
     <script th:src="@{/assets/vendor/js/helpers.js}"></script>
@@ -619,7 +608,9 @@
                     <div class="d-flex align-items-end"></div>
                     <div
                       class="card-body d-flex justify-content-center align-items-center"
-                    ></div>
+                    >
+                      <div id="transViewDiv"></div>
+                    </div>
                   </div>
                 </div>
 
@@ -1114,6 +1105,42 @@
       </div>
     </div>
     <!-- /예산 입력 모달 -->
+
+    <!-- 상세 목록 모달 modal -->
+    <div
+      class="modal fade"
+      id="ModalDetailList"
+      data-bs-backdrop="static"
+      tabindex="-1"
+      style="display: none"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel1">일별 내역</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div id="detailListDiv"></div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-primary"
+              data-bs-dismiss="modal"
+            >
+              확인
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!-- / Layout wrapper -->
 
