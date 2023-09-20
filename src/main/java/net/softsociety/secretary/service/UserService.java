@@ -25,6 +25,5 @@ public interface UserService {
 	ArrayList<User> findALL();
 	//관리자 기능 유저정보 편집
 	int editUser(User updatedUser);
-	//관리자 기능 유저 정보 열람
-	//User readUser(String userId);
+	
 }
