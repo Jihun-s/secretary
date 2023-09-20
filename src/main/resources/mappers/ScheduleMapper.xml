@@ -144,8 +144,8 @@
 
 
 
-<!-- 카드 알림 -->
-<select id="getCardAlert" parameterType="hashmap" resultType="Schedule">
+<!-- 자동결제 알림 -->
+<select id="getWithdrawAlert" parameterType="hashmap" resultType="Schedule">
 SELECT
 	sch_id
 	, user_id
@@ -166,8 +166,13 @@ FROM
 	Secretary_Schedule
 WHERE 
     family_id = ${familyId}
-    AND sch_type = '가계부'
-    AND sch_content like '%'|| '카드' || '%'
+    AND (sch_content like '%구독%'
+    	OR sch_content like '%결제%'
+    	OR sch_content like '%정기%'
+    	OR sch_content like '%납부%'
+    	OR sch_cate = '명절'
+    	OR sch_cate = '경조사'
+    	OR sch_cate = '생일')
     AND sch_start >= TRUNC(SYSDATE)
     AND sch_start &lt;= TRUNC(SYSDATE + 7)
 </select>

@@ -168,6 +168,8 @@ public class CashbookMainRestController {
 		log.debug("{}번 가족 {}의 {} 기준 알림 가져오기", familyId, userId, curDateTime);
 
 		ArrayList<Schedule> result = schService.alertList(map);
+		log.debug("화면에 출력할 필수알림 리스트:{}", result);
+		log.debug("화면에 출력할 필수알림 리스트 개수:{}", result.size());
 		
 		return result;
 	}

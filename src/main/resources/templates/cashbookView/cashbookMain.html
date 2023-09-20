@@ -1084,7 +1084,7 @@
       style="display: none"
       aria-hidden="true"
     >
-      <div class="modal-dialog modal-xl" role="document">
+      <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLabel1">일별 내역</h5>
@@ -1099,12 +1099,15 @@
             <div id="detailListDiv"></div>
           </div>
           <div class="modal-footer">
+            <a th:href="@{/cashbook/trans}">
+              <button class="btn btn-primary">내역 홈으로 가기</button>
+            </a>
             <button
               type="button"
-              class="btn btn-primary"
+              class="btn btn-secondary"
               data-bs-dismiss="modal"
             >
-              확인
+              닫기
             </button>
           </div>
         </div>

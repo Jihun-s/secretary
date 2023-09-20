@@ -303,10 +303,13 @@ function getAlerts() {
         data: { curDateTime: curDateTime, curYear: curYear, curMonth: curMonth, curDate: curDate },
         dataType: 'JSON',
         success: function(data) {
+            console.log(JSON.stringify(data));
+
             let html = "";
         
             // 일정을 schStartYmd 기준으로 그룹화
             let groupedByDate = {};
+            // 자동이체 
             data.forEach(sch => {
                 if (!groupedByDate[sch.schStartYmd]) {
                     groupedByDate[sch.schStartYmd] = [];
@@ -318,16 +321,29 @@ function getAlerts() {
             for (let date in groupedByDate) {
                 html += `<br><small class="text-light fw-semibold">${date}</small>`;
                 groupedByDate[date].forEach(sch => {
-                    html += `
-                      <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" style="border: none;">
-                        <a href="javascript:openDetailModal(${sch.schId});">
-                          <div>
-                            ${sch.schStartMonth}월 ${sch.schStartDate}일은 ${sch.schContent}입니다. 연결 계좌 잔고를 확인하세요.
+                    if (sch.schContent.includes("카드") || sch.schContent.includes("구독") || sch.schContent.includes("정기") || sch.schContent.includes("결제") || sch.schContent.includes("납부")) {
+                        html += `
+                          <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" style="border: none;">
+                            <a href="javascript:openDetailModal(${sch.schId});">
+                              <div>
+                                ${sch.schStartMonth}월 ${sch.schStartDate}일은 ${sch.schContent}입니다. 연결 계좌 잔고를 확인하세요.
+                              </div>
+                            </a>
+                            <i class="bx bx-x" style="cursor: pointer;" onclick="deleteSch(${sch.schId});"></i>
                           </div>
-                        </a>
-                        <i class="bx bx-x" style="cursor: pointer;" onclick="deleteSch(${sch.schId});"></i>
-                      </div>
-                    `;
+                        `;
+                    } else if (sch.schCate == '명절' || sch.schCate == '생일' ||sch.schCate == '경조사') {
+                        html += `
+                          <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" style="border: none;">
+                            <a href="javascript:openDetailModal(${sch.schId});">
+                              <div>
+                                ${sch.schStartMonth}월 ${sch.schStartDate}일은 ${sch.schContent}입니다. 예산을 확인하세요.
+                              </div>
+                            </a>
+                            <i class="bx bx-x" style="cursor: pointer;" onclick="deleteSch(${sch.schId});"></i>
+                          </div>
+                        `;
+                    }
                 });
             }
 

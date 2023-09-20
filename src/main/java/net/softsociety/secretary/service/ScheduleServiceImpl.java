@@ -27,14 +27,16 @@ public class ScheduleServiceImpl implements ScheduleService {
 		log.debug("일정서비스가 받은 map: {}", map);
 		HashMap<String, Object> result = new HashMap<>();
 		
-		ArrayList<Schedule> cardAlert = dao.getCardAlert(map);
-		log.debug("일정서비스가 가져온 cardAlert:{}", cardAlert);
-		result.put("cardAlert", cardAlert);
+		ArrayList<Schedule> withdrawAlert = dao.getWithdrawAlert(map);
+		log.debug("일정서비스가 가져온 자동이체 이벤트:{}", withdrawAlert);
+		result.put("withdrawAlert", withdrawAlert);
+//		
+//		ArrayList<Schedule> holidayAlert = dao.getHolidayAlert(map);
+//		log.debug("일정서비스가 가져온 명경생 이벤트:{}", holidayAlert);
+//		result.put("holidayAlert", holidayAlert);
 		
-//		ArrayList<Schedule> salaryAlert = dao.getSalaryAlert(map);
-//		log.debug("일정서비스가 받은 salaryAlert:{}", salaryAlert);
 		
-		return cardAlert;
+		return withdrawAlert;
 	}
 	
 	
