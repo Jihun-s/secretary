@@ -15,7 +15,7 @@ $(document).ready(function() {
       initialView: 'dayGridMonth',
       locale: 'ko',
       aspectRatio: 0.1,
-      contentHeight: 200,
+      height: 550,
       initialDate: curDateFormat,
       events: function(info, successCallback, failureCallback) {
       // 현재 달력 연월 추출

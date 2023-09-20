@@ -139,4 +139,36 @@
 		<!-- AND user_id = #{userId} -->
 		AND family_id = #{familyId}
 </update>
+
+
+
+
+
+<!-- 카드 알림 -->
+<select id="getCardAlert" parameterType="hashmap" resultType="Schedule">
+SELECT
+	sch_id
+	, user_id
+	, family_id
+	, sch_type
+	, sch_cate
+	, sch_level
+	, sch_content
+	, sch_start
+	, TO_CHAR(sch_start, 'YYYY-MM-DD') AS sch_start_ymd
+    , TO_CHAR(sch_start, 'HH24:MI') AS sch_start_hm
+    , TO_CHAR(sch_start, 'YYYY') AS sch_start_year
+	, TO_CHAR(sch_start, 'MM') AS sch_start_month
+    , TO_CHAR(sch_start, 'DD') AS sch_start_date
+	, sch_end
+	, sch_allday
+FROM
+	Secretary_Schedule
+WHERE 
+    family_id = ${familyId}
+    AND sch_type = '가계부'
+    AND sch_content like '%'|| '카드' || '%'
+    AND sch_start >= TRUNC(SYSDATE)
+    AND sch_start &lt;= TRUNC(SYSDATE + 7)
+</select>
 </mapper>

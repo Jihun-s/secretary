@@ -28,4 +28,10 @@ public interface ScheduleDAO {
 	/** 일정 목록 불러오기 오른쪽 */
 	ArrayList<Schedule> selectAllScheList(HashMap<String, Object> map);
 
+	/** 카드 알림 */
+	ArrayList<Schedule> getCardAlert(HashMap<String, Object> map);
+
+	/** 월급날 알림 */
+	ArrayList<Schedule> getSalaryAlert(HashMap<String, Object> map);
+
 }
