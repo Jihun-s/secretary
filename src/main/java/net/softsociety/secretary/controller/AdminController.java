@@ -2,8 +2,11 @@ package net.softsociety.secretary.controller;
 
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,6 +27,8 @@ public class AdminController {
 	UserService userservice;
 	@Autowired
 	UserMapper usermapper;
+	@Autowired
+    private JdbcTemplate jdbcTemplate;
 	
 	@GetMapping("adminHome")
 	public String adminHome() {
@@ -68,6 +73,17 @@ public class AdminController {
 		
 		return "redirect:/admin/list";
 	}
+	//일일 로그인 수 그래프
+	@GetMapping("dailyLogin")
+	public List<Map<String, Object>> dailyLogin() {
+        String sql = "SELECT LOGIN, COUNT(*) AS daily_login_count " +
+                "FROM secretary_logstat " +
+                "WHERE log_message = '로그인이 발생하였습니다' " +
+                "GROUP BY LOGIN " +
+                "ORDER BY LOGIN";
 
+        // 실행 및 결과 반환
+        return jdbcTemplate.queryForList(sql);
+    }
 
 }
