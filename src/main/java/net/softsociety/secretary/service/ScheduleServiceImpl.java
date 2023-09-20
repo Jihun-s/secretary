@@ -38,6 +38,27 @@ public class ScheduleServiceImpl implements ScheduleService {
 		
 		return withdrawAlert;
 	}
+
+
+	/** 가계부 해당월 일정 목록 가져오기 */
+	@Override
+	public ArrayList<Schedule> getBudgetEventList(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		log.debug("일정서비스가 받은 map: {}", map);
+		
+		// update인 경우
+//		if (map.get("insertOrUpdate") != null && (int)map.get("insertOrUpdate") == 1) {
+//			if (map.containsKey("curMonth")) {
+//			    int curValue = (int) map.get("curMonth");
+//			    map.put("curMonth", curValue + 1);
+//			}
+//		}
+		
+		ArrayList<Schedule> budgetEventList = dao.getBudgetEventList(map);
+		log.debug("일정서비스가 가져온 이번달 이벤트:{}", budgetEventList);
+		
+		return budgetEventList;
+	}
 	
 	
 	

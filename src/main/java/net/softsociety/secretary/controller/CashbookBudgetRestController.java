@@ -1,5 +1,6 @@
 package net.softsociety.secretary.controller;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 
@@ -7,16 +8,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.extern.slf4j.Slf4j;
 import net.softsociety.secretary.dao.CashbookDAO;
+import net.softsociety.secretary.dao.ScheduleDAO;
 import net.softsociety.secretary.dao.UserMapper;
 import net.softsociety.secretary.domain.Budget;
+import net.softsociety.secretary.domain.Schedule;
 import net.softsociety.secretary.domain.User;
 import net.softsociety.secretary.service.CashbookService;
+import net.softsociety.secretary.service.ScheduleService;
 
 @Slf4j
 @RequestMapping("/cashbook/budget")
@@ -31,6 +36,12 @@ public class CashbookBudgetRestController {
 	
 	@Autowired
 	UserMapper userdao;
+	
+	@Autowired
+	ScheduleService schService;
+	
+	@Autowired
+	ScheduleDAO schDao;
 	
 	
 	/** 예산 입력 */
@@ -106,6 +117,34 @@ public class CashbookBudgetRestController {
 		
 		int n = dao.deleteBudget(budget);
 		
+	}
+	
+	/** 예산월 이벤트 목록 */
+	@GetMapping("budgetEventList")
+	public ArrayList<Schedule> budgetEventList(
+			Model model
+			, String curDateTime
+			, int curYear
+			, int curMonth
+			, int curDate
+			, int insertOrUpdate) {
+		User loginUser = (User) model.getAttribute("loginUser");
+		int familyId = loginUser.getFamilyId();
+		String userId = loginUser.getUserId();
+		
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("userId", userId);
+		map.put("familyId", familyId);
+		map.put("curDateTime", curDateTime);
+		map.put("curYear", curYear);
+		map.put("curMonth", curMonth);
+		map.put("curDate", curDate);
+		map.put("insertOrUpdate", insertOrUpdate);
+		log.debug("{}번 가족 {}의 {}월 일정 가져오기", familyId, userId, curMonth);
+
+		ArrayList<Schedule> result = schService.getBudgetEventList(map);
+		
+		return result;
 	}
 	
 }

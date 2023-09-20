@@ -149,6 +149,7 @@ function initSetBudgetModal() {
     let curMonth = $('#curMonth').val();
     let curDate = $('#curDate').val();
     let curDateTime = $('#curDateTime').val();
+    let insertOrUpdate = 0;
 
     $.ajax({
         url: '/secretary/cashbook/initSetBudgetModal',
@@ -173,6 +174,34 @@ function initSetBudgetModal() {
             alert('예산 설정 모달 init 실패');
         }
     });
+
+    $.ajax({
+        url: '/secretary/cashbook/budget/budgetEventList',
+        type: 'GET',
+        data: { curDateTime: curDateTime, curYear: curYear, curMonth: curMonth, curDate: curDate, insertOrUpdate: insertOrUpdate },
+        dataType: 'JSON',
+        success: (data) => {
+            let html = '';
+            data.forEach(sch => {
+                let dateParts = sch.schStartYmd.split('-');
+                let dateObj = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]);
+                let days = ['일', '월', '화', '수', '목', '금', '토'];
+                let dayName = days[dateObj.getDay()];
+    
+                html += `
+                        <a href="javascript:void(0);" class="list-group-item list-group-item-action">
+                        ${sch.schStartDate} ${dayName} ${sch.schContent}
+                        </a>`;
+            });
+    
+            $('.modalEventList').html(html);
+    
+        },
+        error: (e) => {
+            console.log(JSON.stringify(e));
+        }
+    });
+    
 }
 
 /** 예산 수정 모달 init */
@@ -182,19 +211,20 @@ function initUpdateBudgetModal() {
     let curMonth = $('#curMonth').val();
     let curDate = $('#curDate').val();
     let curDateTime = $('#curDateTime').val();
+    let insertOrUpdate = 1;
 
     $.ajax({
-        url: '/secretary/cashbook/initSetBudgetModal',
+        url: '/secretary/cashbook/initUpdateBudgetModal',
         type: 'POST',
         data: { familyId: familyId, curDateTime: curDateTime,
             curYear: curYear, curMonth: curMonth, curDate: curDate },
         dataType: 'JSON',
         success: (data) => {
-            // alert("ajax로 가져온 데이터:" + JSON.stringify(data));
-            $('.budgetAvg').html(data.budgetAvg);
-            $('.budgetAmountX').html(data.budgetAmountX);
-            $('.budgetAmountXx').html(data.budgetAmountXx);
-            $('.budgetAmountXxx').html(data.budgetAmountXxx);
+            alert("ajax로 가져온 데이터:" + JSON.stringify(data));
+            $('.budgetAvg').html(data.budgetAvg.toLocaleString('en-US'));
+            $('.budgetAmountX').html(data.budgetAmountX.toLocaleString('en-US'));
+            $('.budgetAmountXx').html(data.budgetAmountXx.toLocaleString('en-US'));
+            $('.budgetAmountXxx').html(data.budgetAmountXxx.toLocaleString('en-US'));
             $('.curYear').html(curYear);
             $('.curMonth').html(curMonth);
             $('.curMonthX').html(curMonth - 1);
@@ -202,10 +232,38 @@ function initUpdateBudgetModal() {
             $('.curMonthXxx').html(curMonth - 3);
 
         },
-        error: () => {
-            alert('예산 수정 모달 init 실패');
+        error: (e) => {
+            console.log(JSON.stringify(e));
         }
     });
+
+    $.ajax({
+        url: '/secretary/cashbook/budget/budgetEventList',
+        type: 'GET',
+        data: { curDateTime: curDateTime, curYear: curYear, curMonth: curMonth, curDate: curDate, insertOrUpdate: insertOrUpdate },
+        dataType: 'JSON',
+        success: (data) => {
+            let html = '';
+            data.forEach(sch => {
+                let dateParts = sch.schStartYmd.split('-'); 
+                let dateObj = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]);
+                let days = ['일', '월', '화', '수', '목', '금', '토'];
+                let dayName = days[dateObj.getDay()];
+    
+                html += `
+                        <a href="javascript:void(0);" class="list-group-item list-group-item-action">
+                        ${sch.schStartDate} ${dayName} ${sch.schContent}
+                        </a>`;
+            });
+    
+            $('.modalEventList').html(html);
+    
+        },
+        error: (e) => {
+            console.log(JSON.stringify(e));
+        }
+    });
+    
 }
 
 

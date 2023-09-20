@@ -37,4 +37,7 @@ public interface ScheduleDAO {
 	/** 명경생 알림 */
 	ArrayList<Schedule> getHolidayAlert(HashMap<String, Object> map);
 
+	/** 예산월 일정 목록 */
+	ArrayList<Schedule> getBudgetEventList(HashMap<String, Object> map);
+
 }

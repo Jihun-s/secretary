@@ -102,7 +102,7 @@ public class CashbookMainRestController {
 		return result;
 	}
 
-	
+	/** 예산 설정 모달 init */
 	@PostMapping("initSetBudgetModal")
 	public HashMap<String, Object> initSetBudgetModal(
 			String curDateTime
@@ -143,7 +143,50 @@ public class CashbookMainRestController {
 			return result;
 		}
 	}
-	
+
+
+	/** 예산 수정 모달 init */
+	@PostMapping("initUpdateBudgetModal")
+	public HashMap<String, Object> initUpdateBudgetModal(
+			String curDateTime
+			, int curYear
+			, int curMonth
+			, int curDate
+			, Model model) {
+		log.debug("예산 수정할때 쓰는 이닛!!!!!!!!!!!!!");
+		User loginUser = (User) model.getAttribute("loginUser");
+		HashMap<String, Object> result = new HashMap<>();	
+		
+		// dao에 보낼 매개변수 map 만들기 
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("budgetYear", curYear);
+		map.put("budgetMonth", curMonth);
+		map.put("familyId", loginUser.getFamilyId());
+		log.debug("DAO에 보낼 map:{}", map);
+		
+		int budgetExist = dao.budgetExist(map);
+		
+		if(budgetExist == 1) {
+			HashMap<String, Object> bax = dao.selectBudgetAvgXXX(map);
+			BigDecimal budgetAvg = (BigDecimal) bax.get("BUDGETAVG");
+			BigDecimal budgetAmountX = (BigDecimal) bax.get("BUDGETAMOUNTX");
+			BigDecimal budgetAmountXx = (BigDecimal) bax.get("BUDGETAMOUNTXX");
+			BigDecimal budgetAmountXxx = (BigDecimal) bax.get("BUDGETAMOUNTXXX");
+				
+			log.debug("직전 3개월 예산 평균?:{}", budgetAvg);
+			log.debug("직전 3개월 예산:{}->{}->{}", budgetAmountX, budgetAmountXx, budgetAmountXxx);
+
+			result.put("budgetAvg", budgetAvg);
+			result.put("budgetAmountX", budgetAmountX);
+			result.put("budgetAmountXx", budgetAmountXx);
+			result.put("budgetAmountXxx", budgetAmountXxx);
+
+			return result;
+		}
+		else {
+			return result;
+		}
+	}
 	
 	/** 알림 목록 가져오기 */ 
 	@PostMapping("alertList")
