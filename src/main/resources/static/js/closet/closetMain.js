@@ -6,7 +6,31 @@
 	let closetNum = 0; //전체 옷장
 	
 // !!!!!!!!!!!!!!!!! 	알림 기능
-	$('.form-check-inline').hide();
+  // 현재 날짜를 가져옵니다.
+  const currentDate = new Date();
+  const year = currentDate.getFullYear();
+
+  // 양력 2월 3일을 입춘으로 설정합니다.
+  const springBegins = new Date(year, 1, 3); // 2월은 1을 기준으로 합니다.
+  // 양력 5월 5일을 입하로 설정합니다.
+  const summerBegins = new Date(year, 4, 5); // 5월은 4를 기준으로 합니다.
+  // 양력 8월 7일을 입추로 설정합니다.
+  const autumnBegins = new Date(year, 7, 7); // 8월은 7을 기준으로 합니다.
+  // 양력 11월 7일을 입동으로 설정합니다.
+  const winterBegins = new Date(year, 10, 7); // 11월은 10을 기준으로 합니다.
+
+  // 현재 날짜가 어떤 절기와 일치하는지 확인하고 알림 표시
+  if (
+    currentDate.toDateString() === springBegins.toDateString() ||
+    currentDate.toDateString() === summerBegins.toDateString() ||
+    currentDate.toDateString() === autumnBegins.toDateString() ||
+    currentDate.toDateString() === winterBegins.toDateString()
+  ) {
+    const seasonForAlert = getSeasonName(currentDate);
+    let seasonStr = '<p>'+seasonForAlert+'입니다. 옷장을 정리해볼까요?</p>'
+    $('#seasonAlert').html(seasonStr);
+	}
+  
 
 // !!!!!!!!!!!!!!!!!!			차트 그리기			!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!	
 	//dataValue 배열변수에 카테고리별 옷 개수 집어넣기
@@ -220,6 +244,19 @@ function insertCloset(){
 	})
 }
 
+// 계절 이름을 반환하는 함수
+function getSeasonName(date) {
+  const month = date.getMonth();
+  if (month === 1) {
+    return "입춘";
+  } else if (month === 4) {
+    return "입하";
+  } else if (month === 7) {
+    return "입추";
+  } else if (month === 10) {
+    return "입동";
+  }
+}
 
 function clothesSearchAnimation(){
 	var result = $('#clothesCategoryForSearch option:selected').val();
