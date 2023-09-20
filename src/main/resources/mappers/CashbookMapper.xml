@@ -254,7 +254,7 @@ INSERT INTO
 	UPDATE
 	    Secretary_Transaction
 	SET
-	    trans_date = TO_DATE(#{transDate}, 'YYYY-MM-DD"T"HH24:MI')
+	    trans_date = TO_DATE(#{transDate}, 'YYYY-MM-DD HH24:MI:SS')
 	    , trans_type = #{transType}
 	    , cate1_id = #{cate1Id}
 	    , cate2_id = #{cate2Id}
@@ -458,6 +458,6 @@ WHERE
 		</if>
 	ORDER BY
 		st.trans_date DESC
-
 </select>
+
 </mapper>

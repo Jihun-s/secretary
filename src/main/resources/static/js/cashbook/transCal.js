@@ -1,171 +1,5 @@
 $(document).ready(function() {
-      // 날짜 설정
-    setCurDate();
-    initializeDateSelector();
 
-    // 오늘 날짜로 초기화
-    $('#dateReset').click(function() {
-        resetToCurrentDate();
-        initializeDateSelector();
-        init();
-    });
-
-    // 목록 불러오기
-    init();
-    $('#prevYear, #prevMonth, #nextYear, #nextMonth').click(init);
-
-    $("#transCategoriesDiv").hide();
-    $("#transSearchCategory2Div").hide();
-
-    // 내역 검증 후 입력
-    $('#setTransBt').click(setTrans);
-
-    // 모달 검증 후 내역 수정
-    $('#setTransBtModal').click(updateTrans); 
-
-   // 거래유형 클릭 이벤트 (대분류 출력)
-   $("input[name='transType']").change(function() {
-    showTransCategoriesDiv();
-    loadMainCategories($(this).val());
-   });
-
-   // 대분류 선택 이벤트 (소분류 출력 or 기본값)
-   $("#cate1Name").change(function() {
-        const selectedCate1Name = $(this).val();
-        if (selectedCate1Name !== "대분류를 선택하세요") {
-            loadSubCategories(selectedCate1Name);
-        } else {
-            // 대분류가 초기 상태로 변경된 경우, 소분류도 초기 상태로 변경합니다.
-            $("#cate2Name").html('<option>소분류를 선택하세요</option>');
-        }
-   });
-
-   // 모달 거래유형 클릭 이벤트 (대분류 출력)
-   $("input[name='transType']").change(function() {
-    showTransCategoriesDivModal();
-    loadMainCategoriesModal($(this).val());
-   });
-
-   // 모달 대분류 선택 이벤트 (소분류 출력 or 기본값)
-   $("#cate1NameModal").change(function() {
-        const selectedCate1NameModal = $(this).val();
-        if (selectedCate1NameModal !== "대분류를 선택하세요") {
-            loadSubCategoriesModal(selectedCate1NameModal);
-        } 
-        if (selectedCate1NameModal === "대분류를 선택하세요") {
-            // 대분류가 초기 상태로 변경된 경우, 소분류도 초기 상태로 변경합니다.
-            $("#cate2NameModal").html('<option>소분류를 선택하세요</option>');
-        }
-   });
-
-    // 소분류 선택 이벤트 (소분류 먼저 선택할 수 없음)
-    $("#cate2Name").click(function() {
-        if ($("input[name='transType']:checked").length === 0) {
-            alert("거래 유형을 먼저 선택하세요.");
-            return;
-        }
-        if ($("#cate1Name").val() === "대분류를 선택하세요") {
-            alert("대분류를 먼저 선택하세요.");
-        }
-    });
-
-    // 모달 소분류 선택 이벤트 (소분류 먼저 선택할 수 없음)
-    $("#cate2NameModal").click(function() {
-        if ($("input[name='transType']:checked").length === 0) {
-            alert("거래 유형을 먼저 선택하세요.");
-            return;
-        }
-        if ($("#cate1NameModal").val() === "대분류를 선택하세요") {
-            alert("대분류를 먼저 선택하세요.");
-        }
-    });
-
-    // 대분류 커스텀 카테고리 추가
-    $('#cate1Name').change(function() {
-        const selectedOptionText = $(this).find("option:selected").text();
-
-        // 입력한 선택지가 '직접입력'인 경우
-        if (selectedOptionText === "직접입력") {
-            setCustomCategory1();
-        }
-    });
-
-    // 소분류 커스텀 카테고리 추가
-    // $('#cate2Name').change(function() {
-    //     const selectedOptionText = $(this).find("option:selected").text();
-
-    //     // 입력한 선택지가 '직접입력'인 경우
-    //     if (selectedOptionText === "직접입력") {
-    //         setCustomCategory2();
-    //     }
-    // });
-    // body 요소에 이벤트 위임
-    $('body').on('change', '#cate2Name', function() {
-        const selectedOptionText = $(this).find("option:selected").text();
-    
-        // 입력한 선택지가 '직접입력'인 경우
-        if (selectedOptionText === "직접입력") {
-            setCustomCategory2();
-        }
-    });
-
-    // 1000단위 콤마 찍기
-    $('#transAmount').on('input', function() {
-        let amount = $(this).val().replace(/,/g, '');  // 현재 입력된 값에서 콤마를 제거합니다.
-        
-        if (!amount) {  // 입력값이 없는 경우
-            return;
-        }
-        
-        let parsedAmount = parseFloat(amount);
-        
-        if (isNaN(parsedAmount)) {  // 숫자로 변환할 수 없는 경우
-            $(this).val('');  // 입력란을 비웁니다.
-        } else {
-            $(this).val(parsedAmount.toLocaleString('en-US'));  // 값을 천 단위로 콤마로 구분하여 다시 설정합니다.
-        }
-    });   
-    
-    // 모달 1000단위 콤마 찍기
-    $('#transAmountModal').on('input', function() {
-        let amount = $(this).val().replace(/,/g, '');  // 현재 입력된 값에서 콤마를 제거합니다.
-        
-        if (!amount) {  // 입력값이 없는 경우
-            return;
-        }
-        
-        let parsedAmount = parseFloat(amount);
-        
-        if (isNaN(parsedAmount)) {  // 숫자로 변환할 수 없는 경우
-            $(this).val('');  // 입력란을 비웁니다.
-        } else {
-            $(this).val(parsedAmount.toLocaleString('en-US'));  // 값을 천 단위로 콤마로 구분하여 다시 설정합니다.
-        }
-    });   
-
-    
-    // 검색용 전체 대분류 & 에 맞는 소분류 출력
-    loadMainCategoriesSearch();
-    $("#transSearchCategory1Div").change(function() {
-        selectConditionTrans();
-        const selectedCate1NameSearch = $(this).val();
-        if (selectedCate1NameSearch !== "대분류를 선택하세요") {
-            loadSubCategoriesSearch(selectedCate1NameSearch);
-        } else {
-            // 대분류가 초기 상태로 변경된 경우, 소분류도 초기 상태로 변경합니다.
-            $("#cate2NameSearch").html('<option>소분류를 선택하세요</option>');
-        }
-    });
-    
-    // 조건 & 검색 & 정렬 
-    // 검색어 입력
-    $('#searchSubmitBt').click(selectConditionTrans);
-    $('#selectCondition input, #selectCondition select').change(selectConditionTrans);
-    $('#transSearchCheckIncome').click(selectConditionTrans);
-    $('#transSearchCheckExpense').click(selectConditionTrans);
-    $('#transSearchCheckUserId').click(selectConditionTrans);
-    $('#transSearchCategoriesDiv').click(selectConditionTrans);
-    $('#sortBy').change(selectConditionTrans);
 });
 
 ////////////////////////////////////////////////////////////////
@@ -189,6 +23,8 @@ function dateToSysdate() {
 
 ////////////////////////////////////////////////////////////////
 
+let isCal = false;
+
 /** transType별 색상 매핑 */
 function getColorBytransType(transType) {
   switch (transType) {
@@ -203,7 +39,7 @@ function getColorBytransType(transType) {
     // 'warning' color
     case '지출':
       return {
-        textColor: '#FFC0CB',
+        textColor: '#FFAB00',
         borderColor: 'transparent',
         backgroundColor: 'transparent'
       };
@@ -319,15 +155,11 @@ let listHtml = `
 
 /////////////////////////////////////////////////////////////////////////////
 
+let calendar = null;
 
-function showList() {
-  $('#transViewDiv').html(listHtml);
-  init();
-}
-
-let calendar = null; // 글로벌 변수로 캘린더 인스턴스를 저장하기 위한 변수
-
+/** 달력 보이기 */
 function showCalendar() {
+  isCal = true;
   let calendarEl = $('#transViewDiv')[0];
 
   /* 현재 날짜 구하기 */
@@ -431,7 +263,7 @@ function showCalendar() {
 
         // 일자별로 데이터 그룹화
         $(list).each(function(idx, ta) {
-            let date = ta.transDate;  // 거래날짜를 가져옵니다. (예: "2023-08-28")
+            let date = ta.transDate;
             if (!groupedData[date]) {
                 groupedData[date] = [];
             }
@@ -452,30 +284,20 @@ function showCalendar() {
                             <th>내용</th>
                             <th>메모</th>
                             <th>거래금액</th>
-                            <th></th>
                         </tr>
                     </thead>
                     <tbody class="table-border-bottom-0">`;
 
             $(groupedData[date]).each(function(idx, ta) {
                 table += `<tr>
-                            <td style="width: 5rem;">
+                            <td>
                                 <span class="badge bg-label-${ta.labelColor} me-1">${ta.cate2Name || ta.cate1Name || '미분류'}</span>
                                 <input type="hidden" value="${ta.transId}">
                             </td>
-                            <td style="width: 5rem;">${ta.transTime}</td>
+                            <td>${ta.transTime}</td>
                             <td><i class="fab fa-react fa-lg text-info me-3"></i> <strong>${ta.transPayee}</strong></td>
                             <td>${ta.transMemo || ''}</td>
-                            <td style="width: 5rem;">${parseInt(ta.transAmount).toLocaleString('en-US')}</td>
-                            <td>
-                            <div class="dropdown">
-                                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></button>
-                                <div class="dropdown-menu">
-                                <a class="dropdown-item" href="javascript:openModalUpdate(${ta.transId});"><i class="bx bx-edit-alt me-2"></i> 수정</a>
-                                <a class="dropdown-item" href="javascript:deleteTrans(${ta.transId});"><i class="bx bx-trash me-2"></i> 삭제</a>
-                                </div>
-                            </div>
-                            </td>
+                            <td>${parseInt(ta.transAmount).toLocaleString('en-US')}</td>
                         </tr>`;
             });
 
@@ -489,7 +311,7 @@ function showCalendar() {
       
           
           // 모달 활성화
-          $('#ModalDetailList').modal('show');  // Bootstrap의 모달을 활성화합니다.
+          $('#ModalDetailList').modal('show'); 
       },
         error: (e) => {
           alert(JSON.stringify(e));
@@ -503,4 +325,54 @@ function showCalendar() {
   $('#transViewDiv').html('');
 
   calendar.render();
+}
+
+/** 목록 보이기 */
+function showList() {
+  isCal = false;
+  $('#transViewDiv').html(listHtml);
+  calendar.destroy();
+  init();
+
+  // 검색용 전체 대분류 & 에 맞는 소분류 출력
+  loadMainCategoriesSearch();
+  $('body').on('change', "#transSearchCategory1Div", function() {
+      selectConditionTrans();
+      const selectedCate1NameSearch = $(this).val();
+      if (selectedCate1NameSearch !== "대분류를 선택하세요") {
+          loadSubCategoriesSearch(selectedCate1NameSearch);
+      } else {
+          // 대분류가 초기 상태로 변경된 경우, 소분류도 초기 상태로 변경합니다.
+          $("#cate2NameSearch").html('<option>소분류를 선택하세요</option>');
+      }
+  });
+
+  // 조건 & 검색 & 정렬 
+  // 검색어 입력
+  $('body').on('click', '#searchSubmitBt', selectConditionTrans);
+  $('body').on('change', '#selectCondition input, #selectCondition select', selectConditionTrans);
+  $('body').on('click', '#transSearchCheckIncome', selectConditionTrans);
+  $('body').on('click', '#transSearchCheckExpense', selectConditionTrans);
+  $('body').on('click', '#transSearchCheckUserId', selectConditionTrans);
+  $('body').on('change', '#transSearchCategoriesDiv', selectConditionTrans);
+  $('body').on('change', '#sortBy', selectConditionTrans);
+
+  // 오늘 날짜로 초기화
+  $('#dateReset').click(function() {
+    resetToCurrentDate();
+    initializeDateSelector();
+    init();
+  });
+
+  // 날짜 설정
+  setCurDate();
+  initializeDateSelector();
+
+  // 목록 불러오기
+  init();
+  $('body').on('click', '#prevYear, #prevMonth, #nextYear, #nextMonth', init);
+
+  $("#transCategoriesDiv").hide();
+  $("#transSearchCategory2Div").hide();
+
 }

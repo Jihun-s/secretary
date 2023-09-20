@@ -20,6 +20,9 @@ public class Schedule {
 	private String schEnd;
 	private String schStartYmd;
 	private String schStartHm;
+	private String schStartYear;
+	private String schStartMonth;
+	private String schStartDate;
 	private boolean schAllday;
 	
 	public String getId() {

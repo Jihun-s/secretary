@@ -1,6 +1,7 @@
 package net.softsociety.secretary.controller;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Optional;
 
@@ -14,10 +15,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.extern.slf4j.Slf4j;
 import net.softsociety.secretary.dao.CashbookDAO;
+import net.softsociety.secretary.dao.ScheduleDAO;
 import net.softsociety.secretary.dao.UserMapper;
 import net.softsociety.secretary.domain.Budget;
+import net.softsociety.secretary.domain.Schedule;
 import net.softsociety.secretary.domain.User;
 import net.softsociety.secretary.service.CashbookService;
+import net.softsociety.secretary.service.ScheduleService;
 
 /** 
  * 메인화면 RestController
@@ -36,6 +40,12 @@ public class CashbookMainRestController {
 	
 	@Autowired
 	UserMapper userdao;
+	
+	@Autowired
+	ScheduleService schService;
+	
+	@Autowired
+	ScheduleDAO schDao;
 	
 	
 	@PostMapping("init")
@@ -132,5 +142,35 @@ public class CashbookMainRestController {
 		else {
 			return result;
 		}
+	}
+	
+	
+	/** 알림 목록 가져오기 */ 
+	@PostMapping("alertList")
+	public ArrayList<Schedule> alertList(
+			Model model
+			, String curDateTime
+			, int curYear
+			, int curMonth
+			, int curDate
+			) {
+		User loginUser = (User) model.getAttribute("loginUser");
+		int familyId = loginUser.getFamilyId();
+		String userId = loginUser.getUserId();
+		
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("userId", userId);
+		map.put("familyId", familyId);
+		map.put("curDateTime", curDateTime);
+		map.put("curYear", curYear);
+		map.put("curMonth", curMonth);
+		map.put("curDate", curDate);
+		log.debug("{}번 가족 {}의 {} 기준 알림 가져오기", familyId, userId, curDateTime);
+
+		ArrayList<Schedule> result = schService.alertList(map);
+		log.debug("화면에 출력할 필수알림 리스트:{}", result);
+		log.debug("화면에 출력할 필수알림 리스트 개수:{}", result.size());
+		
+		return result;
 	}
 }

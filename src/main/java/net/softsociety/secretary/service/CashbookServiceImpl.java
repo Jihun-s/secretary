@@ -105,9 +105,4 @@ public class CashbookServiceImpl implements CashbookService {
 		return result;
 	}
 
-
-	
-	
-	
-	
 }

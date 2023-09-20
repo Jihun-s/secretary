@@ -163,11 +163,13 @@ $(document).ready(function() {
     $('body').on('click', '#transSearchCheckIncome', selectConditionTrans);
     $('body').on('click', '#transSearchCheckExpense', selectConditionTrans);
     $('body').on('click', '#transSearchCheckUserId', selectConditionTrans);
-    $('body').on('click', '#transSearchCategoriesDiv', selectConditionTrans);
+    $('body').on('change', '#transSearchCategoriesDiv', selectConditionTrans);
     $('body').on('change', '#sortBy', selectConditionTrans);
 
 });
 
+
+////////////////////////////////////////////////////////////////////////
 
 
 /** 사진 입력 버튼 */
@@ -267,6 +269,8 @@ function initializeDateSelector() {
         monthElement.text(currentMonth);
     });
 }
+
+////////////////////////////////////////////////////////////////
 
 
 /** 내역 입력 유효성 검사 */
@@ -370,7 +374,6 @@ function validateTransAmount() {
 function setTrans() {
     if(validateTrans()) {
         setTransAjax();
-        init();
     }
 }
 
@@ -526,19 +529,19 @@ function init() {
     let nowYear = $('#nowYear').html();
     let nowMonth = $('#nowMonth').html();
 
-    // 내역 수 가져오기 
-    $.ajax({
-        url: '/secretary/cashbook/trans/cntMonth',
-        type: 'GET',
-        data: { nowYear: nowYear, nowMonth: nowMonth },
-        dataType: 'text',
-        success: (cnt) => {
-            transCntMonth.html(cnt);
-        },
-        error: () => {
-            alert('내역 개수 전송 실패');
-        }
-    });
+    // // 내역 수 가져오기 
+    // $.ajax({
+    //     url: '/secretary/cashbook/trans/cntMonth',
+    //     type: 'GET',
+    //     data: { nowYear: nowYear, nowMonth: nowMonth },
+    //     dataType: 'text',
+    //     success: (cnt) => {
+    //         transCntMonth.html(cnt);
+    //     },
+    //     error: () => {
+    //         alert('내역 개수 전송 실패');
+    //     }
+    // });
 
     // 총지출 총수입 가져오기 
     $.ajax({
@@ -574,7 +577,7 @@ function init() {
 
             // 일자별로 데이터 그룹화
             $(list).each(function(idx, ta) {
-                let date = ta.transDate;  // 거래날짜를 가져옵니다. (예: "2023-08-28")
+                let date = ta.transDate;
                 if (!groupedData[date]) {
                     groupedData[date] = [];
                 }
@@ -627,10 +630,11 @@ function init() {
 
             table += `</table>`;
 
+            transCntMonth.html(list.length);
             transListDiv.html(table);
         },
         error: function() {
-            alert('내역 리스트 전송 실패');
+            console.log('내역 리스트 전송 실패');
         }
     });
     
@@ -639,7 +643,7 @@ function init() {
 
 /** 날짜 형식 변환 */
 function formatDate(inputDate) {
-    // YYYY-MM-DD 형식의 문자열을 받아서 "월 일 요일" 형식으로 반환하는 함수입니다.
+    // YYYY-MM-DD 형식의 문자열을 받아서 "월 일 요일" 형식으로 반환하는 함수
     let dateObj = new Date(inputDate);
     let month = dateObj.getMonth() + 1;
     let date = dateObj.getDate();
@@ -733,9 +737,8 @@ function updateTrans() {
 /** 내역 수정 Ajax 호출 */
 function updateTransAjax() {
     let transId = $('#transIdModal');
-    let familyId = $('#familyIdModal');
     let cashbookId = $('#cashbookIdModal');
-    let transDate = $('#transDateModal');
+    let transDate = $('#transDateModal').val().replace("T", " ");
     let transType = $("#transTypeModal input[name='transType']:checked"); 
     let cate1Name = $('#cate1NameModal');
     let cate2Name = $('#cate2NameModal');
@@ -744,18 +747,17 @@ function updateTransAjax() {
     let transAmount = $('#transAmountModal').val().replace(/,/g, '');
     let labelColor = $('#labelColorModal');
 
-    // alert("수정할 값들:" + transId.val() + familyId.val() + cashbookId.val() + transDate.val()
-    //  + transType.val() + cate1Name.val() + cate2Name.val() + transPayee.val()
-    //   + transMemo.val()  + transAmount + labelColor.val());
+    alert("수정할 값들:" + transId.val() + cashbookId.val() + transDate
+     + transType.val() + cate1Name.val() + cate2Name.val() + transPayee.val()
+      + transMemo.val()  + transAmount + labelColor.val());
 
     $.ajax({
         url: '/secretary/cashbook/trans/updateTrans',
         type: 'POST',
         data: { 
             transId: transId.val(),
-            familyId: familyId.val(),
             cashbookId: cashbookId.val(),
-            transDate: transDate.val(), 
+            transDate: transDate, 
             transType: transType.val(), 
             cate1Name: cate1Name.val(),
             cate2Name: cate2Name.val(),
@@ -1117,6 +1119,7 @@ function setCustomCategory2() {
 /** 조건별 보기 */
 function selectConditionTrans() {
     let transListDiv = $('#transListDiv');
+    let transCntMonth = $('#transCntMonth');
     transListDiv.html("");
 
     let incomeSelected = false;
@@ -1222,6 +1225,7 @@ function selectConditionTrans() {
 
             table += `</table>`;
 
+            transCntMonth.html(list.length);
             transListDiv.html(table);
             }
 
