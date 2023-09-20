@@ -7,97 +7,57 @@
 <script th:src="@{/js/jquery-3.7.0.js}"></script>
 <script>
 
-     $(document).ready(function () {
-    	userList();
-    	
-      // 카테고리 선택이 변경될 때마다 검색 수행
-      document.getElementById('category1').addEventListener('change', function() {
-          userList();
-          const selectedCategory1 = document.getElementById('category1').value;
-          const category2Dropdown = document.getElementById('category2');
-          
-      // 카테고리1이 선택되면 카테고리 2 드롭다운을 초기화
-      category2Dropdown.innerHTML = '<option value="all">-</option>'; 
-      
-      // 카테고리 1에 따라 카테고리 2 옵션을 동적으로 추가
-      if (selectedCategory1 === 'sex') {
-        category2Dropdown.innerHTML += '<option value="1">남자</option>';
-        category2Dropdown.innerHTML += '<option value="0">여자</option>';
-      } else if (selectedCategory1 === 'rolename') {
-    	  category2Dropdown.innerHTML += '<option value="ROLE_ADMIN">관리자</option>';
-    	  category2Dropdown.innerHTML += '<option value="ROLE_USER1">가장</option>';
-          category2Dropdown.innerHTML += '<option value="ROLE_USER2">구성원</option>';
-      }else if (selectedCategory1 === 'suspended') {
-        
-      }
-   });  
-      // 카테고리 2 선택이 변경될 때
-      document.getElementById('category2').addEventListener('change', function() {
-          userList();
-      });
- 
-      // 검색어 입력이 변경될 때마다 검색 수행
-      document.getElementById('title').addEventListener('input', userList);
-    });    
+$(document).ready(function () {
+    userList();
+    
+    // 검색어 입력이 변경될 때마다 검색 수행
+    document.getElementById('title').addEventListener('input', userList);
+});    
 
-      function userList() {
-      // 카테고리 선택에 따른 필터링
-      const selectedCategory = document.getElementById('category1').value;
-      const selectedCategory2 = document.getElementById('category2').value;
-      // 타이틀 검색에 따른 필터링
-      const searchTitle = document.getElementById('title').value;
-
-      $.ajax({
-          url: 'userList',
-          type: 'get',
-          dataType: 'json',
-          success: function (list) {
-          let filteredList = list;
-       // 카테고리 선택에 따른 필터링
-       if (selectedCategory !== 'all') {
-             filteredList = list.filter((item) => item.category1 === selectedCategory);
-         }
-
-       // 타이틀 검색에 따른 필터링
-       if (searchTitle) {
-             filteredList = filteredList.filter((item) => item.userId.includes(searchTitle));
-       }
-
-       // 결과를 테이블에 표시
-       let htmlContent = '';
-       filteredList.forEach((item) => {
-       htmlContent += `
-       <tr>
-       	<td>${item.enabled}</td>
-       	<td><a href="readUser?userId=${item.userId}">${item.userId}</a></td>
-        <td>${item.userRealName}</td>
-       	<td>${item.rolename}</td>
-       	<td>${item.familyId}</td> 
-       	<td>${item.sex}</td> 
-       </tr>
-        `;
-       });
-       $('#searchList').html(htmlContent);
-       },
-       error: function (e) {
-          alert(JSON.stringify(e));
-     },
-  });
+function userList() {
+    // 타이틀 검색에 따른 필터링
+    const searchTitle = document.getElementById('title').value;
+    
+    $.ajax({
+        url: 'userList',
+        type: 'get',
+        dataType: 'json',
+        success: function (list) {
+            let filteredList = list;
+            
+            // 타이틀 검색에 따른 필터링
+            if (searchTitle) {
+                filteredList = filteredList.filter((item) => item.userId.includes(searchTitle));
+            }
+            
+            // 결과를 테이블에 표시
+            let htmlContent = '';
+            filteredList.forEach((item) => {
+                htmlContent += `
+                <tr>
+                    <td>${item.enabled}</td>
+                    <td><a href="readUser?userId=${item.userId}">${item.userId}</a></td>
+                    <td>${item.userRealName}</td>
+                    <td>${item.rolename}</td>
+                    <td>${item.familyId}</td> 
+                    <td>${item.sex}</td> 
+                </tr>
+                `;
+            });
+            $('#searchList').html(htmlContent);
+        },
+        error: function (e) {
+            alert(JSON.stringify(e));
+        },
+    });
 }
-        </script>
+
+</script>
+
 </head>
 <body>
 	<h1>[ 회원 목록 ]</h1>
-        <select name="category1" id="category1">
-            <option value="all">전체</option>
-            <option value="sex">성별</option>
-            <option value="rolename">권한</option> 
-            <option value="suspended">정지 계정</option>
-        </select>
-        <select name="category2" id="category2">
-    		<option value="all">-</option>
-		</select>
-        <input type="text" id="title" />
+        검색<input type="text" id="title" />
         <table>
             <thead>
                 <tr>

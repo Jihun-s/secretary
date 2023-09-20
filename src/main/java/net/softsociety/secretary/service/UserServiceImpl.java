@@ -151,11 +151,5 @@ public class UserServiceImpl implements UserService {
 		int n= userMapper.editUser(updatedUser);
 		return n;
 	}
-	//관리자기능 유저정보 열람
-//	@Override
-//	public User readUser(String userId) {
-//		User u = userMapper.readUser(userId);
-//		return u;
-//	}
 
 }

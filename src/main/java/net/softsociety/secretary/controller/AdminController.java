@@ -24,6 +24,11 @@ public class AdminController {
 	UserService userservice;
 	@Autowired
 	UserMapper usermapper;
+	
+	@GetMapping("adminHome")
+	public String adminHome() {
+		return "adminView/adminHome";
+	}
 	@GetMapping("list")
 	public String list() {
 		return "adminView/userList";
