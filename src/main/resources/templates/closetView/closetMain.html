@@ -39,6 +39,10 @@
  	let userid = '[[${loginUser.userId}]]';
     </script>
     <script th:src="@{/js/closet/closetMain.js}"></script>
+    
+    <!-- 달력 -->
+    <script th:src="@{/js/fullcalendar/dist/index.global.js}"></script>
+    <script th:src="@{/js/closet/scheduleCloset.js}"></script>    
 	
     <meta name="description" content="" />
 
@@ -648,7 +652,7 @@
                     	<p><strong>코디일지</strong></p>
                     	<a th:href="@{/closet/styleDiary}"><img th:src="@{/images/closetImg/styleDiary.png}"></a>
                     </div>
-                  </div>
+                  </div> <!-- class="card" -->
                 </div>
                 
                 
@@ -846,7 +850,7 @@
                     <div class="card-body">
                       <div class="notification">
                         <div class="col-xl-6" style="width: 100%">
-                          <h6 class="text-muted">알림</h6>
+                          <!-- <h6 class="text-muted">알림</h6>  -->
                           <div class="nav-align-top mb-4">
                             <ul
                               class="nav nav-pills mb-3 nav-fill"
@@ -866,7 +870,7 @@
                                   <i class="tf-icons bx bx-home"></i> 필수 알림
                                   <span
                                     class="badge rounded-pill badge-center h-px-20 w-px-20 bg-danger"
-                                    >3</span
+                                    ></span
                                   >
                                 </button>
                               </li>
@@ -886,7 +890,7 @@
                             </ul>
                             <div
                               class="tab-content flex-fill"
-                              style="height: 18rem"
+                              style="height: 9.2rem; padding:0 1rem;"
                             >
                               <!-- 필수 알림 탭 내용 -->
                               <div
@@ -894,11 +898,12 @@
                                 id="navs-pills-justified-home"
                                 role="tabpanel"
                               >
-                                <p>8월 18일은 오늘입니다. 안녕하세요!</p>
-                                <p>8월 19일은 내일입니다. 안녕하세요!</p>
-                                <p>8월 19일은 내일입니다. 안녕하세요!</p>
-                                <p>8월 19일은 내일입니다. 안녕하세요!</p>
-                                <p>8월 19일은 내일입니다. 안녕하세요!</p>
+                              	<div id="dateAlert"></div>
+                                <div class="alert alert-danger alert-dismissible" role="alert" style="height:4.5rem;">
+         							 <span id="alertContent"></span>
+          						<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+         						 </button>
+        						</div>
                               </div>
 
                               <!-- 제안 알림 탭 내용 -->
@@ -907,20 +912,31 @@
                                 id="navs-pills-justified-profile"
                                 role="tabpanel"
                               >
-                                <p>
-                                  8월 23일은 처서입니다. 여름옷을 정리해볼까요?
-                                </p>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
+                      <!-- 그루핑 라디오 박스 -->
+                      <div class="col mb-1">
+                      <!-- 리스트 -->
+                      <div id="schListDiv" class="col mb-4 mb-xl-0">
+                        <!-- 일정 목록 출력되는 부분 -->
                       </div>
-                    </div>
-                  </div>
-                </div>
+                      </div>
+                              </div> <!-- 제안알림 탭 -->
+                            </div>
+                          </div> <!-- class="nav-align-top mb-4" -->
+                        </div> <!-- class="col-xl-6" -->
+                      </div> <!-- class="notification" -->
+                    </div> <!-- class="card-body" -->
+                  </div> <!-- class="card" -->
+                  
+                  <div class="card" style="margin-top:1.5rem; height:30.4rem;">
+                  <div class="card-body">
+                   <div id="calendar"></div>
+                  </div> <!-- class="card-body" -->
+                  </div> <!-- class="card" -->
+                </div> <!-- class="col-lg-4 mb-4" -->
               </div>
             </div>
 
+             <input class="form-check-input" type="hidden" name="groupBy" id="groupByType" value="유형별" checked>
             <!-- 컨텐트 박스 -->
           </div>
           <!-- / Content -->
@@ -953,6 +969,158 @@
       </div>
       <!-- / Layout page -->
     </div>
+
+    <!-- Modal 모달 -->
+    <!-- 일정 상세 모달 -->
+    <div class="modal fade" id="schDetailModal" tabindex="-1" style="display: none;" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="schDetailModalTitle">일정 상세보기</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <form>
+            <input type="hidden" id="schId">
+            <div class="modal-body" id="eventDetails">
+              <div class="row g-2">
+                <div class="col mb-3">
+                  <label for="schTypeDiv" class="form-label">유형</label>
+                  <div id="schTypeDiv">
+                    <select class="form-select" id="schTypeSelect" aria-label="Default select example">
+                      <option value="">유형을 선택하세요</option>
+                      <option value="일정">일정</option>
+                      <option value="냉장고">냉장고</option>
+                      <option value="생활용품">생활용품</option>
+                      <option value="옷장">옷장</option>
+                      <option value="가계부">가계부</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col mb-3">
+                  <label for="schCateDiv" class="form-label">카테고리</label>
+                  <div id="schCateDiv">
+                    <select class="form-select" id="schCateSelect" aria-label="Default select example">
+                      <option value="">카테고리를 선택하세요</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col mb-3">
+                  <label for="schContent" class="form-label">일정명</label>
+                  <input type="text" id="schContent" class="form-control" placeholder="일정을 입력하세요">
+                </div>
+              </div>
+              <div class="row g-2">
+                <div class="col mb-3">
+                  <label for="schLevel" class="form-label">중요도</label>
+                  <input type="range" class="form-range" min="0" max="2" step="1" id="schLevel">
+                </div>
+              </div>
+              <div class="row g-2">
+                <div class="col mb-3">
+                  <label for="schStart" class="form-label">시작일</label>
+                  <input class="form-control" type="datetime-local" value="" id="schStart">
+                </div>
+              </div>
+              <div class="row g-2">
+                <div class="col mb-3">
+                  <label for="schEnd" class="form-label">종료일</label>
+                  <input class="form-control" type="datetime-local" value="" id="schEnd">
+                </div>
+              </div>
+              <div class="row g-2">
+                <div class="col mb-3">
+                  <label for="schAllday" class="form-label">종일</label>
+                  <input class="form-check-input" type="checkbox" id="schAllday">
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" id="schDetailUpdateBt" class="btn btn-primary">수정</button>
+              <button type="button" id="schDetailDeleteBt" class="btn btn-primary">삭제</button>
+              <button type="button" id="schDetailCloseBt" class="btn btn-outline-secondary" data-bs-dismiss="modal">닫기</button>
+              <button type="button" id="schUpdateBt" class="btn btn-primary">수정</button>
+              <button type="button" id="schCancelBt" class="btn btn-outline-secondary">돌아가기</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- 일정 추가 모달 -->
+    <div class="modal fade" id="schInsertModal" tabindex="-1" style="display: none;" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">일정 추가하기</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <form th:action="@{/schedule/insertSch}" method="POST" onsubmit="return validateSch()">
+            <div class="modal-body" id="eventDetails">
+              <div class="row g-2">
+                <div class="col mb-3">
+                  <label for="schTypeInputDiv" class="form-label">유형</label>
+                  <div id="schTypeInputDiv">
+                    <select class="form-select" name="schType" id="schTypeSelectInput" aria-label="Default select example">
+                      <option value="">유형을 선택하세요</option>
+                      <option value="일정">일정</option>
+                      <option value="냉장고">냉장고</option>
+                      <option value="생활용품">생활용품</option>
+                      <option value="옷장">옷장</option>
+                      <option value="가계부">가계부</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col mb-3">
+                  <label for="schCateInputDiv" class="form-label">카테고리</label>
+                  <div id="schCateInputDiv">
+                    <select class="form-select" name="schCate" id="schCateSelectInput" aria-label="Default select example">
+                      <option value="">카테고리를 선택하세요</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col mb-3">
+                  <label for="schContent" class="form-label">일정명</label>
+                  <input type="text" id="schContentInput" name="schContent" class="form-control" placeholder="일정을 입력하세요">
+                </div>
+              </div>
+              <div class="row g-2">
+                <div class="col mb-3">
+                  <label for="schLevel" class="form-label">중요도</label>
+                  <input type="range" class="form-range" min="0" max="2" step="1" name="schLevel" id="schLevelInput">
+                </div>
+              </div>
+              <div class="row g-2">
+                <div class="col mb-3">
+                  <label for="schStart" class="form-label">시작일</label>
+                  <input class="form-control" type="datetime-local" value="" name="schStart" id="schStartInput">
+                </div>
+              </div>
+              <div class="row g-2">
+                <div class="col mb-3">
+                  <label for="schEnd" class="form-label">종료일</label>
+                  <input class="form-control" type="datetime-local" value="" name="schEnd" id="schEndInput">
+                </div>
+              </div>
+              <div class="row g-2">
+                <div class="col mb-3">
+                  <label for="schAllday" class="form-label">종일</label>
+                  <input class="form-check-input" type="checkbox" name="schAllday" id="schAlldayInput">
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="submit" id="schInsertBt" class="btn btn-primary">추가</button>
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">닫기</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
 
     <!-- Overlay -->
     <div class="layout-overlay layout-menu-toggle"></div>

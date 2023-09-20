@@ -58,9 +58,6 @@ $(document).ready(function(){
 		//편집버튼 누르면 editIMG함수 실행
 		$('#editIMGbtn').on('click', editIMG);
 		
-		//웹에서 찾기 버튼을 누르면 webSearch함수 실행	
-		$('#webSearchbtn').on('click', webSearch);
-
 
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!옷장안에 의류목록 출력!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		$.ajax({
@@ -627,10 +624,7 @@ function chartDraw(dataValue){
 		})		
 	}
 	
-	function webSearch(){
-		window.open("webSearch");
-	}
-	
+
 	const categoryMapping = {
     'Tshirt': '티셔츠', 'blouse': '블라우스/셔츠', 'sweatshirt': '맨투맨/후디', 'knitwear': '니트',
     'skirt': '치마', 'pants': '바지', 'jeans': '청바지', 'trainingPants': '트레이닝/조거',

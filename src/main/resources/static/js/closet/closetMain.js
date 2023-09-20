@@ -5,6 +5,9 @@
  $(document).ready(function(){
 	let closetNum = 0; //전체 옷장
 	
+// !!!!!!!!!!!!!!!!! 	알림 기능
+	$('.form-check-inline').hide();
+
 // !!!!!!!!!!!!!!!!!!			차트 그리기			!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!	
 	//dataValue 배열변수에 카테고리별 옷 개수 집어넣기
 	let dataValue = new Array(8);
@@ -68,7 +71,7 @@
 		
 		
 		
-//!!!!!!!!!!!!!!!!!!! 세탁물 게이지 표시 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!		
+//!!!!!!!	세탁물 게이지 표시 & 필수 알림 표시 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!		
 		let laundryCheck = true;
 		$.ajax({
 			url:'closet/inCloset',
@@ -81,12 +84,23 @@
 					laundryCnt += 1;
 				});
 				
-				let proVal = (laundryCnt/50) * 100; 
+				let proVal = (laundryCnt/30) * 100; 
 				let proStr = '<div class="progress-bar" role="progressbar" style="width:'+proVal+'%; \
 				background-color: rgba(223,132,166,255); border-color: rgba(223,132,166,255);" \
-				aria-valuenow="'+proVal+'" aria-valuemin="0" aria-valuemax="50"></div>';
+				aria-valuenow="'+proVal+'" aria-valuemin="0" aria-valuemax="30"></div>';
 				$('#progessDetail').html(proStr);
 				$('#laundryCntDetail').html('<p>세탁바구니에 세탁물이 '+laundryCnt+'개 쌓여있어요</p>')
+				
+				var now = new Date();	// 현재 날짜 및 시간
+				var month = now.getMonth() + 1;
+				var date = now.getDate();
+				let dateStr = month+'월 '+date+'일 알림입니다.</p>';
+				$('#dateAlert').html(dateStr);
+				let laundryCntStr = '';
+				if(laundryCnt>=20){
+				 laundryCntStr += '<p> 세탁하러 가시는건 어떠신가요? <br> 세탁물이 <b>'+laundryCnt+'</b>개 쌓여있어요.</p>';
+				} 
+				$('#alertContent').html(laundryCntStr);
 			},
 			error:function(e){
 				alert(JSON.stringify(e));

@@ -288,6 +288,7 @@ public class ClosetController {
 		service.laundryOut(closetNum,clothesNum);
 	}
 	
+	
 	//차트데이터 값 불러오기
 	@ResponseBody
 	@GetMapping("chartValue")

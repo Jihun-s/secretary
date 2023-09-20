@@ -813,7 +813,7 @@
                       		<td colspan="2" style="text-align:right;"><label for="uploadIMG" id="cssuploadIMG"><span>사진 등록</span></label>
                       			<input type="file" value="사진 등록" id="uploadIMG" accept="image/*">
                       			<button id="editIMGbtn" class="btn-pink" style="background-color:#FFFFFF; color:grey;">편집</button></td>
-                      		<td><button id="webSearchbtn" class="btn-pink" style="background-color:#FFFFFF; color:grey;">웹에서 찾기</button></td>
+                      		<td><button id="webSearchbtn" class="btn-pink" style="background-color:#FFFFFF; color:grey;" data-bs-toggle="modal" data-bs-target="#fullscreenModal">웹에서 찾기</button></td>
                       	</tr>
                       	<tr> <!-- 2행 -->
                       		<td colspan="2">
@@ -1103,7 +1103,25 @@
             </div> <!--  class="container-xxl flex-grow-1 container-p-y" -->
 
           </div> <!-- class="content-wrapper" -->
-
+          
+          <div class="modal fade" id="fullscreenModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-fullscreen" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="modalFullTitle">의류 아이템 찾기</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" style="display:flex;">
+ 				<div class="col">웹에서 찾기</div>
+ 				<div class="col">의류정보 보기</div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+              </div>
+            </div>
+          </div>
           <!-- Footer -->
           <footer class="content-footer footer bg-footer-theme">
             <div
