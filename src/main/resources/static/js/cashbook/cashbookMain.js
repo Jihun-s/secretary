@@ -63,7 +63,7 @@ function setCurDate() {
 
     let curDateTime = `${curYear}-${curMonth}-${curDate} ${curHour}:${curMin}:00`;
 
-    alert(curYear + ' ' + curMonth + ' ' + curDate + ' ' + curDateTime);
+    // alert(curYear + ' ' + curMonth + ' ' + curDate + ' ' + curDateTime);
 
     $('#curDateTime').val(curDateTime);
     $('#curYear').val(curYear);

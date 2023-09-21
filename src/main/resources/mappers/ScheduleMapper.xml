@@ -54,6 +54,34 @@
 		sch_start
 </select>
 
+
+<!-- 일정 목록 불러오기 메인용 -->
+<select id="selectAllScheListAfter" parameterType="hashmap" resultType="Schedule">
+	SELECT
+		sch_id
+		, user_id
+		, family_id
+		, sch_type
+		, sch_cate
+		, sch_level
+		, sch_content
+		, sch_start
+		, TO_CHAR(sch_start, 'YYYY-MM-DD') AS sch_start_ymd
+	    , TO_CHAR(sch_start, 'HH24:MI') AS sch_start_hm
+		, sch_end
+		, sch_allday
+	FROM
+		Secretary_Schedule
+	WHERE
+		family_id = #{familyId}
+        AND EXTRACT(YEAR FROM sch_start) = #{schYear}
+        AND EXTRACT(MONTH FROM sch_start) >= #{schMonth}
+    	AND sch_start >= TRUNC(SYSDATE)
+    	AND sch_start &lt;= TRUNC(SYSDATE + 30)
+	ORDER BY
+		sch_start
+</select>
+
 <!-- 일정 하나 불러오기 -->
 <select id="selectOne" parameterType="hashmap" resultType="Schedule">
 	SELECT

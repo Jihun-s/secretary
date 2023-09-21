@@ -68,6 +68,30 @@ public class ScheduleRestController {
 		
 		return result;
 	}
+	
+	
+	/** 오늘 이후 일정 목록 불러오기 */
+	@GetMapping("loadSchListAfter")
+	public ArrayList<Schedule> loadSChListAfter(
+			Model model
+			, Integer schYear
+			, Integer schMonth) {
+		log.debug("오늘 이후 일정 목록 가져올 연월:{}{}", schYear, schMonth);
+		
+		// DAO에 보낼 map 만들기
+		User loginUser = (User) model.getAttribute("loginUser");
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("userId", loginUser.getUserId());
+		map.put("familyId", loginUser.getFamilyId());
+		map.put("schYear", schYear);
+		map.put("schMonth", schMonth);
+		log.debug("오른쪽 일정 목록 가져오려고 DAO 보낼 map:{}", map);
+		
+		ArrayList<Schedule> result = dao.selectAllScheListAfter(map);
+		log.debug("DAO에서 받아온 오른쪽 일정 목록:{}", result);
+		
+		return result;
+	}
 
 
 	/** 일정 삭제 */
