@@ -3,6 +3,7 @@ package net.softsociety.secretary.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.softsociety.secretary.domain.Log;
 import net.softsociety.secretary.domain.User;
 
 public interface UserService {
@@ -25,5 +26,9 @@ public interface UserService {
 	ArrayList<User> findALL();
 	//관리자 기능 유저정보 편집
 	int editUser(User updatedUser);
+	//로그인수 출력
+	List<Log> getDailyLoginData();
+
+
 	
 }
