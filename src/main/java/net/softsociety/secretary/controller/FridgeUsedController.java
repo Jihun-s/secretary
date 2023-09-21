@@ -43,7 +43,6 @@ public class FridgeUsedController {
 	@GetMapping("/consumptionHistory")
     public List<FridgeUsed> getConsumptionHistory() {
 		List<FridgeUsed> fff = fridgeUsedService.getUsedFoodsHistory();
-		log.debug("왜 또 안돼 왜 매번 안돼 : {}",fff);
         return fridgeUsedService.getUsedFoodsHistory();
     }
 	
