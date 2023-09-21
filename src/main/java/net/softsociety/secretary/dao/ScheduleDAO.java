@@ -40,4 +40,7 @@ public interface ScheduleDAO {
 	/** 예산월 일정 목록 */
 	ArrayList<Schedule> getBudgetEventList(HashMap<String, Object> map);
 
+	/** 오늘 이후 일정 목록 */
+	ArrayList<Schedule> selectAllScheListAfter(HashMap<String, Object> map);
+
 }

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -213,6 +214,26 @@ public class CashbookMainRestController {
 		ArrayList<Schedule> result = schService.alertList(map);
 		log.debug("화면에 출력할 필수알림 리스트:{}", result);
 		log.debug("화면에 출력할 필수알림 리스트 개수:{}", result.size());
+		
+		return result;
+	}
+	
+	@GetMapping("budgetExist")
+	public int budgetExist(Model model
+			, int curYear
+			, int curMonth) {
+		User loginUser = (User) model.getAttribute("loginUser");
+		int familyId = loginUser.getFamilyId();
+		String userId = loginUser.getUserId();
+		
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("userId", userId);
+		map.put("familyId", familyId);
+		map.put("budgetYear", curYear);
+		map.put("budgetMonth", curMonth);
+		
+		int result = dao.budgetExist(map);
+		log.debug("{}월 예산 있없? : {}", curMonth, result);
 		
 		return result;
 	}
