@@ -65,11 +65,13 @@ function totalMonthExpense() {
         // <ul>에 <li>를 동적으로 추가
         let htmlToInsert = '';
         dataFromServer.forEach((item) => {
-            const subCategoryExample = cate2NameExample(item.cate1Name); // cate1Name을 기반으로 소분류 예제 텍스트 가져오기
+            const subCategoryExample = cate2NameExample(item.cate1Name);
+            const cateIcon = cate1Icon(item.cate1Name);
+
             htmlToInsert += `
                 <li class="d-flex mb-4 pb-1">
                 <div class="avatar flex-shrink-0 me-3">
-                    <span class="avatar-initial rounded bg-label-${item.labelColor}"><i class="bx bx-mobile-alt"></i></span>
+                    <span class="avatar-initial rounded bg-label-${item.labelColor}"><i class="bx bx-${cateIcon}"></i></span>
                 </div>
                 <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
                     <div class="me-2">
@@ -108,5 +110,25 @@ function cate2NameExample(cate1Name) {
         return '병원, 약국, 운동 등';
       default:
         return '기타';
+    }
+  }
+
+/** 도넛 밑 리스트 대분류에 따른 아이콘bx 변경 */
+function cate1Icon(cate1Name) {
+    switch (cate1Name) {
+      case '식비':
+        return 'bowl-rice';
+      case '쇼핑':
+        return 'shopping-bag';
+      case '여가':
+        return 'camera-movie';
+      case '여행':
+        return 'train';
+      case '뷰티':
+        return 'face';
+      case '건강':
+        return 'capsule';
+      default:
+        return 'credit-card';
     }
   }
