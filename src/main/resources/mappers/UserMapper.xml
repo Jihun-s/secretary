@@ -63,4 +63,15 @@
          ,sex  = #{sex}     
 	WHERE user_id = #{userId}
 	</update>
+	
+	<!-- 유저 일일로그인 조회 -->
+	<select id="getDailyLoginData" resultType="net.softsociety.secretary.domain.Log">
+        SELECT TO_CHAR(LOGIN, 'YYYY-MM-DD') AS login_date, COUNT(*) AS daily_login_count
+        FROM secretary_logstat
+        WHERE log_message = '로그인이 발생하였습니다'
+        GROUP BY TO_CHAR(LOGIN, 'YYYY-MM-DD')
+        ORDER BY TO_CHAR(LOGIN, 'YYYY-MM-DD')
+    </select>
+    
+    
 </mapper>

@@ -2,10 +2,12 @@ package net.softsociety.secretary.dao;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import net.softsociety.secretary.domain.Log;
 import net.softsociety.secretary.domain.User;
 
 @Mapper
@@ -24,4 +26,9 @@ public interface UserMapper {
 	int editUser(User updatedUser);
 	//관리자 기능 유저 정보 열람
 	User readUser(String userId);
+	//관리자 기능 일일 로그인 정보 
+	//List<Map<String, Object>> getDailyLoginData();
+	
+	List<Log> getDailyLoginData();
+	List<Log> getMonthlyLoginData();
 }

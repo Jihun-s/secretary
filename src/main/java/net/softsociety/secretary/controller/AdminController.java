@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,8 +16,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
 import lombok.extern.slf4j.Slf4j;
 import net.softsociety.secretary.dao.UserMapper;
+import net.softsociety.secretary.domain.Log;
 import net.softsociety.secretary.domain.User;
 import net.softsociety.secretary.service.UserService;
 @Slf4j
@@ -75,15 +81,13 @@ public class AdminController {
 	}
 	//일일 로그인 수 그래프
 	@GetMapping("dailyLogin")
-	public List<Map<String, Object>> dailyLogin() {
-        String sql = "SELECT LOGIN, COUNT(*) AS daily_login_count " +
-                "FROM secretary_logstat " +
-                "WHERE log_message = '로그인이 발생하였습니다' " +
-                "GROUP BY LOGIN " +
-                "ORDER BY LOGIN";
+	@ResponseBody
+	public ResponseEntity<List<Log>> dailyLogin() {
+	    List<Log> result = userservice.getDailyLoginData();
+	    
+	    return ResponseEntity.ok(result);
+	}
 
-        // 실행 및 결과 반환
-        return jdbcTemplate.queryForList(sql);
-    }
 
+	
 }

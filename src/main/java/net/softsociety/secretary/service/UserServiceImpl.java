@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import lombok.extern.slf4j.Slf4j;
 import net.softsociety.secretary.dao.UserMapper;
 import net.softsociety.secretary.domain.Board;
+import net.softsociety.secretary.domain.Log;
 import net.softsociety.secretary.domain.User;
 
 @Slf4j
@@ -151,5 +152,12 @@ public class UserServiceImpl implements UserService {
 		int n= userMapper.editUser(updatedUser);
 		return n;
 	}
+
+	@Override
+	public List<Log> getDailyLoginData() {
+		return userMapper.getDailyLoginData();
+	}
+
+	
 
 }

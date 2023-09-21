@@ -7,6 +7,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -44,4 +45,22 @@ public class Log {
     private String logMessage;
     
     //private Date timeStamp;
+    
+    @Transient // 이 필드는 데이터베이스와 매핑하지 않음을 나타냅니다.
+    private int dailyLoginCount;
+
+    public int getDailyLoginCount() {
+        return dailyLoginCount;
+    }
+
+    public void setDailyLoginCount(int dailyLoginCount) {
+        this.dailyLoginCount = dailyLoginCount;
+    }
+    @Transient
+    public String loginDate;
+    
+    public String getLoginDate() {
+    	return loginDate;
+    }
+    
 }
