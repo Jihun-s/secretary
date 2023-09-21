@@ -48,7 +48,6 @@ public class FridgeFoodController {
             if (foodImage != null && !foodImage.isEmpty()) {
             	String savedFileName = FileService.saveFile(foodImage, uploadPath);
                 // 파일 저장 로직
-                // ...
                 fridgeFood.setFoodOriginalFile(foodImage.getOriginalFilename());
                 fridgeFood.setFoodSavedFile(savedFileName);  // 저장된 파일명
             }
