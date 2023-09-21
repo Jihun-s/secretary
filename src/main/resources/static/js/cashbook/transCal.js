@@ -62,14 +62,14 @@ let listHtml = `
                       </div>
                       <div class="col">
                         <div class="date-selector">
-                          <button id="prevYear">◁◁</button>
-                          <button id="nowYear">2023</button>
-                          <button id="nextYear">▷▷</button>
+                          <i id="prevYear" class="tf-icon bx bx-chevron-left-circle bx-sm" style="cursor: pointer;"></i>
+                          <span id="nowYear"></span>
+                          <i id="nextYear" class="tf-icon bx bx-chevron-right-circle bx-sm" style="cursor: pointer;"></i>
                           <br>
-                          <button id="prevMonth">◁</button>
-                          <span><span id="nowMonth">9</span>월</span>
-                          <button id="nextMonth">▷</button>
-                          <button id="dateReset">오늘로 이동</button>
+                          <i id="prevMonth" class="tf-icon bx bx-chevron-left-circle bx-sm" style="cursor: pointer;"></i>
+                          <span><span id="nowMonth"></span>월</span>
+                          <i id="nextMonth" class="tf-icon bx bx-chevron-right-circle bx-sm" style="cursor: pointer;"></i>
+                          <button type="button" id="dateReset" class="btn btn-sm rounded-pill btn-outline-primary">오늘</button>
                         </div>
                       </div>
                     </div>
@@ -371,7 +371,7 @@ function showList() {
   // 목록 불러오기
   init();
   $('body').on('click', '#prevYear, #prevMonth, #nextYear, #nextMonth', init);
-
+  
   $("#transCategoriesDiv").hide();
   $("#transSearchCategory2Div").hide();
 

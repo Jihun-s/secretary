@@ -220,6 +220,9 @@ function setCurDate() {
     $('#curYear').val(curYear);
     $('#curMonth').val(curMonth);
     $('#curDate').val(curDate);
+
+    $('#nowYear').html(curYear);
+    $('#nowMonth').html(curMonth);
 }
 
 

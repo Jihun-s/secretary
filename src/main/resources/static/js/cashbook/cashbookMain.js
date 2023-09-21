@@ -1,5 +1,7 @@
 $(document).ready(function() {
     setCurDate();
+    $('#nowYear').text(curYear);
+    $('#nowMonth').text(curMonth);
     getAlerts();
     init();
 
@@ -14,6 +16,8 @@ $(document).ready(function() {
     $('#deleteBudgetBtModal').click(deleteBudgetModal);
     $('necessaryAlertBt').click(getAlerts);
 });
+
+////////////////////////////////////////////////////////////
 
 /** 화면 초기화 */
 function init() {
@@ -59,10 +63,15 @@ function setCurDate() {
 
     let curDateTime = `${curYear}-${curMonth}-${curDate} ${curHour}:${curMin}:00`;
 
+    alert(curYear + ' ' + curMonth + ' ' + curDate + ' ' + curDateTime);
+
     $('#curDateTime').val(curDateTime);
     $('#curYear').val(curYear);
     $('#curMonth').val(curMonth);
     $('#curDate').val(curDate);
+    
+    $('#nowYear').html(curYear);
+    $('#nowMonth').html(curMonth);
 }
 
 
