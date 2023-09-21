@@ -4,6 +4,8 @@
 $(document).ready(function(){
 	closetNum = parseInt(closetNum); // 스트링에서 정수형으로 변환
 
+	$('#webSearchbtn').on('click',webSearch);
+	
 // !!!!!!!!!!!!!!!!!!			차트 그리기			!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!	
 	let dataValue = new Array(8);
 	$.ajax({
@@ -169,7 +171,7 @@ function chartDraw(dataValue){
   	  		plugins: {
     		title: {
         		display: true,
-        		text: '전체 옷장',
+        		text: '현재 옷장',
       				}
     			}//plugins
   	  		}//options 
@@ -624,6 +626,12 @@ function chartDraw(dataValue){
 		})		
 	}
 	
+
+	//webSearch
+	function webSearch(){
+		window.open("webSearch", "webSearhPage");
+	}
+
 
 	const categoryMapping = {
     'Tshirt': '티셔츠', 'blouse': '블라우스/셔츠', 'sweatshirt': '맨투맨/후디', 'knitwear': '니트',
