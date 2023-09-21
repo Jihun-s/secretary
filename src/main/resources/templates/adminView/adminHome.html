@@ -6,6 +6,7 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.1/dist/chart.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
+//새 차트를 만들 때 새로운 Chart.js 인스턴스가 할당
 let myChart = null;
 
 function fetchLoginDataAndDrawChart() {
@@ -15,8 +16,8 @@ function fetchLoginDataAndDrawChart() {
         dataType: 'json',
         success: function (loginData) {
             console.log('Login data:', loginData);
-            const labels = loginData.map(entry => entry.loginDate);
-            const counts = loginData.map(entry => entry.dailyLoginCount);
+            const labels = loginData.slice(-7).map(entry => entry.loginDate);
+            const counts = loginData.slice(-7).map(entry => entry.dailyLoginCount);
             console.log('Labels:', labels);
             console.log('Counts:', counts);
             drawLoginChart(labels, counts);
@@ -42,12 +43,12 @@ function drawLoginChart(labels, counts) {
 
     const canvas = document.getElementById('myChart');
     
-    // Check if myChart is a valid Chart instance
+    // 차트 재생성 전 기존차트 삭제
     if (myChart instanceof Chart) {
         myChart.destroy();
     }
 
-    // Create a new chart instance
+    // 새로운 값으로 차트 생성
     myChart = new Chart(canvas, {
         type: 'bar',
         data: chartData,
@@ -73,7 +74,7 @@ window.onload = function() {
 <body>
     <h1>ADMIN</h1>
     <div>
-        <canvas id="myChart" width="400" height="400"></canvas>
+        <canvas id="myChart" width="50" height="50"></canvas>
     </div>
 </body>
 </html>
