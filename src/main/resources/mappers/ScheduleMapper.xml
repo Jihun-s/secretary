@@ -194,13 +194,17 @@ FROM
 	Secretary_Schedule
 WHERE 
     family_id = ${familyId}
+    <!-- 정기결제 -->
     AND (sch_content like '%구독%'
     	OR sch_content like '%결제%'
     	OR sch_content like '%정기%'
     	OR sch_content like '%납부%'
+    <!-- 명절 경조사 생일 -->	
     	OR sch_cate = '명절'
     	OR sch_cate = '경조사'
-    	OR sch_cate = '생일')
+    	OR sch_cate = '생일'
+    <!-- 월급날 -->
+    	OR sch_cate = '수입')
     AND sch_start >= TRUNC(SYSDATE)
     AND sch_start &lt;= TRUNC(SYSDATE + 7)
 </select>
