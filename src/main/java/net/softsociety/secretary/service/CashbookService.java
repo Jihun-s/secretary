@@ -3,10 +3,13 @@ package net.softsociety.secretary.service;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.springframework.stereotype.Service;
+
 import net.softsociety.secretary.domain.Category1;
 import net.softsociety.secretary.domain.Category2;
 import net.softsociety.secretary.domain.Transaction;
 
+@Service
 public interface CashbookService {
 
 	/** 내역 입력 */

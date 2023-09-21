@@ -83,10 +83,10 @@ public class CashbookPageController {
 	}
 	
 	/** 통계 */
-	@GetMapping("statistic")
+	@GetMapping("chart")
 	public String cashbookStatistic() {
 		
-		return "cashbookView/statistic";
+		return "cashbookView/chart";
 	}
 	
 }
