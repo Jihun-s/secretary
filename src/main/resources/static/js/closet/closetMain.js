@@ -31,7 +31,7 @@
     $('#seasonAlert').html(seasonStr);
 	}
   
-
+	$('.alert').hide();
 // !!!!!!!!!!!!!!!!!!			차트 그리기			!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!	
 	//dataValue 배열변수에 카테고리별 옷 개수 집어넣기
 	let dataValue = new Array(8);
@@ -123,8 +123,9 @@
 				let laundryCntStr = '';
 				if(laundryCnt>=20){
 				 laundryCntStr += '<p> 세탁하러 가시는건 어떠신가요? <br> 세탁물이 <b>'+laundryCnt+'</b>개 쌓여있어요.</p>';
+				 $('#alertContent').html(laundryCntStr);
+				 $('.alert').show();
 				} 
-				$('#alertContent').html(laundryCntStr);
 			},
 			error:function(e){
 				alert(JSON.stringify(e));

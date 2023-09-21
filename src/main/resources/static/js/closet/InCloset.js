@@ -76,7 +76,11 @@ $(document).ready(function(){
 							<img src="../closet/clothesDownload?closetNum='+n.closetNum+'&clothesNum='+clothesNum+'">\
 							</a></div>';
 				});
-				$('#whatsInCloset').html(str); 
+				if(str == ''){
+					$('#whatsInCloset').html('<p style="font-size:2rem;">옷장에 옷이 없습니다. <br> 옷을 추가해주세요.</p>')
+				}else{
+				$('#whatsInCloset').html(str);
+				}
 			},
 			error:function(e){
 				alert(JSON.stringify(e));
@@ -393,29 +397,34 @@ function chartDraw(dataValue){
 				}
 				
 				let imgStr =  '<img	src="../closet/clothesDownload?closetNum='+clothes.closetNum+'&clothesNum='+clothes.clothesNum+'">'
-				let str = '<br><table><tr>\
-							<td><button class="btn-pink">카테고리</button><td>\
-							<td>&nbsp;&nbsp;'+translatedCategory+'</td>\
-							<td>&nbsp;&nbsp;'+ translatedMaterial+'</td>\
-							<td>&nbsp;&nbsp;'+seasonresult+'</td>\
-							<td>&nbsp;&nbsp;'+clothes.clothesSize+'</td></tr>'
-				let footer = '<br><button class="btn btn-primary" style="background-color: rgba(223,132,166,255); border-color: rgba(223,132,166,255); float:left"\
-								onclick="laundryIn('+clothes.closetNum+','+clothes.clothesNum+')">세탁물 체크</button>\
-							<button type="button" class="btn btn-primary" style="background-color: rgba(223,132,166,255); border-color: rgba(223,132,166,255);" \
-								onclick="deleteClothes('+clothesNum+')"> 삭제 </button>\
-							<button type="button" class="btn btn-primary"	style="background-color: rgba(223,132,166,255); border-color: rgba(223,132,166,255);" \
-								onclick="openUpdateModal('+clothes.clothesNum+')"> 수정 </button>'
-							
+				let str = '<br><br><ul>\
+							<li><button class="btn-pink">카테고리</button><li>\
+							<li>&nbsp;&nbsp;'+translatedCategory+'</li>\
+							<li>&nbsp;&nbsp;'+ translatedMaterial+'</li>\
+							<li>&nbsp;&nbsp;'+seasonresult+'</td>\
+							<li>&nbsp;&nbsp;'+clothes.clothesSize+'</li></ul>'
 
-				$('#IMGdetail').html(imgStr);
-				$('#InfoDetail').html(str);
-				$('#InfoFooter').html(footer);
+				let footer = '<br><div id="ClothesFooter" style="margin-top:2rem; position:relative; bottom:0;"><br><br>\
+							<ul><li><button class="btn btn-primary" style="background-color: rgba(223,132,166,255); border-color: rgba(223,132,166,255);"\
+								onclick="laundryIn('+clothes.closetNum+','+clothes.clothesNum+')">세탁물 체크</button></li>\
+							<li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-primary" style="background-color: rgba(223,132,166,255); border-color: rgba(223,132,166,255); float:right" \
+								onclick="deleteClothes('+clothesNum+')"> 삭제 </button></li>\
+							<li>&nbsp;&nbsp;<button type="button" class="btn btn-primary"	style="background-color: rgba(223,132,166,255); border-color: rgba(223,132,166,255); float:right" \
+								onclick="openUpdateModal('+clothes.clothesNum+')"> 수정 </button></li></ul></div>'
+							
+				$('#IMGdetail').html(imgStr+str+footer);
 			},
 			error:function(e){
 				alert(JSON.stringify(e));
 			}			
 		}) //의류정보 읽어오기
 		
+		
+	    //  태그를 추가할 div 요소 선택
+        var divElement = document.getElementById("IMGdetail");
+        var tempDiv = document.createElement('ul');
 		
 		$.ajax({
 			url:'howToManageClothes',
@@ -425,19 +434,25 @@ function chartDraw(dataValue){
 			success:function(manageTip){
 				if(manageTip.clothesMaterial != "none"){
 				console.log('howToManageClothes 매핑');
-				let manageTipStr = '<tr><td><button class="btn-pink">관리방법</button></td>\
-				<td colspan="4">&nbsp;&nbsp;'+manageTip.howToWash+manageTip.howToKeep+'</td></tr></table>';
-				$('#ManageDetail').html(manageTipStr); 
-				} else {
-					$('#ManageDetail').html('');
-				}
+				let manageTipStr = '<li><button class="btn-pink">관리방법</button>\
+									&nbsp;'+manageTip.howToWash+'&nbsp;'+manageTip.howToKeep+'</li>';
+        		// 의류관리방법 태그 중간에 추가
+       			 tempDiv.innerHTML = manageTipStr;
+				var ulElement = divElement.querySelector('div'); 
+					if (ulElement) {
+  				 		 divElement.insertBefore(tempDiv, ulElement);
+					} else {
+   				 	
+					}	
+				} else{
+				}//outer if문
 			},
 			error:function(e){
 				alert(JSON.stringify(e));
 			}			
 		})//관리정보 읽어오기
 		
-		
+
 		
 	}
 	
