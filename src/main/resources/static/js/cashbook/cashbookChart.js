@@ -46,10 +46,36 @@ function totalMonthExpense() {
               ],
             },
             options: {
-              aspectRatio: 1,
-              maintainAspectRatio: false,
+                aspectRatio: 1,
+                maintainAspectRatio: false,
+                plugins:{
+                    legend: {
+                        display: false
+                    },
+                }
             },
           });
+
+            // <ul>에 <li>를 동적으로 추가
+            let htmlToInsert = '';
+            dataFromServer.forEach((item) => {
+            htmlToInsert += `
+                <li class="d-flex mb-4 pb-1">
+                <div class="avatar flex-shrink-0 me-3">
+                    <span class="avatar-initial rounded bg-label-primary"><i class="bx bx-mobile-alt"></i></span>
+                </div>
+                <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                    <div class="me-2">
+                    <h6 class="mb-0">${item.cate1Name}</h6>
+                    <small class="text-muted">${item.cate2Name}</small>
+                    </div>
+                    <div class="user-progress">
+                    <small class="fw-semibold">${item.totalMonthExpense}</small>
+                    </div>
+                </div>
+                </li>`;
+            });
+            $('#totalMonthExpenseList').html(htmlToInsert); // Replace existing content
         },
         error: (e) => {
           console.log("도넛 월지출 실패" + JSON.stringify(e));

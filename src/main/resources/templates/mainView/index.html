@@ -69,7 +69,9 @@
     <!-- 소영 추가 JS --> 
     <script th:src="@{/js/jquery-3.7.0.js}"></script> 
     <script th:src="@{/js/fullcalendar/dist/index.global.js}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script th:src="@{/js/main/mainCal.js}"></script>
+    <script th:src="@{/js/cashbook/cashbookChart.js}"></script>
 
     <!-- Helpers -->
     <script th:src="@{/assets/vendor/js/helpers.js}"></script>
@@ -884,21 +886,25 @@
                     </div>
                     <div class="card-body">
                       <div
-                        class="d-flex justify-content-between align-items-center mb-3"
+                        class="d-flex justify-content-center align-items-center mb-3"
                       >
                         <div
-                          class="d-flex flex-column align-items-center gap-1"
+                          class="d-flex flex-column align-items-center gap-1" style="margin-right: 3rem;"
                         >
                           <h3 class="mb-2">
                             <span class="fw-bolder">345,670</span>원
                           </h3>
                           <span>지출했어요.</span>
                         </div>
-
-                        <!-- 원형 그래프 -->
-                        <div id="orderStatisticsChart"></div>
+                        <div class="d-flex flex-column align-items-center gap-1">
+                          <!-- 원형 그래프 -->
+                          <canvas id="DonutMonthExpense" style="width: 7rem; height: 7rem;"></canvas>
+                        <script>
+                          totalMonthExpense();
+                        </script>
+                        </div>
                       </div>
-                      <ul class="p-0 m-0">
+                      <ul class="p-0 m-0" id="totalMonthExpenseList">
                         <li class="d-flex mb-4 pb-1">
                           <div class="avatar flex-shrink-0 me-3">
                             <span
