@@ -37,21 +37,21 @@ INSERT INTO
 <!-- 내역 전체 조회 -->
 <select id="selectAllTrans" parameterType="map" resultType="Transaction">
 	SELECT
-	        st.trans_id AS trans_id,
-	        st.cashbook_id AS cashbook_id,
-	        st.user_id AS user_id,
-	        st.family_id AS family_id,
-	        TO_CHAR(st.trans_date, 'YYYY-MM-DD') AS trans_date,
-	        TO_CHAR(st.trans_date, 'HH24:MI') AS trans_time,
-	        st.trans_type AS trans_type,
-	        st.cate1_id AS cate1_id,
-	        st.cate2_id AS cate2_id,
-	        stc1.cate1_name AS cate1_name,
-	        stc2.cate2_name AS cate2_name,
-	        st.trans_payee AS trans_payee,
-	        st.trans_memo AS trans_memo,
-	        st.trans_amount AS trans_amount,
-	        stc1.label_color AS label_color
+        st.trans_id AS trans_id,
+        st.cashbook_id AS cashbook_id,
+        st.user_id AS user_id,
+        st.family_id AS family_id,
+        TO_CHAR(st.trans_date, 'YYYY-MM-DD') AS trans_date,
+        TO_CHAR(st.trans_date, 'HH24:MI') AS trans_time,
+        st.trans_type AS trans_type,
+        st.cate1_id AS cate1_id,
+        st.cate2_id AS cate2_id,
+        stc1.cate1_name AS cate1_name,
+        stc2.cate2_name AS cate2_name,
+        st.trans_payee AS trans_payee,
+        st.trans_memo AS trans_memo,
+        st.trans_amount AS trans_amount,
+        stc1.label_color AS label_color
     FROM
         Secretary_Transaction st
     LEFT JOIN
@@ -128,7 +128,7 @@ INSERT INTO
 <!-- 내역 삭제 -->
 <delete id="deleteTrans" parameterType="Transaction">
 	DELETE FROM Secretary_Transaction
-	WHERE trans_id = #{transId} AND user_id = #{userId}
+	WHERE trans_id = #{transId} AND family_id = #{familyId}
 </delete>
 
 <!-- 대분류 불러오기 -->
@@ -262,6 +262,7 @@ INSERT INTO
 	    , trans_memo = #{transMemo}
 	    , trans_amount = #{transAmount}
 	WHERE trans_id = #{transId}
+		AND family_id = #{familyId}
 </update>
 
 <!-- 소분류 name으로 id찾기 -->

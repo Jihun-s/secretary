@@ -26,7 +26,11 @@
       type="image/x-icon"
       th:href="@{/assets/img/favicon/favicon.ico}"
     />
-
+    <script
+      type="text/javascript"
+      async=""
+      src="https://static.hotjar.com/c/hotjar-3067524.js?sv=7"
+    ></script>
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -72,6 +76,20 @@
     <script th:src="@{/js/cashbook/cashbookMain.js}"></script>
     <script th:src="@{/js/cashbook/mainTransCal.js}"></script>
     <script th:src="@{/js/fullcalendar/dist/index.global.js}"></script>
+
+    <!-- 소영 추가 토스트 -->
+    <!-- Toastr CSS -->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"
+      rel="stylesheet"
+    />
+    <!-- Toastr JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <!-- <script
+      type="text/javascript"
+      async=""
+      src="https://static.hotjar.com/c/hotjar-3067524.js?sv=7"
+    ></script> -->
 
     <!-- Helpers -->
     <script th:src="@{/assets/vendor/js/helpers.js}"></script>
@@ -753,7 +771,7 @@
                             </ul>
                             <div
                               class="tab-content flex-fill"
-                              style="height: 18rem"
+                              style="height: 18rem; padding-top: 0"
                             >
                               <!-- 필수 알림 탭 내용 -->
                               <div
@@ -1108,6 +1126,12 @@
           </div>
         </div>
       </div>
+    </div>
+    <!-- / 디테일 목록 모달 -->
+
+    <!-- 토스트 프라이머리 -->
+    <div class="toast-body">
+      Fruitcake chocolate bar tootsie roll gummies gummies jelly beans cake.
     </div>
 
     <!-- / Layout wrapper -->

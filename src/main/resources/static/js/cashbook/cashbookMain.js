@@ -220,7 +220,7 @@ function initUpdateBudgetModal() {
             curYear: curYear, curMonth: curMonth, curDate: curDate },
         dataType: 'JSON',
         success: (data) => {
-            alert("ajax로 가져온 데이터:" + JSON.stringify(data));
+            toastr.success("ajax로 가져온 데이터:" + JSON.stringify(data));
             $('.budgetAvg').html(data.budgetAvg.toLocaleString('en-US'));
             $('.budgetAmountX').html(data.budgetAmountX.toLocaleString('en-US'));
             $('.budgetAmountXx').html(data.budgetAmountXx.toLocaleString('en-US'));
