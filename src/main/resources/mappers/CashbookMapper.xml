@@ -323,14 +323,6 @@ INSERT INTO
 
 <!-- 해당 연월 예산 있는지 확인 -->
 <select id="budgetExist" parameterType="map" resultType="int">
-<!-- 	SELECT
-		budget_amount
-	FROM 
-		Secretary_Budget
-	WHERE
-		budget_month = #{budgetMonth}
-		AND budget_year = #{budgetYear}
-		AND family_id = #{familyId} -->
 	SELECT 
 	    CASE 
 	        WHEN COUNT(*) > 0 THEN 1
@@ -410,36 +402,36 @@ INSERT INTO
 
 <!-- 일별 수입지출액 -->
 <select id="loadCalInEx" parameterType="hashmap" resultType="CalInEx">
-SELECT 
-    DISTINCT TO_CHAR(trans_date, 'YYYY-MM-DD') AS cal_date,
-    SUM(CASE WHEN trans_type = '수입' THEN trans_amount ELSE 0 END) OVER(PARTITION BY to_char(trans_date, 'YYYYMMDD')) AS cal_income,
-    SUM(CASE WHEN trans_type = '지출' THEN trans_amount ELSE 0 END) OVER(PARTITION BY to_char(trans_date, 'YYYYMMDD')) AS cal_expense
-FROM
-    Secretary_Transaction
-WHERE
-    family_id = #{familyId}
-    AND EXTRACT(YEAR FROM trans_date) = #{calYear}
-    AND EXTRACT(MONTH FROM trans_date) = #{calMonth}
+	SELECT 
+	    DISTINCT TO_CHAR(trans_date, 'YYYY-MM-DD') AS cal_date,
+	    SUM(CASE WHEN trans_type = '수입' THEN trans_amount ELSE 0 END) OVER(PARTITION BY to_char(trans_date, 'YYYYMMDD')) AS cal_income,
+	    SUM(CASE WHEN trans_type = '지출' THEN trans_amount ELSE 0 END) OVER(PARTITION BY to_char(trans_date, 'YYYYMMDD')) AS cal_expense
+	FROM
+	    Secretary_Transaction
+	WHERE
+	    family_id = #{familyId}
+	    AND EXTRACT(YEAR FROM trans_date) = #{calYear}
+	    AND EXTRACT(MONTH FROM trans_date) = #{calMonth}
 </select>
 
 <!-- 내역 상세 목록 조회 -->
 <select id="selectDetailTrans" parameterType="map" resultType="Transaction">
 	SELECT
-	        st.trans_id AS trans_id,
-	        st.cashbook_id AS cashbook_id,
-	        st.user_id AS user_id,
-	        st.family_id AS family_id,
-	        TO_CHAR(st.trans_date, 'YYYY-MM-DD') AS trans_date,
-	        TO_CHAR(st.trans_date, 'HH24:MI') AS trans_time,
-	        st.trans_type AS trans_type,
-	        st.cate1_id AS cate1_id,
-	        st.cate2_id AS cate2_id,
-	        stc1.cate1_name AS cate1_name,
-	        stc2.cate2_name AS cate2_name,
-	        st.trans_payee AS trans_payee,
-	        st.trans_memo AS trans_memo,
-	        st.trans_amount AS trans_amount,
-	        stc1.label_color AS label_color
+        st.trans_id AS trans_id,
+        st.cashbook_id AS cashbook_id,
+        st.user_id AS user_id,
+        st.family_id AS family_id,
+        TO_CHAR(st.trans_date, 'YYYY-MM-DD') AS trans_date,
+        TO_CHAR(st.trans_date, 'HH24:MI') AS trans_time,
+        st.trans_type AS trans_type,
+        st.cate1_id AS cate1_id,
+        st.cate2_id AS cate2_id,
+        stc1.cate1_name AS cate1_name,
+        stc2.cate2_name AS cate2_name,
+        st.trans_payee AS trans_payee,
+        st.trans_memo AS trans_memo,
+        st.trans_amount AS trans_amount,
+        stc1.label_color AS label_color
     FROM
         Secretary_Transaction st
     LEFT JOIN
@@ -461,4 +453,24 @@ WHERE
 		st.trans_date DESC
 </select>
 
+
+<!-- 당월 소비 도넛 -->
+<select id="getMonthExpense" parameterType="hashmap" resultType="CashbookChart">
+	SELECT 
+	    t.family_id,
+	    tc1.cate1_name,
+	    tc1.label_color AS label_color,
+	    SUM(t.trans_amount) AS total_month_expense
+	FROM 
+	    Secretary_Transaction t
+	JOIN 
+	    Secretary_Trans_Category1 tc1 ON t.cate1_id = tc1.cate1_id
+	WHERE 
+	    t.family_id = #{familyId} 
+	    AND t.trans_type = '지출'
+	GROUP BY 
+	    t.family_id, tc1.cate1_name, tc1.label_color
+	ORDER BY
+	    total_month_expense DESC
+</select>
 </mapper>

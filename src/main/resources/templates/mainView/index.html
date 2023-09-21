@@ -69,7 +69,10 @@
     <!-- 소영 추가 JS --> 
     <script th:src="@{/js/jquery-3.7.0.js}"></script> 
     <script th:src="@{/js/fullcalendar/dist/index.global.js}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script th:src="@{/js/main/index.js}"></script>
     <script th:src="@{/js/main/mainCal.js}"></script>
+    <script th:src="@{/js/cashbook/cashbookChart.js}"></script>
 
     <!-- Helpers -->
     <script th:src="@{/assets/vendor/js/helpers.js}"></script>
@@ -856,7 +859,18 @@
                     >
                       <div class="card-title mb-0">
                         <h5 class="m-0 me-2">이달의 지출</h5>
-                        <small class="text-muted">2023년 8월</small>
+                        <small class="text-muted">
+                          <span>
+                            <script>
+                              document.write(new Date().getFullYear());
+                            </script>
+                          </span>년 
+                          <span>
+                            <script>
+                              document.write(new Date().getMonth()+1);
+                            </script>
+                          </span>월
+                        </small>
                       </div>
                       <div class="dropdown">
                         <button
@@ -873,111 +887,41 @@
                           class="dropdown-menu dropdown-menu-end"
                           aria-labelledby="orederStatistics"
                         >
-                          <a class="dropdown-item" href="javascript:void(0);"
+                          <a class="dropdown-item" th:href="@{/cashbook/trans}"
                             >내역 더보기</a
                           >
-                          <a class="dropdown-item" href="javascript:void(0);"
+                          <a class="dropdown-item" th:href="@{/cashbook/chart}"
                             >분석 더보기</a
                           >
                         </div>
                       </div>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body" style="overflow: hidden;">
                       <div
-                        class="d-flex justify-content-between align-items-center mb-3"
+                        class="d-flex justify-content-center align-items-center mb-4"
                       >
                         <div
-                          class="d-flex flex-column align-items-center gap-1"
+                          class="d-flex flex-column align-items-center gap-1" style="margin-right: 3rem;"
                         >
-                          <h3 class="mb-2">
-                            <span class="fw-bolder">345,670</span>원
-                          </h3>
-                          <span>지출했어요.</span>
+                          <h4 class="mb-2">
+                            <span class="fw-bolder" id="sumExpenseMonth">
+                              <script>
+                                sumExpenseMonth();
+                              </script>
+                            </span>원
+                          </h4>
+                          <span>사용했어요.</span>
                         </div>
-
-                        <!-- 원형 그래프 -->
-                        <div id="orderStatisticsChart"></div>
+                        <div class="d-flex flex-column align-items-center gap-1">
+                          <!-- 원형 그래프 -->
+                          <canvas id="DonutMonthExpense" style="width: 8rem; height: 8rem;"></canvas>
+                        <script>
+                          totalMonthExpense();
+                        </script>
+                        </div>
                       </div>
-                      <ul class="p-0 m-0">
-                        <li class="d-flex mb-4 pb-1">
-                          <div class="avatar flex-shrink-0 me-3">
-                            <span
-                              class="avatar-initial rounded bg-label-primary"
-                              ><i class="bx bx-mobile-alt"></i
-                            ></span>
-                          </div>
-                          <div
-                            class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2"
-                          >
-                            <div class="me-2">
-                              <h6 class="mb-0">고정비용</h6>
-                              <small class="text-muted"
-                                >주거비, 통신비, 교통비</small
-                              >
-                            </div>
-                            <div class="user-progress">
-                              <small class="fw-semibold">82,500</small>
-                            </div>
-                          </div>
-                        </li>
-                        <li class="d-flex mb-4 pb-1">
-                          <div class="avatar flex-shrink-0 me-3">
-                            <span
-                              class="avatar-initial rounded bg-label-success"
-                              ><i class="bx bx-closet"></i
-                            ></span>
-                          </div>
-                          <div
-                            class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2"
-                          >
-                            <div class="me-2">
-                              <h6 class="mb-0">쇼핑</h6>
-                              <small class="text-muted">의류, 잡화</small>
-                            </div>
-                            <div class="user-progress">
-                              <small class="fw-semibold">23,800</small>
-                            </div>
-                          </div>
-                        </li>
-                        <li class="d-flex mb-4 pb-1">
-                          <div class="avatar flex-shrink-0 me-3">
-                            <span class="avatar-initial rounded bg-label-info"
-                              ><i class="bx bx-home-alt"></i
-                            ></span>
-                          </div>
-                          <div
-                            class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2"
-                          >
-                            <div class="me-2">
-                              <h6 class="mb-0">식비</h6>
-                              <small class="text-muted">외식, 식료품, 술</small>
-                            </div>
-                            <div class="user-progress">
-                              <small class="fw-semibold">849,000</small>
-                            </div>
-                          </div>
-                        </li>
-                        <li class="d-flex">
-                          <div class="avatar flex-shrink-0 me-3">
-                            <span
-                              class="avatar-initial rounded bg-label-secondary"
-                              ><i class="bx bx-football"></i
-                            ></span>
-                          </div>
-                          <div
-                            class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2"
-                          >
-                            <div class="me-2">
-                              <h6 class="mb-0">생필품</h6>
-                              <small class="text-muted"
-                                >생활용품, 주방용품, 욕실용품</small
-                              >
-                            </div>
-                            <div class="user-progress">
-                              <small class="fw-semibold">99,000</small>
-                            </div>
-                          </div>
-                        </li>
+                      <ul class="p-0 m-0" id="totalMonthExpenseList">
+                        <!-- 도넛 목록 들어감 -->
                       </ul>
                     </div>
                   </div>

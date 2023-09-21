@@ -5,16 +5,19 @@ import java.util.HashMap;
 import java.util.Optional;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Repository;
 
-
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import net.softsociety.secretary.domain.Budget;
 import net.softsociety.secretary.domain.CalInEx;
+import net.softsociety.secretary.domain.CashbookChart;
 import net.softsociety.secretary.domain.Category1;
 import net.softsociety.secretary.domain.Category2;
 import net.softsociety.secretary.domain.Transaction;
 
 @Mapper
+@Repository
 public interface CashbookDAO {
 
 	/** 내역 입력 */
@@ -104,5 +107,8 @@ public interface CashbookDAO {
 
 	/** 내역 상세 목록 조회 */
 	ArrayList<Transaction> selectDetailTrans(HashMap<String, Object> map);
+
+	/** 당월 소비 도넛 */
+	ArrayList<CashbookChart> getMonthExpense(HashMap<String, Object> map);
 
 }

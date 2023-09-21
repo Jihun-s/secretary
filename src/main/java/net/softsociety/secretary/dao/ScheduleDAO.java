@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Repository;
 
 import net.softsociety.secretary.domain.Schedule;
 
 @Mapper
+@Repository
 public interface ScheduleDAO {
 
 	/** 일정 목록 불러오기 */
