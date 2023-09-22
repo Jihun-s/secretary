@@ -1,9 +1,22 @@
+/** 현재 날짜 전역변수 */
+let date = new Date();
+let curYear = date.getFullYear();
+let curMonth = (date.getMonth() + 1).toString().padStart(2, '0');
+let curDate = date.getDate().toString().padStart(2, '0');
+let curHour = date.getHours().toString().padStart(2, '0');
+let curMin = date.getMinutes().toString().padStart(2, '0');
+
+let curDateTime = `${curYear}-${curMonth}-${curDate} ${curHour}:${curMin}:00`;
+
+
+
+
 /** 대분류별 이달의 지출 도넛 */
 function totalMonthExpense() {
     $.ajax({
         url: "/secretary/cashbook/chart/donutMonthExpense",
         type: "POST",
-        data: { chYear: 2023, chMonth: 9 },
+        data: { chYear: curYear, chMonth: curMonth },
         dataType: "JSON",
         success: (result) => {
           // alert(JSON.stringify(result));
@@ -28,7 +41,7 @@ function totalMonthExpense() {
             } else if (rank === 3) {
               return "#03C3EC";
             } else if (rank === 4) {
-              return "#FFAB00";
+              return "#FFE616";
             }
             else {
               return "#8592A3";
@@ -36,7 +49,7 @@ function totalMonthExpense() {
           });
     
           // 도넛 그리기
-          const ctx = document.getElementById("DonutMonthExpense").getContext("2d");
+          const ctx = document.getElementById("DonutMonthExpenseCate1").getContext("2d");
           const DonutMonthExpense = new Chart(ctx, {
             type: "doughnut",
             data: {
@@ -132,3 +145,5 @@ function cate1Icon(cate1Name) {
         return 'credit-card';
     }
   }
+
+
