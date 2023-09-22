@@ -40,13 +40,13 @@ public class CashbookChartCRestController {
 	ScheduleDAO schDao;
 	
 	
-	/** 가족 당월 소비 도넛 */
+	/** 가족 당월 지출 대분류 도넛 */
 	@PostMapping("donutMonthExpense")
 	public ArrayList<CashbookChart> donutMonthExpense(
 			Model model
 			, int chYear
 			, int chMonth) {
-		log.debug("{}년 {}월 소비 도넛 컨트롤러 도착", chYear, chMonth);
+		log.debug("{}년 {}월 대분류지출 도넛 컨트롤러 도착", chYear, chMonth);
 		User loginUser = (User) model.getAttribute("loginUser");
 		HashMap<String, Object> map = new HashMap<>();
 		map.put("userId", loginUser.getUserId());
@@ -55,6 +55,27 @@ public class CashbookChartCRestController {
 		map.put("chMonth", chMonth);
 		
 		ArrayList<CashbookChart> result = dao.getMonthExpense(map);
+		log.debug("도넛차트 들어갈 값:{}", result);
+		
+		return result;
+	}
+
+	
+	/** 가족 당월 수입 대분류 도넛 */
+	@PostMapping("donutMonthIncome")
+	public ArrayList<CashbookChart> donutMonthIncome(
+			Model model
+			, int chYear
+			, int chMonth) {
+		log.debug("{}년 {}월 수입 도넛 컨트롤러 도착", chYear, chMonth);
+		User loginUser = (User) model.getAttribute("loginUser");
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("userId", loginUser.getUserId());
+		map.put("familyId", loginUser.getFamilyId());
+		map.put("chYear", chYear);
+		map.put("chMonth", chMonth);
+		
+		ArrayList<CashbookChart> result = dao.getMonthIncome(map);
 		log.debug("도넛차트 들어갈 값:{}", result);
 		
 		return result;

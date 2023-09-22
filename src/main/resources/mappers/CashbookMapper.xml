@@ -473,4 +473,24 @@ INSERT INTO
 	ORDER BY
 	    total_month_expense DESC
 </select>
+
+<!-- 당월 수입 도넛 -->
+<select id="getMonthIncome" parameterType="hashmap" resultType="CashbookChart">
+	SELECT 
+	    t.family_id,
+	    tc1.cate1_name,
+	    tc1.label_color AS label_color,
+	    SUM(t.trans_amount) AS total_month_income
+	FROM 
+	    Secretary_Transaction t
+	JOIN 
+	    Secretary_Trans_Category1 tc1 ON t.cate1_id = tc1.cate1_id
+	WHERE 
+	    t.family_id = #{familyId} 
+	    AND t.trans_type = '수입'
+	GROUP BY 
+	    t.family_id, tc1.cate1_name, tc1.label_color
+	ORDER BY
+	    total_month_income DESC
+</select>
 </mapper>

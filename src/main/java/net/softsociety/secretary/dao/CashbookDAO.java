@@ -111,4 +111,7 @@ public interface CashbookDAO {
 	/** 당월 소비 도넛 */
 	ArrayList<CashbookChart> getMonthExpense(HashMap<String, Object> map);
 
+	/** 당월 수입 도넛 */
+	ArrayList<CashbookChart> getMonthIncome(HashMap<String, Object> map);
+
 }

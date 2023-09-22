@@ -31,7 +31,7 @@ function setCurDate() {
 ////////////////////////////////////////////////////////////////
 
 /** 월 대분류별 총지출 총수입 불러오기 */
-function sumExpenseMonth() {
+function sumInExMonth() {
     nowYear = new Date().getFullYear();
     nowMonth = new Date().getMonth()+1;
 
@@ -44,8 +44,10 @@ function sumExpenseMonth() {
         success: (data) => {
             if (data == null || data == undefined) {
                 $('#sumExpenseMonth').html("0");
+                $('#sumIncomeMonth').html("0");
             } else {
                 $('#sumExpenseMonth').html(data.EXPENSESUMMONTH.toLocaleString('en-US'));
+                $('#sumIncomeMonth').html(data.INCOMESUMMONTH.toLocaleString('en-US'));
             }
         },
         error: (e) => {
