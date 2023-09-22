@@ -44,7 +44,8 @@
 
 /* 옷등록 사진 미리보기*/
 #imagePreview img{
-	width:100%;
+	width:32rem;
+	height:25.25rem;
 }
 
 
@@ -97,7 +98,8 @@
 
 /*의류수정 미리보기*/
 #updatePreview img{
-	width:100%;
+	width:32rem;
+	height:25.25rem;
 }
 
 

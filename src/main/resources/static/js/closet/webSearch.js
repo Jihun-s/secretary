@@ -9,6 +9,13 @@ function pagingFormSubmit(currentPage) {
 	form.submit();
 }
 
+function sendImageToParent(imgUrl){
+	console.log(imgUrl);
+	window.opener.receiveImage(imgUrl);
+	window.close();
+}
+
+
 $(document).ready(function(){
 
 //!!!!!!!!!!!!!!!!!!!!!! 옷 찾기  

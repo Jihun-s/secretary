@@ -675,7 +675,7 @@
       			   </div> <!-- id="body_top" card-body 상단바 (옷찾기..) -->
       			   
       			    <div class="card-body" id="whatsInStore">
-      			    <div th:each="item:${list}">
+      			    <div th:each="item:${list}" th:onclick="sendImageToParent([[${item.clothesFromStoreImg}]])">
       			    	<ul>
       			    	<li><img th:src="@{/closet/clothesFromStoreDownload(clothesFromStoreImg=${item.clothesFromStoreImg})}"></li>
       			    	<li th:text="${item.clothesFromStoreName}"></li>
