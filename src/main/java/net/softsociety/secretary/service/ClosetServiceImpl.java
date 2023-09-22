@@ -12,7 +12,6 @@ import net.softsociety.secretary.dao.ClosetDAO;
 import net.softsociety.secretary.domain.Closet;
 import net.softsociety.secretary.domain.ClosetStyleDiary;
 import net.softsociety.secretary.domain.Clothes;
-import net.softsociety.secretary.domain.ClothesManager;
 
 @Slf4j
 @Service
@@ -111,12 +110,6 @@ public class ClosetServiceImpl implements ClosetService {
 	public int updateClothes(Clothes clothes) {
 
 		return dao.updateClothes(clothes);
-	}
-
-	//소재별 세탁및관리방법 찾아오기
-	@Override
-	public ClothesManager howToManageClothes(String clothesMaterial) {
-		return dao.howToManageClothes(clothesMaterial);
 	}
 	
 	//세탁물 체크

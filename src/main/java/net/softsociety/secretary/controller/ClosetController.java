@@ -33,7 +33,6 @@ import org.springframework.web.multipart.MultipartFile;
 import lombok.extern.slf4j.Slf4j;
 import net.softsociety.secretary.domain.Closet;
 import net.softsociety.secretary.domain.Clothes;
-import net.softsociety.secretary.domain.ClothesManager;
 import net.softsociety.secretary.service.ClosetService;
 import net.softsociety.secretary.util.FileService;
 
@@ -199,20 +198,6 @@ public class ClosetController {
 
 		return clothesList;
 	}
-	
-	//세탁및관리방법
-	@ResponseBody
-	@GetMapping("howToManageClothes")
-	public ClothesManager howToManageClothes(@RequestParam(name="closetNum") int closetNum,
-											@RequestParam(name="clothesNum") int clothesNum) {
-		log.debug("howToManageClothes 매핑!");
-		Clothes clothes = service.findClothes(closetNum, clothesNum);
-		log.debug("옷 객체:{}",clothes);
-		ClothesManager clothesManager = service.howToManageClothes(clothes.getClothesMaterial());
-		log.debug("세탁및 관리방법:{}", clothesManager);
-		return clothesManager;
-	}
-	
 	
 	
 	//옷 자세히보기

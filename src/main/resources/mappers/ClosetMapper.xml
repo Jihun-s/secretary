@@ -113,11 +113,6 @@
 	delete from Secretary_clothes where closet_num = #{closetNum} and clothes_num = #{clothesNum}
 </delete>
 
-<!-- 소재별 세탁및관리방법 찾아오기 -->
-<select id="howToManageClothes" parameterType="string" resultType="ClothesManager">
-	select * from Secretary_clothesManager where clothes_material = #{clothesMaterial}
-</select>
-
 <!-- 세탁물 체크 -->
 <update id="laundryIn" parameterType="Clothes">
 	update Secretary_clothes set clothes_laundry = 1

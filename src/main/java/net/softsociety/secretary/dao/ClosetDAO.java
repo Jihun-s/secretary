@@ -9,7 +9,6 @@ import org.apache.ibatis.annotations.Mapper;
 import net.softsociety.secretary.domain.Closet;
 import net.softsociety.secretary.domain.ClosetStyleDiary;
 import net.softsociety.secretary.domain.Clothes;
-import net.softsociety.secretary.domain.ClothesManager;
 
 @Mapper
 public interface ClosetDAO {
@@ -37,8 +36,6 @@ public interface ClosetDAO {
 	//옷장 옷 수정
 	int updateClothes(Clothes clothes);
 	
-	//소재별 세탁및관리방법 찾아오기
-	ClothesManager howToManageClothes(String clothesMaterial);
 	//세탁물 체크
 	void laundryIn(Clothes clothes);
 	//세탁물 다시 옷장으로

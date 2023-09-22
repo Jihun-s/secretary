@@ -58,7 +58,8 @@
 	font-size:10px;
 	width:80px;
   	border: 1px solid rgb(77,77,77);
-  	border-radius: 5px;	
+  	border-radius: 5px;
+  	cursor:pointer;
 }
 
 .insertClothes > lable {
@@ -80,9 +81,6 @@
 }
 
 
-
-
-
 /*input 파일태그 안보이게 (사진 수정할때)*/
 #updateIMG {
 	display:none;
@@ -96,15 +94,6 @@
   	border-radius: 5px;	
 }
 
-#readClothesView > lable {
-	text-align:center;
-	font-size:10px;
-}
-
-#readClothesView input {
-	text-align:center;
-	font-size:10px; 
-}
 
 /*의류수정 미리보기*/
 #updatePreview img{
@@ -135,7 +124,12 @@
 	float:left;
 	font-size:1.2em;
 }
-
+#clothesFooter{
+	width:32rem;
+	position:absolute;
+	left:3rem;
+	bottom:1.5rem;
+}
 
 .btn-pink{
 	align-items: flex-start;

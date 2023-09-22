@@ -7,7 +7,6 @@ import java.util.HashMap;
 import net.softsociety.secretary.domain.Closet;
 import net.softsociety.secretary.domain.ClosetStyleDiary;
 import net.softsociety.secretary.domain.Clothes;
-import net.softsociety.secretary.domain.ClothesManager;
 
 public interface ClosetService {
 
@@ -32,9 +31,6 @@ public interface ClosetService {
 	
 	//옷장안 의류정보 수정
 	int updateClothes(Clothes clothes);
-
-	//소재별 세탁및관리방법 찾아오기
-	ClothesManager howToManageClothes(String clothesMaterial);
 	
 	//세탁물 체크
 	void laundryIn(Clothes clothes);
