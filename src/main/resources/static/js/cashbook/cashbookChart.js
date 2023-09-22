@@ -1,5 +1,13 @@
 $(document).ready(function() {
   weekExpenseAcc();
+
+  /* 도넛 차트 그리기 */
+  $('#donutMonthIncome-tab').on('shown.bs.tab', function (e) {
+    totalMonthIncome();
+  });
+  $('#donutMonthExpense-tab').on('shown.bs.tab', function (e) {
+    totalMonthExpense();
+  });
 });
 
 
@@ -15,10 +23,18 @@ let curMin = date.getMinutes().toString().padStart(2, '0');
 let curDateTime = `${curYear}-${curMonth}-${curDate} ${curHour}:${curMin}:00`;
 
 
+////////////////////////////////////////////////////////////////////////////////////////////////
 
+// chart 객체 담는 전역변수 
+let DonutMonthExpense;
 
 /** 대분류별 이달의 지출 도넛 */
 function totalMonthExpense() {
+  // chart 객체가 이미 존재하면 파괴
+  if (DonutMonthExpense) {
+    DonutMonthExpense.destroy();
+  }
+
     $.ajax({
         url: "/secretary/cashbook/chart/donutMonthExpense",
         type: "POST",
@@ -56,7 +72,7 @@ function totalMonthExpense() {
     
           // 도넛 그리기
           const ctx = document.getElementById("DonutMonthExpenseCate1").getContext("2d");
-          const DonutMonthExpense = new Chart(ctx, {
+          DonutMonthExpense = new Chart(ctx, {
             type: "doughnut",
             data: {
               labels: labels,
@@ -98,7 +114,7 @@ function totalMonthExpense() {
                     <small class="text-muted">${ExpenseSubCategoryExample}</small>
                     </div>
                     <div class="user-progress">
-                    <small class="fw-semibold">${item.totalMonthExpense.toLocaleString('en-US')}</small>
+                    <small class="fw-semibold">${item.totalMonthExpense.toLocaleString('en-US')}원</small>
                     </div>
                 </div>
                 </li>`;
@@ -155,9 +171,16 @@ function ExpenseCate1Icon(cate1Name) {
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 
+// chart 객체 담는 전역변수 
+let DonutMonthIncome;
+
 /** 대분류별 이달의 수입 도넛 */
 function totalMonthIncome() {
-  alert('가라 수입 도넛');
+  // chart 객체가 이미 존재하면 파괴
+  if (DonutMonthIncome) {
+    DonutMonthIncome.destroy();
+  }
+
   $.ajax({
       url: "/secretary/cashbook/chart/donutMonthIncome",
       type: "POST",
@@ -195,7 +218,7 @@ function totalMonthIncome() {
   
         // 도넛 그리기
         const ctx = document.getElementById("DonutMonthIncomeCate1").getContext("2d");
-        const DonutMonthIncome = new Chart(ctx, {
+        DonutMonthIncome  = new Chart(ctx, {
           type: "doughnut",
           data: {
             labels: labels,
@@ -237,7 +260,7 @@ function totalMonthIncome() {
                   <small class="text-muted">${IncomeSubCategoryExample}</small>
                   </div>
                   <div class="user-progress">
-                  <small class="fw-semibold">${item.totalMonthIncome.toLocaleString('en-US')}</small>
+                  <small class="fw-semibold">${item.totalMonthIncome.toLocaleString('en-US')}원</small>
                   </div>
               </div>
               </li>`;
