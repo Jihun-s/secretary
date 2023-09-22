@@ -1,3 +1,9 @@
+$(document).ready(function() {
+  weekExpenseAcc();
+});
+
+
+
 /** 현재 날짜 전역변수 */
 let date = new Date();
 let curYear = date.getFullYear();
@@ -284,4 +290,41 @@ function IncomeCate1Icon(cate1Name) {
     default:
       return 'money';
   }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////
+
+/** 주별 요약 */
+function weekExpenseAcc() {
+  $.ajax({
+    url: '/secretary/cashbook/chart/weekExpenseAcc',
+    type: 'POST',
+    data: { chYear: curYear, chMonth: curMonth },
+    dataType: 'JSON',
+    success: (data) => {
+      // console.log("주별 요약:" + JSON.stringify(data));
+      // [{"familyId":1,"userId":null,"cate1Name":null,"cate2Name":null,"labelColor":null,"curYear":2023,"curMonth":9,"weekOfMonth":1,"totalMonthExpense":null,"totalMonthIncome":null,"totalWeekExpense":780200,"weekAccumulatedExpense":780200}]
+
+      let htmlToInsert = '';
+      data.forEach((wea) => {
+      htmlToInsert += `
+        <p class="list-group-item list-group-item-action">
+          <span>${wea.weekOfMonth}주차</span>
+          <span>총 ${wea.weekAccumulatedExpense.toLocaleString('en-US')}원</span>
+          <small>+${wea.totalWeekExpense.toLocaleString('en-US')}</small>
+        </p>
+      `;
+    });
+
+  $('#weekExpenseAccDiv').html(htmlToInsert);
+
+
+
+
+    },
+    error: (e) => {
+      alert("주별 요약 전송 실패");
+      console.log(JSON.stringify(e));
+    }
+  });
 }

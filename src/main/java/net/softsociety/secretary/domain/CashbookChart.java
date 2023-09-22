@@ -19,8 +19,15 @@ public class CashbookChart {
 	String userId;
 	String cate1Name;
 	String cate2Name;
+	String labelColor;
+	
+	int curYear;
+	int curMonth;
+	int weekOfMonth;
+	
 	BigDecimal totalMonthExpense;
 	BigDecimal totalMonthIncome;
-	String labelColor;
+	BigDecimal totalWeekExpense;
+	BigDecimal weekAccumulatedExpense;
 	
 }
