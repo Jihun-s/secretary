@@ -98,6 +98,7 @@ $(document).ready(function(){
 				//분류, 소재, 계절 한글로 변환작업
 				const translatedCategory = categoryMapping[clothes.clothesCategory] || clothes.clothesCategory;
 				const translatedMaterial = materialMapping[clothes.clothesMaterial] || clothes.clothesMaterial;
+				const manageTip = howtomanageMapping[clothes.clothesMaterial] || clothes.clothesMaterial;
 				let seasonresult = '';
 				if(!clothes.clothesSeasons){
 					seasonresult='해당 없음';
@@ -118,47 +119,23 @@ $(document).ready(function(){
 				}
 				
 				let imgStr =  '<img	src="../closet/clothesDownload?closetNum='+clothes.closetNum+'&clothesNum='+clothes.clothesNum+'">'
-				let str = '<br><table><tr>\
-							<td><button class="btn-pink">카테고리</button><td>\
-							<td>&nbsp;&nbsp;'+translatedCategory+'</td>\
-							<td>&nbsp;&nbsp;'+ translatedMaterial+'</td>\
-							<td>&nbsp;&nbsp;'+seasonresult+'</td>\
-							<td>&nbsp;&nbsp;'+clothes.clothesSize+'</td></tr>'
-				let footer = '<br><button class="btn btn-primary" style="background-color: rgba(223,132,166,255); border-color: rgba(223,132,166,255); float:right"\
-								onclick="laundryOut('+clothes.closetNum+','+clothes.clothesNum+')">옷장으로 보내기</button>'
+				let str = '<br><br><ul>\
+							<li><button class="btn-pink" style="cursor:auto;">카테고리</button><li>\
+							<li>&nbsp;&nbsp;'+translatedCategory+'</li>\
+							<li>&nbsp;&nbsp;'+ translatedMaterial+'</li>\
+							<li>&nbsp;&nbsp;'+seasonresult+'</td>\
+							<li>&nbsp;&nbsp;'+clothes.clothesSize+'</li></ul><br>\
+							<ul><li><button class="btn-pink" style="cursor:auto;">관리방법</button>&nbsp;&nbsp;'+manageTip+'</li></ui><br>'
+				let footer = '<br><div id="clothesFooter"><button class="btn btn-primary" style="background-color: rgba(223,132,166,255); border-color: rgba(223,132,166,255); float:right"\
+								onclick="laundryOut('+clothes.closetNum+','+clothes.clothesNum+')">옷장으로 보내기</button></div>'
 							
 
-				$('#IMGdetail').html(imgStr);
-				$('#InfoDetail').html(str);
-				$('#InfoFooter').html(footer);
+				$('#IMGdetail').html(imgStr+str+footer);
 			},
 			error:function(e){
 				alert(JSON.stringify(e));
 			}			
 		}) //의류정보 읽어오기
-		
-		
-		$.ajax({
-			url:'howToManageClothes',
-			type:'get',
-			data:{closetNum: closetNum, clothesNum: clothesNum},
-			dataType:'json',
-			success:function(manageTip){
-				if(manageTip.clothesMaterial != "none"){
-				console.log('howToManageClothes 매핑');
-				let manageTipStr = '<tr><td><button class="btn-pink">관리방법</button></td>\
-				<td colspan="4">&nbsp;&nbsp;'+manageTip.howToWash+manageTip.howToKeep+'</td></tr></table>';
-				$('#ManageDetail').html(manageTipStr); 
-				} else {
-					$('#ManageDetail').html('');
-				}
-			},
-			error:function(e){
-				alert(JSON.stringify(e));
-			}			
-		})//관리정보 읽어오기
-		
-		
 		
 	}
 	
@@ -384,6 +361,25 @@ $(document).ready(function(){
 	
 	
 //!!!!!!!!!!!!!!!!!!!!!!     카테고리 맵핑   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!	
+	const howtomanageMapping = {
+    'none': '해당 없음', 'cotton': '기계 세탁이 가능하며, 따뜻한 물을 사용합니다. 밝은 색과 진한 색을 분리하여 세탁합니다. 햇빛에 오래 노출하지 않고, 그늘에서 보관하며 공기 순환을 유지합니다.', 
+    'linen': '손세탁이나 기계 세탁 모두 가능하며, 따뜻한 물을 사용합니다. 세탁 시 드라이어 사용을 피하고, 그늘에서 건조합니다. 다림질 시 낮은 열에서 다림질하며, 린넨은 다림질 시 미지근한 상태에서 다림질해야 합니다.',
+    'polyester': '기계 세탁이 가능하며, 차가운 물을 사용합니다. 드라이어 사용이 가능하나, 낮은 열로 설정합니다. 다림질이 필요할 경우 낮은 열로 다림질합니다.', 
+    'denim': '데님은 기계 세탁이 가능하며, 내부를 바깥으로 뒤집어서 세탁합니다. 드라이어 사용을 피하고, 건조할 때 태양에 직사광선을 피합니다. 다림질은 필요하지 않습니다.',
+    'knit': '손세탁이나 기계 세탁 중 선택할 수 있으며, 차가운 물을 사용합니다. 드라이어 사용을 피하고, 수평으로 뉘어뜨려서 건조합니다. 다림질 시 낮은 열로 다림질하며, 니트 제품을 뒤집어서 다림질합니다.',
+    'wool': '손세탁을 권장하며, 차가운 물을 사용합니다. 드라이어 사용을 피하고, 수평으로 뉘어뜨려서 건조합니다. 다림질 시 낮은 열로 다림질하며, 스팀 다림질이 필요할 수 있습니다.',
+    'acryl': '기계 세탁이 가능하며, 차가운 물을 사용합니다. 드라이어 사용이 가능하나, 낮은 열로 설정합니다. 다림질은 필요하지 않습니다.', 
+    'corduroy': '기계 세탁이 가능하며, 따뜻한 물을 사용합니다. 드라이어 사용을 피하고, 건조할 때 털을 다듬어 줍니다. 다림질 시 낮은 열로 다림질합니다.',
+    'silk': '손세탁을 권장하며, 차가운 물을 사용합니다. 드라이어 사용을 피하고, 그늘에서 건조합니다. 다림질 시 낮은 열로 다림질하며, 실크 제품을 뒤집어서 다림질합니다.',
+    'woolen': '드라이클리닝을 권장하며, 손세탁 시 차가운 물을 사용합니다. 드라이어 사용을 피하고, 건조할 때 털을 다듬어 줍니다. 다림질 시 낮은 열로 다림질하며, 모직 제품을 뒤집어서 다림질합니다.',
+    'nylon': '기계 세탁이 가능하며, 따뜻한 물을 사용합니다. 드라이어 사용이 가능하나, 낮은 열로 설정합니다. 다림질은 필요하지 않습니다.', 
+    'suede': '스웨이드는 물과 습기에 민감하므로, 특수한 스웨이드 브러시를 사용하여 세탁합니다.',
+    'leather': '가죽 제품은 특수한 관리가 필요하므로 전문적인 가죽 청소제와 관리제를 사용합니다. 습기와 물을 피하고, 직사광선에 노출을 피합니다.', 
+    'rayon': '기계 세탁이 가능하며, 따뜻한 물을 사용합니다. 드라이어 사용을 피합니다. 다림질 시 낮은 열로 다림질합니다.', 
+    'oxford': '기계 세탁이 가능하며, 따뜻한 물을 사용합니다. 드라이어 사용을 피합니다. 다림질 시 낮은 열로 다림질합니다.',
+    'napping': '기계 세탁이 가능하며, 차가운 물을 사용합니다. 드라이어 사용이 가능하나, 낮은 열로 설정합니다. 다림질은 필요하지 않습니다.'		
+	}
+
 	const categoryMapping = {
     'Tshirt': '티셔츠',
     'blouse': '블라우스/셔츠',

@@ -420,39 +420,6 @@ function chartDraw(dataValue){
 			}			
 		}) //의류정보 읽어오기
 		
-		
-/*	    //  태그를 추가할 div 요소 선택
-        var divElement = document.getElementById("IMGdetail");
-        var tempDiv = document.createElement('ul');
-		
-		$.ajax({
-			url:'howToManageClothes',
-			type:'get',
-			data:{closetNum: closetNum, clothesNum: clothesNum},
-			dataType:'json',
-			success:function(manageTip){
-				if(manageTip.clothesMaterial != "none"){
-				console.log('howToManageClothes 매핑');
-				let manageTipStr = '<li><button class="btn-pink">관리방법</button>\
-									&nbsp;'+manageTip.howToWash+'&nbsp;'+manageTip.howToKeep+'</li>';
-        		// 의류관리방법 태그 중간에 추가
-       			 tempDiv.innerHTML = manageTipStr;
-				var ulElement = divElement.querySelector('div'); 
-					if (ulElement) {
-  				 		 divElement.insertBefore(tempDiv, ulElement);
-					} else {
-   				 	
-					}	
-				} else{
-				}//outer if문
-			},
-			error:function(e){
-				alert(JSON.stringify(e));
-			}			
-		})//관리정보 읽어오기*/
-		
-
-		
 	}
 	
 	//의류 수정 모달창 열기 + 의류 수정
