@@ -198,4 +198,36 @@
 	FROM Secretary_StyleDiary WHERE user_id = #{userId}
 </select>
 
+<!-- 의류등록 웹에서 찾기 - 의류 리스트 출력 -->
+<select id="findAllClothesFromStore" parameterType="hashmap" resultType="ClothesFromStore">
+	select * from Secretary_ClothesFromStore
+		<where>
+		<if test="searchKeyword != null">
+			upper(clothesFromStore_name) like upper('%' || #{searchKeyword} || '%')
+		</if>
+		<if test="clothesFromStoreBrand != null">
+			and clothesFromStore_brand = #{clothesFromStoreBrand}
+		</if>			
+		<if test="clothesFromStoreCategory != null">
+			and clothesFromStore_category = #{clothesFromStoreCategory}
+		</if>
+		</where>
+</select>
+
+<!-- 웹에서 찾기 - ClothesFromStore 전체 글개수 -->
+<select id="getTotal" parameterType="hashmap" resultType="int">
+	select count(*) from Secretary_ClothesFromStore
+		<where>
+		<if test="searchKeyword != null">
+			upper(clothesFromStore_name) like upper('%' || #{searchKeyword} || '%')
+		</if>
+		<if test="clothesFromStoreBrand != null">
+			and clothesFromStore_brand = #{clothesFromStoreBrand}
+		</if>			
+		<if test="clothesFromStoreCategory != null">
+			and clothesFromStore_category = #{clothesFromStoreCategory}
+		</if>
+		</where>
+</select>
+
 </mapper>

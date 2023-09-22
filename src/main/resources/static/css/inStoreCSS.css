@@ -8,151 +8,53 @@
 }
 
 /* 의류리스트 이미지*/
-#whatsInCloset{
+#whatsInStore{
 	text-align:center;
-	max-height: 40em; /* 스크롤 가능한 최대 높이를 지정 (필요에 따라 조정) */
- 	overflow-y: auto; /* 세로 스크롤을 활성화 */
- 	height:34rem;
-}
-#whatsInCloset > div{
-	margin-right:1em;
-	margin-bottom:1em;
-	border-color: pink; 
-	border:1px;
-	border-style:solid;
-	border-radius:3%;
-	display:inline-block;
-	position:relative;
-}
-#whatsInCloset img{
-	width:14.5em;
-	height:10em;
-}
-#whatsInCloset div:hover{
-	transform: translate3d(1px,1px,1px);
-	cursor:pointer;
-}
-/*세탁바구니 보기 버튼*/
-#TolaundryPageBtn {
-	display:inline-block; position:relative; left:11em; 
-	background-color: rgba(223,132,166,255); border-color: rgba(223,132,166,255);
-}
-/*의류등록 버튼*/
-#insertClothesBtn{
-	display:inline-block; float:right; background-color: rgba(223,132,166,255); border-color: rgba(223,132,166,255);
+	max-height: 40em;
+ 	overflow-y: auto; 
+ 	height:31rem;
+ 	padding:0;
+ 	display:flex;
+ 	flex-flow:row wrap;
+ 	justify-content:space-around;
 }
 
-/* 옷등록 사진 미리보기*/
-#imagePreview img{
-	width:100%;
-}
-
-
-/*input file태그 안보이게하기*/
-#uploadIMG {
-	display:none;
-}
-#cssuploadIMG {
-	/*사진등록 라벨 */
-	text-align:center;
-	font-size:10px;
-	width:80px;
-  	border: 1px solid rgb(77,77,77);
-  	border-radius: 5px;
-  	cursor:pointer;
-}
-
-.insertClothes > lable {
-	text-align:center;
-	font-size:10px;
-}
-.insertClothes > table {
-	width:70%;
-	margin: 2% auto;
-	font: 20px;
-	text-align:center;
-	border-collapse: separate;
-  	border-spacing: 0.4em;	
-}
-
-.insertClothes input {
-	text-align:center;
-	font-size:10px;
-}
-
-
-/*input 파일태그 안보이게 (사진 수정할때)*/
-#updateIMG {
-	display:none;
-}
-#cssupdateIMG {
-	/*사진수정 라벨 */
-	text-align:center;
-	font-size:10px;
-	width:80px;
-  	border: 1px solid rgb(77,77,77);
-  	border-radius: 5px;	
-}
-
-
-/*의류수정 미리보기*/
-#updatePreview img{
-	width:100%;
-}
-
-
-/*의류 상세정보*/
-
-#IMGdetail{
-	width:100%;
-	height:37rem; 
-	overflow:hidden;
-}
-#myChart {
-	position:relative;
-	left:4.4em;
-}
-#IMGdetail img{
-	width:100%; 
-	height:25rem; 
-	object-fit:cover;
-}
-#IMGdetail ul{
+#whatsInStore ul{
 	list-style:none;
 }
-#IMGdetail li{
-	float:left;
-	font-size:1.2em;
+#whatsInStore li{
+    text-overflow: ellipsis;
 }
-#clothesFooter{
-	width:32rem;
-	position:absolute;
-	left:3rem;
-	bottom:1.5rem;
-}
-
-/*웹에서 찾기 신상품리스트*/
-#newItemList{
-	width:100%;
-	height:32.6rem; 
-	overflow:hidden;
-	text-align:center;
-	max-height: 40em; /* 스크롤 가능한 최대 높이를 지정 (필요에 따라 조정) */
- 	overflow-y: auto; /* 세로 스크롤을 활성화 */
-}
-#newItemList > div{
+#whatsInStore > div{
 	margin-right:1em;
 	margin-bottom:1em;
 	border-color: pink; 
 	border:1px;
 	border-style:solid;
 	border-radius:3%;
-	display:inline-block;
-	position:relative;
+	overflow: hidden; 
+	width:14rem;
+	height:14rem;
 }
-#newItemList img{
-	width:14.5em;
-	height:10em;
+#whatsInStore img{
+	
+}
+#whatsInStore div:hover{
+	transform: translate3d(1px,1px,1px);
+	cursor:pointer;
+} 
+
+#storeOuterdiv{
+	height:39.5rem;
+	text-align:center;
+	flex:display;
+}
+#pageCSS {
+	align-self:center;
+	text-align:center;
+}
+#pageCSS ul {
+	display: flex; justify-content: center; 
 }
 
 .btn-pink{

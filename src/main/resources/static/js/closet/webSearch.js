@@ -1,12 +1,17 @@
 /**
- * 옷장 페이지
+ * 의류등록 -> 웹에서 찾기
  */
+
+function pagingFormSubmit(currentPage) {
+	let form = document.getElementById('pagingForm');
+	var page = document.getElementById('page');
+	page.value = currentPage;
+	form.submit();
+}
+
 $(document).ready(function(){
 
-
-
-//!!!!!!!!!!!!!!!!!!!!!! 옷 찾기  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!	
-		//옷찾기 분류에서 소분류 숨겨놓기
+//!!!!!!!!!!!!!!!!!!!!!! 옷 찾기  
 		$('#topCategory').hide();
 		$('#bottomCategory').hide();
 		$('#outerCategory').hide();
@@ -19,33 +24,28 @@ $(document).ready(function(){
 		$('#shoesSizeForSearch').hide();
 		//옷찾기에서 분류를 선택하면 clothesSearchAnimation함수 실행	
 		$("#clothesCategoryForSearch").on('change',clothesSearchAnimation);
-		$("#clothesSearchbtn").on('click',clothesSearch); //옷찾기 버튼 클릭하면 clothesSearch 함수실행
-//!!!!!!!!!!!!!!!!!!!!!! 옷 찾기  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!		
+		//$("#clothesSearchbtn").on('click',clothesSearch); //옷찾기 버튼 클릭하면 clothesSearch 함수실행
+//!!!!!!!!!!!!!!!!!!!!!! 옷 찾기 끝
 
-
-		
-
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!옷장안에 의류목록 출력!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		$.ajax({
-			url:'inCloset',
+// !!!!!!!!!!!!!!!!			의류목록 출력			!!!!!!!!!!!!!!!!!
+/*		$.ajax({
+			url:'ClothesFromStoreList',
 			type:'get',
-			data:{closetNum: closetNum},
 			dataType:'json',
 			success:function(list){
 				let str ='';
 				$(list).each(function(i,n){
-					let clothesNum = parseInt(n.clothesNum);
+					let ImgSrc = n.clothesFromStoreImg;
 					str +='<div>\
-							<a onclick="readClothes('+n.closetNum+','+clothesNum+')">\
-							<img src="../closet/clothesDownload?closetNum='+n.closetNum+'&clothesNum='+clothesNum+'">\
-							</a></div>';
+							<img src="../closet/clothesFromStoreDownload?clothesFromStoreImg='+ImgSrc+'">\
+							</div>';
 				});
 				$('#whatsInCloset').html(str); 
 			},
 			error:function(e){
 				alert(JSON.stringify(e));
 			}			
-		})		
+		})		*/
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!옷장안에 의류목록 출력!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 
@@ -54,7 +54,7 @@ $(document).ready(function(){
 });//document.ready 끝
 	
 
-	function clothesSearch(){
+/*	function clothesSearch(){
 		//console.log();
 		// 카테고리 category, 사이즈 size
 		let category = $('#clothesCategoryForSearch option:selected').val();
@@ -121,7 +121,7 @@ $(document).ready(function(){
 				alert(JSON.stringify(e));
 			}			
 		})
-	}
+	}*/
 	
 	
 

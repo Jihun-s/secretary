@@ -5,10 +5,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.session.RowBounds;
 
 import net.softsociety.secretary.domain.Closet;
 import net.softsociety.secretary.domain.ClosetStyleDiary;
 import net.softsociety.secretary.domain.Clothes;
+import net.softsociety.secretary.domain.ClothesFromStore;
 
 @Mapper
 public interface ClosetDAO {
@@ -56,5 +58,9 @@ public interface ClosetDAO {
 	void updateStyle(ClosetStyleDiary diary);
 	//코디일지 : 코디일지 삭제
 	int deleteStyleDiary(ClosetStyleDiary diary);
+	
+	//의류등록 웹에서 찾기 - 의류 리스트 출력
+	ArrayList<ClothesFromStore> findAllClothesFromStore(HashMap<String, String> map, RowBounds rb);
+	int getTotal(HashMap<String, String> map);
 
 }

@@ -81,7 +81,10 @@
 
     <!-- 소영 추가 CSS -->
     <link rel="stylesheet" th:href="@{/css/index.css}" />
-
+    
+    <!-- 혜린 추가 CSS -->
+    <link rel="stylesheet" th:href="@{/css/inStoreCSS.css}" />
+   
     <!-- Page CSS -->
 
     <!-- Helpers -->
@@ -610,17 +613,19 @@
               <!-- 컨텐츠 -->
               <div class="row">
                 <!-- 1열 -->
-                <div class="col-lg-6 mb-4">
+                <div class="col">
                   <h3></h3>
                   <div class="card mb-4">
                     <div class="d-flex align-items-end"></div>
-                    <div class="card-body">
-        	 		 <div id="accordionIcon" class="accordion mt-3 accordion-without-arrow" style="display:inline;">
+                    <div class="card-body" id="storeOuterdiv">
+                    <div id="body_top">
+        	 		 <div id="accordionIcon" class="accordion mt-3 accordion-without-arrow" style="display:inline-block; width:48%;">
+                    <form id ="pagingForm"  method ="get" th:action="@{/closet/ClothesFromStoreList}"> <!-- 검색 폼 -->
 					   <div class="accordion-item card">
 					        <h2 class="accordion-header text-body d-flex justify-content-between" id="accordionIconOne" style="border:1;">
  						         <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#accordionIcon-1" aria-controls="accordionIcon-1">
  							           <strong>옷 찾기</strong> 
- 							      </button> <button class="btn btn-danger" id="clothesSearchbtn">Search</button>
+ 							      </button> <button class="btn btn-danger" id="clothesSearchbtn" onclick="pagingFormSubmit(1)">Search</button>
 					        </h2>
 					        <div id="accordionIcon-1" class="accordion-collapse collapse" data-bs-parent="#accordionIcon">
  						      <div class="accordion-body">                    
@@ -634,7 +639,7 @@
 						<tr>
 							<td><label for="brandForSearch">브랜드&nbsp;</label></td>
 							<td><!-- 의류 브랜드 -->
-								<select>
+								<select id="clothesFromStoreBrand" name="clothesFromStoreBrand">
 									<option value="musinsa">무신사</option>
 									<option value="Uniqlo">유니클로</option>
 									<option value="Zara">자라</option>
@@ -643,7 +648,7 @@
 							</td>
 							<td><label for="clothesCategoryForSearch">분류</label></td>
                       		<td> <!-- 의류 대분류 -->
-                      			<select id="clothesCategoryForSearch">
+                      			<select id="clothesCategoryForSearch" name="clothesFromStoreCategory">
                       				<option value="CategoryAll" selected>전체</option>
                       				<option value="top">상의</option>
                       				<option value="bottom">하의</option>
@@ -653,95 +658,67 @@
                       				<option value="bag">가방</option>
                       				<option value="accessory">악세사리</option>
                       				<option value="etc">기타</option>
-                      			</select>
-<!--                       				의류 소분류
-									<select id="topCategory" >
-                      					<option value="topAll" selected>상의 전체</option>
-                      					<option value="Tshirt">티셔츠</option>
-                      					<option value="blouse">블라우스/셔츠</option>
-                      					<option value="sweatshirt">맨투맨/후디</option>
-                      					<option value="knitwear">니트</option>												
-									</select>
-
-									<select id="bottomCategory">
-										<option value="bottomAll">하의 전체</option>
-										<option value="skirt">치마</option>
-                      					<option value="pants">바지</option>
-                      					<option value="jeans">청바지</option>
-                      					<option value="trainingPants">트레이닝/조거</option>
-									</select>
-												
-									<select id="outerCategory">
-                      					<option value="clothesOuterAll" selected>아우터 전체</option>
-                      					<option value="coat">코트</option>
-                      					<option value="jacket">자켓/점퍼</option>
-                      					<option value="paddedJacket">패딩</option>                      			
-                      					<option value="zipupHoodie">후드집업</option>                      			
-                      					<option value="cardigan">가디건/베스트</option>												
-									</select>
-												
-									<select id="dressCategory">
-										<option value="dressAll" selected>원피스 전체</option>
-										<option value="miniDress">미니원피스</option>
-										<option value="longDress">롱원피스</option>			
-									</select>
-												
-									<select id="shoesCategory">
-                      					<option value="shoesAll" selected>신발 전체</option>                     			
-                      					<option value="sneakers">운동화</option>                     			
-                      					<option value="formalShoes">구두</option>                     			
-                      					<option value="boots">부츠</option>
-                      					<option value="sandals">샌들</option>												
-									</select>
-												
-									<select id="bagCategory">
-                      					<option value="bagAll" selected>가방 전체</option>
-                      					<option value="backpack">백팩</option>
-                      					<option value="totebag">숄더/토트백</option>
-                      					<option value="crossbodybag">크로스백</option>
-                      					<option value="clutchbag">클러치</option>												
-									</select>
-												
-									<select id="accessoryCategory">
-			                      		<option value="accessoryAll" selected>악세사리 전체</option>
-			                      		<option value="hat">모자</option>
-                      					<option value="socks">양말</option>
-                      					<option value="jewelryOrWatch">쥬얼리/시계</option>
-                      					<option value="scarf">머플러/스카프</option>
-                      					<option value="belt">벨트</option>
-                      					<option value="accessoryEtc">기타</option>												
-									</select>
-												
-									<select id="etcCategory">
-                      					<option value="etcAll" selected>기타 전체</option>
-                      					<option value="innerwear">이너웨어</option>
-                      					<option value="sleepwear">잠옷</option>
-                      					<option value="swimsuit">수영복</option>												
-									</select> -->
-                      		</td><!-- 의류 소분류 끝 -->
+                      			</select> </td>
 						</tr> <!-- 옷 찾기 1행 끝 -->
+						<tr><td>검색</td>
+						<td colspan="3"><input type="text" name="SearchKeyword"></td>
+						</tr>
 					 </table>
 					</div> <!-- class="accordion-body" -->
  				    </div> <!-- id="accordionIcon-1" class="accordion-collapse collapse" -->
     			   </div><!-- class="accordion-item card" -->
-      			   </div> <!-- id="accordionIcon" class="accordion mt-3 accordion-without-arrow" -->					 
-                    </div>
+    			   </form> <!-- 검색폼 끝 -->
+      			   </div> <!-- id="accordionIcon" class="accordion mt-3 accordion-without-arrow" -->
+      			   <div class="alert alert-danger" role="alert" style="display:inline-block; margin-left:2rem; width:48%;">
+          			비서에게 새로운 아이템을 요청해보세요!
+       				 </div>
+      			   </div> <!-- id="body_top" card-body 상단바 (옷찾기..) -->
+      			   
+      			    <div class="card-body" id="whatsInStore">
+      			    <div th:each="item:${list}">
+      			    	<ul>
+      			    	<li><img th:src="@{/closet/clothesFromStoreDownload(clothesFromStoreImg=${item.clothesFromStoreImg})}"></li>
+      			    	<li th:text="${item.clothesFromStoreName}"></li>
+      			    	</ul>
+      			    </div>
+                    </div> <!-- 의류리스트 끝 -->
+		          </div> <!-- class="card-body" 전체 div -->
                   </div>
-                </div>
-                
-                
-                <!-- 2열 -->
-                <div class="col-lg-6 mb-4">
-                  <!-- 2열 1행 -->
-                  <h3 class=""></h3>
-                  <div class="card">
-                    <div class="d-flex align-items-end"></div>
-                    <div class="card-body">
-					<div class="alert alert-danger" role="alert">
-          			<b>New!</b> 요청하신 신상품들 도착했어요
-        			</div>                    
-                    </div>
-                  </div>
+	<!-- 페이지 이동 링크 -->
+	<div id="pageCSS">
+	<nav aria-label="Page navigation">
+            <ul class="pagination">
+              <li class="page-item first">
+                <a class="page-link" href="javascript:void(0);"><i class="tf-icon bx bx-chevrons-left"></i></a>
+              </li>
+              <li class="page-item prev">
+                <a class="page-link" href="javascript:void(0);"><i class="tf-icon bx bx-chevron-left"></i></a>
+              </li>
+              <li class="page-item">
+                <a class="page-link" href="javascript:void(0);">1</a>
+              </li>
+              <li class="page-item">
+                <a class="page-link" href="javascript:void(0);">2</a>
+              </li>
+              <li class="page-item">
+                <a class="page-link" href="javascript:void(0);">3</a>
+              </li>
+              <li class="page-item">
+                <a class="page-link" href="javascript:void(0);">4</a>
+              </li>
+              <li class="page-item">
+                <a class="page-link" href="javascript:void(0);">5</a>
+              </li>
+              <li class="page-item next">
+                <a class="page-link" href="javascript:void(0);"><i class="tf-icon bx bx-chevron-right"></i></a>
+              </li>
+              <li class="page-item last">
+                <a class="page-link" href="javascript:void(0);"><i class="tf-icon bx bx-chevrons-right"></i></a>
+              </li>
+            </ul>
+         </nav>
+          </div>
+         <!-- 페이지 끝 -->
                 </div>
               </div>
             <!-- 컨텐트 박스 -->

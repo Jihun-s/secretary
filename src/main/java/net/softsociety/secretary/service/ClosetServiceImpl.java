@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +13,8 @@ import net.softsociety.secretary.dao.ClosetDAO;
 import net.softsociety.secretary.domain.Closet;
 import net.softsociety.secretary.domain.ClosetStyleDiary;
 import net.softsociety.secretary.domain.Clothes;
+import net.softsociety.secretary.domain.ClothesFromStore;
+import net.softsociety.secretary.util.PageNavigator;
 
 @Slf4j
 @Service
@@ -193,11 +196,31 @@ public class ClosetServiceImpl implements ClosetService {
 	public int deleteStyleDiary(ClosetStyleDiary diary) {
 		return dao.deleteStyleDiary(diary);
 	}
-	
 
-	
-	
-	
-	
+	//의류등록 웹에서 찾기 - 의류 리스트 출력
+	@Override
+	public ArrayList<ClothesFromStore> findAllClothesFromStore(PageNavigator navi, 
+			String searchKeyword, String clothesFromStoreBrand, String clothesFromStoreCategory) {
+		HashMap<String, String> map = new HashMap<>();
+		map.put("searchKeyword", searchKeyword);
+		map.put("clothesFromStoreBrand", clothesFromStoreBrand);
+		map.put("clothesFromStoreCategory", clothesFromStoreCategory);
+		RowBounds rb = new RowBounds(navi.getStartRecord(), navi.getCountPerPage());
+		return dao.findAllClothesFromStore(map, rb);
+	}
+
+	//웹에서 찾기 - 페이지정보
+	@Override
+	public PageNavigator getPageNavigator(int pagePerGroup, int countPerPage, int page, 
+					String searchKeyword, String clothesFromStoreBrand, String clothesFromStoreCategory) {
+		HashMap<String, String> map = new HashMap<>();
+		map.put("searchKeyword", searchKeyword);
+		map.put("clothesFromStoreBrand", clothesFromStoreBrand);
+		map.put("clothesFromStoreCategory", clothesFromStoreCategory);
+		int total = dao.getTotal(map);
+		PageNavigator navi = new PageNavigator(pagePerGroup, countPerPage, page, total);
+		return navi;
+	}
+		
 	
 }
