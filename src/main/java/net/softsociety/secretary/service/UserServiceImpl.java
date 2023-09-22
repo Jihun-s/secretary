@@ -152,10 +152,16 @@ public class UserServiceImpl implements UserService {
 		int n= userMapper.editUser(updatedUser);
 		return n;
 	}
-
+	//관리자 기능 일별 로그인 횟수 
 	@Override
 	public List<Log> getDailyLoginData() {
 		return userMapper.getDailyLoginData();
+	}
+	//관리자 기능 시간별 로그인 횟수
+	@Override
+	public List<Log> getHourlyLoginData() {
+		
+		return userMapper.getHourlyLoginData();
 	}
 
 	

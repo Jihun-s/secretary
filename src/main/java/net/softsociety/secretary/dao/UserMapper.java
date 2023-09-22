@@ -20,15 +20,16 @@ public interface UserMapper {
 	int countByEmail(String userEmail);
 	int countByUserId(String userId);
 	void updateUserPw(User user);
-	//관리자 기능 유저목록 - 인찬
+	
+	//관리자 기능 유저목록
 	ArrayList<User> findALL();
 	//관리자 기능 유저 정보 편집
 	int editUser(User updatedUser);
 	//관리자 기능 유저 정보 열람
 	User readUser(String userId);
 	//관리자 기능 일일 로그인 정보 
-	//List<Map<String, Object>> getDailyLoginData();
-	
 	List<Log> getDailyLoginData();
-	List<Log> getMonthlyLoginData();
+	//관리자 기능 시간별 로그인 정보
+	List<Log> getHourlyLoginData();
+	
 }

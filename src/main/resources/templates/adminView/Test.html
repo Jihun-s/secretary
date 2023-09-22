@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<script>
+//새 차트를 만들 때 새로운 Chart.js 인스턴스가 할당
+let myChart = null;
+
+function fetchLoginDataAndDrawChart() {
+    $.ajax({
+        url: 'dailyLogin',
+        type: 'GET',
+        dataType: 'json',
+        success: function (loginData) {
+            //console.log('Login data:', loginData);
+            const labels = loginData.slice(-7).map(entry => entry.loginDate);
+            const counts = loginData.slice(-7).map(entry => entry.dailyLoginCount);
+            //console.log('Labels:', labels);
+            //console.log('Counts:', counts);
+            drawLoginChart(labels, counts);
+            
+        },
+        error: function (error) {
+            console.error('Error fetching login data:', error);
+        }
+    });
+}
+
+function drawLoginChart(labels, counts) {
+    const chartData = {
+        labels: labels,
+        datasets: [{
+            label: '일일 로그인 수',
+            data: counts,
+            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+            borderColor: 'rgba(75, 192, 192, 1)',
+            borderWidth: 1
+        }]
+    };
+
+    const canvas = document.getElementById('myChart');
+    
+    // 차트 재생성 전 기존차트 삭제
+    if (myChart instanceof Chart) {
+        myChart.destroy();
+    }
+
+    // 새로운 값으로 차트 생성
+    myChart = new Chart(canvas, {
+        type: 'bar',
+        data: chartData,
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+}
+
+// 페이지 로드 시 데이터로 그래프 그리기 함수 호출
+window.onload = function() {
+    fetchLoginDataAndDrawChart();
+    // 주기적으로 데이터 업데이트 (예: 5초마다)
+    setInterval(fetchLoginDataAndDrawChart, 100000);
+};
+</script>
+</body>
+</html>
