@@ -620,7 +620,8 @@
                     <div class="card-body" id="storeOuterdiv">
                     <div id="body_top">
         	 		 <div id="accordionIcon" class="accordion mt-3 accordion-without-arrow" style="display:inline-block; width:48%;">
-                    <form id ="pagingForm"  method ="get" th:action="@{/closet/ClothesFromStoreList}"> <!-- 검색 폼 -->
+                    <form id ="pagingForm"  method ="get" th:action="@{/closet/webSearch}"> <!-- 검색 폼 -->
+					   <input type="hidden" name="page" id="page">
 					   <div class="accordion-item card">
 					        <h2 class="accordion-header text-body d-flex justify-content-between" id="accordionIconOne" style="border:1;">
  						         <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#accordionIcon-1" aria-controls="accordionIcon-1">
@@ -640,6 +641,7 @@
 							<td><label for="brandForSearch">브랜드&nbsp;</label></td>
 							<td><!-- 의류 브랜드 -->
 								<select id="clothesFromStoreBrand" name="clothesFromStoreBrand">
+									<option value="brandAll" selected>전체</option>
 									<option value="musinsa">무신사</option>
 									<option value="Uniqlo">유니클로</option>
 									<option value="Zara">자라</option>
@@ -670,7 +672,7 @@
     			   </form> <!-- 검색폼 끝 -->
       			   </div> <!-- id="accordionIcon" class="accordion mt-3 accordion-without-arrow" -->
       			   <div class="alert alert-danger" role="alert" style="display:inline-block; margin-left:2rem; width:48%;">
-          			비서에게 새로운 아이템을 요청해보세요!
+          			추가하고 싶은 옷을 클릭하세요!
        				 </div>
       			   </div> <!-- id="body_top" card-body 상단바 (옷찾기..) -->
       			   
@@ -689,26 +691,16 @@
 	<nav aria-label="Page navigation">
             <ul class="pagination">
               <li class="page-item first">
-                <a class="page-link" href="javascript:void(0);"><i class="tf-icon bx bx-chevrons-left"></i></a>
+                <a class="page-link" th:href="|javascript:pagingFormSubmit(${navi.currentPage - navi.pagePerGroup})|"><i class="tf-icon bx bx-chevrons-left"></i></a>
               </li>
               <li class="page-item prev">
-                <a class="page-link" href="javascript:void(0);"><i class="tf-icon bx bx-chevron-left"></i></a>
+                <a class="page-link" th:href="|javascript:pagingFormSubmit(${navi.currentPage - 1})|"><i class="tf-icon bx bx-chevron-left"></i></a>
               </li>
-              <li class="page-item">
-                <a class="page-link" href="javascript:void(0);">1</a>
-              </li>
-              <li class="page-item">
-                <a class="page-link" href="javascript:void(0);">2</a>
-              </li>
-              <li class="page-item">
-                <a class="page-link" href="javascript:void(0);">3</a>
-              </li>
-              <li class="page-item">
-                <a class="page-link" href="javascript:void(0);">4</a>
-              </li>
-              <li class="page-item">
-                <a class="page-link" href="javascript:void(0);">5</a>
-              </li>
+              <span th:each="counter : ${#numbers.sequence(navi.startPageGroup, navi.endPageGroup)}">
+				<th:block th:if="${counter == navi.currentPage}"><b></th:block>
+				<li class="page-item"><a class="page-link" th:text="${counter}" th:href="|javascript:pagingFormSubmit(${counter})|"></a></li>
+				<th:block th:if="${counter == navi.currentPage}"></b></th:block>
+              </span>
               <li class="page-item next">
                 <a class="page-link" href="javascript:void(0);"><i class="tf-icon bx bx-chevron-right"></i></a>
               </li>

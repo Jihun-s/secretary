@@ -205,10 +205,10 @@
 		<if test="searchKeyword != null">
 			upper(clothesFromStore_name) like upper('%' || #{searchKeyword} || '%')
 		</if>
-		<if test="clothesFromStoreBrand != null">
+		<if test="clothesFromStoreBrand != null and clothesFromStoreBrand !='brandAll'">
 			and clothesFromStore_brand = #{clothesFromStoreBrand}
 		</if>			
-		<if test="clothesFromStoreCategory != null">
+		<if test="clothesFromStoreCategory != null and clothesFromStoreCategory != 'CategoryAll'">
 			and clothesFromStore_category = #{clothesFromStoreCategory}
 		</if>
 		</where>
@@ -218,13 +218,13 @@
 <select id="getTotal" parameterType="hashmap" resultType="int">
 	select count(*) from Secretary_ClothesFromStore
 		<where>
-		<if test="searchKeyword != null">
+		<if test="searchKeyword != null and searchKeyword !=''" >
 			upper(clothesFromStore_name) like upper('%' || #{searchKeyword} || '%')
 		</if>
-		<if test="clothesFromStoreBrand != null">
+		<if test="clothesFromStoreBrand != null and clothesFromStoreBrand !='brandAll'">
 			and clothesFromStore_brand = #{clothesFromStoreBrand}
 		</if>			
-		<if test="clothesFromStoreCategory != null">
+		<if test="clothesFromStoreCategory != null and clothesFromStoreCategory != 'CategoryAll'">
 			and clothesFromStore_category = #{clothesFromStoreCategory}
 		</if>
 		</where>
