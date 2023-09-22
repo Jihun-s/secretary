@@ -8,9 +8,10 @@
 
 /* 의류리스트 이미지*/
 #whatsInStyleDiary{
+	text-align:center;
 	max-height: 40em; /* 스크롤 가능한 최대 높이를 지정 (필요에 따라 조정) */
  	overflow-y: auto; /* 세로 스크롤을 활성화 */	
-	text-align:center;
+ 	height:34rem;
 }
 #whatsInStyleDiary > div{
 	margin-right:1em;
@@ -154,15 +155,6 @@
   	border-radius: 5px;	
 }
 
-#readClothesView > lable {
-	text-align:center;
-	font-size:10px;
-}
-
-#readClothesView input {
-	text-align:center;
-	font-size:10px; 
-}
 
 /*의류수정 미리보기*/
 #updatePreview img{
@@ -174,7 +166,7 @@
 
 #IMGdetail{
 	width:100%;
-	height:500px; 
+	height:37rem; 
 	overflow:hidden;
 }
 #myChart {
@@ -183,23 +175,22 @@
 }
 #IMGdetail img{
 	width:100%; 
-	height:100%; 
+	height:25rem; 
 	object-fit:contain;
 }
-#InfoDetail{
-	display:inline-block;
-	text-align:justify;
+
+#IMGdetail ul{
+	list-style:none;
+}
+#IMGdetail li{
+	float:left;
 	font-size:1.2em;
 }
-
-#ManageDetail{
-	display:inline-block;
-	text-align:justify;
-	font-size:1.2em;	
-}
-
-#InfoFooter button{
-	display:inline-block; float:right; margin-left:5px;
+#clothesFooter{
+	width:32rem;
+	position:absolute;
+	left:3rem;
+	bottom:1.5rem;
 }
 
 .btn-pink{

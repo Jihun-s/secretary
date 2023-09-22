@@ -360,19 +360,19 @@ function readDiary(styleNum){
 			}
 			
 			let DiaryImgStr = '<img src="../closet/styleDiary/styleDiaryDownload?styleNum='+styleNum+'&userId='+userId+'">';
-			$('#IMGdetail').html(DiaryImgStr);
-			let DiaryStr = '<br><table><tr>\
-						<td><button class="btn-pink">카테고리</button><td>\
-						<td>&nbsp;&nbsp;'+seasonresult+'</td>\
-						<td>&nbsp;&nbsp;'+translatedTPO+'</td></tr>\
-						<tr><td><button class="btn-pink">메모내용</button><td>\
-						<td colspan="2">&nbsp;&nbsp;'+diary.styleDescription+'</td></tr>'
-			$('#InfoDetail').html(DiaryStr);
-			let footer = '<br><button type="button" class="btn btn-primary" style="background-color: rgba(223,132,166,255); border-color: rgba(223,132,166,255);" \
+			let DiaryStr = '<br><br><ul>\
+						<li><button class="btn-pink" style="cursor:auto;">카테고리</button></li>\
+						<li>&nbsp;&nbsp;'+seasonresult+'</li>\
+						<li>&nbsp;&nbsp;'+translatedTPO+'</li></ul><br>\
+						<ul><li><button class="btn-pink" style="cursor:auto;">메모내용</button></li>\
+						<li>&nbsp;&nbsp;'+diary.styleDescription+'</li></ul>'
+			//$('#InfoDetail').html(DiaryStr);
+			let footer = '<br><div id="clothesFooter"><button type="button" class="btn btn-primary" style="background-color: rgba(223,132,166,255); border-color: rgba(223,132,166,255);float:right;" \
 							onclick="deleteDiary('+styleNum+')"> 삭제 </button>\
-						<button type="button" class="btn btn-primary"	style="background-color: rgba(223,132,166,255); border-color: rgba(223,132,166,255);" \
-							onclick="openUpdateModal('+styleNum+')"> 수정 </button>'
-		 	$('#InfoFooter').html(footer);						
+						<button type="button" class="btn btn-primary"	style="background-color: rgba(223,132,166,255); border-color: rgba(223,132,166,255); margin-right:0.5rem; float:right;" \
+							onclick="openUpdateModal('+styleNum+')"> 수정 </button></div>'
+		 	//$('#InfoFooter').html(footer);						
+			$('#IMGdetail').html(DiaryImgStr+DiaryStr+footer);
 		 },
 		error:function(e){
 			alert(JSON.stringify(e));
