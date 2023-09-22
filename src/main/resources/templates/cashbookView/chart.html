@@ -1,17 +1,4 @@
 <!DOCTYPE html>
-
-<!-- =========================================================
-* Sneat - Bootstrap 5 HTML Admin Template - Pro | v1.0.0
-==============================================================
-
-* Product Page: https://themeselection.com/products/sneat-bootstrap-html-admin-template/
-* Created by: ThemeSelection
-* License: You must have a valid license purchased in order to legally use the theme for your project.
-* Copyright ThemeSelection (https://themeselection.com)
-
-=========================================================
- -->
-<!-- beautify ignore:start -->
 <html
   lang="en"
   class="light-style layout-menu-fixed"
@@ -82,6 +69,9 @@
 
     <!-- 소영 추가 JS -->
     <script th:src="@{/js/jquery-3.7.0.js}"></script> 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script th:src="@{/js/cashbook/cashbookChart.js}"></script>
+    <script th:src="@{/js/cashbook/statistic.js}"></script>
 
     <!-- Helpers -->
     <script th:src="@{/assets/vendor/js/helpers.js}"></script>
@@ -577,6 +567,12 @@
 
           <!-- / Navbar -->
 
+          <!-- 현재시각 심어놓기 -->
+          <input type="hidden" id="curDateTime" value="" />
+          <input type="hidden" id="curYear" value="" />
+          <input type="hidden" id="curMonth" value="" />
+          <input type="hidden" id="curDate" value="" />
+
           <!-- Content wrapper -->
           <div class="content-wrapper">
             <!-- Content -->
@@ -601,10 +597,11 @@
               <div class="row">
                 <!-- 1열 -->
                 <div class="col-lg-4 mb-4">
-                  <h3>내역 추가하기</h3>
+                  <h3>주별 요약</h3>
                   <div class="card mb-4">
                     <div class="d-flex align-items-end"></div>
                     <div class="card-body">
+
                     </div>
                   </div>
                   <div class="card">
@@ -619,11 +616,117 @@
                 <!-- 2열 -->
                 <div class="col-lg-4 mb-4">
                   <!-- 2열 1행 -->
-                  <h3 class="">내역 보기</h3>
-                  <div class="card">
-                    <div class="d-flex align-items-end"></div>
-                    <div class="card-body">
-                      <h5>2열</h5>
+                  <h3 class="">카테고리별 수입/지출</h3>
+                  <div class="h-100">
+                    <!-- 지출 디폴트 필 -->
+                    <div id="donutMonthFill" class="nav-align-top mb-4">
+                      <ul class="nav nav-tabs nav-fill" role="tablist">
+                        <li class="nav-item">
+                          <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#donutMonthIncome" aria-controls="donutMonthIncome" aria-selected="false" onclick="totalMonthIncome()">수입</button>
+                        </li>
+                        <li class="nav-item">
+                          <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab" data-bs-target="#donutMonthExpense" aria-controls="donutMonthExpense" aria-selected="true">지출</button>
+                        </li>
+                      </ul>
+                      <div class="tab-content">
+                        <!-- 수입 -->
+                        <div class="tab-pane fade" id="donutMonthIncome" role="tabpanel">
+                          <div
+                            class="card-header d-flex align-items-center justify-content-between pb-0"
+                          >
+                            <div class="card-title mb-0">
+                              <h5 class="m-0 me-2">이달의 <span>수입</span></h5>
+                              <small class="text-muted">
+                                <span>
+                                  <script>
+                                    document.write(new Date().getFullYear());
+                                  </script>
+                                </span>년 
+                                <span>
+                                  <script>
+                                    document.write(new Date().getMonth()+1);
+                                  </script>
+                                </span>월
+                              </small>
+                            </div>
+                          </div>
+                          <div class="card-body" style="overflow: hidden;">
+                            <div
+                              class="d-flex justify-content-center align-items-center mb-4"
+                            >
+                              <div
+                                class="d-flex flex-column align-items-center gap-1" style="margin-right: 3rem;"
+                              >
+                                <h4 class="mb-2">
+                                  <span class="fw-bolder" id="sumIncomeMonth">
+                                    <script>
+                                      sumInExMonth();
+                                    </script>
+                                  </span>원
+                                </h4>
+                                <span>벌었어요.</span>
+                              </div>
+                              <div class="d-flex flex-column align-items-center gap-1">
+                                <!-- 원형 그래프 -->
+                                <canvas id="DonutMonthIncomeCate1" style="width: 8rem; height: 8rem;"></canvas>
+                              </div>
+                            </div>
+                            <ul class="p-0 m-0" id="totalMonthIncomeList">
+                              <!-- 도넛 목록 들어감 -->
+                            </ul>
+                          </div>
+                        </div>
+                        <!-- 지출 -->
+                        <div class="tab-pane fade active show" id="donutMonthExpense" role="tabpanel">
+                          <div
+                            class="card-header d-flex align-items-center justify-content-between pb-0"
+                          >
+                            <div class="card-title mb-0">
+                              <h5 class="m-0 me-2">이달의 <span>지출</span></h5>
+                              <small class="text-muted">
+                                <span>
+                                  <script>
+                                    document.write(new Date().getFullYear());
+                                  </script>
+                                </span>년 
+                                <span>
+                                  <script>
+                                    document.write(new Date().getMonth()+1);
+                                  </script>
+                                </span>월
+                              </small>
+                            </div>
+                          </div>
+                          <div class="card-body" style="overflow: hidden;">
+                            <div
+                              class="d-flex justify-content-center align-items-center mb-4"
+                            >
+                              <div
+                                class="d-flex flex-column align-items-center gap-1" style="margin-right: 3rem;"
+                              >
+                                <h4 class="mb-2">
+                                  <span class="fw-bolder" id="sumExpenseMonth">
+                                    <script>
+                                      sumInExMonth();
+                                    </script>
+                                  </span>원
+                                </h4>
+                                <span>사용했어요.</span>
+                              </div>
+                              <div class="d-flex flex-column align-items-center gap-1">
+                                <!-- 원형 그래프 -->
+                                <canvas id="DonutMonthExpenseCate1" style="width: 8rem; height: 8rem;"></canvas>
+                                <script>
+                                  totalMonthExpense();
+                                </script>
+                              </div>
+                            </div>
+                            <ul class="p-0 m-0" id="totalMonthExpenseList">
+                              <!-- 도넛 목록 들어감 -->
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>

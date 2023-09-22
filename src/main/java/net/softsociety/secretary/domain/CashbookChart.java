@@ -20,6 +20,7 @@ public class CashbookChart {
 	String cate1Name;
 	String cate2Name;
 	BigDecimal totalMonthExpense;
+	BigDecimal totalMonthIncome;
 	String labelColor;
 	
 }
