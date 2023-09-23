@@ -468,6 +468,8 @@ INSERT INTO
 	WHERE 
 	    t.family_id = #{familyId} 
 	    AND t.trans_type = '지출'
+        AND EXTRACT(YEAR FROM t.trans_date) = #{chYear}
+    AND EXTRACT(MONTH FROM t.trans_date) = #{chMonth}
 	GROUP BY 
 	    t.family_id, tc1.cate1_name, tc1.label_color
 	ORDER BY
@@ -488,9 +490,33 @@ INSERT INTO
 	WHERE 
 	    t.family_id = #{familyId} 
 	    AND t.trans_type = '수입'
+        AND EXTRACT(YEAR FROM t.trans_date) = #{chYear}
+    AND EXTRACT(MONTH FROM t.trans_date) = #{chMonth}
 	GROUP BY 
 	    t.family_id, tc1.cate1_name, tc1.label_color
 	ORDER BY
 	    total_month_income DESC
+</select>
+
+<!-- 각 주별 총 지출액 -->
+<select id="getWeekExpenseAcc" parameterType="hashmap" resultType="CashbookChart">
+SELECT
+    1 AS family_id,
+    '2023' AS curYear,
+    '09' AS curMonth,
+    TO_CHAR(t.trans_date, 'W') AS week_of_month,
+    SUM(t.trans_amount) AS total_week_expense,
+    SUM(SUM(t.trans_amount)) OVER (ORDER BY TO_CHAR(t.trans_date, 'W')) AS week_accumulated_expense
+FROM 
+    Secretary_Transaction t
+WHERE
+    t.family_id = #{familyId}
+    AND t.trans_type = '지출' 
+    AND EXTRACT(YEAR FROM t.trans_date) = #{chYear}
+    AND EXTRACT(MONTH FROM t.trans_date) = #{chMonth}
+GROUP BY
+    TO_CHAR(t.trans_date, 'W')
+ORDER BY
+    week_of_month ASC
 </select>
 </mapper>

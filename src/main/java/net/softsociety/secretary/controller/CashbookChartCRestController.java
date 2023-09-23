@@ -80,4 +80,25 @@ public class CashbookChartCRestController {
 		
 		return result;
 	}
+	
+	
+	/** 가족 당월 주별 지출 */
+	@PostMapping("weekExpenseAcc")
+	public ArrayList<CashbookChart> weekExpenseAcc(
+			Model model
+			, int chYear
+			, int chMonth) {
+		log.debug("{}년 {}월 주차별 지출 컨트롤러 도착", chYear, chMonth);
+		User loginUser = (User) model.getAttribute("loginUser");
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("userId", loginUser.getUserId());
+		map.put("familyId", loginUser.getFamilyId());
+		map.put("chYear", chYear);
+		map.put("chMonth", chMonth);
+		
+		ArrayList<CashbookChart> result = dao.getWeekExpenseAcc(map);
+		log.debug("주차별 지출:{}", result);
+		
+		return result;
+	}
 }
