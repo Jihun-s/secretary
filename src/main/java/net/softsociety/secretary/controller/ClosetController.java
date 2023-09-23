@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,8 +34,10 @@ import org.springframework.web.multipart.MultipartFile;
 import lombok.extern.slf4j.Slf4j;
 import net.softsociety.secretary.domain.Closet;
 import net.softsociety.secretary.domain.Clothes;
+import net.softsociety.secretary.domain.ClothesFromStore;
 import net.softsociety.secretary.service.ClosetService;
 import net.softsociety.secretary.util.FileService;
+import net.softsociety.secretary.util.PageNavigator;
 
 @Slf4j
 @RequestMapping("closet")
@@ -50,7 +53,13 @@ public class ClosetController {
 	
 	//편집된 사진경로 담을 변수
 	String returnfile = "";
-	
+
+	//게시판 목록의 페이지당 글 수
+	@Value("${clothesFromStore.page}")
+	int countPerPage;
+	//게시판 목록의 페이지 이동 링크 수
+	@Value("${user.board.group}")
+	int pagePerGroup;	
 	
 	//옷장추가
 	@ResponseBody
@@ -282,5 +291,28 @@ public class ClosetController {
 		HashMap<String, BigDecimal> valueList = service.getChartValue(closetNum);
 		return valueList;
 	}
-	
+
+	//옷이미지(의류등록-웹에서 찾기) 다운로드
+	@GetMapping("clothesFromStoreDownload")
+	public void clothesDownload(@RequestParam(name="clothesFromStoreImg") String clothesFromStoreImg,
+								HttpServletRequest request, HttpServletResponse response) {
+		String fullPath = uploadPath + "/" + clothesFromStoreImg;
+		
+		try {
+			response.setHeader("Content-Disposition", " attachment;filename=" + URLEncoder.encode(clothesFromStoreImg, "UTF-8"));
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		
+		try {
+			FileInputStream in = new FileInputStream(fullPath);
+			ServletOutputStream out = response.getOutputStream();
+			FileCopyUtils.copy(in, out);
+			in.close();
+			out.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 }

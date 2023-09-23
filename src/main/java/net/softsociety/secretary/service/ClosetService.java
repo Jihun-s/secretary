@@ -7,6 +7,8 @@ import java.util.HashMap;
 import net.softsociety.secretary.domain.Closet;
 import net.softsociety.secretary.domain.ClosetStyleDiary;
 import net.softsociety.secretary.domain.Clothes;
+import net.softsociety.secretary.domain.ClothesFromStore;
+import net.softsociety.secretary.util.PageNavigator;
 
 public interface ClosetService {
 
@@ -52,6 +54,13 @@ public interface ClosetService {
 	void updateStyle(ClosetStyleDiary diary);
 	//코디일지 - 코디일지 삭제
 	int deleteStyleDiary(ClosetStyleDiary diary);
+	
+	//의류등록 웹에서 찾기 - 의류 리스트 출력
+	ArrayList<ClothesFromStore> findAllClothesFromStore(PageNavigator navi, String searchKeyword, String clothesFromStoreBrand,
+			String clothesFromStoreCategory);
+	//웹에서 찾기 - 페이지작업
+	PageNavigator getPageNavigator(int pagePerGroup, int countPerPage, int page, String searchKeyword,
+			String clothesFromStoreBrand, String clothesFromStoreCategory);
 
 	
 }

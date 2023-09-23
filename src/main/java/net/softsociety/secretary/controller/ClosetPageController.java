@@ -3,6 +3,7 @@ package net.softsociety.secretary.controller;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import lombok.extern.slf4j.Slf4j;
 import net.softsociety.secretary.domain.Closet;
 import net.softsociety.secretary.domain.Clothes;
+import net.softsociety.secretary.domain.ClothesFromStore;
 import net.softsociety.secretary.service.ClosetService;
+import net.softsociety.secretary.util.PageNavigator;
 
 @Slf4j
 @Controller
@@ -21,6 +24,14 @@ public class ClosetPageController {
 
 	@Autowired
 	ClosetService service;
+
+	//게시판 목록의 페이지당 글 수
+	@Value("${clothesFromStore.page}")
+	int countPerPage;
+	//게시판 목록의 페이지 이동 링크 수
+	@Value("${user.board.group}")
+	int pagePerGroup;	
+		
 	
 	// 옷장 메인화면
 	@GetMapping({"", "/"})
@@ -59,7 +70,20 @@ public class ClosetPageController {
 	}
 
 	@GetMapping("webSearch")
-	public String webSearch() {
+	public String webSearch(Model m, String SearchKeyword, String clothesFromStoreBrand, String clothesFromStoreCategory
+			,@RequestParam(name="page", defaultValue="1") int page) {
+		log.debug("옷 검색 키워드: {}", SearchKeyword);
+		log.debug("옷 검색 브랜드: {}", clothesFromStoreBrand);
+		log.debug("옷 검색 브랜드: {}", clothesFromStoreCategory);
+		
+		 PageNavigator navi = service.getPageNavigator(pagePerGroup, countPerPage, page, SearchKeyword, clothesFromStoreBrand, clothesFromStoreCategory);
+		//옷장안에 의류리스트 불러오기
+		ArrayList<ClothesFromStore> clothesList = service.findAllClothesFromStore(navi, SearchKeyword,clothesFromStoreBrand,clothesFromStoreCategory);
+		m.addAttribute("list", clothesList);
+		m.addAttribute("navi", navi);
+		m.addAttribute("searchKeyWord", SearchKeyword);
+		m.addAttribute("brand", clothesFromStoreBrand);
+		m.addAttribute("category", clothesFromStoreCategory);		
 		return "closetView/webSearch";
 	}
 	
