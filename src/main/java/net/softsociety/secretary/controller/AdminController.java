@@ -87,6 +87,13 @@ public class AdminController {
 	    
 	    return ResponseEntity.ok(result);
 	}
+	//시간별 접속자 그래프
+	@GetMapping("hourlyLogin")
+	@ResponseBody
+	public ResponseEntity<List<Log>> hourlyLogin() {
+		List<Log> result = userservice.getHourlyLoginData();
+		return ResponseEntity.ok(result);
+	}
 
 
 	

@@ -46,7 +46,7 @@ public class Log {
     
     //private Date timeStamp;
     
-    @Transient // 이 필드는 데이터베이스와 매핑하지 않음을 나타냅니다.
+    @Transient // 이 필드는 데이터베이스와 매핑하지 않음
     private int dailyLoginCount;
 
     public int getDailyLoginCount() {
@@ -62,5 +62,19 @@ public class Log {
     public String getLoginDate() {
     	return loginDate;
     }
+    @Transient
+    public String loginHour;
+    
+    public String getLoginHour() {
+    	return loginHour;
+    }
+    
+    @Transient
+    public String loginCount;
+    
+    public String getLoginCount() {
+    	return loginCount;
+    }
+    
     
 }
