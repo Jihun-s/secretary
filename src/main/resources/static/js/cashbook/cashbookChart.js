@@ -356,25 +356,30 @@ function weekExpenseAcc() {
 
 /** 6개월 간 수입지출 추이 */
 function inExSixMonth() {
-  alert('함수 호출');
-
   $.ajax({
     url: '/secretary/cashbook/chart/inExSixMonth',
     type: 'POST',
     data: { chYear: 2023, chMonth: 9 },
     dataType: 'JSON',
     success: (data) => {
-      console.log(JSON.stringify(data));
-
+      // 연월 기준 오름차순 정렬
+      data.sort((a, b) => {
+        if (a.curYear === b.curYear) {
+          return a.curMonth - b.curMonth;
+        }
+        return a.curYear - b.curYear;
+      });
+    
+      // console.log(JSON.stringify(data));
+    
       // 라벨과 데이터 배열 생성
       const labels = data.map(item => `${item.curYear}년 ${item.curMonth}월`);
       const expenseData = data.map(item => item.totalMonthExpense);
       const incomeData = data.map(item => item.totalMonthIncome);
-
-
+    
       // 차트 생성
-      const ctx = document.getElementById('myBarChart').getContext('2d');
-      const myBarChart = new Chart(ctx, {
+      const ctx = document.getElementById('barInExSixMonth').getContext('2d');
+      const barInExSixMonth = new Chart(ctx, {
         type: 'bar',
         data: {
           labels: labels,
@@ -397,6 +402,7 @@ function inExSixMonth() {
       alert('6개월 추이 전송 실패');
       console.log(JSON.stringify(e));
     }
+    
   });
 }
 

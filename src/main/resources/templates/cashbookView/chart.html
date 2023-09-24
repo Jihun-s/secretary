@@ -611,7 +611,7 @@
                           <span>
                             <script>
                               document.write(new Date().getMonth()+1);
-                            </script>
+                              </script>
                           </span>월
                         </h5>
                         <div class="demo-inline-spacing mt-4">
@@ -622,10 +622,14 @@
                       </div>
                     </div>
                   </div>
+                  <h3>수입지출 추이</h3>
                   <div class="card">
                     <div class="d-flex align-items-end"></div>
                     <div class="card-body">
-                      <h5>1열</h5>
+                      <canvas id="barInExSixMonth" style="width: 100%;"></canvas>
+                        <script>
+                          inExSixMonth();
+                        </script>
                     </div>
                   </div>
                 </div>
