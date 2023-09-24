@@ -62,7 +62,6 @@ public class FoodCategoryServiceImpl implements FoodCategoryService {
         FoodCategory foodCategoryVo = new FoodCategory();
         foodCategoryVo.setFamilyId(familyId);
         foodCategoryVo.setFoodCategory(foodCategory);
-        log.debug("객체로 보내 볼게요 : {}",foodCategoryVo);
         // 카테고리 삭제
         foodCategoryDAO.deleteCategoryName(foodCategoryVo);
     }

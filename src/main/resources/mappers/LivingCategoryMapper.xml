@@ -21,4 +21,23 @@
 	    WHERE ITEM_CATEGORY = #{itemCategory}
 	    AND FAMILY_ID = #{familyId}
 	</select>
+	
+	<!-- 카테고리 중복 확인 -->
+    <select id="checkCategoryDuplication" resultType="int" parameterType="LivingCategory">
+        SELECT COUNT(*) FROM Secretary_LIVING_CATEGORY
+        WHERE ITEM_CATEGORY = #{itemCategory} AND FAMILY_ID = #{familyId}
+    </select>
+    
+    <!-- 카테고리 수정 -->
+    <update id="updateCategoryName" parameterType="map">
+        UPDATE Secretary_LIVING_CATEGORY
+        SET ITEM_CATEGORY = #{newName}
+        WHERE ITEM_CATEGORY = #{originalName} AND FAMILY_ID = #{familyId}
+    </update>
+    
+    <!-- 카테고리 삭제 -->
+    <delete id="deleteCategory" parameterType="LivingCategory">
+        DELETE FROM Secretary_LIVING_CATEGORY
+    	WHERE ITEM_CATEGORY = #{itemCategory} AND FAMILY_ID = #{familyId}
+    </delete>
 </mapper>

@@ -10,4 +10,12 @@ public interface LivingCategoryService {
 
 	int addCategory(LivingCategory itemCategory);
 
+	boolean checkCategoryDuplication(LivingCategory livingCategory);
+
+	int countItemsUsingCategory(LivingCategory livingCategory);
+
+	void updateCategory(String originalName, String newName, int familyId);
+
+	void deleteCategory(String itemCategory, int familyId);
+
 }
