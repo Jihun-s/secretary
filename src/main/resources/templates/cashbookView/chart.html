@@ -553,7 +553,7 @@
                       <div class="dropdown-divider"></div>
                     </li>
                     <li>
-                      <a class="dropdown-item" th:href="@{/member/logout}">
+                      <a class="dropdown-item" th:href="@{/user/logout}">
                         <i class="bx bx-power-off me-2"></i>
                         <span class="align-middle">로그아웃</span>
                       </a>
@@ -611,7 +611,7 @@
                           <span>
                             <script>
                               document.write(new Date().getMonth()+1);
-                            </script>
+                              </script>
                           </span>월
                         </h5>
                         <div class="demo-inline-spacing mt-4">
@@ -622,10 +622,14 @@
                       </div>
                     </div>
                   </div>
+                  <h3>수입지출 추이</h3>
                   <div class="card">
                     <div class="d-flex align-items-end"></div>
                     <div class="card-body">
-                      <h5>1열</h5>
+                      <canvas id="barInExSixMonth" style="width: 100%;"></canvas>
+                        <script>
+                          inExSixMonth();
+                        </script>
                     </div>
                   </div>
                 </div>
@@ -733,20 +737,75 @@
                 <!-- 3열 -->
                 <div class="col-lg-4 mb-4">
                   <!-- 3열 1행 -->
-                  <h3 class="">자산</h3>
+                  <h3 class="">다른 유저와 비교</h3>
                   <div class="card">
                     <div class="d-flex align-items-end"></div>
                     <div class="card-body">
-                      <h5>3열 1</h5>
+                      <canvas id="lineOtherUserTotal"></canvas>
+                      <script>
+                        otherUserTotal();
+                      </script>
                     </div>
                   </div>
 
                   <!-- 3열 2행 -->
-                  <h3 class="">예산</h3>
+                  <h3 class="">최대/최다 지출</h3>
                   <div class="card">
                     <div class="d-flex align-items-end"></div>
-                    <div class="card-body">
-                      <h5>3열 2</h5>
+                    <div class="card-body align-items-center">
+                      <div class="accordion mt-3" id="accordionExample">
+                        <div class="card accordion-item active">
+                          <h2 class="accordion-header" id="headingTwo">
+                            <button
+                              type="button"
+                              class="accordion-button"
+                              data-bs-toggle="collapse"
+                              data-bs-target="#accordionTwo"
+                              aria-expanded="true"
+                              aria-controls="accordionTwo"
+                            >
+                              최대 지출
+                            </button>
+                          </h2>
+                          <div
+                            id="accordionTwo"
+                            class="accordion-collapse collapse show"
+                            aria-labelledby="headingTwo"
+                            data-bs-parent="#accordionExample"
+                          >
+                            <div class="accordion-body">
+                              <div id="mostFreqDiv" class="justify-content-center align-items-center"></div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="card accordion-item">
+                          <h2 class="accordion-header" id="headingThree">
+                            <button
+                              type="button"
+                              class="accordion-button collapsed"
+                              data-bs-toggle="collapse"
+                              data-bs-target="#accordionThree"
+                              aria-expanded="false"
+                              aria-controls="accordionThree"
+                            >
+                              최다 이용
+                            </button>
+                          </h2>
+                          <div
+                            id="accordionThree"
+                            class="accordion-collapse collapse"
+                            aria-labelledby="headingThree"
+                            data-bs-parent="#accordionExample"
+                          >
+                          <div class="accordion-body">
+                              <div id="mostLgDiv" class="justify-content-center align-items-center"></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <script>
+                        mostCate2();
+                      </script>
                     </div>
                   </div>
                 </div>

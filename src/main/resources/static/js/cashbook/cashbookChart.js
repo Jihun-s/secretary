@@ -131,6 +131,8 @@ function totalMonthExpense() {
 /** 도넛 밑 리스트 대분류에 따른 지출 소분류 예시 */
 function ExpenseCate2NameExample(cate1Name) {
     switch (cate1Name) {
+      case '고정지출':
+        return '주거, 통신, 교통 등';
       case '식비':
         return '식당, 카페, 간식 등';
       case '쇼핑':
@@ -151,6 +153,8 @@ function ExpenseCate2NameExample(cate1Name) {
 /** 도넛 밑 리스트 대분류에 따른 지출 아이콘bx 변경 */
 function ExpenseCate1Icon(cate1Name) {
     switch (cate1Name) {
+      case '고정지출':
+        return 'pin';
       case '식비':
         return 'dish';
       case '쇼핑':
@@ -351,3 +355,145 @@ function weekExpenseAcc() {
     }
   });
 }
+
+////////////////////////////////////////////////////////////
+
+/** 6개월 간 수입지출 추이 */
+function inExSixMonth() {
+  $.ajax({
+    url: '/secretary/cashbook/chart/inExSixMonth',
+    type: 'POST',
+    data: { chYear: curYear, chMonth: curMonth },
+    dataType: 'JSON',
+    success: (data) => {
+      // 연월 기준 오름차순 정렬
+      data.sort((a, b) => {
+        if (a.curYear === b.curYear) {
+          return a.curMonth - b.curMonth;
+        }
+        return a.curYear - b.curYear;
+      });
+    
+      console.log(JSON.stringify(data));
+    
+      // 라벨과 데이터 배열 생성
+      const labels = data.map(item => `${item.curYear}년 ${item.curMonth}월`);
+      const expenseData = data.map(item => item.totalMonthExpense);
+      const incomeData = data.map(item => item.totalMonthIncome);
+    
+      // 차트 생성
+      const ctx = document.getElementById('barInExSixMonth').getContext('2d');
+      const barInExSixMonth = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: '수입',
+              data: incomeData,
+              borderColor: '#696CFF',
+              fill: false,
+            },
+            {
+              label: '지출',
+              data: expenseData,
+              borderColor: '#03C3EC',
+              fill: false,
+            }
+          ]
+        },
+        options: {
+          scales: {
+            x: { beginAtZero: true },
+            y: { beginAtZero: true }
+          },
+          elements: {
+            line: {
+              tension: 0.3  // 선 띠용~하는 정도 
+            }
+          }
+        }
+      });
+    },
+    error: (e) => {
+      alert('6개월 추이 선 그래프 전송 실패');
+      console.log(JSON.stringify(e));
+    }
+    
+  });
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+
+/** 다른 유저 3개월 평균 비교 */
+function otherUserTotal() {
+  $.ajax({
+    url: '/secretary/cashbook/chart/otherUserTotal',
+    type: 'POST',
+    data: { chYear: curYear, chMonth: curMonth },
+    dataType: 'JSON',
+    success: (data) => {
+      // 시간을 키로 하고, 각 값을 value로 하는 Map을 생성
+      const myExpenseMap = new Map();
+      const otherExpenseAvgMap = new Map();
+  
+      // Map에 데이터 저장
+      for (const item of data.myResult) {
+        const key = `${item.chYear}-${item.chMonth}`;
+        myExpenseMap.set(key, item.totalMonthExpense);
+      }
+  
+      for (const item of data.otherResult) {
+        const key = `${item.chYear}-${item.chMonth}`;
+        otherExpenseAvgMap.set(key, item.totalMonthExpenseAvg);
+      }
+  
+      // 고유한 시간 라벨을 생성
+      const uniqueLabels = Array.from(new Set([...myExpenseMap.keys(), ...otherExpenseAvgMap.keys()])).sort();
+  
+      // Chart.js 데이터 배열을 생성
+      const labels = uniqueLabels.map(label => `${label.split('-')[0]}년 ${label.split('-')[1]}월`);
+      const myExpenseData = uniqueLabels.map(label => myExpenseMap.get(label) || 0);
+      const otherExpenseAvgData = uniqueLabels.map(label => otherExpenseAvgMap.get(label) || 0);  
+
+      // Chart.js 설정
+      const ctx = document.getElementById('lineOtherUserTotal').getContext('2d');
+      const lineOtherUserTotal = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: '우리 가족',
+              data: myExpenseData,
+              backgroundColor: '#71DD37'
+            },
+            {
+              label: '평균',
+              data: otherExpenseAvgData,
+              backgroundColor: '#696CFF'
+            }
+          ]
+        },
+        
+      });
+    },
+    error: (e) => {
+      alert('타 유저 비교 막대그래프 전송 실패');
+      console.log(JSON.stringify(e));
+    }
+  });
+}
+
+
+
+
+
+
+
+
+
+
+
+

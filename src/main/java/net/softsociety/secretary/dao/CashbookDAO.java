@@ -117,4 +117,15 @@ public interface CashbookDAO {
 	/** 당월 주차별 지출액 */
 	ArrayList<CashbookChart> getWeekExpenseAcc(HashMap<String, Object> map);
 
+	/** 6개월 추이 */
+	ArrayList<CashbookChart> getInExSixMonth(HashMap<String, Object> map);
+
+	/** 나의 3개월 수입지출 */
+	ArrayList<CashbookChart> getMyTotal(HashMap<String, Object> map);
+	
+	/** 다른 유저의 3개월 수입지출 평균 */
+	ArrayList<CashbookChart> getOtherUserTotal(HashMap<String, Object> map);
+	
+	/** 최다/최대 지출 소분류 카테고리 */
+	ArrayList<CashbookChart> getMostCate2(HashMap<String, Object> map);
 }
