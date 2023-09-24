@@ -16,6 +16,16 @@ $(document).ready(function() {
     $('necessaryAlertBt').click(getAlerts);
 });
 
+/** 현재 날짜 전역변수 */
+let date = new Date();
+let curYear = date.getFullYear();
+let curMonth = (date.getMonth() + 1).toString().padStart(2, '0');
+let curDate = date.getDate().toString().padStart(2, '0');
+let curHour = date.getHours().toString().padStart(2, '0');
+let curMin = date.getMinutes().toString().padStart(2, '0');
+
+let curDateTime = `${curYear}-${curMonth}-${curDate} ${curHour}:${curMin}:00`;
+
 ////////////////////////////////////////////////////////////
 
 /** 화면 초기화 */
@@ -463,4 +473,55 @@ function deleteSch() {
     }
   }
 
-  
+  ////////////////////////////////////////////////////////////////////////////////////////////////
+
+/** 이전월 지금월 수입지출 비교 */
+function curPreInExSum() {
+    $.ajax({
+        url: '/secretary/cashbook/curPreInExSum',
+        type: 'POST',
+        data: { chYear: curYear, chMonth: curMonth },
+        dataType: 'JSON',
+        success: (data) => {
+            console.log(JSON.stringify(data));
+            // 현재 달 / 이전 달 정보 쪼개기
+            let curMonthData = data.find(item => item.chMonth == curMonth && item.chYear == curYear);
+            let preMonthData = data.find(item => item.chMonth == curMonth - 1 && item.chYear == curYear);
+
+            // alert(curMonthData.totalMonthExpense);
+            // alert(preMonthData.totalMonthExpense);
+
+            // 데이터 확인
+            if (!curMonthData || !preMonthData) {
+                console.log("현월 또는 이전월 데이터 없음");
+                return;
+            }
+
+            // 지출 비교
+            if (curMonthData.totalMonthExpense > preMonthData.totalMonthExpense) {
+                $('#expenseSumArrow').html('↑');
+                // alert('지출 더 커요');
+            } else if (curMonthData.totalMonthExpense === preMonthData.totalMonthExpense) {
+                $('#expenseSumArrow').html('＝');
+                // alert('지출 같아요');
+            } else {
+                $('#expenseSumArrow').html('↓');
+                // alert('지출 더 작아요');
+            }
+
+            // 수입 비교
+            if (curMonthData.totalMonthIncome > preMonthData.totalMonthIncome) {
+                $('#incomeSumArrow').html('↑');
+            } else if (curMonthData.totalMonthIncome === preMonthData.totalMonthIncome) {
+                $('#incomeSumArrow').html('＝');
+            } else {
+                $('#incomeSumArrow').html('↓');
+            }
+
+        },
+        error: (e) => {
+            alert("이번달 저번달 전송 실패");
+            console.log(JSON.stringify(e));
+        }
+    });
+}

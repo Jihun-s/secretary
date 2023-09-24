@@ -128,4 +128,7 @@ public interface CashbookDAO {
 	
 	/** 최다/최대 지출 소분류 카테고리 */
 	ArrayList<CashbookChart> getMostCate2(HashMap<String, Object> map);
+	
+	/** 이번달 저번달 수입/지출 */
+	ArrayList<CashbookChart> getCurPreInExSum(HashMap<String, Object> map);
 }

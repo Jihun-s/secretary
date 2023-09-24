@@ -678,4 +678,55 @@ ORDER BY
     ORDER BY
         total_amount DESC
 </select>
+
+<!-- 이번달 저번달 수입/지출 -->
+<select id="getCurPreInExSum" parameterType="hashmap" resultType="CashbookChart">
+	SELECT 
+    family_id,
+    EXTRACT(YEAR FROM trans_date) AS ch_year,
+    EXTRACT(MONTH FROM trans_date) AS ch_month,
+    SUM(CASE WHEN trans_type = '지출' THEN trans_amount ELSE 0 END) AS total_month_expense,
+    SUM(CASE WHEN trans_type = '수입' THEN trans_amount ELSE 0 END) AS total_month_income
+FROM 
+    Secretary_Transaction
+WHERE
+    family_id = #{familyId}
+    AND EXTRACT(YEAR FROM trans_date) = #{chYear}
+    AND EXTRACT(MONTH FROM trans_date) = #{chMonth}
+GROUP BY 
+    family_id, EXTRACT(YEAR FROM trans_date), EXTRACT(MONTH FROM trans_date)
+  
+UNION ALL
+
+SELECT 
+    family_id,
+    CASE
+        WHEN #{chMonth} = 1 THEN #{chYear} - 1
+        ELSE #{chYear}
+    END AS ch_year,
+    CASE
+        WHEN #{chMonth} = 1 THEN 12
+        ELSE #{chMonth} - 1
+    END AS ch_month,
+    SUM(CASE WHEN trans_type = '지출' THEN trans_amount ELSE 0 END) AS total_month_expense,
+    SUM(CASE WHEN trans_type = '수입' THEN trans_amount ELSE 0 END) AS total_month_income
+FROM 
+    Secretary_Transaction
+WHERE
+    family_id = #{familyId}
+    AND (
+        (EXTRACT(YEAR FROM trans_date) = #{chYear} AND EXTRACT(MONTH FROM trans_date) = #{chMonth} - 1)
+        OR (EXTRACT(YEAR FROM trans_date) = #{chYear} - 1 AND EXTRACT(MONTH FROM trans_date) = 12)
+    )
+GROUP BY 
+    family_id,
+    CASE
+        WHEN #{chMonth} = 1 THEN #{chYear} - 1
+        ELSE #{chYear}
+    END,
+    CASE
+        WHEN #{chMonth} = 1 THEN 12
+        ELSE #{chMonth} - 1
+    END
+</select>
 </mapper>

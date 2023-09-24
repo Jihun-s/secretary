@@ -656,18 +656,27 @@
                     <div class="card-body">
                       <div class="row">
                         <h5>이번 달 내역</h5>
+                        <script>
+                          curPreInExSum();
+                        </script>
                         <p>
                           수입 총
                           <span id="incomeSumMonthSpan">0</span>원
-                          <span id="incomeSumArrow">▲</span>
+                          <span
+                            id="incomeSumArrow"
+                            style="color: skyblue"
+                          ></span>
                         </p>
                         <p>
                           지출 총
                           <span id="expenseSumMonthSpan">0</span>원
-                          <span id="expenseSumArrow">▼</span>
+                          <span
+                            id="expenseSumArrow"
+                            style="color: orangered"
+                          ></span>
                         </p>
                         <a th:href="@{/cashbook/trans}">
-                          <button type="button" class="btn btn-success">
+                          <button type="button" class="btn btn-outline-success">
                             내역 바로가기
                           </button>
                         </a>
@@ -680,9 +689,10 @@
                   <div class="card">
                     <div class="d-flex align-items-end"></div>
                     <div class="card-body">
+                      <p>나의 소비 패턴을 한 눈에 확인하세요!</p>
                       <a th:href="@{/cashbook/chart}">
-                        <button type="button" class="btn btn-success">
-                          분석 바로가기
+                        <button type="button" class="btn btn-outline-success">
+                          소비 분석 바로가기
                         </button>
                       </a>
                     </div>
