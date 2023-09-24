@@ -30,7 +30,6 @@ public class FridgeUsedServiceImpl implements FridgeUsedService {
 	    
 	    // 현재 수량이 소비하려는 수량보다 많거나 같다면
 	    if (currentQuantity >= fridgeFood.getFoodQuantity()) {
-	    	log.debug("서비스임플 수량 비교.. currentQuantity: {}, fridgeFood.getFoodQuantity() : {}", currentQuantity, fridgeFood.getFoodQuantity());
 	        // 수량 감소
 	        fridgeFoodDAO.reduceFoodQuantity(fridgeFood);
 	        
@@ -47,11 +46,8 @@ public class FridgeUsedServiceImpl implements FridgeUsedService {
 	            log.error("Error inserting used food", e);
 	        }
 
-	        
-	        log.debug("문제의 소비이력 다음.... : {}", fridgeFood.getFoodId());
 	        // 수량이 0이면 음식 삭제
 	        if (currentQuantity - fridgeFood.getFoodQuantity() == 0) {
-	        	log.debug("이번엔 삭제가 문제야 또.. : {}", fridgeFood.getFoodId());
 	            fridgeFoodDAO.deleteFridgeFood(fridgeFood.getFoodId());
 	        }
 	    } else {

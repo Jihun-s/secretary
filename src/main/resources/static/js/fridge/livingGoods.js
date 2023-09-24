@@ -175,8 +175,6 @@ $(document).ready(function () {
         $('#livingItemsContainer').append(itemElement);
     }
     
-
-    
     //아이템 출력
     $.get(`livingGoods/getLivingGoods`, function (items) {
         $('#livingItemsContainer').empty();
@@ -196,8 +194,9 @@ $(document).ready(function () {
                 // 버튼의 data 속성 업데이트
                 $('.consume-btn').data('item-id', data.itemId);
                 $('.consume-btn').data('item-quantity', data.itemQuantity);
-                $('.consume-btn').data('fridge-id', data.fridgeId);
+                $('.consume-btn').data('family-id', data.familyId);
                 $('.consume-btn').data('item-name', data.itemName);
+                $('.consume-btn').data('item-category', data.itemCategory);
     
                 // 모달에 들어갈 내용 설정
                 const imagePath = data.itemSavedFile

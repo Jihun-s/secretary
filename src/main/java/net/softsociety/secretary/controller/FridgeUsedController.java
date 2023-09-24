@@ -30,7 +30,6 @@ public class FridgeUsedController {
 	@ResponseBody
 	@PostMapping("/consumeFood")
 	public ResponseEntity<?> consumeFood(@RequestBody FridgeFood fridgeFood) {
-	    log.debug("컨트롤러시점 : {}", fridgeFood);
 		try {
 	    	fridgeUsedService.consumeFood(fridgeFood);
 	        return new ResponseEntity<>(HttpStatus.OK);
@@ -42,7 +41,6 @@ public class FridgeUsedController {
 	@ResponseBody
 	@GetMapping("/consumptionHistory")
     public List<FridgeUsed> getConsumptionHistory() {
-		List<FridgeUsed> fff = fridgeUsedService.getUsedFoodsHistory();
         return fridgeUsedService.getUsedFoodsHistory();
     }
 	

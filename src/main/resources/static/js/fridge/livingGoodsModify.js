@@ -288,5 +288,88 @@ function setExistingImageInEditMode(existingImageSrc) {
         submitBtn.removeClass('btn-warning').addClass('btn-primary');
         $('#manualInputModal form').attr('action', 'livingGoods/add');
     });
+
+// 아이템 소비 후에 호출되는 함수
+function updateItemQuantity(itemId, newQuantity) {
+    const itemElement = $(`[data-item-id="${itemId}"]`);
+    if (newQuantity <= 0) {
+        // 수량이 0 이하이면 화면에서 아이템 제거
+        itemElement.remove();
+    } else {
+        // 아니면 수량 업데이트
+        itemElement.data('item-quantity', newQuantity); // data 속성 업데이트
+        itemElement.find('.item-quantity').text(newQuantity); // 화면에 보이는 텍스트 업데이트
+    }
+}
+
+//소비 버튼 클릭 이벤트
+$(document).on('click', '.consume-btn', function () {
+    const itemId = $(this).data('item-id');
+    const maxQuantity = $(this).data('item-quantity');
+    const itemName = $(this).data('item-name');
+    const itemCategory = $(this).data('item-category');
+
+    const responseFromPrompt = prompt(`소비할 수량을 입력하세요 (최대: ${maxQuantity})`);
+    
+    if (responseFromPrompt === null) {
+        return;
+    }
+    
+    const quantityToConsume = parseInt(responseFromPrompt);
+
+    if (quantityToConsume > 0 && quantityToConsume <= maxQuantity) {
+        $.ajax({
+            url: 'livingUsed/consumeItem',
+            type: 'POST',
+            data: JSON.stringify({
+                itemId: itemId,
+                itemQuantity: quantityToConsume,
+                itemName: itemName,
+                itemCategory: itemCategory,
+            }),
+            contentType: 'application/json',
+            success: function (response) {
+                alert('소비 처리가 완료되었습니다.');
+                $('#itemModal').modal('hide');
+
+                const newQuantity = maxQuantity - quantityToConsume;
+                updateItemQuantity(itemId, newQuantity);
+
+                refreshConsumptionHistory();
+            },
+            error: function (error) {
+                console.log('Error consuming item:', error);
+                alert('소비 처리에 실패하였습니다.');
+            },
+        });
+    } else {
+        alert('올바른 수량을 입력하세요.');
+    }
+});
+
+// 소비 이력 갱신 함수
+function refreshConsumptionHistory() {
+    $.ajax({
+        type: 'GET',
+        url: 'livingUsed/consumptionHistory',
+        success: function (data) {
+            let content = '';
+            data.forEach((item) => {
+                content += `
+                    <div class="consumption-item">
+                        <h5 class="used-item-name">${item.itemCategory}의 ${item.itemName}을/를 ${item.livingQuantityUsed}개 소비하셨습니다!</h5>
+                        <p class="used-date">${new Date(item.livingUsedDate).toLocaleString()}</p>
+                    </div>
+                `;
+            });
+            $('#consumptionHistoryContainer').html(content);
+        },
+    });
+}
+
+// 페이지 로딩 후 자동으로 소비 이력 갱신
+refreshConsumptionHistory();
+
+
 });
 //readyEND

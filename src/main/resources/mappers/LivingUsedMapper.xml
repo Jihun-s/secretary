@@ -1,0 +1,17 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.softsociety.secretary.dao.LivingUsedDAO">
+	<!-- 소비 이력 추가 -->
+	<insert id="insertUsedItem" parameterType="LivingUsed">
+	    INSERT INTO Secretary_Living_Used (living_used_id, family_id, item_id, living_quantity_used, item_name, item_category)
+	    VALUES (living_used_seq.NEXTVAL, #{familyId}, #{itemId}, #{livingQuantityUsed}, #{itemName}, #{itemCategory})
+	</insert>
+	
+	<select id="getAllUsedItems" resultType="LivingUsed">
+	    SELECT *
+	    FROM Secretary_Living_Used
+	    ORDER BY living_used_date DESC
+	</select>
+</mapper>

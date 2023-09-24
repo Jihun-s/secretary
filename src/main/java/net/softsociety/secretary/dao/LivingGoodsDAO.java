@@ -25,4 +25,8 @@ public interface LivingGoodsDAO {
 
 	void deleteLivingGoods(int itemId);
 
+	int checkItemQuantity(LivingGoods livingGoods);
+
+	void reduceItemQuantity(LivingGoods livingGoods);
+
 }
