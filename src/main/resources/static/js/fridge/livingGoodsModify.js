@@ -227,72 +227,66 @@ function setExistingImageInEditMode(existingImageSrc) {
     previewImage.style.display = "block";
     previewImage.setAttribute("src", existingImageSrc);
 }
-// 아이템 삭제 아이콘을 클릭했을 때 실행되는 코드
-$(document).on('click', '.itemDeleteIcon', function (e) {
-    const itemId = $(this).data('item-id');
-    if (confirm('정말로 이 물품 아이템을 삭제하시겠습니까?')) {
+    // 삭제 아이콘 클릭 이벤트
+    $(document).on('click', '.itemDeleteIcon', function (e) {
+        e.stopImmediatePropagation();
+        const itemId = $(this).data('item-id');
+        if (confirm('정말로 이 물품 아이템을 삭제하시겠습니까?')) {
+            $.ajax({
+                url: 'livingGoods/delete/' + itemId,
+                type: 'POST',
+                success: function (response) {
+                    if (response === 'success') {
+                        $('[data-item-id="' + itemId + '"]').remove();
+                    } else {
+                        console.error('Failed to delete the item.');
+                    }
+                },
+                error: function (error) {
+                    console.error(error);
+                },
+            });
+        }
+        e.stopPropagation(); // 이벤트 전파 중단
+    });
+
+    // 수정 아이콘 클릭 이벤트
+    $(document).on('click', '.item-editIcon', function (e) {
+        const itemId = $(this).data('item-id');
         $.ajax({
-            url: 'livingGoods/delete/' + itemId,
-            type: 'POST',
-            success: function (response) {
-                if (response === 'success') {
-                    $('[data-item-id="' + itemId + '"]').remove();
-                } else {
-                    console.error('Failed to delete the item.');
+            url: 'livingGoods/item/' + itemId,
+            type: 'GET',
+            success: function (item) {
+                $('#itemName').val(item.itemName);
+                $('#itemCategory').val(item.itemCategory);
+                $('#itemQuantity').val(item.itemQuantity);
+                $('#itemPrice').val(item.itemPrice);
+                $('#itemPurchaseDate').val(item.itemPurchaseDate);
+                $('#itemExpiryDate').val(item.itemExpiryDate);
+                $('#itemMadeDate').val(item.itemMadeDate);
+                if (item.itemSavedFile) {
+                    const existingImageSrc = 'fridgeFood/image/' + item.itemSavedFile;
+                    setExistingImageInEditMode(existingImageSrc);
                 }
+                const submitBtn = $('#manualInputModal .addsubmitBtn');
+                submitBtn.text('Update');
+                submitBtn.removeClass('btn-primary').addClass('btn-warning');
+                $('#manualInputModal form').attr('action', 'livingGoods/modify/' + itemId);
+                $('#manualInputModal').modal('show');
             },
             error: function (error) {
                 console.error(error);
             },
         });
-    }
-    e.stopPropagation();
-});
-
-// 아이템 수정 아이콘 클릭 이벤트
-$(document).on('click', '.item-editIcon', function (e) {
-    e.stopPropagation(); // 이벤트 전파 중단
-
-    const itemId = $(this).data('item-id'); // 해당 아이템의 ID
-
-    // 서버에서 아이템 정보를 가져옴
-    $.ajax({
-        url: 'livingGoods/item/' + itemId,
-        type: 'GET',
-        success: function (item) {
-            $('#itemName').val(item.itemName);
-            $('#itemCategory').val(item.itemCategory);
-            $('#itemQuantity').val(item.itemQuantity);
-            $('#itemPrice').val(item.itemPrice);
-            $('#itemPurchaseDate').val(item.itemPurchaseDate);
-            $('#itemExpiryDate').val(item.itemExpiryDate);
-            $('#itemMadeDate').val(item.itemMadeDate);
-            // 기존에 업로드된 이미지가 있다면 미리보기에 설정
-            if (item.itemSavedFile) {
-                const existingImageSrc = 'fridgeFood/image/' + item.itemSavedFile; // 예시 경로, 실제 경로는 서버에 맞게 변경
-                setExistingImageInEditMode(existingImageSrc);
-            }
-
-            const submitBtn = $('#manualInputModal .addsubmitBtn');
-            submitBtn.text('Update');
-            submitBtn.removeClass('btn-primary').addClass('btn-warning');
-
-            $('#manualInputModal form').attr('action', 'livingGoods/modify/' + itemId);
-
-            $('#manualInputModal').modal('show');
-        },
-        error: function (error) {
-            console.error(error);
-        }
+        e.stopPropagation(); // 이벤트 전파 중단
     });
-});
 
-// 모달이 닫힐 때, 버튼과 폼 액션을 원래대로 돌려놓음
-$('#manualInputModal').on('hidden.bs.modal', function () {
-    const submitBtn = $('#manualInputModal .btn-warning');
-    submitBtn.text('Submit');
-    submitBtn.removeClass('btn-warning').addClass('btn-primary');
-    $('#manualInputModal form').attr('action', 'livingGoods/add');
-});
+    // 모달이 닫힐 때 초기 상태로 복구
+    $('#manualInputModal').on('hidden.bs.modal', function () {
+        const submitBtn = $('#manualInputModal .btn-warning');
+        submitBtn.text('Submit');
+        submitBtn.removeClass('btn-warning').addClass('btn-primary');
+        $('#manualInputModal form').attr('action', 'livingGoods/add');
+    });
 });
 //readyEND

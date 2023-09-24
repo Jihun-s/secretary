@@ -995,6 +995,41 @@
                                             편집
                                         </button>
                                     </div>
+                                    <!-- 삭제 확인 모달 -->
+                                    <div
+                                        class="modal fade"
+                                        id="deleteConfirmModal"
+                                        tabindex="-1"
+                                        aria-labelledby="deleteConfirmModalLabel"
+                                        aria-hidden="true"
+                                    >
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="deleteConfirmModalLabel">삭제 확인</h5>
+                                                    <button
+                                                        type="button"
+                                                        class="btn-close"
+                                                        data-bs-dismiss="modal"
+                                                        aria-label="Close"
+                                                    ></button>
+                                                </div>
+                                                <div class="modal-body">정말로 이 물품 아이템을 삭제하시겠습니까?</div>
+                                                <div class="modal-footer">
+                                                    <button
+                                                        type="button"
+                                                        class="btn btn-secondary"
+                                                        data-bs-dismiss="modal"
+                                                    >
+                                                        아니오
+                                                    </button>
+                                                    <button type="button" class="btn btn-primary" id="confirmDelete">
+                                                        예
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <!-- Living Item Display -->
                                     <div class="card mb-4 living-item-box">
                                         <div class="card-body itembox">
