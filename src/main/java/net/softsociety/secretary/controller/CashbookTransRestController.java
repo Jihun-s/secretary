@@ -18,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.softsociety.secretary.dao.CashbookDAO;
 import net.softsociety.secretary.dao.UserMapper;
 import net.softsociety.secretary.domain.CalInEx;
+import net.softsociety.secretary.domain.CashbookChart;
 import net.softsociety.secretary.domain.Category1;
 import net.softsociety.secretary.domain.Category2;
 import net.softsociety.secretary.domain.Transaction;
@@ -328,5 +329,25 @@ public class CashbookTransRestController {
 		return result;
 	}
 	
+	/** 최다/최대 지출 소분류 카테고리 */
+	@PostMapping("mostCate2")
+	public ArrayList<CashbookChart> mostCate2(
+			Model model
+			, int nowYear
+			, int nowMonth) {
+		log.debug("{}년 {}월 최다최대소분류 컨트롤러 도착", nowYear, nowMonth);
+		User loginUser = (User) model.getAttribute("loginUser");
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("userId", loginUser.getUserId());
+		map.put("familyId", loginUser.getFamilyId());
+		map.put("nowYear", nowYear);
+		map.put("nowMonth", nowMonth);
+		log.debug("최다최대소분류 보낼 map:{}", map);
+		
+		ArrayList<CashbookChart> result = dao.getMostCate2(map);
+		log.debug("최다최대소분류 결과:{}", map);
+
+		return result;
+	}
 }
 	

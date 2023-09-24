@@ -125,4 +125,7 @@ public interface CashbookDAO {
 	
 	/** 다른 유저의 3개월 수입지출 평균 */
 	ArrayList<CashbookChart> getOtherUserTotal(HashMap<String, Object> map);
+	
+	/** 최다/최대 지출 소분류 카테고리 */
+	ArrayList<CashbookChart> getMostCate2(HashMap<String, Object> map);
 }

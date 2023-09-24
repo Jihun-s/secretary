@@ -648,4 +648,34 @@ ORDER BY
 	    ch_year DESC, ch_month DESC
 </select>
 
+<!-- 최다/최대 지출 소분류 카테고리 -->
+<select id="getMostCate2" parameterType="hashmap" resultType="CashbookChart">
+	    SELECT
+        EXTRACT(YEAR FROM t.trans_date) AS ch_year,
+        EXTRACT(MONTH FROM t.trans_date) AS ch_month,
+        t.cate1_id,
+        c1.cate1_name,
+        t.cate2_id,
+        c2.cate2_name,
+        COUNT(*) AS trans_count,
+        SUM(t.trans_amount) AS total_amount
+    FROM
+        Secretary_Transaction t
+    JOIN Secretary_Trans_Category1 c1 ON t.cate1_id = c1.cate1_id
+    JOIN Secretary_Trans_Category2 c2 ON t.cate2_id = c2.cate2_id
+    WHERE
+        t.family_id = #{familyId}
+        AND t.trans_type = '지출'
+        AND EXTRACT(YEAR FROM t.trans_date) = #{nowYear}
+        AND EXTRACT(MONTH FROM t.trans_date) = #{nowMonth}
+    GROUP BY
+        t.cate1_id,
+        c1.cate1_name,
+        t.cate2_id,
+        c2.cate2_name,
+        EXTRACT(YEAR FROM t.trans_date),
+        EXTRACT(MONTH FROM t.trans_date)
+    ORDER BY
+        total_amount DESC
+</select>
 </mapper>

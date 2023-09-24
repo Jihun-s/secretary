@@ -749,11 +749,63 @@
                   </div>
 
                   <!-- 3열 2행 -->
-                  <h3 class="">예산</h3>
+                  <h3 class="">최대/최다 지출</h3>
                   <div class="card">
                     <div class="d-flex align-items-end"></div>
-                    <div class="card-body">
-                      <h5>3열 2</h5>
+                    <div class="card-body align-items-center">
+                      <div class="accordion mt-3" id="accordionExample">
+                        <div class="card accordion-item active">
+                          <h2 class="accordion-header" id="headingTwo">
+                            <button
+                              type="button"
+                              class="accordion-button"
+                              data-bs-toggle="collapse"
+                              data-bs-target="#accordionTwo"
+                              aria-expanded="true"
+                              aria-controls="accordionTwo"
+                            >
+                              최대 지출
+                            </button>
+                          </h2>
+                          <div
+                            id="accordionTwo"
+                            class="accordion-collapse collapse show"
+                            aria-labelledby="headingTwo"
+                            data-bs-parent="#accordionExample"
+                          >
+                            <div class="accordion-body">
+                              <div id="mostFreqDiv" class="justify-content-center align-items-center"></div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="card accordion-item">
+                          <h2 class="accordion-header" id="headingThree">
+                            <button
+                              type="button"
+                              class="accordion-button collapsed"
+                              data-bs-toggle="collapse"
+                              data-bs-target="#accordionThree"
+                              aria-expanded="false"
+                              aria-controls="accordionThree"
+                            >
+                              최다 이용
+                            </button>
+                          </h2>
+                          <div
+                            id="accordionThree"
+                            class="accordion-collapse collapse"
+                            aria-labelledby="headingThree"
+                            data-bs-parent="#accordionExample"
+                          >
+                          <div class="accordion-body">
+                              <div id="mostLgDiv" class="justify-content-center align-items-center"></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <script>
+                        mostCate2();
+                      </script>
                     </div>
                   </div>
                 </div>
