@@ -531,9 +531,10 @@ ORDER BY
     FROM 
       Secretary_Budget
     WHERE 
-      family_id = #{familyId} AND 
-      ((budget_year = #{chYear} AND budget_month BETWEEN #{chMonth}-5 AND #{chMonth}) OR
-      (budget_year = #{chYear}-1 AND budget_month = 12))
+      family_id = #{familyId} 
+      AND ((budget_year = #{chYear} 
+      		AND budget_month BETWEEN #{chMonth}-5 AND #{chMonth}) 
+       OR (budget_year = #{chYear}-1 AND budget_month = 12))
     GROUP BY 
       family_id, budget_year, budget_month
   ),
@@ -546,9 +547,10 @@ ORDER BY
 	  FROM 
 	    Secretary_Transaction
 	  WHERE 
-	    family_id = #{familyId} AND 
-	    trans_type = '수입' AND
-	    trans_date BETWEEN ADD_MONTHS(TO_DATE(#{chYear} || '-' || #{chMonth} || '-01', 'YYYY-MM-DD'), -5) AND LAST_DAY(TO_DATE(#{chYear} || '-' || #{chMonth} || '-01', 'YYYY-MM-DD'))
+	    family_id = #{familyId} 
+	    AND trans_type = '수입' 
+	    AND trans_date BETWEEN ADD_MONTHS(TO_DATE(#{chYear} || '-' || #{chMonth} || '-01', 'YYYY-MM-DD'), -5) 
+	    				AND LAST_DAY(TO_DATE(#{chYear} || '-' || #{chMonth} || '-01', 'YYYY-MM-DD'))
 	  GROUP BY 
 	    family_id, EXTRACT(YEAR FROM trans_date), EXTRACT(MONTH FROM trans_date)
 	),
@@ -561,9 +563,10 @@ ORDER BY
 	  FROM 
 	    Secretary_Transaction
 	  WHERE 
-	    family_id = #{familyId} AND 
-	    trans_type = '지출' AND
-	    trans_date BETWEEN ADD_MONTHS(TO_DATE(#{chYear} || '-' || #{chMonth} || '-01', 'YYYY-MM-DD'), -5) AND LAST_DAY(TO_DATE(#{chYear} || '-' || #{chMonth} || '-01', 'YYYY-MM-DD'))
+	    family_id = #{familyId} 
+	    AND trans_type = '지출' 
+	    AND trans_date BETWEEN ADD_MONTHS(TO_DATE(#{chYear} || '-' || #{chMonth} || '-01', 'YYYY-MM-DD'), -5) 
+	    				AND LAST_DAY(TO_DATE(#{chYear} || '-' || #{chMonth} || '-01', 'YYYY-MM-DD'))
 	  GROUP BY 
 	    family_id, EXTRACT(YEAR FROM trans_date), EXTRACT(MONTH FROM trans_date)
 	)

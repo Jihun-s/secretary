@@ -115,6 +115,7 @@ public class CashbookChartCRestController {
 		map.put("familyId", loginUser.getFamilyId());
 		map.put("chYear", chYear);
 		map.put("chMonth", chMonth);
+		log.debug("6개월 추이 서버 보낼 map:{}", map);
 		
 		ArrayList<CashbookChart> result = dao.getInExSixMonth(map);
 		log.debug("6개월 추이:{}", result);
