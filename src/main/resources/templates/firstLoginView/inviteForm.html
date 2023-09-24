@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>가족 초대하기</title>
+</head>
+<body>
+	<h1>가족 초대하기</h1>
+	<p>가족 구성원에게 초대 이메일을 보냅니다. 최대 00명까지 입력할 수 있어요.</p>
+	
+	<form th:action="@{/sendEmail}" method="post">
+		<input type="email" name="email" placeholder="초대할 가족 구성원의 이메일주소를 입력하세요."/>
+		<input type="email" name="email" placeholder="초대할 가족 구성원의 이메일주소를 입력하세요." readonly/>
+		<input type="email" name="email" placeholder="초대할 가족 구성원의 이메일주소를 입력하세요." readonly/>
+		<input type="submit" value="초대 메일 전송" />
+	</form>
+</body>
+</html>
