@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class LivingGoods {
+	private int familyId;
     private int itemId;
     private String itemName;
     private String itemCategory;

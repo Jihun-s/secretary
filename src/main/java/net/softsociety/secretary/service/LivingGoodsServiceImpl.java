@@ -42,4 +42,33 @@ public class LivingGoodsServiceImpl implements LivingGoodsService {
 	public List<LivingGoods> getLivingGoods() {
 		return livingGoodsDAO.getLivingGoods();
 	}
+
+	@Override
+	public LivingGoods getGoodsDetails(int itemId) {
+		return livingGoodsDAO.getGoodsDetails(itemId);
+	}
+
+	@Override
+	public void modifyLivingGood(LivingGoods livingGood, int familyId) {
+	    // 카테고리 존재 여부 확인 및 추가 로직
+	    String category = livingGood.getItemCategory();
+	    LivingCategory livingCategory = new LivingCategory();
+	    livingCategory.setItemCategory(category);
+	    livingCategory.setFamilyId(familyId);
+
+	    List<String> DEFAULT_CATEGORIES = Arrays.asList("욕실용품", "주방용품", "청소용품", "세탁용품", "일반물품", "사용자 입력", "custom");
+
+	    if (!livingCategoryDAO.exists(livingCategory) && !DEFAULT_CATEGORIES.contains(category)) {
+	        // 카테고리가 존재하지 않고, 미리 정의된 카테고리도 아니면 새로운 카테고리 추가
+	        livingCategoryDAO.addCategory(livingCategory);
+	    }
+
+	    livingGoodsDAO.modifyLivingGood(livingGood);
+	}
+
+	@Override
+	public void deleteLivingGoods(int itemId) {
+		livingGoodsDAO.deleteLivingGoods(itemId);
+	}
+
 }

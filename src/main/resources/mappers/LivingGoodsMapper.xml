@@ -53,8 +53,60 @@
 	    )
 	</insert>
 	
+	<!-- 전체 가져오기 -->
 	<select id="getLivingGoods" resultType="LivingGoods">
         SELECT * FROM SECRETARY_LIVING_GOODS
     </select>
+    
+    <!-- 한 개 가져오기 -->
+	<select id="getGoodsDetails" resultType="LivingGoods">
+        SELECT * FROM SECRETARY_LIVING_GOODS WHERE ITEM_ID = #{itemId}
+    </select>
 
+	<!-- 해당 카테고리를 사용하는 음식 수 확인 -->
+	<select id="countItemsUsingCategory" resultType="int" parameterType="net.softsociety.secretary.domain.LivingCategory">
+	    SELECT COUNT(*) FROM SECRETARY_LIVING_GOODS
+	    WHERE ITEM_CATEGORY = #{itemCategory} AND family_id = #{familyId}
+	</select>
+	
+	<!-- 카테고리 이름 일괄 업데이트 -->
+	<update id="updateItemsCategoryName" parameterType="map">
+	    UPDATE SECRETARY_LIVING_GOODS
+	    SET ITEM_CATEGORY = #{newName}
+	    WHERE ITEM_CATEGORY = #{originalName} AND FAMILY_ID = #{familyId}
+	</update>
+	
+	<!-- 아이템 수정 -->
+	<update id="modifyLivingGood" parameterType="LivingGoods">
+	    UPDATE Secretary_LIVING_GOODS
+	    SET 
+	        ITEM_NAME = #{itemName},
+	        ITEM_CATEGORY = #{itemCategory},
+	        ITEM_QUANTITY = #{itemQuantity}
+	        <if test="itemPrice != null">
+	        , ITEM_PRICE = #{itemPrice}
+	        </if>
+	        <if test="itemPurchaseDate != null">
+	        , ITEM_PURCHASE_DATE = #{itemPurchaseDate}
+	        </if>
+	        <if test="itemMadeDate != null">
+	        , ITEM_MADE_DATE = #{itemMadeDate}
+	        </if>
+	        <if test="itemExpiryDate != null">
+	        , ITEM_EXPIRY_DATE = #{itemExpiryDate}
+	        </if>
+	        <if test="itemOriginalFile != null">
+	        , ITEM_ORIGINAL_FILE = #{itemOriginalFile}
+	        </if>
+	        <if test="itemSavedFile != null">
+	        , ITEM_SAVED_FILE = #{itemSavedFile}
+	        </if>
+	    WHERE ITEM_ID = #{itemId}
+	</update>
+	
+	<!-- 아이템 삭제 -->
+	<delete id="deleteLivingGoods" parameterType="int">
+	    DELETE FROM Secretary_LIVING_GOODS WHERE ITEM_ID = #{itemId}
+	</delete>
+	
 </mapper>
