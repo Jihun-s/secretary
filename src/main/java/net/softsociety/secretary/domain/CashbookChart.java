@@ -21,6 +21,8 @@ public class CashbookChart {
 	String cate2Name;
 	String labelColor;
 	
+	int chYear;
+	int chMonth;
 	int curYear;
 	int curMonth;
 	int weekOfMonth;
@@ -29,6 +31,8 @@ public class CashbookChart {
 	
 	BigDecimal totalMonthExpense;
 	BigDecimal totalMonthIncome;
+	BigDecimal totalMonthExpenseAvg;
+	BigDecimal totalMonthIncomeAvg;
 	BigDecimal totalWeekExpense;
 	BigDecimal weekAccumulatedExpense;
 	BigDecimal budgetAmount;

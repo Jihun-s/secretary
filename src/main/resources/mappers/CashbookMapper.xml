@@ -596,4 +596,56 @@ ORDER BY
   ORDER BY 
     b.budget_year DESC, b.budget_month DESC
 </select>
+
+<!-- 나의 3개월간 평균 -->
+<select id="getMyTotal" parameterType="hashmap" resultType="CashbookChart">
+	SELECT 
+	    t.family_id,
+	    EXTRACT(YEAR FROM t.trans_date) AS ch_year,
+	    EXTRACT(MONTH FROM t.trans_date) AS ch_month,
+	    SUM(CASE WHEN t.trans_type = '지출' THEN t.trans_amount ELSE 0 END) AS total_month_expense,
+	    SUM(CASE WHEN t.trans_type = '수입' THEN t.trans_amount ELSE 0 END) AS total_month_income
+	FROM
+	    Secretary_Transaction t
+	WHERE
+	    t.family_id = #{familyId}
+	    AND EXTRACT(YEAR FROM t.trans_date) = #{chYear} 
+	    AND EXTRACT(MONTH FROM t.trans_date) BETWEEN #{chMonth}-3 AND #{chMonth}
+	GROUP BY
+	    t.family_id, EXTRACT(YEAR FROM t.trans_date), EXTRACT(MONTH FROM t.trans_date)
+	ORDER BY
+	    ch_year DESC, ch_month DESC
+</select>
+
+<!-- 다른 유저들의 3개월간 평균 -->
+<select id="getOtherUserTotal" parameterType="hashmap" resultType="CashbookChart">
+	WITH AggregatedData AS (
+	  SELECT 
+	      t.family_id,
+	      EXTRACT(YEAR FROM t.trans_date) AS ch_year,
+	      EXTRACT(MONTH FROM t.trans_date) AS ch_month,
+	      SUM(CASE WHEN t.trans_type = '지출' THEN t.trans_amount ELSE 0 END) AS total_month_expense,
+	      SUM(CASE WHEN t.trans_type = '수입' THEN t.trans_amount ELSE 0 END) AS total_month_income
+	  FROM
+	      Secretary_Transaction t
+	  WHERE
+	      t.family_id != #{familyId}
+	      AND EXTRACT(YEAR FROM t.trans_date) = #{chYear} 
+	      AND EXTRACT(MONTH FROM t.trans_date) BETWEEN #{chMonth}-3 AND #{chMonth}
+	  GROUP BY
+	      t.family_id, EXTRACT(YEAR FROM t.trans_date), EXTRACT(MONTH FROM t.trans_date)
+	)
+	SELECT 
+	    ch_year,
+	    ch_month,
+	    AVG(total_month_expense) AS total_month_expense_avg,
+	    AVG(total_month_income) AS total_month_income_avg
+	FROM 
+	    AggregatedData
+	GROUP BY 
+	    ch_year, ch_month
+	ORDER BY
+	    ch_year DESC, ch_month DESC
+</select>
+
 </mapper>

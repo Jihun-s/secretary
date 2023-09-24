@@ -359,7 +359,7 @@ function inExSixMonth() {
   $.ajax({
     url: '/secretary/cashbook/chart/inExSixMonth',
     type: 'POST',
-    data: { chYear: 2023, chMonth: 9 },
+    data: { chYear: curYear, chMonth: curMonth },
     dataType: 'JSON',
     success: (data) => {
       // 연월 기준 오름차순 정렬
@@ -407,8 +407,79 @@ function inExSixMonth() {
 }
 
 
+////////////////////////////////////////////////////////////////////////////////////////////////
 
+/** 다른 유저 3개월 평균 비교 */
+function otherUserTotal() {
+  $.ajax({
+    url: '/secretary/cashbook/chart/otherUserTotal',
+    type: 'POST',
+    data: { chYear: curYear, chMonth: curMonth },
+    dataType: 'JSON',
+    success: (data) => {
+      // 시간을 키로 하고, 각 값을 value로 하는 Map을 생성
+      const myExpenseMap = new Map();
+      const otherExpenseAvgMap = new Map();
+  
+      // Map에 데이터 저장
+      for (const item of data.myResult) {
+        const key = `${item.chYear}-${item.chMonth}`;
+        myExpenseMap.set(key, item.totalMonthExpense);
+      }
+  
+      for (const item of data.otherResult) {
+        const key = `${item.chYear}-${item.chMonth}`;
+        otherExpenseAvgMap.set(key, item.totalMonthExpenseAvg);
+      }
+  
+      // 고유한 시간 라벨을 생성
+      const uniqueLabels = Array.from(new Set([...myExpenseMap.keys(), ...otherExpenseAvgMap.keys()])).sort();
+  
+      // Chart.js 데이터 배열을 생성
+      const labels = uniqueLabels.map(label => `${label.split('-')[0]}년 ${label.split('-')[1]}월`);
+      const myExpenseData = uniqueLabels.map(label => myExpenseMap.get(label) || 0);
+      const otherExpenseAvgData = uniqueLabels.map(label => otherExpenseAvgMap.get(label) || 0);  
 
+      // Chart.js 설정
+      const ctx = document.getElementById('lineOtherUserTotal').getContext('2d');
+      const lineOtherUserTotal = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: '우리 가족의 총 지출',
+              data: myExpenseData,
+              borderColor: '#696CFF',
+              fill: false,
+            },
+            {
+              label: '다른 가족의 평균 총 지출',
+              data: otherExpenseAvgData,
+              borderColor: '#03C3EC',
+              fill: false,
+            }
+          ]
+        },
+        options: {
+          scales: {
+            x: { beginAtZero: true },
+            y: { beginAtZero: true }
+          },
+          elements: {
+            line: {
+              tension: 0.3  // 선 띠용~하는 정도 
+            }
+          }
+        }
+      });
+    },
+    error: (e) => {
+      alert('타 유저 비교 전송 실패');
+      console.log(JSON.stringify(e));
+    }
+  });
+}
 
 
 
