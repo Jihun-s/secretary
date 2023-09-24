@@ -370,7 +370,7 @@ function inExSixMonth() {
         return a.curYear - b.curYear;
       });
     
-      // console.log(JSON.stringify(data));
+      console.log(JSON.stringify(data));
     
       // 라벨과 데이터 배열 생성
       const labels = data.map(item => `${item.curYear}년 ${item.curMonth}월`);
@@ -380,26 +380,39 @@ function inExSixMonth() {
       // 차트 생성
       const ctx = document.getElementById('barInExSixMonth').getContext('2d');
       const barInExSixMonth = new Chart(ctx, {
-        type: 'bar',
+        type: 'line',
         data: {
           labels: labels,
           datasets: [
             {
               label: '수입',
               data: incomeData,
-              backgroundColor: '#71DD37'
+              borderColor: '#696CFF',
+              fill: false,
             },
             {
               label: '지출',
               data: expenseData,
-              backgroundColor: '#696CFF'
+              borderColor: '#03C3EC',
+              fill: false,
             }
           ]
+        },
+        options: {
+          scales: {
+            x: { beginAtZero: true },
+            y: { beginAtZero: true }
+          },
+          elements: {
+            line: {
+              tension: 0.3  // 선 띠용~하는 정도 
+            }
+          }
         }
       });
     },
     error: (e) => {
-      alert('6개월 추이 전송 실패');
+      alert('6개월 추이 선 그래프 전송 실패');
       console.log(JSON.stringify(e));
     }
     
@@ -443,39 +456,27 @@ function otherUserTotal() {
       // Chart.js 설정
       const ctx = document.getElementById('lineOtherUserTotal').getContext('2d');
       const lineOtherUserTotal = new Chart(ctx, {
-        type: 'line',
+        type: 'bar',
         data: {
           labels: labels,
           datasets: [
             {
-              label: '우리 가족의 총 지출',
+              label: '우리 가족',
               data: myExpenseData,
-              borderColor: '#696CFF',
-              fill: false,
+              backgroundColor: '#71DD37'
             },
             {
-              label: '다른 가족의 평균 총 지출',
+              label: '평균',
               data: otherExpenseAvgData,
-              borderColor: '#03C3EC',
-              fill: false,
+              backgroundColor: '#696CFF'
             }
           ]
         },
-        options: {
-          scales: {
-            x: { beginAtZero: true },
-            y: { beginAtZero: true }
-          },
-          elements: {
-            line: {
-              tension: 0.3  // 선 띠용~하는 정도 
-            }
-          }
-        }
+        
       });
     },
     error: (e) => {
-      alert('타 유저 비교 전송 실패');
+      alert('타 유저 비교 막대그래프 전송 실패');
       console.log(JSON.stringify(e));
     }
   });
