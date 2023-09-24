@@ -101,4 +101,24 @@ public class CashbookChartCRestController {
 		
 		return result;
 	}
+	
+	/** 6개월 수입 지출 추이 */
+	@PostMapping("inExSixMonth")
+	public ArrayList<CashbookChart> inExSixMonth(
+			Model model
+			, int chYear
+			, int chMonth) {
+		log.debug("{}년 {}월 6개월 추이 컨트롤러 도착", chYear, chMonth);
+		User loginUser = (User) model.getAttribute("loginUser");
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("userId", loginUser.getUserId());
+		map.put("familyId", loginUser.getFamilyId());
+		map.put("chYear", chYear);
+		map.put("chMonth", chMonth);
+		
+		ArrayList<CashbookChart> result = dao.getInExSixMonth(map);
+		log.debug("6개월 추이:{}", result);
+		
+		return result;		
+	}
 }

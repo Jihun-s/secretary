@@ -351,3 +351,67 @@ function weekExpenseAcc() {
     }
   });
 }
+
+////////////////////////////////////////////////////////////
+
+/** 6개월 간 수입지출 추이 */
+function inExSixMonth() {
+  alert('함수 호출');
+
+  $.ajax({
+    url: '/secretary/cashbook/chart/inExSixMonth',
+    type: 'POST',
+    data: { chYear: 2023, chMonth: 9 },
+    dataType: 'JSON',
+    success: (data) => {
+      console.log(JSON.stringify(data));
+
+      // 라벨과 데이터 배열 생성
+      const labels = data.map(item => `${item.curYear}년 ${item.curMonth}월`);
+      const expenseData = data.map(item => item.totalMonthExpense);
+      const incomeData = data.map(item => item.totalMonthIncome);
+
+
+      // 차트 생성
+      const ctx = document.getElementById('myBarChart').getContext('2d');
+      const myBarChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: '수입',
+              data: incomeData,
+              backgroundColor: '#71DD37'
+            },
+            {
+              label: '지출',
+              data: expenseData,
+              backgroundColor: '#696CFF'
+            }
+          ]
+        }
+      });
+    },
+    error: (e) => {
+      alert('6개월 추이 전송 실패');
+      console.log(JSON.stringify(e));
+    }
+  });
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
