@@ -131,6 +131,8 @@ function totalMonthExpense() {
 /** 도넛 밑 리스트 대분류에 따른 지출 소분류 예시 */
 function ExpenseCate2NameExample(cate1Name) {
     switch (cate1Name) {
+      case '고정지출':
+        return '주거, 통신, 교통 등';
       case '식비':
         return '식당, 카페, 간식 등';
       case '쇼핑':
@@ -151,6 +153,8 @@ function ExpenseCate2NameExample(cate1Name) {
 /** 도넛 밑 리스트 대분류에 따른 지출 아이콘bx 변경 */
 function ExpenseCate1Icon(cate1Name) {
     switch (cate1Name) {
+      case '고정지출':
+        return 'pin';
       case '식비':
         return 'dish';
       case '쇼핑':

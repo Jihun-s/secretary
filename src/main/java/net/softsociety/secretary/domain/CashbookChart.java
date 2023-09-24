@@ -26,9 +26,13 @@ public class CashbookChart {
 	int curYear;
 	int curMonth;
 	int weekOfMonth;
+	int cate1Id;
+	int cate2Id;
 	int budgetSuccess;
 	int inExSuccess;
+	int transCount;
 	
+	BigDecimal totalAmount;
 	BigDecimal totalMonthExpense;
 	BigDecimal totalMonthIncome;
 	BigDecimal totalMonthExpenseAvg;
