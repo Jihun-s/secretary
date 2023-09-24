@@ -607,13 +607,16 @@
                       <!-- 예산 존재함 -->
                       <th:block th:if="${budgetExist == 1}">
                         <div id="budgetExistDiv">
+                          <small>
+                            예산
+                            <span class="text-muted" id="budgetAmountP"></span
+                            >원
+                          </small>
                           <p>
                             이번 달 남은 예산은
                             <!-- 1,000 단위로 콤마 찍도록 포맷 설정 -->
-                            <span id="remainingAmountSpan">000</span>원입니다.
+                            <mark id="remainingAmountSpan">000</mark>원입니다.
                           </p>
-                          예산
-                          <span class="text-muted" id="budgetAmountP"></span>원
                           <button
                             type="button"
                             class="btn btn-success"
@@ -650,24 +653,33 @@
                   </div>
 
                   <!-- 1열 2행 -->
-                  <h3>내역</h3>
+                  <h3 class="mt-4">내역</h3>
                   <div class="card">
                     <div class="d-flex align-items-end"></div>
                     <div class="card-body">
                       <div class="row">
                         <h5>이번 달 내역</h5>
+                        <script>
+                          curPreInExSum();
+                        </script>
                         <p>
                           수입 총
                           <span id="incomeSumMonthSpan">0</span>원
-                          <span id="incomeSumArrow">▲</span>
+                          <span
+                            id="incomeSumArrow"
+                            style="color: skyblue"
+                          ></span>
                         </p>
                         <p>
                           지출 총
                           <span id="expenseSumMonthSpan">0</span>원
-                          <span id="expenseSumArrow">▼</span>
+                          <span
+                            id="expenseSumArrow"
+                            style="color: orangered"
+                          ></span>
                         </p>
                         <a th:href="@{/cashbook/trans}">
-                          <button type="button" class="btn btn-success">
+                          <button type="button" class="btn btn-outline-success">
                             내역 바로가기
                           </button>
                         </a>
@@ -676,13 +688,19 @@
                   </div>
 
                   <!-- 1열 3행 -->
-                  <h3>통계</h3>
+                  <h3 class="mt-4">통계</h3>
                   <div class="card">
-                    <div class="d-flex align-items-end"></div>
                     <div class="card-body">
+                      <img
+                        th:src="@{/images/cashbookimg/11176664.png}"
+                        style="width: 7rem; height: 7rem"
+                        class="mb-3"
+                        alt="도넛차트"
+                      />
+                      <p>나의 소비 패턴을 한 눈에 확인하세요!</p>
                       <a th:href="@{/cashbook/chart}">
-                        <button type="button" class="btn btn-success">
-                          분석 바로가기
+                        <button type="button" class="btn btn-outline-success">
+                          소비 분석 바로가기
                         </button>
                       </a>
                     </div>
