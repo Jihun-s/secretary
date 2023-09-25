@@ -459,23 +459,23 @@ function chartDraw(dataValue){
 	//의류 수정 모달창 열기 + 의류 수정
 	function openUpdateModal(clothesNum) {
 		closetNum = parseInt(closetNum);
-   	 	let clothesNumForUpdateInput = document.getElementById('clothesNumForUpdate');
-    	clothesNumForUpdateInput.value = clothesNum; //의류번호 가져오기
+   	 	/*let clothesNumForUpdateInput = document.getElementById('clothesNumForUpdate');
+    	clothesNumForUpdateInput.value = clothesNum; //의류번호 가져오기 */
 
     	// 모달 열기
    		 const updateModal = new bootstrap.Modal(document.getElementById('updateModal'));
     		updateModal.show();
     	
     	//현재 의류사진 미리보기창에 보여주기
-    	let clothesNumForUpdate = $('#clothesNumForUpdate').val();
-		let previewStr = '<img src="../closet/clothesDownload?closetNum='+closetNum+'&clothesNum='+clothesNumForUpdate+'">';
+    	/*let clothesNumForUpdate = $('#clothesNumForUpdate').val();*/
+		let previewStr = '<img src="../closet/clothesDownload?closetNum='+closetNum+'&clothesNum='+clothesNum+'">';
 		$('#updatePreview').html(previewStr);
 		
 		//사진등록하면 미리보기 창에 보여주기 
 		let updateImageInput = document.getElementById("updateIMG");
 		let updateImagePreview = document.getElementById("updatePreview");
 		updateImageInput.addEventListener("change", function(){
-			console.log('num:'+clothesNumForUpdate);
+			console.log('num:'+clothesNum);
 			let selectedFile = updateImageInput.files[0];
 		  	if (selectedFile) {
 		    const updateReader = new FileReader();
@@ -493,8 +493,9 @@ function chartDraw(dataValue){
 
 		    updateReader.readAsDataURL(selectedFile);
 		  } 
-		});	
+		});	//사진등록 미리보기 끝
 		
+		//업데이트할 사진 편집기능
 		let updateEditCheck = 0;
 		$('#updateEditIMGbtn').on('click', function(){
 			const imageElementForUpdate = document.getElementById("previewForUpdate");
@@ -507,7 +508,7 @@ function chartDraw(dataValue){
 			}			
 			const updateImageInput = document.getElementById("updateIMG");
 			const updateSelectedFile = updateImageInput.files[0];
-			if (imageFromStore != "secretary/closet/clothesFromStoreDownload" &&!updateSelectedFile) {
+			if (imageFromStore != "secretary/closet/clothesFromStoreDownload" && !updateSelectedFile) {
 				alert("사진을 등록해주세요");
 				return;
 			}
@@ -536,20 +537,35 @@ function chartDraw(dataValue){
         
        		 updateEditCheck = 1; //사진편집여부 체크
 			
-		});
+		}); //업데이트할 사진 편집기능 끝
 		
 		//데이터 입력후 의류 수정 요청
 		$('#updateClothesbtn').on('click', function(){
-		
+		const imageElementForUpdate = document.getElementById("previewForUpdate");
+		let imageFromStore;
+		let imageUrl;
+		if(imageElementForUpdate){ // id가 preview 이미지 요소
+			let imageSrc = imageElementForUpdate.src; //이미지 요소 src속성 읽어오기
+			imageFromStore = imageSrc.substr(22,41);
+			imageUrl = imageSrc.substr(84);
+		}
+				
 		let blobIMG;//uploadFile 값으로 사용할 변수
 		let originalFileName;
-		if(!document.getElementById("updateIMG").files[0] && !updateEditCheck){// 사용자가 편집안한 사진을 의류등록할 경우
-			blobIMG = '사진변경안함';
-			originalFileName ='사진변경안함';
+		let fromStoreCheck = '해당없음';
+		if(!document.getElementById("updateIMG").files[0] && !updateEditCheck && imageFromStore === "secretary/closet/clothesFromStoreDownload"){
+			// 사진등록 X, 편집X, 웹에서 찾기O
+			originalFileName = imageUrl;
+			fromStoreCheck = imageUrl;
+		} else if(!document.getElementById("updateIMG").files[0] && updateEditCheck){
+			// 사진등록 X, 편집O -> 웹에서 찾은 사진 편집했을때
+			fromStoreCheck = imageUrl;
 		} else if(document.getElementById("updateIMG").files[0] && !updateEditCheck){
+			// 사진등록 O, 편집X !!
 			blobIMG = document.getElementById("updateIMG").files[0];
 			originalFileName = document.getElementById("updateIMG").files[0].name;
 		} else if(document.getElementById("updateIMG").files[0] && updateEditCheck){
+			// 사진등록 O, 편집O
 			originalFileName = document.getElementById("updateIMG").files[0].name;
 		}
 		
@@ -576,7 +592,7 @@ function chartDraw(dataValue){
 		//폼데이터에 넣을 key-value값들
 		const updateClothesObj = {
 			closetNum : closetNum,
-			clothesNum : clothesNumForUpdate,
+			clothesNum : clothesNum,
 			clothesMaterial : material,
 			clothesCategory	: category,
 			clothesSeasons : updateSeasonArr,
@@ -584,6 +600,7 @@ function chartDraw(dataValue){
 			clothesOriginalFile : originalFileName,
 			uploadFile : blobIMG,
 			clothesEditcheck : updateEditCheck,
+			fromStoreCheck: fromStoreCheck,
 		}
 		
 		let formData = new FormData();

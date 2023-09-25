@@ -41,19 +41,10 @@ function InsertOrUpdate(imgUrl){
 		window.close();
 	})
 	$('#updateClothesBtn').on('click',function(){
-		
+		window.opener.receiveImageForUpdate(imgUrl);
+		window.close();
 	})
 }//의류 추가/수정 모달
-
-function sendImageToParent(imgUrl){
-	if(contentIndex == 0){
-	window.opener.receiveImage(imgUrl);
-	} else if(contentIndex == 1) {
-		console.log('실행되고있느녀?');
-	window.opener.receiveImageForUpdate(imgUrl);
-	}
-	//window.close();
-}
 
 
 $(document).ready(function(){
