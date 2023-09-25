@@ -61,6 +61,8 @@ public interface ClosetService {
 	//웹에서 찾기 - 페이지작업
 	PageNavigator getPageNavigator(int pagePerGroup, int countPerPage, int page, String searchKeyword,
 			String clothesFromStoreBrand, String clothesFromStoreCategory);
+	//웹에서 찾기 - 옷 정보
+	ClothesFromStore readClothesFromStore(String imgUrl);
 
 	
 }

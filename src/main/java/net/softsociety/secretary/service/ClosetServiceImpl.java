@@ -221,6 +221,12 @@ public class ClosetServiceImpl implements ClosetService {
 		PageNavigator navi = new PageNavigator(pagePerGroup, countPerPage, page, total);
 		return navi;
 	}
+	
+	//웹에서 찾기 - 옷 정보
+	@Override
+	public ClothesFromStore readClothesFromStore(String imgUrl) {
+		return dao.readClothesFromStore(imgUrl);
+	}
 		
 	
 }

@@ -9,7 +9,7 @@ function pagingFormSubmit(currentPage) {
 	form.submit();
 }
 
-let contentIndex = 0;
+/*let contentIndex = 0;
 const contents = ["추가하고 싶은 옷을 클릭하세요! 의류 등록 모드입니다.", "어떤 옷으로 바꾸고 싶으세요? 의류 수정 모드입니다."];
 function changeMode(){
 	const contentDiv = document.querySelector('#changeMode');
@@ -17,7 +17,33 @@ function changeMode(){
     contentDiv.textContent = contents[contentIndex]; // 내용 변경
     console.log(contentIndex);	// 0이면 등록, 1이면 수정
     console.log(typeof(contentIndex));	// 0이면 등록, 1이면 수정
-}
+}*/
+function InsertOrUpdate(imgUrl){
+	const smallModal = new bootstrap.Modal(document.getElementById('smallModal'));
+    smallModal.show();
+		$.ajax({
+			url:'readClothesFromStore',
+			type:'get',
+			data:{imgUrl: imgUrl},
+			dataType:'json',
+			success:function(clothes){
+				let str = '<img src="../closet/clothesFromStoreDownload?clothesFromStoreImg='+clothes.clothesFromStoreImg+'">\
+						<br><br><ul><li>'+clothes.clothesFromStoreBrand+'</li>\
+						<li>'+clothes.clothesFromStoreName+'</li></ul>';
+				$('#clothesFromStoreInfo').html(str); 
+			},
+			error:function(e){
+				alert(JSON.stringify(e));
+			}			
+		})    
+	$('#insertClothesBtn').on('click',function(){
+		window.opener.receiveImage(imgUrl);
+		window.close();
+	})
+	$('#updateClothesBtn').on('click',function(){
+		
+	})
+}//의류 추가/수정 모달
 
 function sendImageToParent(imgUrl){
 	if(contentIndex == 0){

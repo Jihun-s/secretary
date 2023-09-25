@@ -33,6 +33,7 @@ import org.springframework.web.multipart.MultipartFile;
 import lombok.extern.slf4j.Slf4j;
 import net.softsociety.secretary.domain.Closet;
 import net.softsociety.secretary.domain.Clothes;
+import net.softsociety.secretary.domain.ClothesFromStore;
 import net.softsociety.secretary.service.ClosetService;
 import net.softsociety.secretary.util.FileService;
 
@@ -329,5 +330,12 @@ public class ClosetController {
 			e.printStackTrace();
 		}
 	}
-
+	
+	@ResponseBody
+	@GetMapping("readClothesFromStore")
+	public ClothesFromStore readClothesFromStore(String imgUrl) {
+		ClothesFromStore clothes = service.readClothesFromStore(imgUrl);
+		return clothes;
+	}
+	
 }

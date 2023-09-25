@@ -62,5 +62,8 @@ public interface ClosetDAO {
 	//의류등록 웹에서 찾기 - 의류 리스트 출력
 	ArrayList<ClothesFromStore> findAllClothesFromStore(HashMap<String, String> map, RowBounds rb);
 	int getTotal(HashMap<String, String> map);
+	
+	//웹에서 찾기 - 의류정보
+	ClothesFromStore readClothesFromStore(String imgUrl);
 
 }

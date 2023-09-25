@@ -671,16 +671,15 @@
     			   </div><!-- class="accordion-item card" -->
     			   </form> <!-- 검색폼 끝 -->
       			   </div> <!-- id="accordionIcon" class="accordion mt-3 accordion-without-arrow" -->
-      			   <div class="alert alert-danger" role="alert" id="changeMode" onclick="changeMode()" style="display:inline-block; margin-left:2rem; width:48%;">
-          			추가하고 싶은 옷을 클릭하세요! 의류 등록 모드입니다.
+      			   <div class="alert alert-danger" role="alert" style="display:inline-block; margin-left:2rem; width:48%;">
+          			추가하고 싶은 옷을 클릭하세요!
        				 </div>
       			   </div> <!-- id="body_top" card-body 상단바 (옷찾기..) -->
       			   
       			    <div class="card-body" id="whatsInStore">
-      			    <div th:each="item:${list}" th:onclick="sendImageToParent([[${item.clothesFromStoreImg}]])">
+      			    <div th:each="item:${list}" th:onclick="InsertOrUpdate([[${item.clothesFromStoreImg}]])">
       			    	<ul>
       			    	<li><img th:src="@{/closet/clothesFromStoreDownload(clothesFromStoreImg=${item.clothesFromStoreImg})}"></li>
-      			    	<li th:text="${item.clothesFromStoreName}"></li>
       			    	</ul>
       			    </div>
                     </div> <!-- 의류리스트 끝 -->
@@ -750,7 +749,24 @@
     <div class="layout-overlay layout-menu-toggle"></div>
 
     <!-- / Layout wrapper -->
-
+        <!-- Small Modal -->
+        <div class="modal fade" id="smallModal" tabindex="-1" aria-hidden="true">
+          <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel2">의류 정보</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+				<div id="clothesFromStoreInfo"></div>		
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="insertClothesBtn" style="background-color: rgba(223,132,166,255); border-color: rgba(223,132,166,255);">등록</button>
+                <button type="button" class="btn btn-primary" id="updateClothesBtn" style="background-color: rgba(223,132,166,255); border-color: rgba(223,132,166,255);">수정</button>
+              </div>
+            </div>
+          </div>
+        </div>
     <!-- Core JS -->
     <!-- build:js assets/vendor/js/core.js -->
     <script th:src="@{/assets/vendor/libs/jquery/jquery.js}"></script>

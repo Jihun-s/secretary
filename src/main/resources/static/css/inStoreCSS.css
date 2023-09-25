@@ -53,11 +53,10 @@ body {
 }
 #whatsInStore >div img{
 	width:15rem;
-	height:13.2rem;
+	height:15rem;
 }
 #whatsInStore div:hover{
 	transform: translate3d(1px,1px,1px);
-	cursor:pointer;
 } 
 
 #storeOuterdiv{
@@ -71,6 +70,11 @@ body {
 }
 #pageCSS ul {
 	display: flex; justify-content: center; 
+}
+
+#clothesFromStoreInfo img{
+	width:20rem;
+	height:20rem;
 }
 
 .btn-pink{

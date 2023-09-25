@@ -230,4 +230,8 @@
 		</where>
 </select>
 
+<!-- 웹에서 찾기 - 옷정보 -->
+<select id="readClothesFromStore" parameterType="string" resultType="ClothesFromStore">
+	select * from Secretary_ClothesFromStore where clothesFromStore_img = #{clothesFromStore_img}
+</select>
 </mapper>
