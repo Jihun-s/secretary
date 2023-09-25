@@ -612,14 +612,15 @@
                             <span class="text-muted" id="budgetAmountP"></span
                             >원
                           </small>
-                          <p>
+                          <p id="remainingAmountP">
                             이번 달 남은 예산은
                             <!-- 1,000 단위로 콤마 찍도록 포맷 설정 -->
                             <mark id="remainingAmountSpan">000</mark>원입니다.
+                            <br>잘 하고 계세요! ☺️
                           </p>
                           <button
                             type="button"
-                            class="btn btn-success"
+                            class="btn btn-outline-success"
                             data-bs-toggle="modal"
                             data-bs-target="#ModalUpdateBudget"
                           >
@@ -627,7 +628,7 @@
                           </button>
                           <button
                             type="button"
-                            class="btn btn-success"
+                            class="btn btn-outline-success"
                             data-bs-toggle="modal"
                             data-bs-target="#ModalDeleteBudget"
                           >
@@ -679,7 +680,7 @@
                           ></span>
                         </p>
                         <a th:href="@{/cashbook/trans}">
-                          <button type="button" class="btn btn-outline-success">
+                          <button type="button" class="btn btn-success">
                             내역 바로가기
                           </button>
                         </a>
@@ -699,7 +700,7 @@
                       />
                       <p>나의 소비 패턴을 한 눈에 확인하세요!</p>
                       <a th:href="@{/cashbook/chart}">
-                        <button type="button" class="btn btn-outline-success">
+                        <button type="button" class="btn btn-success">
                           소비 분석 바로가기
                         </button>
                       </a>
@@ -948,7 +949,7 @@
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel1">예산 수정하기</h5>
+            <h5 class="modal-title" id="exampleModalLabel1">예산 재설정하기</h5>
             <button
               type="button"
               class="btn-close"
