@@ -615,32 +615,35 @@ function chartDraw(dataValue){
 	}//webSearch 함수
 	
     function receiveImage(imageUrl) {
-       // 이미지 다운로드
-        var xhr = new XMLHttpRequest();
-        xhr.responseType = 'blob';
+     // 이미지 다운로드
+    var xhr = new XMLHttpRequest();
+    xhr.responseType = 'blob';
 
-        xhr.onload = function() {
-            if (xhr.status === 200) {
-                var blob = xhr.response;
-                var file = new File([blob], imageUrl); // 파일 이름을 조정하세요
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            var blob = xhr.response;
+            var file = new File([blob], imageUrl, { type: 'image/jpeg' }); // 이미지 타입과 파일 이름을 설정
 
-                // input 파일 태그에 파일 등록
-                 var inputElement = document.getElementById("uploadIMG");
-                 var dataTransfer = new DataTransfer();
-          		 dataTransfer.items.add(file);
+            // input 파일 태그에 파일 등록
+            var inputElement = document.getElementById("uploadIMG");
+            var dataTransfer = new DataTransfer();
+            dataTransfer.items.add(file);
+            inputElement.files = dataTransfer.files;
 
-            	// files 속성을 수정
-            	inputElement.files = dataTransfer.files;
+            // 이미지 미리 보기 업데이트 (선택 사항)
+            var previewImage = document.getElementById("preview");
+            previewImage.src = URL.createObjectURL(file);
+        }
+    };
 
-                // 이미지 미리 보기 업데이트 (선택 사항)
-                 var previewImage = document.getElementById("preview");
-                 previewImage.src = URL.createObjectURL(file);
-                }
-         };
-
-         xhr.open('GET', 'clothesFromStoreDownload?clothesFromStoreImg='+imageUrl);
-         xhr.send();
+    xhr.open('GET', 'clothesFromStoreDownload?clothesFromStoreImg=' + imageUrl);
+    xhr.send();
     }//receiveImage 함수
+    
+    function receiveImageForUpdate(imageUrl) {
+		let ImgSrc = '<img src="../closet/clothesFromStoreDownload?clothesFromStoreImg='+imageUrl+'">';
+		$('#updatePreview').html(ImgSrc);
+    }//receiveImageForUpdate 함수 
 
 	const howtomanageMapping = {
     'none': '해당 없음', 'cotton': '기계 세탁이 가능하며, 따뜻한 물을 사용합니다. 밝은 색과 진한 색을 분리하여 세탁합니다. 햇빛에 오래 노출하지 않고, 그늘에서 보관하며 공기 순환을 유지합니다.', 
