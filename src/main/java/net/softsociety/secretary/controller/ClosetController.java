@@ -21,7 +21,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,10 +33,8 @@ import org.springframework.web.multipart.MultipartFile;
 import lombok.extern.slf4j.Slf4j;
 import net.softsociety.secretary.domain.Closet;
 import net.softsociety.secretary.domain.Clothes;
-import net.softsociety.secretary.domain.ClothesFromStore;
 import net.softsociety.secretary.service.ClosetService;
 import net.softsociety.secretary.util.FileService;
-import net.softsociety.secretary.util.PageNavigator;
 
 @Slf4j
 @RequestMapping("closet")
@@ -108,32 +105,50 @@ public class ClosetController {
 	//사진 편집
 	@ResponseBody
 	@PostMapping(value="processImage", produces = MediaType.IMAGE_PNG_VALUE)
-	public ResponseEntity<byte[]> processImage(MultipartFile image) throws IOException {
+	public ResponseEntity<byte[]> processImage(MultipartFile image, String fromStore) throws IOException {
 		log.debug("************processImage 매핑****************");
-		String savedfile = FileService.saveFile(image, uploadPath);
-		returnfile = FileService.processImg(savedfile, uploadPath);
-		Path path = Paths.get(uploadPath + "/"+ returnfile);
-		byte[] imageBytes = Files.readAllBytes(path);
+		log.debug("fromstore변수:{}",fromStore);
+		if(fromStore.equals("NoFromStore")) {
+			String savedfile = FileService.saveFile(image, uploadPath);
+			returnfile = FileService.processImg(savedfile, uploadPath);
+			Path path = Paths.get(uploadPath + "/"+ returnfile);
+			byte[] imageBytes = Files.readAllBytes(path);
 
-		return ResponseEntity.ok(imageBytes);
+			return ResponseEntity.ok(imageBytes);
+		} else {
+			returnfile = FileService.processImg(fromStore, uploadPath);
+			Path path = Paths.get(uploadPath + "/"+ returnfile);
+			byte[] imageBytes = Files.readAllBytes(path);
+
+			return ResponseEntity.ok(imageBytes);
+		}
+		
 	}
 	
 	//옷장에 의류추가
 	@ResponseBody
 	@PostMapping("insertClothes")
-	public void insertClothes(Clothes clothes, MultipartFile uploadFile, boolean clothesEditcheck) {
+	public void insertClothes(Clothes clothes, MultipartFile uploadFile, boolean clothesEditcheck, String fromStoreCheck) {
 		log.debug("***********************옷등록 매핑**********************");
 		log.debug("의류추가전 옷 객체:{}", clothes);
 		log.debug("옷이미지 파일 :{}", uploadFile);//편집한 사진일경우 Null
 		log.debug("편집여부 :{}", clothesEditcheck);
+		log.debug("fromStore여부 :{}", fromStoreCheck);
 		
-		if(clothesEditcheck) {
-			/*편집한 사진일 경우,
+		if(clothesEditcheck && fromStoreCheck.equals("해당없음")) {
+			/*편집한 사진파일 && fromStore 아닌경우
 			uploadFile은 Null, processImage 실행중에 저장된 returnfile값을 clothes객체에 저장 */
 			clothes.setClothesImg(returnfile);
+		} else if(!clothesEditcheck && !fromStoreCheck.equals("해당없음")) {
+			/*편집 안함, fromStore일 경우 */
+			String savedfile = FileService.CopyImg(fromStoreCheck, uploadPath);
+			clothes.setClothesImg(savedfile);
+		} else if(clothesEditcheck && !fromStoreCheck.equals("해당없음")){
+			/*편집함, fromStore일 경우*/
+			clothes.setClothesImg(returnfile);
+			clothes.setClothesOriginalFile(returnfile);
 		} else {
-			/*편집안한 사진일 경우,
-			uploadFile에 사용자가 첨부한 파일있음 */
+			/*편집안한 사진파일의 경우, uploadFile에 사용자가 첨부한 파일있음 */
 			String savedfile = FileService.saveFile(uploadFile, uploadPath);
 			clothes.setClothesImg(savedfile);
 		}
@@ -168,7 +183,7 @@ public class ClosetController {
 			String savedfile = FileService.saveFile(uploadFile, uploadPath);
 			clothes.setClothesImg(savedfile);
 		}else if((uploadFile == null) && clothesEditcheck) {
-			log.debug("사진 변경 & 편집 했음");
+			log.debug("사진 변경함 & 편집 했음");
 			String fullPath = uploadPath + "/" + oldClothes.getClothesImg();
 			FileService.deleteFile(fullPath); //원래 사진 삭제
 			clothes.setClothesImg(returnfile); //편집된 사진 저장

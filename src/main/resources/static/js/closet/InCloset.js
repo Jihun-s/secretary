@@ -188,15 +188,30 @@ function chartDraw(dataValue){
 	
 	// editIMGbtn 누르면 실행되는 함수: 사진편집+미리보기 기능
 	function editIMG(){
+		const imageElement = document.getElementById("preview");
+		let imageFromStore;
+		let imageUrl;
+		if(imageElement){ // id가 preview 이미지 요소
+			let imageSrc = imageElement.src; //이미지 요소 src속성 읽어오기
+			imageFromStore = imageSrc.substr(22,41);
+			imageUrl = imageSrc.substr(84);
+		}
 		const imageInput = document.getElementById("uploadIMG");
 		const selectedFile = imageInput.files[0];
-		if (!selectedFile) {
+		
+		//이미지가 웹에서 찾은 경우가 아닐경우 && 사진파일 등록 안했을 경우
+		if (imageFromStore != "secretary/closet/clothesFromStoreDownload" && !selectedFile) {
 			alert("사진을 등록해주세요");
 			return;
 		}
+
         const formData = new FormData();
         formData.append('image', selectedFile);
-       	
+        if(imageFromStore === "secretary/closet/clothesFromStoreDownload"){
+       		formData.append('fromStore', imageUrl);
+       	} else {
+			formData.append('fromStore', 'NoFromStore');   
+		}
         //서버에 사진편집 요청보내기
         fetch('processImage', {
             method: 'POST',
@@ -219,30 +234,48 @@ function chartDraw(dataValue){
 
 	//(의류)등록 insertClothesbtn 누르면 실행되는 함수 
 	function insertClothes(){
+		const imageElement = document.getElementById("preview");
+		let imageFromStore;
+		let imageUrl;
+		if(imageElement){ // id가 preview 이미지 요소
+			let imageSrc = imageElement.src; //이미지 요소 src속성 읽어오기
+			imageFromStore = imageSrc.substr(22,41);
+			imageUrl = imageSrc.substr(84);
+		}
 		
-		if (!document.getElementById("uploadIMG").files[0]){
+		//웹에서 찾은 경우가 아닐경우 && 사진파일 등록 안했을 경우
+		if (!imgEditCheck && imageFromStore != "secretary/closet/clothesFromStoreDownload" && !document.getElementById("uploadIMG").files[0]){
 			alert("사진을 등록해주세요");
 			return;			
 		}
 		
-		let originalFileName = document.getElementById("uploadIMG").files[0].name; //사용자가 첨부한 파일이름, clothesOriginalFile의 값
-
+		let originalFileName;
 		let blobIMG;//uploadFile 값으로 사용할 변수
-		if(!imgEditCheck){// 사용자가 편집안한 사진을 의류등록할 경우
+		let fromStoreCheck = '해당없음';
+		if(!imgEditCheck && document.getElementById("uploadIMG").files[0]){
+			//편집X , 직접 등록한 파일
 			blobIMG = document.getElementById("uploadIMG").files[0];
+			originalFileName = document.getElementById("uploadIMG").files[0].name; //사용자가 첨부한 파일이름, clothesOriginalFile의 값
+		} else if(imgEditCheck && document.getElementById("uploadIMG").files[0]){
+			//편집O, 직접 등록한 파일
+			originalFileName = document.getElementById("uploadIMG").files[0].name;
+		} else if(!imgEditCheck && !document.getElementById("uploadIMG").files[0]){
+			//편집X, 웹에서 찾은 이미지
+			originalFileName = imageUrl;
+			fromStoreCheck = imageUrl;
+		} else if(imgEditCheck && !document.getElementById("uploadIMG").files[0]){
+			originalFileName = imageUrl; //현재 의류 추가하면 undefined 됨 -> 컨트롤러에서 바꿔주기
+			fromStoreCheck = imageUrl;
 		}
-		
 		
 		let category = $('#clothesCategory option:selected').val(); //분류
 		let material = $('#materialList option:selected').val();	//소재
-
 		//계절 배열변수에 담기
 		const seasonArr = [];
 		var seasonChecked = $("input:checkbox[name='seasons']:checked");
 		$(seasonChecked).each(function(){
 			seasonArr.push($(this).val());
 		}); 
-		
 		//옷이면 옷사이즈, 신발이면 신발사이즈 가져오기
 		let size;
 		var result = $('#clothesCategory option:selected').val();
@@ -265,6 +298,7 @@ function chartDraw(dataValue){
 			clothesOriginalFile : originalFileName,
 			uploadFile : blobIMG,
 			clothesEditcheck : imgEditCheck,
+			fromStoreCheck :fromStoreCheck,
 		}		
 		let formData = new FormData();
 		for (let key in clothesObj){//for문으로 폼데이터에 값 전달
@@ -426,7 +460,7 @@ function chartDraw(dataValue){
 	function openUpdateModal(clothesNum) {
 		closetNum = parseInt(closetNum);
    	 	let clothesNumForUpdateInput = document.getElementById('clothesNumForUpdate');
-    	clothesNumForUpdateInput.value = clothesNum;
+    	clothesNumForUpdateInput.value = clothesNum; //의류번호 가져오기
 
     	// 모달 열기
    		 const updateModal = new bootstrap.Modal(document.getElementById('updateModal'));
@@ -463,16 +497,27 @@ function chartDraw(dataValue){
 		
 		let updateEditCheck = 0;
 		$('#updateEditIMGbtn').on('click', function(){
-			const updatePreview = document.getElementById("updatePreview");
+			const imageElementForUpdate = document.getElementById("previewForUpdate");
+			let imageFromStore;
+			let imageUrl;
+			if(imageElementForUpdate){
+				let imageSrc = imageElementForUpdate.src; //이미지 요소 src속성 읽어오기
+				imageFromStore = imageSrc.substr(22,41);
+				imageUrl = imageSrc.substr(84);
+			}			
 			const updateImageInput = document.getElementById("updateIMG");
 			const updateSelectedFile = updateImageInput.files[0];
-			if (!updateSelectedFile) {
+			if (imageFromStore != "secretary/closet/clothesFromStoreDownload" &&!updateSelectedFile) {
 				alert("사진을 등록해주세요");
 				return;
 			}
        		 const updateFormData = new FormData();
        		 updateFormData.append('image', updateSelectedFile);
-       	
+          	 if(imageFromStore === "secretary/closet/clothesFromStoreDownload"){
+       			updateFormData.append('fromStore', imageUrl);
+       		} else {
+				updateFormData.append('fromStore', 'NoFromStore');   
+			}   	
         		//서버에 사진편집 요청보내기
         		fetch('processImage', {
          		   method: 'POST',
@@ -504,7 +549,7 @@ function chartDraw(dataValue){
 		} else if(document.getElementById("updateIMG").files[0] && !updateEditCheck){
 			blobIMG = document.getElementById("updateIMG").files[0];
 			originalFileName = document.getElementById("updateIMG").files[0].name;
-		} else if(updateEditCheck){
+		} else if(document.getElementById("updateIMG").files[0] && updateEditCheck){
 			originalFileName = document.getElementById("updateIMG").files[0].name;
 		}
 		
@@ -608,42 +653,20 @@ function chartDraw(dataValue){
 	}
 	
 
-	//webSearch
+
 	function webSearch(){
 		var page = window.open("webSearch", "webSearhPage");
-
-	}//webSearch 함수
+	}
 	
     function receiveImage(imageUrl) {
-     // 이미지 다운로드
-    var xhr = new XMLHttpRequest();
-    xhr.responseType = 'blob';
-
-    xhr.onload = function() {
-        if (xhr.status === 200) {
-            var blob = xhr.response;
-            var file = new File([blob], imageUrl, { type: 'image/jpeg' }); // 이미지 타입과 파일 이름을 설정
-
-            // input 파일 태그에 파일 등록
-            var inputElement = document.getElementById("uploadIMG");
-            var dataTransfer = new DataTransfer();
-            dataTransfer.items.add(file);
-            inputElement.files = dataTransfer.files;
-
-            // 이미지 미리 보기 업데이트 (선택 사항)
-            var previewImage = document.getElementById("preview");
-            previewImage.src = URL.createObjectURL(file);
-        }
-    };
-
-    xhr.open('GET', 'clothesFromStoreDownload?clothesFromStoreImg=' + imageUrl);
-    xhr.send();
-    }//receiveImage 함수
+		let ImgSrc = '<img id="preview" src="../closet/clothesFromStoreDownload?clothesFromStoreImg='+imageUrl+'">';
+		$('#imagePreview').html(ImgSrc);
+    }
     
     function receiveImageForUpdate(imageUrl) {
-		let ImgSrc = '<img src="../closet/clothesFromStoreDownload?clothesFromStoreImg='+imageUrl+'">';
+		let ImgSrc = '<img id="previewForUpdate" src="../closet/clothesFromStoreDownload?clothesFromStoreImg='+imageUrl+'">';
 		$('#updatePreview').html(ImgSrc);
-    }//receiveImageForUpdate 함수 
+    }
 
 	const howtomanageMapping = {
     'none': '해당 없음', 'cotton': '기계 세탁이 가능하며, 따뜻한 물을 사용합니다. 밝은 색과 진한 색을 분리하여 세탁합니다. 햇빛에 오래 노출하지 않고, 그늘에서 보관하며 공기 순환을 유지합니다.', 
