@@ -2,6 +2,7 @@ package net.softsociety.secretary.dao;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.session.RowBounds;
@@ -37,6 +38,12 @@ public interface BoardDAO {
 	public Board selectOne(int boardId);
 	//답변상태 업데이트
 	public int updateBoardStatus(int boardId);
+	//일별 게시물수 조회
+	public List<Board> getBoardData();
+	//답변률
+	public List<Board> getBoardResponseRate();
+	//false로 변경
+	public int updateBoardStatusToFalse(int boardId);
 	
 	
 

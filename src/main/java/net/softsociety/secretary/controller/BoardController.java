@@ -15,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -150,13 +151,26 @@ public class BoardController {
     	}
     	return "redirect:/board/list";
     }
-    //답글 삭제
+//    //답글 삭제
+//    @GetMapping("deleteAnswer")
+//    public String deleteAnswer(int answerId) {
+//    	log.debug("deleteAnswer :{}", answerId);
+//    	int n = Aservice.deleteAnswer(answerId);  	
+//           	
+//    	return "redirect:/board/list";
+//    }
+    //답글삭제
     @GetMapping("deleteAnswer")
-    public String deleteAnswer(int answerId) {
-    	log.debug("deleteAnswer :{}", answerId);
-    	int n = Aservice.deleteAnswer(answerId);
+    public String deleteAnswer(Answer answer) {
+    	int answerId = answer.getAnswerId();
+    	int boardId = answer.getBoardId();
     	
-    	return "redirect:/board/list";
+    	log.debug("@@deleteAnswer@@ - answerId: {}, boardId: {}", answerId, boardId);
+
+        int n = Aservice.deleteAnswer(answerId);
+        n = service.updateBoardStatusToFalse(boardId);
+
+        return "redirect:/board/list";
     }
     //답글 달기
     @PostMapping("answer")
