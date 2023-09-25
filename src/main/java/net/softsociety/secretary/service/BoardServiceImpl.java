@@ -2,6 +2,7 @@ package net.softsociety.secretary.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,6 +94,18 @@ public class BoardServiceImpl implements BoardService {
 	public int updateBoardStatus(int boardId) {
 		int n = dao.updateBoardStatus(boardId);
 		return n;
+	}
+	//일별 게시물 수 조회
+	@Override
+	public List<Board> getBoardData() {
+		
+		return dao.getBoardData();
+	}
+	//답변률 계산
+	@Override
+	public List<Board> getBoardResponseRate() {
+		
+		return dao.getBoardResponseRate();
 	}
 	
 	

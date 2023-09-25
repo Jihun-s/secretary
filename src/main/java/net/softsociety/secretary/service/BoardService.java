@@ -1,6 +1,7 @@
 package net.softsociety.secretary.service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import net.softsociety.secretary.domain.Answer;
 import net.softsociety.secretary.domain.Board;
@@ -29,6 +30,10 @@ public interface BoardService {
 	Board upread(int num);
 	//답변상태 업데이트
 	int updateBoardStatus(int boardId);
+	//일별 게시물 수 조회
+	List<Board> getBoardData();
+	//답변률 계산
+	List<Board> getBoardResponseRate();
 	
 
 

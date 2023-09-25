@@ -131,6 +131,7 @@ where
 <!--  게시글 읽기  -->
 <select id="selectOne" resultType="Board"> select * from secretary_board where board_id = #{boardId} </select>
 
+<!--  -->
 <update id="updateBoardStatus" parameterType="int">
 update 
 	secretary_board
@@ -139,4 +140,29 @@ set
 where
 	board_id = #{boardId}
 </update>
+
+<!-- 일별 게시물수  -->
+<select id="getBoardData" resultType="Board">
+SELECT TO_CHAR(board_inputdate, 'YYYY-MM-DD') AS posting_date,
+       COUNT(*) AS daily_post_count
+FROM secretary_board
+GROUP BY TO_CHAR(board_inputdate, 'YYYY-MM-DD')
+ORDER BY TO_CHAR(board_inputdate, 'YYYY-MM-DD')
+</select>
+<!-- 답변률 계산 -->
+<select id="getBoardResponseRate" resultType="Board">
+SELECT 
+    total_inquiry_posts,
+    answered_posts,
+    (answered_posts / total_inquiry_posts) * 100 AS answer_rate
+FROM (
+    SELECT COUNT(*) AS total_inquiry_posts
+    FROM secretary_board
+    WHERE board_category1 = 'inquiry'
+) total_posts,
+(
+    SELECT COUNT(DISTINCT board_id) AS answered_posts
+    FROM secretary_answer
+) answered_posts
+</select>
 </mapper>

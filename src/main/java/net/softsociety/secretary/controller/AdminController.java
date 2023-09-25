@@ -22,8 +22,10 @@ import com.google.gson.JsonObject;
 
 import lombok.extern.slf4j.Slf4j;
 import net.softsociety.secretary.dao.UserMapper;
+import net.softsociety.secretary.domain.Board;
 import net.softsociety.secretary.domain.Log;
 import net.softsociety.secretary.domain.User;
+import net.softsociety.secretary.service.BoardService;
 import net.softsociety.secretary.service.UserService;
 @Slf4j
 @Controller
@@ -31,6 +33,8 @@ import net.softsociety.secretary.service.UserService;
 public class AdminController {
 	@Autowired
 	UserService userservice;
+	@Autowired
+	BoardService boardservice;
 	@Autowired
 	UserMapper usermapper;
 	@Autowired
@@ -79,7 +83,7 @@ public class AdminController {
 		
 		return "redirect:/admin/list";
 	}
-	//일일 로그인 수 그래프
+	//일별 로그인 수 그래프
 	@GetMapping("dailyLogin")
 	@ResponseBody
 	public ResponseEntity<List<Log>> dailyLogin() {
@@ -92,6 +96,23 @@ public class AdminController {
 	@ResponseBody
 	public ResponseEntity<List<Log>> hourlyLogin() {
 		List<Log> result = userservice.getHourlyLoginData();
+		return ResponseEntity.ok(result);
+	}
+	//게시물 수 체크
+	@GetMapping("boardCount")
+	@ResponseBody
+	public ResponseEntity<List<Board>> boardCount() {
+		
+		List<Board> result = boardservice.getBoardData();
+		
+		return ResponseEntity.ok(result);
+	}
+	//답변률
+	@GetMapping("responseRate")
+	@ResponseBody
+	public ResponseEntity<List<Board>> responseRate() {
+		List<Board> result = boardservice.getBoardResponseRate();
+		log.debug("result: {}", result);
 		return ResponseEntity.ok(result);
 	}
 

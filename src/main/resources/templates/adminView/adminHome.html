@@ -5,7 +5,7 @@
 <title>adminHome</title>   
 <script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.1/dist/chart.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<!-- ------------------------------------------------------------------------------ -->
+<!-- ------------------------------------------------------------------------------------------------------------------------------------------------->
 <!-- ////최근 7일 로그인 수 조회 ////-->
 <script>
 //새 차트를 만들 때 새로운 Chart.js 인스턴스가 할당
@@ -63,14 +63,7 @@ function drawLoginChart(labels, counts) {
         }
     });
 }
-
-// 페이지 로드 시 데이터로 그래프 그리기 함수 호출
-//window.onload = function() {
-//    fetchLoginDataAndDrawChart();
-    // 주기적으로 데이터 업데이트 (예: 5초마다)
-//    setInterval(fetchLoginDataAndDrawChart, 100000);
-//};
-<!-- ------------------------------------------------------------------------------ -->
+//<!-- ------------------------------------------------------------------------------ ----------------------------------------------------->
 
 <!-- ///##최근7일 시간별 접속자 수 출력 ##///-->
 
@@ -162,23 +155,166 @@ function drawHourlyLoginChart(labels, counts) {
     });
 }
 <!-- ------------------------------------------------------------------------------ -->
+// 일별 전체 게시물 개수 체크 
+let boardChart = null;
+
+function fetchBoardDataAndDrawChart() {
+    $.ajax({
+        url: 'boardCount',
+        type: 'GET',
+        dataType: 'json',
+        success: function (boardData) {
+            //console.log('Board data:', boardData);
+            const boardLabels = boardData.slice(-7).map(entry => entry.postingDate);
+            const boardCounts = boardData.slice(-7).map(entry => entry.dailyPostCount);
+            //console.log('Labels:', boardLabels);
+            //console.log('Counts:', boardCounts);
+            drawBoardChart(boardLabels, boardCounts);
+            
+        },
+        error: function (error) {
+            console.error('Error fetching board data:', error);
+        }
+    });
+}
+
+function drawBoardChart(labels, counts) {
+    const chartData = {
+        labels: labels,
+        datasets: [{
+            label: '일별 게시물 수',
+            data: counts,
+            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+            borderColor: 'rgba(75, 192, 192, 1)',
+            borderWidth: 1
+        }]
+    };
+
+    const canvas = document.getElementById('boardChart');
+    
+    // 차트 재생성 전 기존차트 삭제
+    if (boardChart instanceof Chart) {
+    	boardChart.destroy();
+    }
+
+    // 새로운 값으로 차트 생성
+    boardChart = new Chart(canvas, {
+        type: 'bar',
+        data: chartData,
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+}
+
+//<!-- ------------------------------------------------------------------------------ -->
+//질문글개수와 답변된 게시물개수를 파악하여 답변률 그래프로 표현
+let rateChart = null;
+
+function fetchRateDataAndDrawChart() {
+    $.ajax({
+        url: 'responseRate',
+        type: 'GET',
+        dataType: 'json',
+        success: function (boardData) {
+            console.log('Board data:', boardData);
+            const rateLabels = boardData.map(entry => entry.totalInquiryPosts);
+            const rateCounts = boardData.map(entry => entry.answeredPosts);
+            console.log('Labels:', rateLabels);
+            console.log('Counts:', rateCounts);
+            drawRateChart(rateLabels, rateCounts);
+        },
+        error: function (error) {
+            console.error('Error fetching data:', error);
+        },
+    });
+}
+
+//도넛 그래프를 그리기 위한 함수
+function drawRateChart(rateLabels, rateCounts) {
+	const answeredPost = rateCounts;  // 답변된 게시물 수
+    const totalInquiryPost = rateLabels;  // 총 문의 게시물 수
+
+    const data = {
+        labels: ['답변된 게시물', '미답변 게시물'],
+        datasets: [
+            {
+                label: '답변률',
+                data: [answeredPost, totalInquiryPost - answeredPost],
+                backgroundColor: ['#36a2eb', '#ff6384'],
+            },
+        ],
+    };
+
+    const config = {
+        type: 'doughnut',
+        data: data,
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: '답변률',
+                },
+            },
+        },
+    };
+
+    const canvas = document.getElementById('rateChart');
+    
+ // 차트 재생성 전 기존차트 삭제
+    if (rateChart instanceof Chart) {
+    	rateChart.destroy();
+    }
+
+    // 새로운 값으로 차트 생성
+    rateChart = new Chart(canvas, {
+        type: 'doughnut',  
+        data: data,
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: '답변률',
+                },
+            },
+        },
+    });
+
+}
 
 <!-- ------------------------------------------------------------------------------ -->
+
 // 페이지 로드 시 데이터로 그래프 그리기 함수 호출
 window.onload = function() {
 	fetchLoginDataAndDrawChart();
     fetchHourlyLoginDataAndDrawChart();
+    fetchBoardDataAndDrawChart();
+    fetchRateDataAndDrawChart();
     // 주기적으로 데이터 업데이트 
     setInterval(function() {
         fetchLoginDataAndDrawChart();
         fetchHourlyLoginDataAndDrawChart();
+        fetchBoardDataAndDrawChart();
+        fetchRateDataAndDrawChart();
     }, 1000000);
 };
 
 </script>
 
 
-<!-- ------------------------------------------------------------------------------ -->
+
 <!-- ------------------------------------------------------------------------------ -->
 <!-- ------------------------------------------------------------------------------ -->
 </head>
@@ -192,7 +328,10 @@ window.onload = function() {
     	<canvas id="hourlyChart" width="50" height="50"></canvas>
     </div><br>
     <div>
-    	<canvas id="boradChart" width="50" height="50"></canvas>
+    	<canvas id="boardChart" width="50" height="50"></canvas>
+    </div><br>
+    <div>
+    	<canvas id="rateChart" width="50" height="50"></canvas>
     </div>
 </body>
 </html>
