@@ -109,4 +109,18 @@
 	    DELETE FROM Secretary_LIVING_GOODS WHERE ITEM_ID = #{itemId}
 	</delete>
 	
+	<!-- 아이템 수량 감소 -->
+	<update id="reduceItemQuantity" parameterType="LivingGoods">
+	    UPDATE Secretary_LIVING_GOODS
+	    SET ITEM_QUANTITY = ITEM_QUANTITY - #{itemQuantity}
+	    WHERE ITEM_ID = #{itemId}
+	</update>
+	
+	<!-- 아이템 수량 확인 -->
+	<select id="checkItemQuantity" parameterType="LivingGoods" resultType="int">
+	    SELECT ITEM_QUANTITY
+	    FROM Secretary_LIVING_GOODS
+	    WHERE ITEM_ID = #{itemId}
+	</select>
+	
 </mapper>
