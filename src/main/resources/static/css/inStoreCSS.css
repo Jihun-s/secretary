@@ -21,10 +21,14 @@
 
 #whatsInStore ul{
 	list-style:none;
+	margin:0;
+	padding:0;
+	
 }
 #whatsInStore li{
     text-overflow: ellipsis;
 }
+
 #whatsInStore > div{
 	margin-right:1em;
 	margin-bottom:1em;
@@ -33,11 +37,12 @@
 	border-style:solid;
 	border-radius:3%;
 	overflow: hidden; 
-	width:14rem;
-	height:14rem;
+	width:15rem;
+	height:15rem;
 }
-#whatsInStore img{
-	
+#whatsInStore >div img{
+	width:15rem;
+	height:13.2rem;
 }
 #whatsInStore div:hover{
 	transform: translate3d(1px,1px,1px);
