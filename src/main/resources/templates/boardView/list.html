@@ -83,10 +83,7 @@ function categoryFirst(){
 	  <tr>
 	     <td>
              전체 <span th:text="${navi.totalRecordsCount}"></span>
-         </td>
-         <td></td>
-         <td></td>
-         <td></td>
+         </td>         
          <td>
             <a th:href="@{/board/write}">글쓰기</a>
             <a th:href="@{/}">Home</a>
@@ -100,9 +97,11 @@ function categoryFirst(){
 	      <td><span class="name">조회수</span></td>
 	      <td><span class="name">작성일</span></td>
 	  </tr>
-	  <tr th:each="b : ${list}" class="center">
+	  <tr th:each="b : ${list}">
 	  	  <td ><span th:text="${b.boardId}"></span></td>
-	      <td ><span th:text="${b.boardStatus == 0 ? '답변대기' : '답변완료'}"></span></td>
+	      <td ><span th:if="${b.boardStatus == 0}">답변대기</span>
+			   <span th:if="${b.boardStatus != 0}">답변완료</span>
+          </td>
 	      <td ><a th:href="@{/board/read(boardId=${b.boardId})}"
                  th:text="${b.boardTitle}"></a></td>
 	      <td ><span th:text="${b.userId}"></span></td>

@@ -34,6 +34,8 @@ public interface BoardService {
 	List<Board> getBoardData();
 	//답변률 계산
 	List<Board> getBoardResponseRate();
+	//board_status를 false로 변경
+	int updateBoardStatusToFalse(int boardId);
 	
 
 

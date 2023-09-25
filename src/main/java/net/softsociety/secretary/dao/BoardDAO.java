@@ -42,6 +42,8 @@ public interface BoardDAO {
 	public List<Board> getBoardData();
 	//답변률
 	public List<Board> getBoardResponseRate();
+	//false로 변경
+	public int updateBoardStatusToFalse(int boardId);
 	
 	
 

@@ -21,10 +21,18 @@
 
 <!-- 1:1문의 글 등록 -->
 <insert id="write" parameterType="Board">
-  insert into secretary_board 
-    (board_id, board_category1, board_category2, board_title, board_content, user_id, board_ispublic) 
-  values 
-    (secretary_board_seq.nextval, #{boardCategory1}, #{boardCategory2}, #{boardTitle}, #{boardContent}, #{userId}, #{boardIsPublic}) 
+ INSERT INTO secretary_board 
+  (board_id, board_category1, board_category2, board_title, board_content, user_id, board_ispublic, board_inputdate) 
+VALUES 
+  (secretary_board_seq.NEXTVAL, 
+   #{boardCategory1}, 
+   #{boardCategory2}, 
+   #{boardTitle}, 
+   #{boardContent}, 
+   #{userId}, 
+   #{boardIsPublic}, 
+   SYSDATE
+  )
 </insert>
 <!-- 리스트 -->
 <select id="list" parameterType="hashmap" resultType="Board">
@@ -32,7 +40,8 @@
 		, board_id
 		, board_title
 		, board_content
-		, to_char(board_inputdate, '[yyyy.mm.dd] hh24:mm:ss') board_inputdate
+		, board_status
+		, to_char(board_inputdate, '[yyyy.mm.dd] hh24:mi:ss') board_inputdate
 		, board_hits 
 	from secretary_board 
 	<where>
@@ -131,7 +140,7 @@ where
 <!--  게시글 읽기  -->
 <select id="selectOne" resultType="Board"> select * from secretary_board where board_id = #{boardId} </select>
 
-<!--  -->
+<!--답변상태 업데이트(True) -->
 <update id="updateBoardStatus" parameterType="int">
 update 
 	secretary_board
@@ -139,6 +148,12 @@ set
 	board_status = 1
 where
 	board_id = #{boardId}
+</update>
+<!-- 답변상태 업데이트(False) -->
+<update id="updateBoardStatusToFalse">
+update secretary_board
+set board_status = 0
+where board_id = #{boardId}
 </update>
 
 <!-- 일별 게시물수  -->
@@ -165,4 +180,6 @@ FROM (
     FROM secretary_answer
 ) answered_posts
 </select>
+
+
 </mapper>

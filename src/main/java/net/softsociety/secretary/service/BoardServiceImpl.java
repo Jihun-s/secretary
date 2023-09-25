@@ -95,6 +95,11 @@ public class BoardServiceImpl implements BoardService {
 		int n = dao.updateBoardStatus(boardId);
 		return n;
 	}
+	//답변상태 수정 false
+	@Override
+	public int updateBoardStatusToFalse(int boardId) {
+		return dao.updateBoardStatusToFalse(boardId);
+	}
 	//일별 게시물 수 조회
 	@Override
 	public List<Board> getBoardData() {
@@ -108,6 +113,7 @@ public class BoardServiceImpl implements BoardService {
 		return dao.getBoardResponseRate();
 	}
 	
+
 	
 	
 

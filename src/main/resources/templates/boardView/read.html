@@ -13,12 +13,11 @@ function deleteOne(boardId){
         location.href = 'deleteOne?boardId=' + boardId;
     }
 }
-
 //답글삭제
-function deleteAnswer(answerId){
+function deleteAnswer(answerId, boardId){
     let confirmDelete = confirm('삭제하시겠습니까?');
     if (confirmDelete) {
-        location.href = 'deleteAnswer?answerId=' + answerId;
+        location.href = 'deleteAnswer?answerId=' + answerId + '&boardId=' + boardId;
     }
 }
 //답글 입력
@@ -62,7 +61,7 @@ function submitAnswer() {
 <a th:href="@{/board/list}">목록</a>
 <a th:href="@{/board/update(boardId=(${board.boardId}))}">수정</a>
 <a href="#" th:attr="onclick='deleteOne(\'' + ${board.boardId} + '\')'">삭제</a>
-
+<input type="hidden" name="boardId" th:value="${board.boardId == null ? '' : board.boardId}">
 <table>
     <tr>
         <td>답변상태</td>
@@ -86,6 +85,7 @@ function submitAnswer() {
     </tr>
     <tr>
         <td>조회수</td>
+        <td th:text="${board.boardHits}"></td>
     </tr>   
 </table>
 <!--  로그인아이디=작성자 면 수정 삭제버튼 출력 
@@ -102,20 +102,18 @@ function submitAnswer() {
      <!-- 답변 출력 -->
     <table th:if="${answer != null && !answer.isEmpty()}">
         <tr>
-            <td><span class="name">답변상태</span></td>
             <td><span class="name">내용</span></td>
             <td><span class="name">작성자</span></td>
             <td><span class="name">작성일</span></td>
         </tr>
         <tr th:each="a : ${answer}">
             <!--<td><span th:text="${answer.boardStatus}"></span></td>-->
-            <td>답변완료</td>
             <td><span th:text="${a.answerContent}"></span></td>
             <td><span th:text="${a.userId}"></span></td>
             <td><span th:text="${a.answerDate}"></span></td>
             <!--  <td><a th:href="@{/board/update(boardId=(${board.boardId}))}">수정</a></td>
             <td><a th:href="@{/board/deleteAnswer(answerId=${a.answerId},boardId=${board.boardId})}">삭제</a></td>-->
-        	<td><a href="#" th:attr="onclick='deleteAnswer(\'' + ${a.answerId} + '\')'">삭제</a></td>
+        	<td><a href="#" th:attr="onclick='deleteAnswer(\'' + ${a.answerId} + '\', \'' + ${board.boardId} + '\')'">삭제</a></td>
         </tr>
     </table>
     
