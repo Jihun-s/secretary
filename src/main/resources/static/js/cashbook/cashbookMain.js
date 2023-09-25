@@ -46,6 +46,14 @@ function init() {
         success: (data) => {
             //  alert('init 결과:' + JSON.stringify(data));
             if(data.budgetExist == 1) {
+                // 예산 다 썼음 
+                if(data.remainingAmount <= 0) {
+                    let html = `이번 달 예산을 초과했어요. 다음 달엔 더 노력해봐요.`;
+                    html += `<p>초과한 금액:<mark id="remainingAmountSpan">000</mark>원</p>`;
+                    
+                    $('#remainingAmountP').html(html);
+                } 
+
                 $('#remainingAmountSpan').html(data.remainingAmount.toLocaleString('en-US'));
                 $('#budgetAmountP').html(data.budgetAmount.toLocaleString('en-US'));
                 $('#incomeSumMonthSpan').html(data.incomeSumMonth.toLocaleString('en-US'));
