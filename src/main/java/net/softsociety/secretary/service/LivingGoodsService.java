@@ -10,4 +10,10 @@ public interface LivingGoodsService {
 
 	List<LivingGoods> getLivingGoods();
 
+	LivingGoods getGoodsDetails(int itemId);
+
+	void modifyLivingGood(LivingGoods livingGoods, int familyId);
+
+	void deleteLivingGoods(int itemId);
+
 }

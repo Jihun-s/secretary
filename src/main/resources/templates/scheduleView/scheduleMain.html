@@ -64,7 +64,18 @@
 
     <!-- 소영 추가 CSS -->
     <link rel="stylesheet" th:href="@{/css/scheduleCalendar.css}" />
-    
+    <style>
+      @font-face {
+        font-family: 'NanumSquareNeo-Variable';
+        src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_11-01@1.0/NanumSquareNeo-Variable.woff2') format('woff2');
+        font-weight: normal;
+        font-style: normal;
+      }
+
+      body {
+        font-family: 'NanumSquareNeo-Variable', sans-serif;
+      }
+    </style>
 
     <!-- Page CSS -->
 
@@ -87,9 +98,9 @@
     <!-- Layout wrapper -->
     <div class="layout-wrapper layout-content-navbar">
       <div class="layout-container">
-        <!-- Menu -->
+       <!-- Menu -->
 
-        <aside
+       <aside
           id="layout-menu"
           class="layout-menu menu-vertical menu bg-menu-theme"
         >
@@ -103,7 +114,7 @@
                 />
               </span>
               <span class="app-brand-text demo menu-text fw-bolder ms-2"
-                >생비서</span
+                >생비</span
               >
             </a>
 
@@ -120,7 +131,7 @@
           <ul class="menu-inner py-1">
             <!-- 홈 -->
             <li class="menu-item active">
-              <a th:href="@{/}" class="menu-link">
+              <a th:href="@{/main}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-home-circle"></i>
                 <div data-i18n="Analytics">홈</div>
               </a>
@@ -140,18 +151,8 @@
 
               <ul class="menu-sub">
                 <li class="menu-item">
-                  <a href="layouts-without-menu.html" class="menu-link">
-                    <div data-i18n="Without menu">필수 알림</div>
-                  </a>
-                </li>
-                <li class="menu-item">
-                  <a href="layouts-without-navbar.html" class="menu-link">
-                    <div data-i18n="Without navbar">제안 알림</div>
-                  </a>
-                </li>
-                <li class="menu-item">
-                  <a href="layouts-container.html" class="menu-link">
-                    <div data-i18n="Container">알림 설정</div>
+                  <a th:href="@{/main}" class="menu-link">
+                    <div data-i18n="Container">알림</div>
                   </a>
                 </li>
               </ul>
@@ -166,18 +167,8 @@
 
               <ul class="menu-sub">
                 <li class="menu-item">
-                  <a href="layouts-without-menu.html" class="menu-link">
-                    <div data-i18n="Without menu">일정 등록</div>
-                  </a>
-                </li>
-                <li class="menu-item">
-                  <a href="layouts-without-navbar.html" class="menu-link">
-                    <div data-i18n="Without navbar">일정 보기</div>
-                  </a>
-                </li>
-                <li class="menu-item">
-                  <a href="layouts-container.html" class="menu-link">
-                    <div data-i18n="Container">일정 알림</div>
+                  <a th:href="@{/schedule}" class="menu-link">
+                    <div data-i18n="Without menu">일정 보기</div>
                   </a>
                 </li>
               </ul>
@@ -197,22 +188,22 @@
 
               <ul class="menu-sub">
                 <li class="menu-item">
-                  <a href="layouts-without-menu.html" class="menu-link">
+                  <a th:href="@{/fridge}" class="menu-link">
                     <div data-i18n="Without menu">물품 등록</div>
                   </a>
                 </li>
                 <li class="menu-item">
-                  <a href="layouts-without-navbar.html" class="menu-link">
+                  <a th:href="@{/fridge}" class="menu-link">
                     <div data-i18n="Without navbar">물품 검색</div>
                   </a>
                 </li>
                 <li class="menu-item">
-                  <a href="layouts-container.html" class="menu-link">
+                  <a th:href="@{/fridge}" class="menu-link">
                     <div data-i18n="Container">한 눈에 보기</div>
                   </a>
                 </li>
                 <li class="menu-item">
-                  <a href="layouts-fluid.html" class="menu-link">
+                  <a th:href="@{/fridge}" class="menu-link">
                     <div data-i18n="Fluid">소비기한 보기</div>
                   </a>
                 </li>
@@ -228,7 +219,7 @@
               <ul class="menu-sub">
                 <li class="menu-item">
                   <a
-                    href="pages-account-settings-account.html"
+                    th:href="@{/livingGoods}"
                     class="menu-link"
                   >
                     <div data-i18n="Account">물품 등록</div>
@@ -236,7 +227,7 @@
                 </li>
                 <li class="menu-item">
                   <a
-                    href="pages-account-settings-notifications.html"
+                    th:href="@{/livingGoods}"
                     class="menu-link"
                   >
                     <div data-i18n="Notifications">물품 검색</div>
@@ -244,7 +235,7 @@
                 </li>
                 <li class="menu-item">
                   <a
-                    href="pages-account-settings-connections.html"
+                    th:href="@{/livingGoods}"
                     class="menu-link"
                   >
                     <div data-i18n="Connections">한 눈에 보기</div>
@@ -252,7 +243,7 @@
                 </li>
                 <li class="menu-item">
                   <a
-                    href="pages-account-settings-connections.html"
+                    th:href="@{/livingGoods}"
                     class="menu-link"
                   >
                     <div data-i18n="Connections">소비기한 보기</div>
@@ -260,7 +251,7 @@
                 </li>
                 <li class="menu-item">
                   <a
-                    href="auth-login-basic.html"
+                    th:href="@{/livingGoods}"
                     class="menu-link"
                     target="_blank"
                   >
@@ -269,7 +260,7 @@
                 </li>
                 <li class="menu-item">
                   <a
-                    href="auth-register-basic.html"
+                    th:href="@{/livingGoods}"
                     class="menu-link"
                     target="_blank"
                   >
@@ -287,32 +278,32 @@
               </a>
               <ul class="menu-sub">
                 <li class="menu-item">
-                  <a href="pages-misc-error.html" class="menu-link">
+                  <a th:href="@{/closet}" class="menu-link">
                     <div data-i18n="Error">의류 등록</div>
                   </a>
                 </li>
                 <li class="menu-item">
-                  <a href="pages-misc-under-maintenance.html" class="menu-link">
+                  <a th:href="@{/closet}" class="menu-link">
                     <div data-i18n="Under Maintenance">의류 검색</div>
                   </a>
                 </li>
                 <li class="menu-item">
-                  <a href="pages-misc-under-maintenance.html" class="menu-link">
+                  <a th:href="@{/closet}" class="menu-link">
                     <div data-i18n="Under Maintenance">한 눈에 보기</div>
                   </a>
                 </li>
                 <li class="menu-item">
-                  <a href="pages-misc-under-maintenance.html" class="menu-link">
+                  <a th:href="@{/closet}" class="menu-link">
                     <div data-i18n="Under Maintenance">의류 관리</div>
                   </a>
                 </li>
                 <li class="menu-item">
-                  <a href="pages-misc-under-maintenance.html" class="menu-link">
+                  <a th:href="@{/closet}" class="menu-link">
                     <div data-i18n="Under Maintenance">세탁물 확인하기</div>
                   </a>
                 </li>
                 <li class="menu-item">
-                  <a href="pages-misc-under-maintenance.html" class="menu-link">
+                  <a th:href="@{/closet}" class="menu-link">
                     <div data-i18n="Under Maintenance">코디 일지</div>
                   </a>
                 </li>
@@ -342,12 +333,7 @@
                   </a>
                 </li>
                 <li class="menu-item">
-                  <a th:href="@{/cashbook/budget}" class="menu-link">
-                    <div data-i18n="Badges">예산 보기</div>
-                  </a>
-                </li>
-                <li class="menu-item">
-                  <a th:href="@{/cashbook/statistic}" class="menu-link">
+                  <a th:href="@{/cashbook/chart}" class="menu-link">
                     <div data-i18n="Buttons">소비 분석</div>
                   </a>
                 </li>
@@ -510,7 +496,7 @@
                   >
                     <div class="avatar avatar-online">
                       <img
-                        th:src="@{/assets/img/avatars/1.png}"
+                        th:src="@{/images/profileimg/10228364.png}"
                         alt
                         class="w-px-40 h-auto rounded-circle"
                       />
@@ -523,7 +509,7 @@
                           <div class="flex-shrink-0 me-3">
                             <div class="avatar avatar-online">
                               <img
-                                th:src="@{/assets/img/avatars/1.png}"
+                                th:src="@{/images/profileimg/10228364.png}"
                                 alt
                                 class="w-px-40 h-auto rounded-circle"
                               />
@@ -581,7 +567,7 @@
                 <span style="display: inline-block">
                   <!-- 메뉴 앞 이미지 src 수정해주세요 -->
                   <img
-                    th:src="@{/images/ck8.png}"
+                    th:src="@{/images/scheduleimg/10352933.png}"
                     style="height: 4rem; width: 4rem; vertical-align: middle"
                   />
                   <!-- 메뉴이름 -->

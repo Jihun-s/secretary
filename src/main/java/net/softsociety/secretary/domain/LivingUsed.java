@@ -11,8 +11,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class LivingUsed {
     private int livingUsedId;
-    private int categoryId;
+    private int familyId;
+    private int itemId;
     private String itemName;
+    private String itemCategory;
     private String livingUsedDate;
     private int livingQuantityUsed;
 }

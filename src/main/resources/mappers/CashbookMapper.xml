@@ -468,9 +468,265 @@ INSERT INTO
 	WHERE 
 	    t.family_id = #{familyId} 
 	    AND t.trans_type = '지출'
+        AND EXTRACT(YEAR FROM t.trans_date) = #{chYear}
+    AND EXTRACT(MONTH FROM t.trans_date) = #{chMonth}
 	GROUP BY 
 	    t.family_id, tc1.cate1_name, tc1.label_color
 	ORDER BY
 	    total_month_expense DESC
+</select>
+
+<!-- 당월 수입 도넛 -->
+<select id="getMonthIncome" parameterType="hashmap" resultType="CashbookChart">
+	SELECT 
+	    t.family_id,
+	    tc1.cate1_name,
+	    tc1.label_color AS label_color,
+	    SUM(t.trans_amount) AS total_month_income
+	FROM 
+	    Secretary_Transaction t
+	JOIN 
+	    Secretary_Trans_Category1 tc1 ON t.cate1_id = tc1.cate1_id
+	WHERE 
+	    t.family_id = #{familyId} 
+	    AND t.trans_type = '수입'
+        AND EXTRACT(YEAR FROM t.trans_date) = #{chYear}
+    AND EXTRACT(MONTH FROM t.trans_date) = #{chMonth}
+	GROUP BY 
+	    t.family_id, tc1.cate1_name, tc1.label_color
+	ORDER BY
+	    total_month_income DESC
+</select>
+
+<!-- 각 주별 총 지출액 -->
+<select id="getWeekExpenseAcc" parameterType="hashmap" resultType="CashbookChart">
+SELECT
+    1 AS family_id,
+    '2023' AS curYear,
+    '09' AS curMonth,
+    TO_CHAR(t.trans_date, 'W') AS week_of_month,
+    SUM(t.trans_amount) AS total_week_expense,
+    SUM(SUM(t.trans_amount)) OVER (ORDER BY TO_CHAR(t.trans_date, 'W')) AS week_accumulated_expense
+FROM 
+    Secretary_Transaction t
+WHERE
+    t.family_id = #{familyId}
+    AND t.trans_type = '지출' 
+    AND EXTRACT(YEAR FROM t.trans_date) = #{chYear}
+    AND EXTRACT(MONTH FROM t.trans_date) = #{chMonth}
+GROUP BY
+    TO_CHAR(t.trans_date, 'W')
+ORDER BY
+    week_of_month ASC
+</select>
+
+<!-- 6개월 추이 -->
+<select id="getInExSixMonth" parameterType="hashmap" resultType="CashbookChart">
+  WITH BudgetInfo AS (
+    SELECT 
+      family_id,
+      budget_year,
+      budget_month,
+      SUM(budget_amount) AS budget_amount
+    FROM 
+      Secretary_Budget
+    WHERE 
+      family_id = #{familyId} 
+      AND ((budget_year = #{chYear} 
+      		AND budget_month BETWEEN #{chMonth}-5 AND #{chMonth}) 
+       OR (budget_year = #{chYear}-1 AND budget_month = 12))
+    GROUP BY 
+      family_id, budget_year, budget_month
+  ),
+  IncomeInfo AS (
+	  SELECT 
+	    family_id,
+	    EXTRACT(YEAR FROM trans_date) AS trans_year,
+	    EXTRACT(MONTH FROM trans_date) AS trans_month,
+	    SUM(trans_amount) AS total_month_income
+	  FROM 
+	    Secretary_Transaction
+	  WHERE 
+	    family_id = #{familyId} 
+	    AND trans_type = '수입' 
+	    AND trans_date BETWEEN ADD_MONTHS(TO_DATE(#{chYear} || '-' || #{chMonth} || '-01', 'YYYY-MM-DD'), -5) 
+	    				AND LAST_DAY(TO_DATE(#{chYear} || '-' || #{chMonth} || '-01', 'YYYY-MM-DD'))
+	  GROUP BY 
+	    family_id, EXTRACT(YEAR FROM trans_date), EXTRACT(MONTH FROM trans_date)
+	),
+	ExpenseInfo AS (
+	  SELECT 
+	    family_id,
+	    EXTRACT(YEAR FROM trans_date) AS trans_year,
+	    EXTRACT(MONTH FROM trans_date) AS trans_month,
+	    SUM(trans_amount) AS total_month_expense
+	  FROM 
+	    Secretary_Transaction
+	  WHERE 
+	    family_id = #{familyId} 
+	    AND trans_type = '지출' 
+	    AND trans_date BETWEEN ADD_MONTHS(TO_DATE(#{chYear} || '-' || #{chMonth} || '-01', 'YYYY-MM-DD'), -5) 
+	    				AND LAST_DAY(TO_DATE(#{chYear} || '-' || #{chMonth} || '-01', 'YYYY-MM-DD'))
+	  GROUP BY 
+	    family_id, EXTRACT(YEAR FROM trans_date), EXTRACT(MONTH FROM trans_date)
+	)
+  SELECT 
+    b.family_id,
+    b.budget_year AS curYear,
+    b.budget_month AS curMonth,
+    b.budget_amount,
+    COALESCE(i.total_month_income, 0) AS total_month_income,
+    COALESCE(e.total_month_expense, 0) AS total_month_expense,
+    (b.budget_amount - COALESCE(e.total_month_expense, 0)) AS budget_vs_expense,
+    CASE 
+      WHEN (b.budget_amount - COALESCE(e.total_month_expense, 0)) >= 0 THEN 1
+      ELSE 0
+    END AS budget_success,
+    (COALESCE(i.total_month_income, 0) - COALESCE(e.total_month_expense, 0)) AS income_vs_expense,
+    CASE
+      WHEN (COALESCE(i.total_month_income, 0) - COALESCE(e.total_month_expense, 0)) >= 0 THEN 1
+      ELSE 0
+    END AS in_ex_success
+  FROM 
+    BudgetInfo b
+  LEFT JOIN 
+    IncomeInfo i ON b.family_id = i.family_id AND b.budget_year = i.trans_year AND b.budget_month = i.trans_month
+  LEFT JOIN 
+    ExpenseInfo e ON b.family_id = e.family_id AND b.budget_year = e.trans_year AND b.budget_month = e.trans_month
+  ORDER BY 
+    b.budget_year DESC, b.budget_month DESC
+</select>
+
+<!-- 나의 3개월간 평균 -->
+<select id="getMyTotal" parameterType="hashmap" resultType="CashbookChart">
+	SELECT 
+	    t.family_id,
+	    EXTRACT(YEAR FROM t.trans_date) AS ch_year,
+	    EXTRACT(MONTH FROM t.trans_date) AS ch_month,
+	    SUM(CASE WHEN t.trans_type = '지출' THEN t.trans_amount ELSE 0 END) AS total_month_expense,
+	    SUM(CASE WHEN t.trans_type = '수입' THEN t.trans_amount ELSE 0 END) AS total_month_income
+	FROM
+	    Secretary_Transaction t
+	WHERE
+	    t.family_id = #{familyId}
+	    AND EXTRACT(YEAR FROM t.trans_date) = #{chYear} 
+	    AND EXTRACT(MONTH FROM t.trans_date) BETWEEN #{chMonth}-3 AND #{chMonth}
+	GROUP BY
+	    t.family_id, EXTRACT(YEAR FROM t.trans_date), EXTRACT(MONTH FROM t.trans_date)
+	ORDER BY
+	    ch_year DESC, ch_month DESC
+</select>
+
+<!-- 다른 유저들의 3개월간 평균 -->
+<select id="getOtherUserTotal" parameterType="hashmap" resultType="CashbookChart">
+	WITH AggregatedData AS (
+	  SELECT 
+	      t.family_id,
+	      EXTRACT(YEAR FROM t.trans_date) AS ch_year,
+	      EXTRACT(MONTH FROM t.trans_date) AS ch_month,
+	      SUM(CASE WHEN t.trans_type = '지출' THEN t.trans_amount ELSE 0 END) AS total_month_expense,
+	      SUM(CASE WHEN t.trans_type = '수입' THEN t.trans_amount ELSE 0 END) AS total_month_income
+	  FROM
+	      Secretary_Transaction t
+	  WHERE
+	      t.family_id != #{familyId}
+	      AND EXTRACT(YEAR FROM t.trans_date) = #{chYear} 
+	      AND EXTRACT(MONTH FROM t.trans_date) BETWEEN #{chMonth}-3 AND #{chMonth}
+	  GROUP BY
+	      t.family_id, EXTRACT(YEAR FROM t.trans_date), EXTRACT(MONTH FROM t.trans_date)
+	)
+	SELECT 
+	    ch_year,
+	    ch_month,
+	    AVG(total_month_expense) AS total_month_expense_avg,
+	    AVG(total_month_income) AS total_month_income_avg
+	FROM 
+	    AggregatedData
+	GROUP BY 
+	    ch_year, ch_month
+	ORDER BY
+	    ch_year DESC, ch_month DESC
+</select>
+
+<!-- 최다/최대 지출 소분류 카테고리 -->
+<select id="getMostCate2" parameterType="hashmap" resultType="CashbookChart">
+	    SELECT
+        EXTRACT(YEAR FROM t.trans_date) AS ch_year,
+        EXTRACT(MONTH FROM t.trans_date) AS ch_month,
+        t.cate1_id,
+        c1.cate1_name,
+        t.cate2_id,
+        c2.cate2_name,
+        COUNT(*) AS trans_count,
+        SUM(t.trans_amount) AS total_amount
+    FROM
+        Secretary_Transaction t
+    JOIN Secretary_Trans_Category1 c1 ON t.cate1_id = c1.cate1_id
+    JOIN Secretary_Trans_Category2 c2 ON t.cate2_id = c2.cate2_id
+    WHERE
+        t.family_id = #{familyId}
+        AND t.trans_type = '지출'
+        AND EXTRACT(YEAR FROM t.trans_date) = #{nowYear}
+        AND EXTRACT(MONTH FROM t.trans_date) = #{nowMonth}
+    GROUP BY
+        t.cate1_id,
+        c1.cate1_name,
+        t.cate2_id,
+        c2.cate2_name,
+        EXTRACT(YEAR FROM t.trans_date),
+        EXTRACT(MONTH FROM t.trans_date)
+    ORDER BY
+        total_amount DESC
+</select>
+
+<!-- 이번달 저번달 수입/지출 -->
+<select id="getCurPreInExSum" parameterType="hashmap" resultType="CashbookChart">
+	SELECT 
+    family_id,
+    EXTRACT(YEAR FROM trans_date) AS ch_year,
+    EXTRACT(MONTH FROM trans_date) AS ch_month,
+    SUM(CASE WHEN trans_type = '지출' THEN trans_amount ELSE 0 END) AS total_month_expense,
+    SUM(CASE WHEN trans_type = '수입' THEN trans_amount ELSE 0 END) AS total_month_income
+FROM 
+    Secretary_Transaction
+WHERE
+    family_id = #{familyId}
+    AND EXTRACT(YEAR FROM trans_date) = #{chYear}
+    AND EXTRACT(MONTH FROM trans_date) = #{chMonth}
+GROUP BY 
+    family_id, EXTRACT(YEAR FROM trans_date), EXTRACT(MONTH FROM trans_date)
+  
+UNION ALL
+
+SELECT 
+    family_id,
+    CASE
+        WHEN #{chMonth} = 1 THEN #{chYear} - 1
+        ELSE #{chYear}
+    END AS ch_year,
+    CASE
+        WHEN #{chMonth} = 1 THEN 12
+        ELSE #{chMonth} - 1
+    END AS ch_month,
+    SUM(CASE WHEN trans_type = '지출' THEN trans_amount ELSE 0 END) AS total_month_expense,
+    SUM(CASE WHEN trans_type = '수입' THEN trans_amount ELSE 0 END) AS total_month_income
+FROM 
+    Secretary_Transaction
+WHERE
+    family_id = #{familyId}
+    AND (
+        (EXTRACT(YEAR FROM trans_date) = #{chYear} AND EXTRACT(MONTH FROM trans_date) = #{chMonth} - 1)
+        OR (EXTRACT(YEAR FROM trans_date) = #{chYear} - 1 AND EXTRACT(MONTH FROM trans_date) = 12)
+    )
+GROUP BY 
+    family_id,
+    CASE
+        WHEN #{chMonth} = 1 THEN #{chYear} - 1
+        ELSE #{chYear}
+    END,
+    CASE
+        WHEN #{chMonth} = 1 THEN 12
+        ELSE #{chMonth} - 1
+    END
 </select>
 </mapper>

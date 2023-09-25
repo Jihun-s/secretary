@@ -19,6 +19,7 @@ import net.softsociety.secretary.dao.CashbookDAO;
 import net.softsociety.secretary.dao.ScheduleDAO;
 import net.softsociety.secretary.dao.UserMapper;
 import net.softsociety.secretary.domain.Budget;
+import net.softsociety.secretary.domain.CashbookChart;
 import net.softsociety.secretary.domain.Schedule;
 import net.softsociety.secretary.domain.User;
 import net.softsociety.secretary.service.CashbookService;
@@ -218,6 +219,7 @@ public class CashbookMainRestController {
 		return result;
 	}
 	
+	/** 예산 존재 확인하기 */
 	@GetMapping("budgetExist")
 	public int budgetExist(Model model
 			, int curYear
@@ -234,6 +236,27 @@ public class CashbookMainRestController {
 		
 		int result = dao.budgetExist(map);
 		log.debug("{}월 예산 있없? : {}", curMonth, result);
+		
+		return result;
+	}
+	
+	/** 이번달 저번달 수입/지출 */
+	@PostMapping("curPreInExSum")
+	public ArrayList<CashbookChart> curPreInExSum(
+			Model model
+			, int chYear
+			, int chMonth) {
+		log.debug("{}년 {}월 이전월 비교 컨트롤러 도착", chYear, chMonth);
+		User loginUser = (User) model.getAttribute("loginUser");
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("userId", loginUser.getUserId());
+		map.put("familyId", loginUser.getFamilyId());
+		map.put("chYear", chYear);
+		map.put("chMonth", chMonth);
+		log.debug("이전월 비교 보낼 map:{}", map);
+		
+		ArrayList<CashbookChart> result = dao.getCurPreInExSum(map);
+		log.debug("이전월 비교 결과:{}", result);
 		
 		return result;
 	}

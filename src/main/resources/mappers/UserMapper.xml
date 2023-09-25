@@ -47,6 +47,7 @@
 	    SET user_pw = #{userPw}
 	    WHERE user_id = #{userId} OR user_email = #{userEmail}
 	</update>
+	
 	<!-- 관리자 기능 유저목록-인찬 -->
 	<select id="findALL" resultType="User">
 	select * from secretary_user
@@ -65,7 +66,7 @@
 	</update>
 	
 	<!-- 유저 일일로그인 조회 -->
-	<select id="getDailyLoginData" resultType="net.softsociety.secretary.domain.Log">
+	<select id="getDailyLoginData" resultType="Log">
         SELECT TO_CHAR(LOGIN, 'YYYY-MM-DD') AS login_date, COUNT(*) AS daily_login_count
         FROM secretary_logstat
         WHERE log_message = '로그인이 발생하였습니다'
@@ -73,5 +74,12 @@
         ORDER BY TO_CHAR(LOGIN, 'YYYY-MM-DD')
     </select>
     
-    
+    <!-- 유저 시간별 로그인 조회 -->
+    <select id="getHourlyLoginData" resultType="Log">
+    SELECT TO_NUMBER(TO_CHAR(LOGIN, 'HH24')) AS loginHour, COUNT(*) AS loginCount
+    FROM secretary_logstat
+    WHERE TO_CHAR(LOGIN, 'YYYY-MM-DD') BETWEEN TO_CHAR(sysdate - 7, 'YYYY-MM-DD') AND TO_CHAR(sysdate, 'YYYY-MM-DD')
+    GROUP BY TO_NUMBER(TO_CHAR(LOGIN, 'HH24'))
+    ORDER BY TO_NUMBER(TO_CHAR(LOGIN, 'HH24'))
+    </select>
 </mapper>

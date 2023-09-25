@@ -63,6 +63,7 @@
         <script th:src="@{/assets/vendor/libs/jquery/jquery.js}"></script>
         <script th:src="@{/js/fridge/livingGoodsSpeechscript.js}"></script>
         <script th:src="@{/js/fridge/livingGoods.js}"></script>
+        <script th:src="@{/js/fridge/livingGoodsModify.js}"></script>
 
         <!-- 스타일 삭제.. -->
 
@@ -85,15 +86,11 @@
                 overflow: hidden;
             }
             #livingItemsContainer {
-                display: flex;
-                flex-wrap: wrap;
-                overflow-y: auto; /* 세로 스크롤 */
-                max-height: 500px; /* 최대 높이 설정 */
-            }
-
-            .item {
-                width: 100px; /* 가로 크기 */
-                margin: 0.5rem; /* 간격 */
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                gap: 1%;
+                overflow-y: auto;
+                max-height: calc(125px * 4); /* 또는 적절한 값으로 설정 */
             }
 
             .itemcard {
@@ -830,6 +827,19 @@
                                                                 <label class="form-label" for="itemImage"
                                                                     >물품 사진</label
                                                                 >
+                                                                <!-- 추가될 이미지 미리보기 태그 -->
+                                                                <div class="image-preview">
+                                                                    <img
+                                                                        src="images/fridgeimg/DefaultItem.png"
+                                                                        style="height: 100px; width: 100px"
+                                                                        alt="Image Preview"
+                                                                        class="image-preview__image"
+                                                                    />
+                                                                    <span class="image-preview__default-text"
+                                                                        >Image Preview</span
+                                                                    >
+                                                                </div>
+                                                                <!-- 파일 입력 필드 -->
                                                                 <input
                                                                     class="form-control"
                                                                     id="itemImage"
@@ -874,7 +884,14 @@
                                                 src="images/fridgeimg/ModifyName.png"
                                                 alt="카테고리 수정"
                                                 class="category-editIcon position-absolute"
-                                                style="top: 0; left: 0; height: 25px; width: 25px; z-index: 999"
+                                                style="
+                                                    display: none;
+                                                    top: 0;
+                                                    left: 0;
+                                                    height: 25px;
+                                                    width: 25px;
+                                                    z-index: 999;
+                                                "
                                             />
                                             <!-- 카테고리 수정 아이콘 위치 변경 끝 -->
                                             <button
@@ -972,16 +989,55 @@
 
                                         <button
                                             class="btn btn-sm btn-warning no-wrap-text"
-                                            id="itemItemModify"
+                                            id="livingItemModify"
                                             type="button"
                                         >
                                             편집
                                         </button>
                                     </div>
+                                    <!-- 삭제 확인 모달 -->
+                                    <div
+                                        class="modal fade"
+                                        id="deleteConfirmModal"
+                                        tabindex="-1"
+                                        aria-labelledby="deleteConfirmModalLabel"
+                                        aria-hidden="true"
+                                    >
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="deleteConfirmModalLabel">삭제 확인</h5>
+                                                    <button
+                                                        type="button"
+                                                        class="btn-close"
+                                                        data-bs-dismiss="modal"
+                                                        aria-label="Close"
+                                                    ></button>
+                                                </div>
+                                                <div class="modal-body">정말로 이 물품 아이템을 삭제하시겠습니까?</div>
+                                                <div class="modal-footer">
+                                                    <button
+                                                        type="button"
+                                                        class="btn btn-secondary"
+                                                        data-bs-dismiss="modal"
+                                                    >
+                                                        아니오
+                                                    </button>
+                                                    <button type="button" class="btn btn-primary" id="confirmDelete">
+                                                        예
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <!-- Living Item Display -->
                                     <div class="card mb-4 living-item-box">
                                         <div class="card-body itembox">
-                                            <div class="living-items-container" id="livingItemsContainer"></div>
+                                            <div
+                                                class="living-items-container"
+                                                id="livingItemsContainer"
+                                                style="padding-right: 20px"
+                                            ></div>
                                         </div>
                                     </div>
                                     <!-- Food Detail Modal -->
