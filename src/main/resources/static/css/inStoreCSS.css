@@ -77,6 +77,15 @@ body {
 	height:20rem;
 }
 
+/*검색창 브랜드*/
+#clothesFromStoreBrand{
+	width:9rem;
+}
+
+/*옷 마우스 갖다대면 포인터*/
+.clothesList{
+	cursor:pointer;
+}
 .btn-pink{
 	align-items: flex-start;
 	appearance: button;

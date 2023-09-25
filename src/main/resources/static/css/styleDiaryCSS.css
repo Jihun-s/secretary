@@ -86,7 +86,7 @@ body {
 
 /*세탁바구니 보기 버튼*/
 #TolaundryPageBtn {
-	display:inline-block; position:relative; left:11em; 
+	display:inline-block; position:relative; right:-11.4rem; 
 	background-color: rgba(223,132,166,255); border-color: rgba(223,132,166,255);
 }
 /*코디등록 버튼*/
@@ -112,7 +112,7 @@ body {
 [class ^= imagePreview] img{
 	width:100%;
 	height:100%;
-	object-fit: cover;
+	object-fit: contain;
 	cursor:pointer;
 }
 .insertStyle{
