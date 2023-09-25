@@ -40,7 +40,7 @@ $(document).ready(function() {
    });
 
    // 모달 거래유형 클릭 이벤트 (대분류 출력)
-   $('body').on('change', "input[name='transType']", function() {
+   $('body').on('change', ".modal-radio-group input[name='transType']", function() {
     showTransCategoriesDivModal();
     loadMainCategoriesModal($(this).val());
    });
@@ -56,6 +56,7 @@ $(document).ready(function() {
             $("#cate2NameModal").html('<option>소분류를 선택하세요</option>');
         }
    });
+
 
     // 소분류 선택 이벤트 (소분류 먼저 선택할 수 없음)
     $('body').on('click', "#cate2Name", function() {
@@ -78,6 +79,72 @@ $(document).ready(function() {
             alert("대분류를 먼저 선택하세요.");
         }
     });
+
+
+    // SMS 추출 거래유형 클릭 이벤트 (대분류 출력)
+    $('body').on('change', ".modal-radio-group input[name='transType']", function() {
+        showTransCategoriesDivSms();
+        loadMainCategoriesSms($(this).val());
+    });
+    
+
+   // SMS 추출 대분류 선택 이벤트 (소분류 출력 or 기본값)
+   $('body').on('change', "#cate1NameSms", function() {
+        const selectedCate1Name = $(this).val();
+        if (selectedCate1Name !== "대분류를 선택하세요") {
+            loadSubCategoriesSms(selectedCate1Name);
+        } else {
+            // 대분류가 초기 상태로 변경된 경우, 소분류도 초기 상태로 변경합니다.
+            $("#cate2NameSms").html('<option>소분류를 선택하세요</option>');
+        }
+   });
+
+    // SMS 추출 소분류 선택 이벤트 (소분류 먼저 선택할 수 없음)
+    $('body').on('click', "#cate2NameSms", function() {
+        if ($("input[name='transType']:checked").length === 0) {
+            alert("거래 유형을 먼저 선택하세요.");
+            return;
+        }
+        if ($("#cate1NameSms").val() === "대분류를 선택하세요") {
+            alert("대분류를 먼저 선택하세요.");
+        }
+    });
+
+    // SMS 모달 닫히면 입력 값 초기화
+    $("#inputBySmsModal").on("hidden.bs.modal", function() {
+        // 입력 필드 초기화
+        $("#transDateSms").val("");
+        $("#radioSms1").prop("checked", false);
+        $("#radioSms2").prop("checked", false);
+        $("#cate1NameSms").val("");
+        $("#cate2NameSms").val("");
+        $("#transPayeeSms").val("");
+        $("#transMemoSms").val("");
+        $("#transAmountSms").val("");
+        
+        // 오류 메세지 초기화
+        $("#transTypeErrorSms").text("");
+        $("#transCategoryErrorSms").text("");
+        $("#transPayeeErrorSms").text("");
+        $("#transMemoErrorSms").text("");
+        $("#transAmountError").text("");
+        
+        // smsMessage 값 초기화
+        $("#smsMessage").val("");
+        
+        // 인식 field 숨기기
+        $('#parseBySmsResultDiv').html("");
+
+        // footer 버튼 바꾸기 
+        let footer = `
+        <button type="button" class="btn btn-primary" onclick="parseBySms();">메세지 인식하기</button>
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">닫기</button>
+        `;
+        $('#smsModalFooter').html(footer);
+    });
+  
+
+
 
     // 대분류 커스텀 카테고리 추가
     $('body').on('change', '#cate1Name', function() {
@@ -173,18 +240,13 @@ $(document).ready(function() {
 
 
 /** 사진 입력 버튼 */
-function inputBtImg() {
+function inputByImg() {
     alert('사진입력 기다려요');
 }
 
 /** 음성 입력 버튼 */
-function inputBtVoice() {
+function inputByVoice() {
     alert('음성입력 기다려요');
-}
-
-/** SMS 입력 버튼 */
-function inputBtSms() {
-    alert('SMS입력 기다려요');
 }
 
 
@@ -813,6 +875,23 @@ function showTransCategoriesDivModal() {
 }
 
 
+/** SMS 수입/지출에 따른 카테고리 표시 */
+function showTransCategoriesDivSms() {
+    let selectedType = $("input[name='transType']:checked").val();
+    ;
+    
+    $("#transCategoriesDivSms").show();
+
+    if (selectedType === "수입") {
+        $("#transCategory1DivSms").show();
+        $("#transCategory2DivSms").hide();
+    } else {
+        $("#transCategory1DivSms").show();
+        $("#transCategory2DivSms").show();
+    }
+}
+
+
 /** 대분류 불러오기 */
 function loadMainCategories(transType) {
 
@@ -854,6 +933,30 @@ function loadMainCategoriesSearch() {
         },
         error: function() {
             alert('검색 대분류 목록 전송 실패');
+        }
+    });
+}
+
+
+/** SMS 대분류 불러오기 */
+function loadMainCategoriesSms(transType) {
+    $.ajax({
+        url: '/secretary/cashbook/trans/loadCate1', 
+        type: 'GET',
+        data: { transType: transType },
+        success: function(cate1List) {
+            let options = '<option>대분류를 선택하세요</option>';
+            
+            cate1List.forEach(cate1 => {
+                options += `<option value="${cate1.cate1Name}">${cate1.cate1Name}</option>`;
+            });
+
+            options += `<option value="직접입력" onclick="setCustomCategory1()">직접입력</option>`;
+
+            $("#cate1NameSms").html(options);
+        },
+        error: function() {
+            alert('SMS 대분류 목록 전송 실패');
         }
     });
 }
@@ -912,6 +1015,32 @@ function loadSubCategoriesSearch(cate1Name) {
     });
 }
 
+/** SMS 소분류 불러오기 */
+function loadSubCategoriesSms(cate1Name) {
+    $.ajax({
+        url: '/secretary/cashbook/trans/loadCate2',
+        type: 'GET',
+        data: { cate1Name: cate1Name },
+        success: function(cate2List) {
+            let options;
+
+            if (cate2List.length > 0) { // 소분류 리스트가 있을 경우
+                options = '<option>소분류를 선택하세요</option>';
+                cate2List.forEach(cate2 => {
+                    options += `<option value="${cate2.cate2Name}">${cate2.cate2Name}</option>`;
+                });
+                options += `<option value="직접입력" onclick="setCustomCategory2()">직접입력</option>`;
+            } else { // 소분류 리스트가 비어있을 경우
+                options = '<option>소분류를 선택하세요</option><option value="직접입력" onclick="setCustomCategory2()">직접입력</option>';
+            }
+
+            $("#cate2NameSms").html(options);
+        },
+        error: function() {
+            alert('SMS 소분류 목록 전송 실패');
+        }
+    });
+}
 
 /** 모달 대분류 불러오기 */
 function loadMainCategoriesModal(transType, cate1Name) {
@@ -1238,3 +1367,99 @@ function selectConditionTrans() {
         }
     });
 }
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+/** SMS로 내역 뽑아오기 */
+function parseBySms() {
+    const smsMessage = $("#smsMessage").val();
+
+    const dateRegex = /(\d{2}\/\d{2})/;
+    const timeRegex = /(\d{2}:\d{2})/;
+    const amountRegex = /(\d+,\d+)/;
+    const payeeRegex = /원\s(.*?)\s잔액/;
+
+    const smsDate = smsMessage.match(dateRegex)[1];
+    const smsTime = smsMessage.match(timeRegex)[1];
+    const transAmount = smsMessage.match(amountRegex)[1];
+    const transPayee = smsMessage.match(payeeRegex)[1];
+
+    console.log("거래일자: " + smsDate);
+    console.log("거래시간: " + smsTime);
+    console.log("거래금액: " + transAmount);
+    console.log("거래처: " + transPayee);
+
+    const transDate = convertSmsDateFormat(smsDate, smsTime);
+    console.log("찐 거래일시: " + transDate);
+
+    // 거래일자 포맷 맞추기 
+    let form = `
+        <form action="/secretary/cashbook/trans/setTrans" method="post">
+        <div class="mb-3">
+        <label class="form-label" for="transDate">거래일자</label>
+        <input class="form-control" type="datetime-local" name="transDate" value="${transDate}" id="transDateSms">
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="transPayee">거래내용</label>
+            <input type="text" name="transPayee" id="transPayeeSms" value="${transPayee}" class="form-control phone-mask" placeholder="거래처를 입력하세요">
+            <div>
+                <p id="transPayeeErrorSms"></p>
+            </div>
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="transAmount">거래금액</label>
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="basic-addon11">₩</span>
+                <input type="text" name="transAmount" id="transAmountSms" value="${transAmount}" class="form-control" placeholder="금액을 입력하세요" aria-label="Username" aria-describedby="basic-addon11">
+            </div>
+            <div>
+                <p id="transAmountErrorSms"></p>
+            </div>
+        </div>
+    
+    `;
+
+    let footer = `
+    <button type="button" class="btn btn-success" id="fromSmsToForm" onclick="fromSmsToForm();">추출하기</button>
+    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">닫기</button>
+    </form>
+    `;
+
+    $('#smsModalFooter').html(footer);
+    $('#parseBySmsResultDiv').html(form);
+}
+
+/** SMS 거래일자 포맷 맞추기 */
+function convertSmsDateFormat(date, time) {
+    const currentYear = 2023;
+    
+    // "MM/DD" -> "YYYY-MM-DD" 
+    const formattedDate = `${currentYear}-${date.split('/').join('-')}`;
+    
+    // "HH:MM" -> "T11:30:00"
+    const formattedTime = `T${time}:00`;
+    
+    const resultFormat = `${formattedDate}${formattedTime}`;
+    
+    return resultFormat;
+  }
+
+
+  /** 직접입력 폼에 SMS 추출 내용 넣기 */
+  function fromSmsToForm() {
+    // SMS 모달 값 추출
+    let transDateSms = $('#transDateSms').val();
+    let transPayeeSms = $('#transPayeeSms').val();
+    let transAmountSms = $('#transAmountSms').val();
+
+    console.log(transDateSms, transPayeeSms, transAmountSms);
+
+    // 본문에 값 설정
+    $('#transDate').val(transDateSms);
+    $('#transPayee').val(transPayeeSms);
+    $('#transAmount').val(transAmountSms);
+
+    // 모달 닫기
+    $('#inputBySmsModal').modal('hide');
+  }

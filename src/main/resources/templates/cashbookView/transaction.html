@@ -618,9 +618,9 @@
                       <!-- 입력버튼*3 -->
                       <label class="form-label" for="basic-default-apiInput">빠른 입력</label>
                       <div class="transInputBt mb-4">
-                        <button type="button" class="btn btn-outline-success" onclick="inputBtImg()">사진</button>
-                        <button type="button" class="btn btn-outline-success" onclick="inputBtVoice()">음성</button>
-                        <button type="button" class="btn btn-outline-success" onclick="inputBtSms()">SMS</button>
+                        <button type="button" class="btn btn-outline-success" onclick="inputByImg()">사진</button>
+                        <button type="button" class="btn btn-outline-success" onclick="inputByVoice()">음성</button>
+                        <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#inputBySmsModal">SMS</button>
                       </div>
                       <h4>직접 입력</h4>
                       <form>
@@ -938,6 +938,33 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-primary" data-bs-dismiss="modal">확인</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- /상세 목록 모달 -->
+
+    <!-- SMS 입력 모달 -->
+    <div class="modal fade" id="inputBySmsModal" data-bs-backdrop="static" tabindex="-1" style="display: none;" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel1">SMS로 내역 입력하기</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col mb-3">
+                <label for="smsMessage" class="form-label">SMS</label>
+                <input type="text" id="smsMessage" class="form-control" placeholder="카드사 결제 메세지를 붙여넣으세요.">
+              </div>
+            </div>
+            <div id="parseBySmsResultDiv" class="row">
+            </div>
+          </div>
+          <div id="smsModalFooter" class="modal-footer">
+            <button type="button" class="btn btn-success" onclick="parseBySms();">메세지 인식하기</button>
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">닫기</button>
           </div>
         </div>
       </div>
