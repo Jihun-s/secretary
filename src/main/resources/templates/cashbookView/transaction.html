@@ -983,11 +983,10 @@
                   <div class="row">
                       <div class="col mb-3">
                           <label for="imgSubmitForm" class="form-label">영수증 사진 업로드</label>
-                          <form enctype="multipart/form-data" id="imgSubmitForm" method="post" th:action="@{/cashbook/trans/inputByImg}">
+                          <form enctype="multipart/form-data" id="imgSubmitForm" method="post" th:action="@{/cashbook/trans/imgSubmitForm}">
                               <div class="mb-3">
                                   <input class="form-control" id="receiptUpload" type="file" />
                               </div>
-                              <!-- 구분선 -->
                             </div>
                           </div>
                         </div>

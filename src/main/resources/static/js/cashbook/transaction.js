@@ -21,6 +21,10 @@ $(document).ready(function() {
     $('body').on('click', '#setTransBt', setTrans);
     // 모달 검증 후 내역 수정
     $('body').on('click', '#setTransBtModal', updateTrans); 
+    
+    // 영수증 사진 첨부
+    $('#imgSubmitBt').click(submitReceiptImg);
+
 
    // 거래유형 클릭 이벤트 (대분류 출력)
    $('body').on('change', "input[name='transType']", function() {
@@ -1462,4 +1466,35 @@ function convertSmsDateFormat(date, time) {
 
     // 모달 닫기
     $('#inputBySmsModal').modal('hide');
+  }
+
+
+  ////////////////////////////////////////////////////////////////////////////////////////////////
+
+  /** 영수증 사진 서버로 보내기 */
+  function submitReceiptImg() {
+    let fileInput = $('#receiptUpload').get(0); // jQuery에서 DOM 객체 가져오기
+    if (!fileInput.files || !fileInput.files.length) {
+        alert('사진을 첨부하세요.');
+        return;
+    }
+
+    let formData = new FormData();
+    formData.append('file', fileInput.files[0]);
+
+    fetch('/secretary/detect-text', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.text())
+    .then(data => {
+        handleOcrResult(data);
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+  }
+
+  function handleOcrResult(response) {
+    alert("서버가 읽어준 영수증 텍스트:" + response);
   }
