@@ -62,5 +62,18 @@ public class LivingUsedServiceImpl implements LivingUsedService {
 		return livingUsedDAO.getAllUsedItems();
 	}
 
-	
+	@Override
+	public List<LivingGoods> getLivingGoodsNotAccessedForDays(int days) {
+	    return livingUsedDAO.getLivingGoodsNotAccessedForDays(days);
+	}
+
+	@Override
+	public int deleteById(int fridgeUsedId) {
+		return livingUsedDAO.deleteById(fridgeUsedId);
+	}
+
+	@Override
+	public void deleteAll(int familyId) {
+		livingUsedDAO.deleteAll(familyId);
+	}
 }

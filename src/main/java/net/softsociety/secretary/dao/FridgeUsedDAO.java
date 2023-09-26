@@ -16,4 +16,8 @@ public interface FridgeUsedDAO {
 	List<FridgeFood> getUnusedFoods();
 
 	List<FridgeFood> getFoodsNotAccessedForDays(int days);
+
+	int deleteById(int fridgeUsedId);
+
+	void deleteAll(int familyId);
 }

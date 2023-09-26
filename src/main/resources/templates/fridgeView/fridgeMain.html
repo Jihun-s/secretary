@@ -63,6 +63,48 @@
         <script th:src="@{/js/fridge/speechscript.js}"></script>
         <script th:src="@{/assets/vendor/libs/jquery/jquery.js}"></script>
         <style>
+            .delete-all-consumption-text {
+                cursor: pointer; /* 마우스 커서를 손가락 모양으로 변경 */
+                transition: color 0.3s; /* 색상 변화에 애니메이션 효과 추가 */
+            }
+
+            .delete-all-consumption-text:hover {
+                color: red; /* 마우스를 올렸을 때의 텍스트 색상 */
+            }
+
+            .consumption-item {
+                position: relative; /* 이렇게 설정하면 안에 있는 child elements에 position: absolute;를 적용할 수 있습니다. */
+                padding-right: 30px; /* X 문자를 위한 우측 패딩 */
+                margin-right: 10px;
+            }
+
+            .delete-consumption-text {
+                position: absolute;
+                top: 50%;
+                right: 10px;
+                transform: translateY(-50%); /* 이 속성은 X 문자를 세로로 중앙에 위치하게 합니다. */
+                cursor: pointer;
+                font-size: 20px; /* 폰트 사이즈 설정 */
+            }
+
+            .delete-consumption-text:hover {
+                color: red; /* 빨간색으로 변경 */
+            }
+            .delete-text {
+                cursor: pointer;
+                font-weight: bold;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 100%;
+                max-width: 50px;
+                height: 100%;
+            }
+
+            .delete-text:hover {
+                color: #c9302c; /* Slightly darker shade of the danger color */
+            }
+
             h3 {
                 white-space: nowrap;
             }
@@ -1219,18 +1261,55 @@
                             let content = '';
                             data.forEach((item) => {
                                 content += `
-                    <div class="consumption-item">
-                        <h5 class="used-food-name">${item.fridgeFoodName}을/를 ${
-                                    item.fridgeQuantityUsed
-                                }개 소비하셨습니다!</h5>
-                        <p class="used-date">${new Date(item.fridgeUsedDate).toLocaleString()}</p>
-                    </div>
-                `;
+        <div class="consumption-item">
+            <h5 class="used-food-name">${item.fridgeFoodName}을/를 ${item.fridgeQuantityUsed}개 소비하셨습니다!</h5>
+            <p class="used-date">${new Date(item.fridgeUsedDate).toLocaleString()}</p>
+            <span class="delete-consumption-text" data-consumption-id="${item.fridgeUsedId}">X</span>
+        </div>
+    `;
                             });
                             $('#consumptionHistoryContainer').html(content); // 해당 id를 갖는 div 내용 갱신
                         },
                     });
                 }
+
+                $(document).on('click', '.delete-consumption-text', function () {
+                    const consumptionId = $(this).data('consumption-id');
+                    if (confirm('정말 이 소비 이력을 삭제하시겠습니까?')) {
+                        // 서버에 소비 이력 삭제 요청
+                        $.ajax({
+                            url: 'fridgeUsed/deleteConsumptionHistory',
+                            type: 'POST',
+                            data: { fridgeUsedId: consumptionId },
+                            success: function (response) {
+                                alert('소비 이력이 삭제되었습니다.');
+                                refreshConsumptionHistory();
+                            },
+                            error: function (error) {
+                                console.log('Error deleting consumption:', error);
+                                alert('소비 이력 삭제에 실패하였습니다.');
+                            },
+                        });
+                    }
+                });
+
+                $(document).on('click', '.delete-all-consumption-text', function () {
+                    const totalItems = $('.consumption-item').length;
+                    if (confirm(`총 ${totalItems}개의 소비 이력을 전부 삭제하시겠습니까?`)) {
+                        $.ajax({
+                            url: 'fridgeUsed/deleteAllConsumptionHistory',
+                            type: 'POST',
+                            success: function (response) {
+                                alert('모든 소비 이력이 삭제되었습니다.');
+                                $('#consumptionHistoryContainer').empty(); // UI에서 모든 항목 제거
+                            },
+                            error: function (error) {
+                                console.log('Error deleting all consumptions:', error);
+                                alert('소비 이력 전체 삭제에 실패하였습니다.');
+                            },
+                        });
+                    }
+                });
 
                 // 사용자가 소비를 할 때 해당 함수를 호출
                 refreshConsumptionHistory();
@@ -1774,7 +1853,7 @@
                                     <span class="mb-3" style="display: inline-block">
                                         <img
                                             style="height: 4rem; width: 4rem; vertical-align: middle"
-                                            th:src="@{/images/ck8.png}"
+                                            th:src="@{/images/fridgeimg/노랑냉장고.jpg}"
                                         />
                                         <h1 id="fName" style="display: inline; vertical-align: middle">전체 냉장고</h1>
                                     </span>
@@ -1793,7 +1872,11 @@
                                     </div>
                                     <h3>소비 이력</h3>
                                     <div class="card mb-4">
-                                        <div class="card-body">
+                                        <div class="card-body" style="padding-top: 5px">
+                                            <div style="text-align: right">
+                                                <span class="delete-all-consumption-text">전체 삭제</span>
+                                                <hr style="margin-top: 0px" />
+                                            </div>
                                             <div id="consumptionHistoryContainer"></div>
                                         </div>
                                     </div>

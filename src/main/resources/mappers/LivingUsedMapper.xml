@@ -14,4 +14,24 @@
 	    FROM Secretary_Living_Used
 	    ORDER BY living_used_date DESC
 	</select>
+	
+	<select id="getLivingGoodsNotAccessedForDays" resultType="LivingGoods" parameterType="int">
+	    SELECT g.item_id, g.item_name, COALESCE(MAX(u.living_used_date), g.item_input_date) as reference_date
+	    FROM SECRETARY_LIVING_GOODS g
+	    LEFT JOIN SECRETARY_Living_Used u ON g.item_id = u.item_id
+	    GROUP BY g.item_id, g.item_name, g.item_input_date
+	    HAVING (SYSDATE - COALESCE(MAX(u.living_used_date), g.item_input_date)) >= #{days}
+	</select>
+	
+	<!-- 소비 이력 삭제 -->
+	<delete id="deleteById" parameterType="int">
+		DELETE FROM Secretary_Living_Used
+		WHERE living_used_id = #{livingUsedId}
+	</delete>
+	
+	<!-- 소비 이력 전체 삭제 -->
+	<delete id="deleteAll" parameterType="int">
+	    DELETE FROM Secretary_Living_Used
+	    WHERE family_id = #{familyId}
+	</delete>
 </mapper>

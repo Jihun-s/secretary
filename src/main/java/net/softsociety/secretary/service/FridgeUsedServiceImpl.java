@@ -64,6 +64,16 @@ public class FridgeUsedServiceImpl implements FridgeUsedService {
 	public List<FridgeFood> getFoodsNotAccessedForDays(int days) {
 		return fridgeUsedDAO.getFoodsNotAccessedForDays(days);
 	}
+
+	@Override
+	public int deleteById(int fridgeUsedId) {
+		return fridgeUsedDAO.deleteById(fridgeUsedId);
+	}
+
+	@Override
+	public void deleteAll(int familyId) {
+		fridgeUsedDAO.deleteAll(familyId);
+	}
 	
 
 }
