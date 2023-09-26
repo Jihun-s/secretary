@@ -56,100 +56,117 @@ function numberWithCommas(x) {
 ///////////////////////////////////////////////////////////////////////////////
 
 let listHtml = `
-                    <div class="row">
-                      <div class="col">
-                        <h5 class="card-header">이달의 내역<span id="transCntMonth"></span>건</h5>
-                      </div>
-                      <div class="col">
-                        <div class="date-selector">
-                          <i id="prevYear" class="tf-icon bx bx-chevron-left-circle bx-sm" style="cursor: pointer;"></i>
-                          <span id="nowYear"></span>
-                          <i id="nextYear" class="tf-icon bx bx-chevron-right-circle bx-sm" style="cursor: pointer;"></i>
-                          <br>
-                          <i id="prevMonth" class="tf-icon bx bx-chevron-left-circle bx-sm" style="cursor: pointer;"></i>
-                          <span><span id="nowMonth"></span>월</span>
-                          <i id="nextMonth" class="tf-icon bx bx-chevron-right-circle bx-sm" style="cursor: pointer;"></i>
-                          <button type="button" id="dateReset" class="btn btn-sm rounded-pill btn-outline-primary">오늘</button>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <input type="hidden" value="" id="searchDate">
-                    
-                    <!-- 조건별 보기 -->
-                    <div class="row mb-3">
-                      <!-- 분류랑 정렬 -->
-                      <div id="selectCondition" class="col-6">
-                        <div class="row-6">
-                          <div>
-                            <div class="form-check form-check-inline">
-                              <input class="form-check-input" type="checkbox" id="transSearchCheckIncome" value="수입" checked="true">
-                              <label class="form-check-label" for="transSearchCheckIncome">수입</label> 총 <span id="transSumIncomeMonth"></span>원
-                            </div>
-                            <div class="form-check form-check-inline">
-                              <input class="form-check-input" type="checkbox" id="transSearchCheckExpense" value="지출" checked="true">
-                              <label class="form-check-label" for="transSearchCheckExpense">지출</label> 총 <span id="transSumExpenseMonth"></span>원
-                            </div>
-                            <div class="form-check form-check-inline form-switch mb-2">
-                              <input class="form-check-input" type="checkbox" id="transSearchCheckUserId">
-                              <label class="form-check-label" for="transSearchCheckUserId">나의 내역만 보기</label>
-                            </div>  
-                          </div>
-                        </div>
-                        <div class="row-6">
-                          <div id="transSearchCategoriesDiv" class="mb-3">
-                            <label class="form-label" for="transCategory">카테고리</label>
-                            <div>
-                              <div id="transSearchCategory1Div">
-                                <select id="cate1NameSearch" name="cate1Name" class="form-select">
-                                </select>
-                              </div>
-                              <div id="transSearchCategory2Div">
-                                <select id="cate2NameSearch" name="cate2Name" class="form-select">
-                                </select>
-                              </div>
-                            </div>  
-                            <div>
-                              <p id="transCategorySearchError"></p> 
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      
-                      <!-- 검색 & 정렬 -->
-                      <div class="col-6">
-                        <label class="form-label" for="search">검색</label>
-                        <div class="input-group input-group-merge">
-                          <select id="searchBy" name="searchBy" class="form-select">
-                            <option value="all" selected>전체</option>
-                            <option value="transPayee">거래내용</option>
-                            <option value="transMemo">거래메모</option>
-                            <option value="transAmount">거래금액</option>
-                          </select>
-                          <span class="input-group-text"><i class="bx bx-search"></i></span>
-                          <input type="text" id="searchWord" name="searchWord" class="form-control" placeholder="검색" aria-label="검색" aria-describedby="검색">
-                          <button class="btn btn-outline-success" id="searchSubmitBt">검색</button>
-                        </div>
-                        <label class="form-label" for="sort">정렬</label>
-                        <div class="input-group input-group-merge">
-                          <select id="sortBy" name="sortBy" class="form-select">
-                            <option value="dateAsc">날짜 오름차순</option>
-                            <option value="dateDesc" selected>날짜 내림차순</option>
-                            <option value="amountAsc">금액 오름차순</option>
-                            <option value="amountDesc">금액 내림차순</option>
-                            <option value="payeeAsc">거래내용 가나다순</option>
-                          </select>
-                        </div>
-                      </div>
+            <!-- 내역 제목 -->
+            <div class="row">
+              <h5 class="card-header">이달의 내역<span id="transCntMonth"></span>건</h5>
+            </div>
 
+            <!-- 내역 조건 -->
+            <div class="row">
+              <!-- 페이징이랑 체크박스 있는 1열 -->
+              <div class="col-md-6">
+                <!-- 월 페이징 -->
+                <div class="row">
+                  <div class="date-selector mt-5 d-flex flex-column align-items-center justify-content-center">
+                    <div>
+                      <i id="prevYear" class="tf-icon bx bx-chevron-left bx-sm" style="cursor: pointer;"></i>
+                      <span class="display-6 mb-4" id="nowYear"></span>
+                      <i id="nextYear" class="tf-icon bx bx-chevron-right bx-sm" style="cursor: pointer;"></i>
                     </div>
-
-                    <!-- 내역 테이블 -->
-                    <div class="table-responsive text-nowrap">
-                      <div id="transListDiv">
-                        <!-- 반복문 들어가는 자리 -->
+                    <div>
+                      <i id="prevMonth" class="tf-icon bx bx-chevron-left bx-sm" style="cursor: pointer;"></i>
+                      <mark><span class="display-5 mt-4" id="nowMonth"></span>월</mark>
+                      <i id="nextMonth" class="tf-icon bx bx-chevron-right bx-sm" style="cursor: pointer;"></i>
+                    </div>
+                    <p><button type="button" id="dateReset" class="mt-2 btn btn-xs rounded-pill btn-outline-primary">오늘</button></p>
+                  </div>
+                </div>
+                <!-- 체크박스 -->
+                <div class="row mt-4">
+                  <div id="selectCondition">
+                    <div class="row-6">
+                      <div>
+                        <div class="form-check form-check-inline">
+                        <input type="hidden" value="" id="searchDate">
+                        <input class="form-check-input" type="checkbox" id="transSearchCheckIncome" value="수입" checked="true">
+                        <label class="form-check-label" for="transSearchCheckIncome">수입</label> 총 <span id="transSumIncomeMonth"></span>원
+                      </div>
+                      <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="transSearchCheckExpense" value="지출" checked="true">
+                        <label class="form-check-label" for="transSearchCheckExpense">지출</label> 총 <span id="transSumExpenseMonth"></span>원
+                      </div>
+                      <div class="form-check form-check-inline form-switch mb-2 mt-2">
+                        <input class="form-check-input" type="checkbox" id="transSearchCheckUserId">
+                        <label class="form-check-label" for="transSearchCheckUserId">나의 내역만 보기</label>
+                      </div>  
+                    </div>
+                  </div>
+                </div>
+                </div>
+              </div>
+              <!-- select 있는 2열 -->
+              <div class="col-md-6">
+                <!-- 카테고리 -->
+                <div class="row">
+                  <div id="selectCondition">
+                    <div class="row-6">
+                      <div id="transSearchCategoriesDiv" class="mb-3">
+                        <label class="form-label" for="transCategory">카테고리</label>
+                        <div>
+                          <div id="transSearchCategory1Div">
+                            <select id="cate1NameSearch" name="cate1Name" class="form-select">
+                            </select>
+                          </div>
+                          <div id="transSearchCategory2Div">
+                            <select id="cate2NameSearch" name="cate2Name" class="form-select">
+                            </select>
+                          </div>
+                        </div>  
+                        <div>
+                          <p id="transCategorySearchError"></p> 
+                        </div>
                       </div>
                     </div>
+                  </div>
+                </div>
+                <!-- 정렬 -->
+                <div class="row mb-3">
+                  <label class="form-label" for="sort">정렬</label>
+                  <div class="input-group input-group-merge">
+                    <select id="sortBy" name="sortBy" class="form-select">
+                      <option value="dateAsc">날짜 오름차순</option>
+                      <option value="dateDesc" selected>날짜 내림차순</option>
+                      <option value="amountAsc">금액 오름차순</option>
+                      <option value="amountDesc">금액 내림차순</option>
+                      <option value="payeeAsc">거래내용 가나다순</option>
+                    </select>
+                  </div>
+                </div>
+                <!-- 검색 -->
+                <div class="row">
+                  <label class="form-label" for="search">검색</label>
+                  <div class="input-group input-group-merge">
+                    <select id="searchBy" name="searchBy" class="form-select">
+                      <option value="all" selected>전체</option>
+                      <option value="transPayee">거래내용</option>
+                      <option value="transMemo">거래메모</option>
+                      <option value="transAmount">거래금액</option>
+                    </select>
+                    <span class="input-group-text"><i class="bx bx-search"></i></span>
+                    <input type="text" id="searchWord" name="searchWord" class="form-control" placeholder="검색" aria-label="검색" aria-describedby="검색">
+                    <button class="btn btn-outline-success" id="searchSubmitBt">검색</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- 내역 테이블 -->
+            <div class="row">
+              <div class="table-responsive text-nowrap">
+                <div id="transListDiv">
+                  <!-- 반복문 들어가는 자리 -->
+                </div>
+              </div>
+            </div>
 `;
 
 
