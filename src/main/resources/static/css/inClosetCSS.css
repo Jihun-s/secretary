@@ -10,7 +10,13 @@
 body {
   font-family: "NanumSquareNeo-Variable", sans-serif;
 }
-
+#scrollCss{
+	position:relative;
+	text-align:center;
+	/* max-height: 40em; 스크롤 가능한 최대 높이를 지정 (필요에 따라 조정) */
+ 	overflow-y: auto; /* 세로 스크롤을 활성화 */
+ 	height:40rem;	
+}
 
 /*옷찾기 Search 버튼*/
 #clothesSearchbtn{
@@ -18,14 +24,13 @@ body {
 	border-color: rgba(223,132,166,255);
 }
 
-/* 의류리스트 이미지*/
-#whatsInCloset{
-	text-align:center;
-	max-height: 40em; /* 스크롤 가능한 최대 높이를 지정 (필요에 따라 조정) */
- 	overflow-y: auto; /* 세로 스크롤을 활성화 */
- 	height:34rem;
+#accordionIcon{
+	margin-left:1em;
+	width:95%
 }
+
 #whatsInCloset > div{
+	width:15.2em;
 	margin-right:1em;
 	margin-bottom:1em;
 	border-color: pink; 
@@ -36,7 +41,7 @@ body {
 	position:relative;
 }
 #whatsInCloset img{
-	width:14.5em;
+	width:15.1em;
 	height:10em;
 }
 #whatsInCloset div:hover{

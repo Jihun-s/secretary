@@ -50,14 +50,16 @@ body {
 } /*추가버튼 누르면 생기는 옷장이름 입력칸*/
 
 #ManageCloset{
-	display:inline-block; align: center;
-	height: 250px; padding-left: 2.2em;
-	overflow-y: auto; /* 세로 스크롤을 활성화합니다. */
     position: relative; 
+	text-align: center;
+	height: 250px; 
+	overflow-y: auto; /*세로 스크롤을 활성화합니다.*/
 }
 #ManageCloset table{
+	margin-left:1.4em;	
 	margin-bottom: 2.2em;
 }
+
 #ManageCloset p{
 	margin-bottom: 0; text-align:center;
 }

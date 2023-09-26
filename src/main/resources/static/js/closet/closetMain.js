@@ -3,6 +3,7 @@
  */
 
  $(document).ready(function(){
+	const ps = new PerfectScrollbar('#ManageCloset');
 	let closetNum = 0; //전체 옷장
 	
 // !!!!!!!!!!!!!!!!! 	알림 기능
