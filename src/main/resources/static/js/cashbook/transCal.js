@@ -56,7 +56,7 @@ function numberWithCommas(x) {
 ///////////////////////////////////////////////////////////////////////////////
 
 let listHtml = `
-                    <div class="row">
+                        <div class="row">
                       <div class="col">
                         <h5 class="card-header">이달의 내역<span id="transCntMonth"></span>건</h5>
                       </div>
