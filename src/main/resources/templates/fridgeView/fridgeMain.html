@@ -278,6 +278,18 @@
             .used-date {
                 font-size: 12px;
             }
+
+            @font-face {
+                font-family: 'NanumSquareNeo-Variable';
+                src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_11-01@1.0/NanumSquareNeo-Variable.woff2')
+                    format('woff2');
+                font-weight: normal;
+                font-style: normal;
+            }
+
+            body {
+                font-family: 'NanumSquareNeo-Variable', sans-serif;
+            }
         </style>
         <script>
             const DEFAULT_CATEGORIES = ['일반', '야채', '생선', '육류', '과일'];
@@ -1873,15 +1885,31 @@
                                         <h1 id="fName" style="display: inline; vertical-align: middle">전체 냉장고</h1>
                                     </span>
                                     <div class="card mb-4">
-                                        <div class="d-flex">
-                                            <button class="btn btn-sm btn-info flex-fill" id="editButton" type="button">
+                                        <!-- 버튼 그룹 시작 -->
+                                        <div
+                                            class="d-flex"
+                                            style="position: absolute; top: 0; left: 0; right: 0; z-index: 1"
+                                        >
+                                            <!-- 절대 위치 설정 및 상단에 딱 붙게 설정 -->
+                                            <button
+                                                class="btn btn-sm btn-primary flex-fill"
+                                                id="editButton"
+                                                type="button"
+                                            >
                                                 우리집 냉장고 편집
                                             </button>
-                                            <button class="btn btn-sm btn-warning flex-fill" id="toggleButton">
+                                            <button class="btn btn-sm btn-info flex-fill" id="toggleButton">
                                                 냉동실 보기
                                             </button>
                                         </div>
-                                        <div class="card-body" id="fridgeContainer">
+                                        <!-- 버튼 그룹 끝 -->
+
+                                        <div
+                                            class="card-body"
+                                            id="fridgeContainer"
+                                            style="position: relative; padding-top: 40px"
+                                        >
+                                            <!-- position: relative 추가, padding-top 추가해 버튼 그룹과의 겹침을 방지 -->
                                             <!-- 냉장고 이미지들이 이곳에 추가됩니다. -->
                                         </div>
                                     </div>
@@ -2234,133 +2262,67 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="d-flex">
-                                        <div class="btn-group flex-fill position-relative">
-                                            <!-- position-relative 추가 -->
-                                            <button
-                                                class="btn btn-sm btn-info no-wrap-text"
-                                                id="categoryDisplayButton"
-                                                style="pointer-events: none"
-                                                type="button"
-                                            >
-                                                카테고리
-                                            </button>
-                                            <!-- 카테고리 수정 아이콘 위치 변경 시작 -->
-                                            <img
-                                                src="images/fridgeimg/ModifyName.png"
-                                                alt="카테고리 수정"
-                                                class="category-editIcon position-absolute"
-                                                style="top: 0; left: 0; height: 25px; width: 25px; z-index: 999"
-                                            />
-                                            <!-- 카테고리 수정 아이콘 위치 변경 끝 -->
-                                            <button
-                                                aria-expanded="false"
-                                                class="btn btn-sm btn-info dropdown-toggle dropdown-toggle-split"
-                                                data-bs-toggle="dropdown"
-                                                type="button"
-                                            >
-                                                <span class="visually-hidden">Toggle Dropdown</span>
-                                            </button>
-                                            <ul class="dropdown-menu categoryDropdown"></ul>
-                                        </div>
-
-                                        <!-- 카테고리 편집 모달 시작 -->
-                                        <div class="modal" tabindex="-1" id="categoryEditModal">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title">카테고리 편집</h5>
-                                                        <button
-                                                            type="button"
-                                                            class="btn-close"
-                                                            data-bs-dismiss="modal"
-                                                            aria-label="Close"
-                                                        ></button>
-                                                    </div>
-                                                    <div class="modal-body category-modify-modal">
-                                                        <!-- 여기에 카테고리 리스트를 표시합니다 -->
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button
-                                                            type="button"
-                                                            class="btn btn-secondary"
-                                                            data-bs-dismiss="modal"
-                                                        >
-                                                            닫기
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- 카테고리 편집 모달 끝 -->
-                                        <div class="btn-group flex-fill" style="margin: 0 3px">
-                                            <button
-                                                class="btn btn-sm btn-info no-wrap-text"
-                                                id="sortOrderButton"
-                                                style="pointer-events: none"
-                                                type="button"
-                                            >
-                                                정렬순서
-                                            </button>
-                                            <button
-                                                aria-expanded="false"
-                                                class="btn btn-sm btn-info dropdown-toggle dropdown-toggle-split"
-                                                data-bs-toggle="dropdown"
-                                                type="button"
-                                            >
-                                                <span class="visually-hidden">Toggle Dropdown</span>
-                                            </button>
-                                            <ul class="dropdown-menu">
-                                                <li>
-                                                    <a
-                                                        class="dropdown-item"
-                                                        href="javascript:void(0);"
-                                                        onclick="updateSortOrder('유효기간 순')"
-                                                        >유효기간 순</a
-                                                    >
-                                                </li>
-                                                <li>
-                                                    <a
-                                                        class="dropdown-item"
-                                                        href="javascript:void(0);"
-                                                        onclick="updateSortOrder('유효기간 역순')"
-                                                        >유효기간 역순</a
-                                                    >
-                                                </li>
-                                                <li>
-                                                    <a
-                                                        class="dropdown-item"
-                                                        href="javascript:void(0);"
-                                                        onclick="updateSortOrder('입력 날짜 순')"
-                                                        >입력 날짜 순</a
-                                                    >
-                                                </li>
-                                                <li>
-                                                    <a
-                                                        class="dropdown-item"
-                                                        href="javascript:void(0);"
-                                                        onclick="updateSortOrder('입력 날짜 역순')"
-                                                        >입력 날짜 역순</a
-                                                    >
-                                                </li>
-                                            </ul>
-                                        </div>
-
-                                        <button
-                                            class="btn btn-sm btn-warning no-wrap-text"
-                                            id="foodItemModify"
-                                            type="button"
-                                        >
-                                            편집
-                                        </button>
-                                    </div>
                                     <!-- Fridge Item Display -->
                                     <div class="card mb-4 food-item-box">
-                                        <div class="card-body foodbox">
+                                        <div class="card-body foodbox" style="position: relative">
+                                            <!-- 버튼 그룹 시작 -->
+                                            <div class="d-flex" style="position: absolute; top: 0; left: 0; right: 0">
+                                                <!-- 절대 위치 설정 및 상단에 딱 붙게 설정 -->
+                                                <!-- 마진을 조정하기 위해 mb-2를 추가 -->
+                                                <!-- 카테고리 버튼 그룹 -->
+                                                <div class="btn-group flex-fill">
+                                                    <button
+                                                        type="button"
+                                                        class="btn btn-outline-primary dropdown-toggle"
+                                                        data-bs-toggle="dropdown"
+                                                        id="categoryDisplayButton"
+                                                    >
+                                                        카테고리
+                                                    </button>
+                                                    <ul class="dropdown-menu categoryDropdown">
+                                                        <!-- 이곳에 카테고리가 동적으로 삽입될 것입니다. -->
+                                                    </ul>
+                                                    <img
+                                                        src="images/fridgeimg/ModifyName.png"
+                                                        alt="카테고리 수정"
+                                                        class="category-editIcon position-absolute"
+                                                        style="
+                                                            top: 0;
+                                                            right: 0;
+                                                            height: 25px;
+                                                            width: 25px;
+                                                            z-index: 999;
+                                                        "
+                                                    />
+                                                </div>
+                                                <!-- 정렬순서 버튼 그룹 -->
+                                                <div class="btn-group flex-fill" style="margin: 0 3px">
+                                                    <button
+                                                        type="button"
+                                                        class="btn btn-outline-primary dropdown-toggle"
+                                                        data-bs-toggle="dropdown"
+                                                        id="sortOrderButton"
+                                                    >
+                                                        정렬순서
+                                                    </button>
+                                                    <ul class="dropdown-menu">
+                                                        <!-- 정렬 순서 항목들... -->
+                                                    </ul>
+                                                </div>
+                                                <!-- 편집 버튼 -->
+                                                <button
+                                                    class="btn btn-sm btn-outline-warning no-wrap-text"
+                                                    id="foodItemModify"
+                                                    type="button"
+                                                >
+                                                    편집
+                                                </button>
+                                            </div>
+                                            <!-- 버튼 그룹 끝 -->
                                             <div
                                                 class="food-items-container"
                                                 id="foodItemsContainer"
-                                                style="padding-right: 20px"
+                                                style="padding-right: 20px; margin-top: 20px"
                                             ></div>
                                         </div>
                                     </div>
