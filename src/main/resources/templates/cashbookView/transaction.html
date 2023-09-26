@@ -618,7 +618,7 @@
                       <!-- 입력버튼*3 -->
                       <label class="form-label" for="basic-default-apiInput">빠른 입력</label>
                       <div class="transInputBt mb-4">
-                        <button type="button" class="btn btn-outline-success" onclick="inputByImg()">사진</button>
+                        <button type="button" class="btn btn-outline-success"  data-bs-toggle="modal" data-bs-target="#inputByImgModal">사진</button>
                         <button type="button" class="btn btn-outline-success" onclick="inputByVoice()">음성</button>
                         <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#inputBySmsModal">SMS</button>
                       </div>
@@ -970,6 +970,35 @@
       </div>
     </div>
 
+    
+    <!-- 이미지 입력 모달 -->
+    <div class="modal fade" id="inputByImgModal" data-bs-backdrop="static" tabindex="-1" style="display: none;" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel1">사진으로 내역 입력하기</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                  <div class="row">
+                      <div class="col mb-3">
+                          <label for="imgSubmitForm" class="form-label">영수증 사진 업로드</label>
+                          <form enctype="multipart/form-data" id="imgSubmitForm" method="post" th:action="@{/cashbook/trans/inputByImg}">
+                              <div class="mb-3">
+                                  <input class="form-control" id="receiptUpload" type="file" />
+                              </div>
+                              <!-- 구분선 -->
+                            </div>
+                          </div>
+                        </div>
+                        <div id="imgModalFooter" class="modal-footer">
+                          <button class="btn btn-success" id="imgSubmitBt" type="button">영수증 인식하기</button>
+                          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">닫기</button>
+                        </div>
+                      </form>
+          </div>
+      </div>
+    </div>
     <!-- / Layout wrapper -->
 
     <!-- Core JS -->
