@@ -438,9 +438,10 @@ function chartDraw(dataValue){
 							<li>&nbsp;&nbsp;'+translatedCategory+'</li>\
 							<li>&nbsp;&nbsp;'+ translatedMaterial+'</li>\
 							<li>&nbsp;&nbsp;'+seasonresult+'</td>\
-							<li>&nbsp;&nbsp;'+clothes.clothesSize+'</li></ul><br>\
+							<li>&nbsp;&nbsp;'+clothes.clothesSize+'</li>\
+							<li>&nbsp;&nbsp;&nbsp;<button class="btn-pink" style="cursor:auto;">착용횟수</button></li>\
+							<li>&nbsp;&nbsp;'+clothes.clothesPutOnCnt+'번</li></ul><br>\
 							<ul><li><button class="btn-pink" style="cursor:auto;">관리방법</button>&nbsp;&nbsp;'+manageTip+'</li></ui><br>'
-
 				let footer = '<br><div id="clothesFooter"><button class="btn btn-primary" style="background-color: rgba(223,132,166,255); border-color: rgba(223,132,166,255);"\
 								onclick="laundryIn('+clothes.closetNum+','+clothes.clothesNum+')">세탁물 체크</button>\
 							&nbsp;&nbsp;<button type="button" class="btn btn-primary" style="background-color: rgba(223,132,166,255); border-color: rgba(223,132,166,255); float:right;" \

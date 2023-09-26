@@ -119,6 +119,12 @@
 			where closet_num = #{closetNum} and clothes_num = #{clothesNum}
 </update>
 
+<!-- 세탁물 체크하면 착용횟수 증가 -->
+<update id="plusPutOnCnt" parameterType="Clothes">
+	update Secretary_clothes set clothes_putoncnt = clothes_putoncnt + 1
+		where closet_num = #{closetNum} and clothes_num = #{clothesNum}
+</update>
+
 <!-- 세탁물 다시 옷장으로 -->
 <update id="laundryOut" parameterType="hashmap">
 	update Secretary_clothes set clothes_laundry = 0

@@ -18,4 +18,5 @@ public class Clothes {
 	String clothesImg;
 	String clothesOriginalFile;
 	boolean clothesLaundry;
+	int clothesPutOnCnt;
 }

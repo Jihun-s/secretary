@@ -40,6 +40,8 @@ public interface ClosetDAO {
 	
 	//세탁물 체크
 	void laundryIn(Clothes clothes);
+	//세탁물 체크하면 착용횟수 증가
+	void plusPutOnCnt(Clothes clothes);
 	//세탁물 다시 옷장으로
 	void laundryOut(HashMap<String, Integer> map);
 	

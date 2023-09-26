@@ -121,6 +121,12 @@ public class ClosetServiceImpl implements ClosetService {
 		dao.laundryIn(clothes);
 	}
 
+	//세탁물 체크하면 착용횟수 증가
+	@Override
+	public void plusPutOnCnt(Clothes clothes) {
+		dao.plusPutOnCnt(clothes);
+	}
+
 	//세탁물 다시 옷장으로
 	@Override
 	public void laundryOut(int closetNum, int clothesNum) {

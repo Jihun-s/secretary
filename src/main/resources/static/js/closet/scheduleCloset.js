@@ -35,7 +35,7 @@ $(document).ready(function () {
       let schMonth = date.getMonth() + 1;
   
       // loadSchedule 함수 호출
-      //loadSchedule(schYear, schMonth+1, "일자별");
+      loadSchedule(schYear, schMonth, "일자별");
   
       $.ajax({
         url: "/secretary/schedule/loadSch",
@@ -134,6 +134,77 @@ for (var i = 0; i < rowsWithDate.length; i++) {
 
 });//document.ready
 
+
+/** 일정 목록 불러오기 */
+function loadSchedule(schYear, schMonth, groupBy) {
+  console.log(schYear + "년 " + schMonth + "월 " + groupBy + "로 일정을 불러올게요");
+
+  $.ajax({
+      url: '/secretary/schedule/loadSchList',
+      method: 'GET',
+      data: { schYear: schYear, schMonth: schMonth },
+      dataType: 'JSON',
+      success: function(data) {
+          let html = "";
+          // 일정을 schStartYmd 기준으로 그룹화
+          let groupedByDate = {};
+          data.forEach(sch => {
+             if (!groupedByDate[sch.schStartYmd]) {
+                  groupedByDate[sch.schStartYmd] = [];
+               }
+               groupedByDate[sch.schStartYmd].push(sch);
+          });
+
+         // 그룹화된 데이터를 기반으로 HTML 생성
+         for (let date in groupedByDate) {
+              html += `<br><small class="text-light fw-semibold">${date}</small>`;
+              groupedByDate[date].forEach(sch => {
+                 html += `
+                    <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                     <a href="javascript:openDetailModal(${sch.schId});">
+                      <div>
+                      <span class="badge rounded-pill ${getBadgeClass(sch.schType, sch.schCate)}">${sch.schCate}</span>
+                          ${convertTimeToKor(sch.schStartHm)}&nbsp;${sch.schContent}
+                      </div>
+                      </a>
+                   <i class="bx bx-x" style="cursor: pointer;" onclick="deleteSch(${sch.schId});"></i>
+                   </div>
+                      `;
+                  });
+              } 
+
+          $("#schListDiv").html(html);
+      },
+      error: function(e) {
+          alert(JSON.stringify(e));
+          alert('일정 목록 서버 전송 실패');
+      }
+  });
+}
+
+// YYYY-MM-DD' 'HH24:MI:SS -> HH24시
+function convertTimeToKor(dateTimeStr) {
+  let hour = dateTimeStr.slice(0, 2);
+
+  return `${hour}시`;
+}
+
+/** 일정 목록 뱃지 색 지정 */
+function getBadgeClass(type, cate) {
+  let classes = {
+      '일정': 'bg-primary',
+      '냉장고': 'bg-warning',
+      '생활용품': 'bg-info',
+      '옷장': 'bg-label-danger',
+      '가계부': 'bg-success'
+  };
+
+  if (type === '일정' && (cate === '명절' || cate === '공휴일')) {
+      return 'bg-danger';
+  }
+
+  return classes[type] || 'bg-primary';
+}
 
 /** schType -> schCate <option> 동적 변경 */ 
 function updateSchCateOptions(schType, schCate, triggerId) {

@@ -63,6 +63,9 @@ public interface ClosetService {
 			String clothesFromStoreBrand, String clothesFromStoreCategory);
 	//웹에서 찾기 - 옷 정보
 	ClothesFromStore readClothesFromStore(String imgUrl);
+	
+	//세탁물 체크하면 착용횟수 증가
+	void plusPutOnCnt(Clothes clothes);
 
 	
 }

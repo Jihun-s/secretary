@@ -293,6 +293,7 @@ public class ClosetController {
 		log.debug("laundryIn 매핑!");
 		Clothes clothes = service.findClothes(closetNum, clothesNum);
 		service.laundryIn(clothes);
+		service.plusPutOnCnt(clothes);
 	}
 	
 	//세탁물 다시 옷장으로
