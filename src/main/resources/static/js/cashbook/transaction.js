@@ -148,6 +148,27 @@ $(document).ready(function() {
     });
   
 
+    // 영수증 모달 닫히면 입력 값 초기화
+    $("#inputByImgModal").on("hidden.bs.modal", function() {
+        // 입력 필드 초기화
+        $("#transDateImg").val("");
+        $("#transPayeeImg").val("");
+        $("#transAmountImg").val("");
+        
+        // 영수증 파일 초기화
+        $("#receiptUpload").val("");
+        
+        // 인식 field 숨기기
+        $('#parseByImgResultDiv').html("");
+
+        // footer 버튼 바꾸기 
+        let footer = `
+        <button type="button" class="btn btn-primary" onclick="submitReceiptImg();">이미지 인식하기</button>
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">닫기</button>
+        `;
+        $('#smsModalFooter').html(footer);
+    });
+  
 
 
     // 대분류 커스텀 카테고리 추가
@@ -1394,12 +1415,11 @@ function parseBySms() {
     console.log("거래금액: " + transAmount);
     console.log("거래처: " + transPayee);
 
+    // 거래일자 포맷 맞추기 
     const transDate = convertSmsDateFormat(smsDate, smsTime);
     console.log("찐 거래일시: " + transDate);
 
-    // 거래일자 포맷 맞추기 
     let form = `
-        <form action="/secretary/cashbook/trans/setTrans" method="post">
         <div class="mb-3">
         <label class="form-label" for="transDate">거래일자</label>
         <input class="form-control" type="datetime-local" name="transDate" value="${transDate}" id="transDateSms">
@@ -1425,7 +1445,7 @@ function parseBySms() {
     `;
 
     let footer = `
-    <button type="button" class="btn btn-success" id="fromSmsToForm" onclick="fromSmsToForm();">추출하기</button>
+    <button type="button" class="btn btn-success" id="fromSmsToForm" onclick="fromSmsToForm();">입력하기</button>
     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">닫기</button>
     </form>
     `;
@@ -1495,6 +1515,74 @@ function convertSmsDateFormat(date, time) {
     });
   }
 
+  /** 영수증 문자열 정규식으로 파싱하는 함수 */
   function handleOcrResult(response) {
-    alert("서버가 읽어준 영수증 텍스트:" + response);
+    console.log("서버가 읽어준 영수증 텍스트:" + response);
+    
+    // 거래일시 추출
+    let dateMatch = response.match(/(\d{4}-\d{2}-\d{2}) (\d{2}:\d{2})/);
+    let transDate = dateMatch ? `${dateMatch[1]}T${dateMatch[2]}` : null;
+
+    // ','가 포함된 숫자 중 가장 먼저 나오는 숫자 추출
+    let repeatedNumbers = response.match(/(\d{1,3}(,\d{3})*(\.\d+)?)(?:[^\d]+\1){2}/);
+    let transAmount = repeatedNumbers ? repeatedNumbers[1].replace(/,/g, '') : null;
+
+    // "마트"가 포함된 문자열 추출
+    let martMatch = response.match(/Text: ([^\n]*마트[^\n]*)/);
+    let transPayee = martMatch ? martMatch[1] : null;
+
+    console.log('transDate:', transDate);
+    console.log('transAmount:', transAmount);
+    console.log('transPayee:', transPayee);
+
+    // 추출한 문자열 모달에 넣기
+    let form = `
+        <div class="mb-3">
+            <label class="form-label" for="transDate">거래일자</label>
+            <input class="form-control" type="datetime-local" name="transDate" value="${transDate}" id="transDateImg">
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="transPayee">거래내용</label>
+            <input type="text" name="transPayee" id="transPayeeImg" value="${transPayee}" class="form-control phone-mask" placeholder="거래처를 입력하세요">
+            <div>
+                <p id="transPayeeErrorImg"></p>
+            </div>
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="transAmount">거래금액</label>
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="basic-addon11">₩</span>
+                <input type="text" name="transAmount" id="transAmountImg" value="${transAmount}" class="form-control" placeholder="금액을 입력하세요" aria-label="Username" aria-describedby="basic-addon11">
+            </div>
+            <div>
+                <p id="transAmountErrorImg"></p>
+            </div>
+        </div>
+    `;
+
+    let footer = `
+    <button type="button" class="btn btn-success" id="fromImgToForm" onclick="fromImgToForm();">입력하기</button>
+    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">닫기</button>
+    `;
+
+    $('#imgModalFooter').html(footer);
+    $('#parseByImgResultDiv').html(form);
+}
+
+/** 직접입력 폼에 영수증 추출 내용 넣기 */
+function fromImgToForm() {
+    // 영수증 모달 값 추출
+    let transDateImg = $('#transDateImg').val();
+    let transPayeeImg = $('#transPayeeImg').val();
+    let transAmountImg = $('#transAmountImg').val();
+
+    console.log(transDateImg, transPayeeImg, transAmountImg);
+
+    // 본문에 값 설정
+    $('#transDate').val(transDateImg);
+    $('#transPayee').val(transPayeeImg);
+    $('#transAmount').val(transAmountImg);
+
+    // 모달 닫기
+    $('#inputByImgModal').modal('hide');
   }
