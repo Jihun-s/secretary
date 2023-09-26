@@ -113,19 +113,18 @@ public class CashbookTransRestController {
 	
 	/** 내역 삭제 */
 	@PostMapping("deleteTrans")
-	public void deleteTrans(int transId, @AuthenticationPrincipal UserDetails user) {
+	public void deleteTrans(int transId, Model model) {
 		log.debug("삭제할 거래번호:{}", transId);
 		
+		User loginUser = (User) model.getAttribute("loginUser");
 		Transaction trans = new Transaction();
+		trans.setFamilyId(loginUser.getFamilyId());
+		trans.setUserId(loginUser.getUserId());
 		trans.setTransId(transId);
-		// 유저id 불러오기
-		String userId = userdao.findByEmailOrUserId(user.getUsername()).getUserId();
-		// 유저id 입력 
-		trans.setUserId(userId);
+		
 		log.debug("삭제할 거래내역:{}", trans);
 		
-		int n = service.deleteTrans(trans);
-		
+		int n = service.deleteTrans(trans);	
 	}
 	
 	/** 대분류 불러오기 */
