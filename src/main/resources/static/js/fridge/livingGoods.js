@@ -159,7 +159,7 @@ $(document).ready(function () {
                         <img src="${imagePath}" alt="${item.itemName}" class="item-image">
                     </div>
                     <div class="item-details">
-                        <span class="badge rounded-pill bg-success item-category">${item.itemCategory}</span>
+                        <span class="badge rounded-pill bg-label-primary item-category">${item.itemCategory}</span>
                         <div class="item-name">${item.itemName}</div>
                         <div class="purchase-date">
                             ${purchaseDateStr}
