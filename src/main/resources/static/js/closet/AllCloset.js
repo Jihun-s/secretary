@@ -2,7 +2,7 @@
  * 옷장 페이지
  */
 $(document).ready(function(){
-
+	const ps = new PerfectScrollbar('#scrollCss');
 	let closetNum = 0; //  전체 옷장에서 찾기
 
 // !!!!!!!!!!!!!!!!!!			차트 그리기			!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!		

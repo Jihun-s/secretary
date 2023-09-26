@@ -39,6 +39,9 @@
 	 let familyId = '[[${loginUser.familyId}]]';
 	</script>
 	<script th:src="@{/js/closet/InCloset.js}"></script>
+	
+	<!-- 스크롤바 -->
+    <script th:src="@{/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js}"></script>    
     <meta name="description" content="" />
 
     <!-- Favicon -->
@@ -617,10 +620,10 @@
                 <!-- 1열 -->
                 <div class="col-lg-6 mb-4">
                   <h3>나의 옷장</h3>
-                  <div class="card mb-4">
+                  <div class="card mb-4" id="scrollCss">
                     <div class="d-flex align-items-end"></div>
-                    <div class="card-body">
-        	 			<div id="accordionIcon" class="accordion mt-3 accordion-without-arrow" style="display:inline;">
+                    <div class="card-body" style="padding:0;">
+        	 			<div id="accordionIcon" class="accordion mt-3 accordion-without-arrow">
 					      <div class="accordion-item card">
 					        <h2 class="accordion-header text-body d-flex justify-content-between" id="accordionIconOne" >
  						         <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#accordionIcon-1" aria-controls="accordionIcon-1">

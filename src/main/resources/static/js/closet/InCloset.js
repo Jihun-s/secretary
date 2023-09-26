@@ -2,6 +2,7 @@
  * 옷장 페이지
  */
 $(document).ready(function(){
+	const ps = new PerfectScrollbar('#scrollCss');
 	closetNum = parseInt(closetNum); // 스트링에서 정수형으로 변환
 
 	$('#webSearchbtn').on('click',webSearch);

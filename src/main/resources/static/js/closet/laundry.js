@@ -2,7 +2,7 @@
  * 옷장 페이지
  */
 $(document).ready(function(){
-
+		const ps = new PerfectScrollbar('#scrollCss');
 		$('#laundryAllOut').on('click',laundryAllOut);
 //!!!!!!!!!!!!!!!!!!!!!! 옷 찾기  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!	
 		//옷찾기 분류에서 소분류 숨겨놓기

@@ -18,11 +18,22 @@ body {
 }
 
 /* 의류리스트 이미지*/
-#whatsInStyleDiary{
+/* #whatsInStyleDiary{
 	text-align:center;
-	max-height: 40em; /* 스크롤 가능한 최대 높이를 지정 (필요에 따라 조정) */
- 	overflow-y: auto; /* 세로 스크롤을 활성화 */	
+	max-height: 40em; 스크롤 가능한 최대 높이를 지정 (필요에 따라 조정)
+ 	overflow-y: auto; 세로 스크롤을 활성화	
  	height:34rem;
+} */
+#scrollCss{
+	position:relative;
+	text-align:center;
+	/* max-height: 40em; 스크롤 가능한 최대 높이를 지정 (필요에 따라 조정) */
+ 	overflow-y: auto; /* 세로 스크롤을 활성화 */
+ 	height:40.3rem;	
+}
+#accordionIcon{
+	margin-left:1em;
+	width:95%
 }
 #whatsInStyleDiary > div{
 	margin-right:1em;
