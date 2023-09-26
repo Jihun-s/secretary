@@ -63,6 +63,14 @@
         <script th:src="@{/js/fridge/speechscript.js}"></script>
         <script th:src="@{/assets/vendor/libs/jquery/jquery.js}"></script>
         <style>
+            .consume-text-btn {
+                cursor: pointer;
+                text-decoration: underline;
+            }
+            .consume-text-btn:hover {
+                color: red;
+            }
+
             .delete-all-consumption-text {
                 cursor: pointer; /* 마우스 커서를 손가락 모양으로 변경 */
                 transition: color 0.3s; /* 색상 변화에 애니메이션 효과 추가 */
@@ -292,11 +300,17 @@
                     });
                 });
 
+                $('#manualInputModal').on('hidden.bs.modal', function () {
+                    $(this).find('form').trigger('reset'); // form 내의 모든 입력 필드 초기화
+                    // 추가로 초기화해야 할 요소가 있다면 이곳에 코드를 추가
+                });
+
                 function handleFoodAddSuccess(response) {
                     alert('음식 정보가 성공적으로 추가되었습니다.');
                     $('#manualInputModal').modal('hide');
 
                     const selectedFridgeId = $('.fridgeSelect').val();
+                    console.log(selectedFridgeId);
                     if (selectedFridgeId) {
                         $.get(`fridgeFood/getFridgeFoods/${selectedFridgeId}`, function (foods) {
                             $('#foodItemsContainer').empty();
@@ -970,7 +984,8 @@
                         const color = diffDays <= 3 ? 'red' : 'blue';
                         const notification = `<div style="margin-bottom: 10px;">
                                   <p style="margin-bottom: 0;">[${item.fridgeName}]의 ${item.foodName} 유통기한 <span style="color:${color}">${diffDays}일</span> 남았습니다!</p>
-                                  <a href="https://www.google.com/search?q=${item.foodName}을 활용한 요리 레시피" target="_blank" style="margin-top: -5px;">- 레시피 제안</a>
+                                  <a href="https://www.google.com/search?q=${item.foodName}을 활용한 요리 레시피" target="_blank" style="margin-top: -5px;"> - 레시피 제안 - </a>
+                                  <span class="consume-text-btn consume-btn" data-fridge-id="${item.fridgeId}" data-food-id="${item.foodId}" data-food-quantity="${item.foodQuantity}" data-food-name="${item.foodName}">[소비]</span>
                               </div>`;
                         $('#navs-pills-justified-home').append(notification);
                     });
@@ -990,15 +1005,15 @@
                         },
                     });
                 }
-
                 function displaySuggestedNotifications(foods, days) {
                     foods.forEach((item) => {
                         const notification = `
             <div>
-                <p>[${item.fridgeName}]의 ${item.foodName}을 사용하지 않은 지 <span style="color:red">${days}일</span>이 지났습니다!</p>
-                <a href="https://www.google.com/search?q=${item.foodName}을 활용한 요리 레시피" target="_blank">- 레시피 제안</a>
-            </div>
-        `;
+                <p style="margin-bottom:0px;">[${item.fridgeName}]의 ${item.foodName}을 사용하지 않은 지 <span style="color:red">${days}일</span>이 지났습니다!</p>
+                <a href="https://www.google.com/search?q=${item.foodName}을 활용한 요리 레시피" target="_blank"> - 레시피 제안 - </a>
+                <span class="consume-text-btn consume-btn" data-fridge-id="${item.fridgeId}" data-food-id="${item.foodId}" data-food-quantity="${item.foodQuantity}" data-food-name="${item.foodName}">[소비]</span>
+                        </div>
+                    `;
                         $('#navs-pills-justified-profile').append(notification);
                     });
                 }

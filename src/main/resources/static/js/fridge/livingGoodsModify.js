@@ -451,7 +451,8 @@ function createEssentialNotifications() {
         const diffDays = Math.ceil((expiryDate - today) / (1000 * 60 * 60 * 24));
         const color = diffDays <= 3 ? 'red' : 'blue';
         const notification = `<div style="margin-bottom: 10px;">
-                                  <p style="margin-bottom: 0;">${item.itemName}의 유통기한이 <span style="color:${color}">${diffDays}일</span> 남았습니다!</p>
+                                  <p style="margin-bottom: 0;">[${item.itemCategory}]${item.itemName}의 유통기한이 <span style="color:${color}">${diffDays}일</span> 남았습니다! - </p>
+                                  <span class="consume-text consume-btn" data-item-id="${item.itemId}" data-item-quantity="${item.itemQuantity}" data-item-name="${item.itemName}" data-item-category="${item.itemCategory}"> [소비]</span></p>
                               </div>`;
         $('#navs-pills-justified-home').append(notification);
     });
@@ -478,7 +479,8 @@ function displaySuggestedNotifications(goods, days) {
     goods.forEach((item) => {
         const notification = `
             <div>
-                <p>${item.itemName}을(를) 사용하지 않은 지 <span style="color:red">${days}일</span>이 지났습니다!</p>
+                <p style="margin-bottom: 0;">${item.itemName}을(를) 사용하지 않은 지 <span style="color:red">${days}일</span>이 지났습니다! - </p>
+                <span class="consume-text consume-btn" data-item-id="${item.itemId}" data-item-quantity="${item.itemQuantity}" data-item-name="${item.itemName}" data-item-category="${item.itemCategory}"> [소비]</span></p>
             </div>
         `;
         $('#navs-pills-justified-profile').append(notification);

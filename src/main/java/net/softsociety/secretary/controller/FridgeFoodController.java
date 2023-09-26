@@ -142,7 +142,7 @@ public class FridgeFoodController {
     @ResponseBody
     @GetMapping("getFridgeFoods/{fridgeId}")
     public List<FridgeFood> getFridgeFoods(@PathVariable int fridgeId) {
-        // FridgeService 또는 관련 서비스를 사용하여 해당 냉장고의 음식 목록을 가져옵니다.
+    	log.debug("컨트롤러 도착 유뮤 : {}",fridgeId);
         return fridgeFoodService.getFoodsByFridgeId(fridgeId);
     }
 
