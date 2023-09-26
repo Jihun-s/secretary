@@ -1,5 +1,6 @@
 $(document).ready(function() {
     setCurDate();
+    const ps = new PerfectScrollbar('#vertical-example');
 });
 
 
