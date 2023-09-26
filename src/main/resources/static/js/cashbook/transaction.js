@@ -10,6 +10,7 @@ $(document).ready(function() {
         init();
     });
 
+    
     // 목록 불러오기
     init();
     $('body').on('click', '#prevYear, #prevMonth, #nextYear, #nextMonth', init);
@@ -745,7 +746,7 @@ function formatDate(inputDate) {
 
 /** 내역 삭제 */
 function deleteTrans(transId) {
-
+    alert(transId);
     $.ajax({
         url: '/secretary/cashbook/trans/deleteTrans',
         type: 'POST',
@@ -1381,6 +1382,7 @@ function selectConditionTrans() {
             }
 
             table += `</table>`;
+
 
             transCntMonth.html(list.length);
             transListDiv.html(table);

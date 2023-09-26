@@ -704,7 +704,7 @@
                     </div>
                   </div>
                   
-                  <div class="card">
+                  <div class="card overflow-hidden">
                     <div class="card-body" id="transViewDiv">
                       <!-- 내역 제목 -->
                       <div class="row">
@@ -810,14 +810,22 @@
                         </div>
                       </div>
                       <!-- 내역 테이블 -->
-                      <div class="row">
+                      <div class="row mt-5">
                         <div class="table-responsive text-nowrap">
-                          <div id="transListDiv">
+                          <div id="transListDiv" class="ps ps--active-x ps--active-y" style="overflow-y: auto; max-height: 40rem;">
                             <!-- 반복문 들어가는 자리 -->
                           </div>
+ 
                         </div>
                       </div>
-                      
+                      <div class="ps__rail-x" style="width: 1000px; left: 0px; bottom: -872px;">
+                        <div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 508px;">
+                        </div>
+                      </div>
+                      <div class="ps__rail-y" style="top: 872px; height: 432px; right: 0px;">
+                        <div class="ps__thumb-y" tabindex="0" style="top: 289px; height: 143px;">
+                        </div>
+                      </div>
                     </div><!-- 카드바디 -->
                   </div> <!-- 카드 -->
                 </div> <!-- 2열 -->
