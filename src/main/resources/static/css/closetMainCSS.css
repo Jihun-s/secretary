@@ -102,10 +102,37 @@ body {
 
 /* 달력 */
 #calendar {
-	margin: 0.5rem; auto;
-    height:24rem;
+	font-family: "NanumSquareNeo-Variable", sans-serif;
+	font-size:0.45rem;
+	height:27.5rem;
+}
+#calendar button{
+	width:2.6rem;
+	background-color: rgba(223,132,166,255);
+	border-color: rgba(223,132,166,255);
   }
+  
+.fc-scroller{
+	border:0.15rem; 
+	border-style:solid;
+	border-color:rgba(223,132,166,255);
+	background-color:white;
+}
+.fc-list-empty{
+	background-color: pink;
+	font-size:1rem;
+	cursor:pointer;
+	
+}
+#calendar .fc-toolbar-title{
+	width:9rem;
+	font-size:0.75rem;
+	font-weight:bold;
+}
 
+.fc-list-table div.fc-list-day-cushion{
+	background-color: #ffcbcb;
+}
 .btn-pink{
 	align-items: flex-start;
 	appearance: button;
