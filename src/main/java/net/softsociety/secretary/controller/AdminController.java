@@ -110,7 +110,14 @@ public class AdminController {
 		log.debug("result: {}", result);
 		return ResponseEntity.ok(result);
 	}
-
+	//일별 회원가입 수 그래프
+	@GetMapping("dailyJoin")
+	@ResponseBody
+	public ResponseEntity<List<User>> dailyJoin() {
+	   List<User> result = userservice.getDailyJoinData();
+		    
+	   return ResponseEntity.ok(result);
+	}
 
 	
 }

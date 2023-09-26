@@ -81,4 +81,13 @@
     GROUP BY TO_NUMBER(TO_CHAR(LOGIN, 'HH24'))
     ORDER BY TO_NUMBER(TO_CHAR(LOGIN, 'HH24'))
     </select>
+    
+    <!-- 일일 회원가입자 수  -->
+    <select id="getDailyJoinData" resultType="User">
+    SELECT TO_CHAR(verification_token_expiry_date, 'YYYY-MM-DD') AS joinDate,
+       COUNT(*) AS joinCount
+       FROM secretary_user
+    GROUP BY TO_CHAR(verification_token_expiry_date, 'YYYY-MM-DD')
+    ORDER BY TO_DATE(TO_CHAR(verification_token_expiry_date, 'YYYY-MM-DD'), 'YYYY-MM-DD')
+	</select>
 </mapper>

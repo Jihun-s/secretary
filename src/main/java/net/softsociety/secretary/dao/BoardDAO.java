@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.session.RowBounds;
 
@@ -18,7 +20,7 @@ public interface BoardDAO {
 	public ArrayList<Board> listBoard();
 	//글 읽기
 	public Board read(int boardId);
-	//글목록(에이젝스)
+	//글목록
 	public ArrayList<Board> selectAllBoard();
 	//글삭제
 	public int deleteOne(int boardId);

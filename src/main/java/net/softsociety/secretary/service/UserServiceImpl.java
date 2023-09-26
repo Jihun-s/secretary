@@ -163,6 +163,12 @@ public class UserServiceImpl implements UserService {
 		
 		return userMapper.getHourlyLoginData();
 	}
+	//일별 회원가입 수 그래프
+	@Override
+	public List<User> getDailyJoinData() {
+		
+		return userMapper.getDailyJoinData();
+	}
 
 	
 

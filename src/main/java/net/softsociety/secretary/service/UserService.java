@@ -31,6 +31,8 @@ public interface UserService {
 	List<Log> getDailyLoginData();
 	//시간별 로그인 수 출력
 	List<Log> getHourlyLoginData();
+	//일별 회원가입 수 출력
+	List<User> getDailyJoinData();
 
 
 	

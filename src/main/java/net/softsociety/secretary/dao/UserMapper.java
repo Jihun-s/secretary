@@ -31,5 +31,7 @@ public interface UserMapper {
 	List<Log> getDailyLoginData();
 	//관리자 기능 시간별 로그인 정보
 	List<Log> getHourlyLoginData();
+	//관리자 기능 일일 회원가입 정보
+	List<User> getDailyJoinData();
 	
 }

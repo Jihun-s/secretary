@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,6 +30,7 @@ public class BoardServiceImpl implements BoardService {
 	}
 	//글읽기
 	@Override
+	@Transactional 
 	public Board read(int boardId) {
 		dao.addhits(boardId);
 		Board b = dao.read(boardId);

@@ -31,6 +31,9 @@ public class User implements UserDetails{
 	private int sex;
 	private String verificationToken;
 	private LocalDateTime verificationTokenExpiryDate;
+	//그래프
+	String joinDate;
+	int joinCount;
 	
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

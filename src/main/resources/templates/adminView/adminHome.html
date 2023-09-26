@@ -221,11 +221,11 @@ function fetchRateDataAndDrawChart() {
         type: 'GET',
         dataType: 'json',
         success: function (boardData) {
-            console.log('Board data:', boardData);
+            //console.log('Board data:', boardData);
             const rateLabels = boardData.map(entry => entry.totalInquiryPosts);
             const rateCounts = boardData.map(entry => entry.answeredPosts);
-            console.log('Labels:', rateLabels);
-            console.log('Counts:', rateCounts);
+            //console.log('Labels:', rateLabels);
+            //console.log('Counts:', rateCounts);
             drawRateChart(rateLabels, rateCounts);
         },
         error: function (error) {
@@ -294,6 +294,63 @@ function drawRateChart(rateLabels, rateCounts) {
 
 }
 
+//<!-- ------------------------------------------------------------------------------ -->
+//일별 회원가입자 수 
+let joinChart = null;
+
+function fetchJoinDataAndDrawChart() {
+    $.ajax({
+        url: 'dailyJoin',
+        type: 'GET',
+        dataType: 'json',
+        success: function (joinData) {
+            console.log('Join data:', joinData);
+            const labels = joinData.slice(-30).map(entry => entry.joinDate);
+            const counts = joinData.slice(-30).map(entry => entry.joinCount);
+            console.log('Labels:', labels);
+            console.log('Counts:', counts);
+            drawJoinChart(labels, counts);
+            
+        },
+        error: function (error) {
+            console.error('Error fetching login data:', error);
+        }
+    });
+}
+
+function drawJoinChart(labels, counts) {
+    const chartData = {
+        labels: labels,
+        datasets: [{
+            label: '일일 회원가입 수',
+            data: counts,
+            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+            borderColor: 'rgba(75, 192, 192, 1)',
+            borderWidth: 1
+        }]
+    };
+
+    const canvas = document.getElementById('joinChart');
+    
+    // 차트 재생성 전 기존차트 삭제
+    if (joinChart instanceof Chart) {
+    	joinChart.destroy();
+    }
+
+    // 새로운 값으로 차트 생성 (line chart)
+    joinChart = new Chart(canvas, {
+        type: 'line',  // Change to 'line' for a line chart
+        data: chartData,
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+}
+
 <!-- ------------------------------------------------------------------------------ -->
 
 // 페이지 로드 시 데이터로 그래프 그리기 함수 호출
@@ -302,12 +359,14 @@ window.onload = function() {
     fetchHourlyLoginDataAndDrawChart();
     fetchBoardDataAndDrawChart();
     fetchRateDataAndDrawChart();
+    fetchJoinDataAndDrawChart();
     // 주기적으로 데이터 업데이트 
     setInterval(function() {
         fetchLoginDataAndDrawChart();
         fetchHourlyLoginDataAndDrawChart();
         fetchBoardDataAndDrawChart();
         fetchRateDataAndDrawChart();
+        fetchJoinDataAndDrawChart();
     }, 1000000);
 };
 
@@ -315,7 +374,6 @@ window.onload = function() {
 
 
 
-<!-- ------------------------------------------------------------------------------ -->
 <!-- ------------------------------------------------------------------------------ -->
 </head>
 
@@ -335,6 +393,10 @@ window.onload = function() {
     </div><br>
     <div>
     	<canvas id="rateChart" width="50" height="50"></canvas>
+    </div><br>
+    <div>
+    	<canvas id="joinChart" width="50" height="50"></canvas>
     </div>
+    
 </body>
 </html>

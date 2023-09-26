@@ -128,7 +128,7 @@ where
 </insert>
 
 <!-- 조회수 -->
-<update id="addhits" parameterType="int">
+<update id="addhits">
 	update
 		secretary_board
 	set

@@ -151,14 +151,7 @@ public class BoardController {
     	}
     	return "redirect:/board/list";
     }
-//    //답글 삭제
-//    @GetMapping("deleteAnswer")
-//    public String deleteAnswer(int answerId) {
-//    	log.debug("deleteAnswer :{}", answerId);
-//    	int n = Aservice.deleteAnswer(answerId);  	
-//           	
-//    	return "redirect:/board/list";
-//    }
+
     //답글삭제
     @GetMapping("deleteAnswer")
     public String deleteAnswer(Answer answer) {
