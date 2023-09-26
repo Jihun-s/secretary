@@ -1,0 +1,240 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.softsociety.secretary.dao.ScheduleDAO">
+
+<!-- 일정 목록 불러오기 -->
+<select id="selectAllSche" parameterType="hashmap" resultType="Schedule">
+	SELECT
+		sch_id
+		, user_id
+		, family_id
+		, sch_type
+		, sch_cate
+		, sch_level
+		, sch_content
+		, sch_start
+		, TO_CHAR(sch_start, 'YYYY-MM-DD') AS sch_start_ymd
+	    , TO_CHAR(sch_start, 'HH24:MI') AS sch_start_hm
+		, sch_end
+		, sch_allday
+	FROM
+		Secretary_Schedule
+	WHERE
+		family_id = #{familyId}
+<!--         AND EXTRACT(YEAR FROM sch_start) = #{year}
+        AND EXTRACT(MONTH FROM sch_start) = #{month} -->
+	ORDER BY
+		sch_start
+</select>
+
+<!-- 일정 목록 불러오기 오른쪽 -->
+<select id="selectAllScheList" parameterType="hashmap" resultType="Schedule">
+	SELECT
+		sch_id
+		, user_id
+		, family_id
+		, sch_type
+		, sch_cate
+		, sch_level
+		, sch_content
+		, sch_start
+		, TO_CHAR(sch_start, 'YYYY-MM-DD') AS sch_start_ymd
+	    , TO_CHAR(sch_start, 'HH24:MI') AS sch_start_hm
+		, sch_end
+		, sch_allday
+	FROM
+		Secretary_Schedule
+	WHERE
+		family_id = #{familyId}
+        AND EXTRACT(YEAR FROM sch_start) = #{schYear}
+        AND EXTRACT(MONTH FROM sch_start) = #{schMonth}
+	ORDER BY
+		sch_start
+</select>
+
+
+<!-- 일정 목록 불러오기 메인용 -->
+<select id="selectAllScheListAfter" parameterType="hashmap" resultType="Schedule">
+	SELECT
+		sch_id
+		, user_id
+		, family_id
+		, sch_type
+		, sch_cate
+		, sch_level
+		, sch_content
+		, sch_start
+		, TO_CHAR(sch_start, 'YYYY-MM-DD') AS sch_start_ymd
+	    , TO_CHAR(sch_start, 'HH24:MI') AS sch_start_hm
+		, sch_end
+		, sch_allday
+	FROM
+		Secretary_Schedule
+	WHERE
+		family_id = #{familyId}
+        AND EXTRACT(YEAR FROM sch_start) = #{schYear}
+        AND EXTRACT(MONTH FROM sch_start) >= #{schMonth}
+    	AND sch_start >= TRUNC(SYSDATE)
+    	AND sch_start &lt;= TRUNC(SYSDATE + 30)
+	ORDER BY
+		sch_start
+</select>
+
+<!-- 일정 하나 불러오기 -->
+<select id="selectOne" parameterType="hashmap" resultType="Schedule">
+	SELECT
+		sch_id
+		, user_id
+		, family_id
+		, sch_type
+		, sch_cate
+		, sch_level
+		, sch_content
+		, sch_start
+		, TO_CHAR(sch_start, 'YYYY-MM-DD') AS sch_start_ymd
+	    , TO_CHAR(sch_start, 'HH24:MI') AS sch_start_hm
+		, sch_end
+		, sch_allday
+	FROM
+		Secretary_Schedule
+	WHERE
+		sch_id = #{schId}
+		AND family_id = #{familyId}
+</select>
+
+<!-- 일정 추가 -->
+<insert id="insertSch" parameterType="Schedule">
+	INSERT INTO 
+    Secretary_Schedule
+        (sch_id
+        , user_id
+        , family_id
+        , sch_type
+        , sch_cate
+        , sch_level
+        , sch_content
+        , sch_start
+        , sch_end
+        , sch_allday)
+    VALUES 
+        (Secretary_Schedule_SEQ.nextval
+        , #{userId}
+        , #{familyId}
+        , #{schType}
+        , #{schCate}
+        , #{schLevel}
+        , #{schContent}
+        , TO_DATE(#{schStart}, 'YYYY-MM-DD"T"HH24:MI')
+        , TO_DATE(#{schEnd}, 'YYYY-MM-DD"T"HH24:MI')
+        , 
+        <choose>
+            <when test="schAllday == true">1</when>
+            <otherwise>0</otherwise>
+        </choose>
+        )
+</insert>
+
+<!-- 일정 삭제 -->
+<delete id="deleteSch" parameterType="hashmap">
+	DELETE FROM
+		Secretary_Schedule
+	WHERE
+		sch_id = #{schId}
+		<!-- AND user_id = #{userId} -->
+		AND family_id = #{familyId}
+</delete>
+
+<!-- 일정 수정 -->
+<update id="updateSch" parameterType="Schedule">
+	UPDATE
+		Secretary_Schedule
+	SET
+		sch_type = #{schType}
+        , sch_cate = #{schCate}
+        , sch_level = #{schLevel}
+        , sch_content = #{schContent}
+        , sch_start = TO_DATE(#{schStart}, 'YYYY-MM-DD"T"HH24:MI')
+        , sch_end = TO_DATE(#{schEnd}, 'YYYY-MM-DD"T"HH24:MI')
+        , sch_allday = 
+        <choose>
+	        <when test="schAllday == true">1</when>
+	        <otherwise>0</otherwise>
+        </choose>
+	WHERE
+		sch_id = #{schId}
+		<!-- AND user_id = #{userId} -->
+		AND family_id = #{familyId}
+</update>
+
+
+
+
+
+<!-- 자동결제 알림 -->
+<select id="getWithdrawAlert" parameterType="hashmap" resultType="Schedule">
+SELECT
+	sch_id
+	, user_id
+	, family_id
+	, sch_type
+	, sch_cate
+	, sch_level
+	, sch_content
+	, sch_start
+	, TO_CHAR(sch_start, 'YYYY-MM-DD') AS sch_start_ymd
+    , TO_CHAR(sch_start, 'HH24:MI') AS sch_start_hm
+    , TO_CHAR(sch_start, 'YYYY') AS sch_start_year
+	, TO_CHAR(sch_start, 'MM') AS sch_start_month
+    , TO_CHAR(sch_start, 'DD') AS sch_start_date
+	, sch_end
+	, sch_allday
+FROM
+	Secretary_Schedule
+WHERE 
+    family_id = ${familyId}
+    <!-- 정기결제 -->
+    AND (sch_content like '%구독%'
+    	OR sch_content like '%결제%'
+    	OR sch_content like '%정기%'
+    	OR sch_content like '%납부%'
+    <!-- 명절 경조사 생일 -->	
+    	OR sch_cate = '명절'
+    	OR sch_cate = '경조사'
+    	OR sch_cate = '생일'
+    <!-- 월급날 -->
+    	OR sch_cate = '수입')
+    AND sch_start >= TRUNC(SYSDATE)
+    AND sch_start &lt;= TRUNC(SYSDATE + 7)
+</select>
+
+<!-- 예산월 일정 목록 -->
+<select id="getBudgetEventList" parameterType="hashmap" resultType="Schedule">
+SELECT
+	sch_id
+	, user_id
+	, family_id
+	, sch_type
+	, sch_cate
+	, sch_level
+	, sch_content
+	, sch_start
+	, TO_CHAR(sch_start, 'YYYY-MM-DD') AS sch_start_ymd
+    , TO_CHAR(sch_start, 'HH24:MI') AS sch_start_hm
+    , TO_CHAR(sch_start, 'YYYY') AS sch_start_year
+	, TO_CHAR(sch_start, 'MM') AS sch_start_month
+    , TO_CHAR(sch_start, 'DD') AS sch_start_date
+	, sch_end
+	, sch_allday
+FROM
+	Secretary_Schedule
+WHERE 
+    family_id = ${familyId}
+    AND sch_type = '가계부'
+    AND EXTRACT(YEAR FROM sch_start) = #{curYear}
+    AND EXTRACT(MONTH FROM sch_start) = #{curMonth}
+ORDER BY
+	sch_start
+</select>
+</mapper>

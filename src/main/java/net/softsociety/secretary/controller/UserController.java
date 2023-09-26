@@ -82,8 +82,6 @@ public class UserController {
 	
 	@PostMapping("/register")
 	public String registerUser(@ModelAttribute User user, HttpServletRequest request) {
-	    log.debug("Direct userEmail from HttpServletRequest: {}", request.getParameter("userEmail"));
-		log.debug("User객체 어떻게 받나요? : {}",user);
 	    userService.register(user, getSiteURL(request));
 	    return "redirect:/user/check-email";
 	}
@@ -91,7 +89,6 @@ public class UserController {
 	@ResponseBody
 	@PostMapping("/idcheck")
 	public int checkUserId(@RequestParam String userId) {
-		log.debug("아이디 왔나요?? : {}", userId);
 	    if (userService.existsByUserId(userId)) {
 	        return 1;  // 사용중인 ID
 	    } else {

@@ -35,3 +35,5 @@ out/
 
 ### VS Code ###
 .vscode/
+/.metadata/
+java_pid25780.hprof

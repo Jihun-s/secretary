@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<script th:src="@{/js/jquery-3.7.0.js}"></script> 
+<script>
+	function showFamilyForm() {
+		let html = `
+		<form action="/secretary/requireInvi" method="post">
+			<input type="text" name="userId" placeholder="가장의 아이디/이메일을 입력하세요.">
+			<input type="submit" value="초대 요청" />
+		</form>
+		`;
+		
+		$('#familyFormDiv').html(html);
+	}
+</script>
+<title>첫 로그인</title>
+</head>
+<body>
+	<h1>인증 계정 첫 로그인</h1>
+	<div>
+		<a th:href="@{/main}">
+			새 가족으로 시작하기
+		</a>
+		<p>이걸 누르면 family_id가 시퀀스로 부여되고 /main으로 이동함</p>
+	</div>
+	<div>
+		<a href="javascript:showFamilyForm()">
+			기존 가족에 들어가기
+		</a>
+		<div id="familyFormDiv"></div>
+		<p>이걸 누르면 가장의 아이디/이메일을 입력하는 폼이 뜨고 전송하면 그 가장의 필수알림에 승인/거절 알림을 보냄</p>
+	</div>
+</body>
+</html>

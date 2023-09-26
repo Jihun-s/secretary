@@ -1,46 +1,186 @@
 @charset "UTF-8";
-
-/*옷장보기, 코디일지 css*/
-.col-md-6 > p {
-	font-size:25px;
+@font-face {
+  font-family: "NanumSquareNeo-Variable";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_11-01@1.0/NanumSquareNeo-Variable.woff2")
+       format("woff2");
+  font-weight: normal;
+  font-style: normal;
 }
 
-.col-md-6 > p > input {
-	font-size:10px;
+body {
+  font-family: "NanumSquareNeo-Variable", sans-serif;
 }
 
-.col-md-6 img {
-	width:200px;
-	height:200px;
+/* !!!!!!!!!!!!옷장 css!!!!!!!!!!!!!!*/
+
+.col-lg-3 div.card {
+	overflow:auto; white-space: nowrap;
+} /* 가로스크롤 만들기*/
+
+#editClosetBtn {
+	display:inline-block; width:50%;
+} /*메인화면 옷장편집 버튼*/
+#editClosetBtn:hover {
+	transform: translate3d(1px,0.5px,1px);
+}
+#insertClosetBtn {
+	display:inline-block; width:50%;
+} /*메인화면 옷장추가 버튼 */
+#insertClosetBtn:hover {
+	transform: translate3d(-0.5px,0.5px,1px);
+}
+.delCloset{
+	position:absolute; right:2em;;
+	width:1.5em;
+} /*편집버튼 누르면 생기는 옷장삭제버튼*/
+.modifyCloset{
+	position:absolute; right:4em;;
+	width:1.5em;
+} /*편집버튼 누르면 생기는 옷장수정버튼*/ 
+
+#closetNameForModifyBtn:hover{
+	transform: translate3d(1px,0.5px,1px);
+}
+#plusClosetBtn img {
+	width: 80%; padding-left:2.2em;
+	cursor:pointer;
+} /*추가버튼 누르면 생기는 옷장추가이미지*/
+#closetNameForInsert {
+	padding-left:1em;
+} /*추가버튼 누르면 생기는 옷장이름 입력칸*/
+
+#ManageCloset{
+	display:inline-block; align: center;
+	height: 250px; padding-left: 2.2em;
+	overflow-y: auto; /* 세로 스크롤을 활성화합니다. */
+    position: relative; 
+}
+#ManageCloset table{
+	margin-bottom: 2.2em;
+}
+#ManageCloset p{
+	margin-bottom: 0; text-align:center;
 }
 
-.col-md-6 td {
-	text-align:center;
+#ManageCloset a img:hover{
+	transform: translate3d(1px,1px,1px);
 }
+/* !!!!!!!!!!!!옷장 css!!!!!!!!!!!!!!*/
 
-/* 가로스크롤 만들기*/
-.col-md-6 div.card {
-	overflow:auto; 
-	white-space: nowrap;
-}
-
-.col-md-6 div.card-body{
+/* !!!!!!!!!!!!코디일지 css!!!!!!!!!!!!!!*/
+#diaryCSS{
 	display:inline-block; 
 	align: center;
-	padding-left:10px;
-	height: 270px;
+	padding-left: 2.2em;
+	text-align:center;
+	height:30rem;
 }
-/* 옷장보기, 코디일지 css 끝*/
-
-
-
-/*세탁물 게이지*/
-.progress {
-	width:340px;
-	height:25px;
-	text-align:left;
+#diaryCSS img {
+	width:100%;
+	height:20rem;
 }
-.progress div {
-	width: 75%; height:25px;
+#diaryCSS img:hover {
+	transform: translate3d(1px,1px,1px);
+}
+/* !!!!!!!!!!!!코디일지 css!!!!!!!!!!!!!!*/
+
+/* !!!!!!!!!!!전체옷장에서 옷찾기!!!!!!!!*/
+#clothesSearchbtn{
+	background-color: rgba(223,132,166,255);
+	border-color: rgba(223,132,166,255);
+} /*옷찾기 버튼*/
+
+
+
+/*!!!!!!!!!!!!!  세탁물 게이지  !!!!!!!!!!!!!!!!!!!!*/
+#progessDetail{
+	height:3em;
+}
+#laundryCntDetail{
+	text-aling:center;
 }
 
+/* 달력 */
+#calendar {
+	margin: 0.5rem; auto;
+    height:24rem;
+  }
+
+.btn-pink{
+	align-items: flex-start;
+	appearance: button;
+	background-color: rgba(223,132,166,255);
+	border-bottom-color: rgba(223,132,166,255);
+	border-bottom-left-radius: 6px;
+	border-bottom-right-radius: 6px;
+	border-bottom-style: solid;
+	border-bottom-width: 0.8px;
+	border-collapse: collapse;
+	border-image-outset: 0;
+	border-image-repeat: stretch;
+	border-image-slice: 100%;
+	border-image-source: none;
+	border-image-width: 1;
+	border-left-color: rgba(223,132,166,255);
+	border-left-style: solid;
+	border-left-width: 0.8px;
+	border-right-color: rgba(223,132,166,255);
+	border-right-style: solid;
+	border-right-width: 0.8px;
+	border-top-color: rgba(223,132,166,255);
+	border-top-left-radius: 6px;
+	border-top-right-radius: 6px;
+	border-top-style: solid;
+	border-top-width: 0.8px;
+	/*box-shadow: rgba(255, 62, 29, 0.4) 0px 2px 4px 0px;*/
+	box-sizing: border-box;
+	caption-side: bottom;
+	color: rgb(255, 255, 255);
+	color-scheme: light;
+	cursor: pointer;
+	display: inline-block;
+	font-family: "Public Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+	font-feature-settings: normal;
+	font-kerning: auto;
+	font-optical-sizing: auto;
+	font-size: 15px;
+	font-stretch: 100%;
+	font-style: normal;
+	font-variant-alternates: normal;
+	font-variant-caps: normal;
+	font-variant-east-asian: normal;
+	font-variant-ligatures: normal;
+	font-variant-numeric: normal;
+	font-variation-settings: normal;
+	font-weight: 400;
+	/*height: 38.55px;*/
+	letter-spacing: normal;
+	line-height: 22.95px;
+	margin-bottom: 0.2em;
+	/*margin-left: 5px;
+	margin-right: 0px;
+	margin-top: 0px;
+	padding-bottom: 7px;
+	padding-left: 20px;
+	padding-right: 20px;
+	padding-top: 7px;*/
+	text-align: center;
+	text-indent: 0px;
+	text-rendering: auto;
+	text-shadow: none;
+	text-transform: none;
+	text-wrap: nowrap;
+	transition-delay: 0s;
+	transition-duration: 0.2s;
+	transition-property: all;
+	transition-timing-function: ease-in-out;
+	user-select: none;
+	vertical-align: middle;
+	white-space-collapse: preserve;
+	/*width: 86.6px;*/
+	word-spacing: 0px;
+	writing-mode: horizontal-tb;
+	-webkit-font-smoothing: antialiased;
+	-webkit-rtl-ordering: logical;
+	-webkit-tap-highlight-color: rgba(67, 89, 113, 0);
+}

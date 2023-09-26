@@ -1,0 +1,284 @@
+@charset "UTF-8";
+@font-face {
+  font-family: "NanumSquareNeo-Variable";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_11-01@1.0/NanumSquareNeo-Variable.woff2")
+       format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+
+body {
+  font-family: "NanumSquareNeo-Variable", sans-serif;
+}
+
+.accordion-body table {
+  width:100%;
+  border-spacing: 0.3em;
+  border-collapse: separate; 
+}
+
+/* 의류리스트 이미지*/
+#whatsInStyleDiary{
+	text-align:center;
+	max-height: 40em; /* 스크롤 가능한 최대 높이를 지정 (필요에 따라 조정) */
+ 	overflow-y: auto; /* 세로 스크롤을 활성화 */	
+ 	height:34rem;
+}
+#whatsInStyleDiary > div{
+	margin-right:1em;
+	margin-bottom:1em;
+	border-color: pink; 
+	border:1px;
+	border-style:solid;
+	border-radius:3%;
+	display:inline-block;
+	position:relative;
+}
+#whatsInStyleDiary img{
+	width:14.5em;
+	height:10em;
+}
+#whatsInStyleDiary div:hover{
+	transform: translate3d(1px,1px,1px);
+	cursor:pointer;
+}
+
+
+/*옷찾기 Search 버튼(코디등록 모달)*/
+#clothesSearchbtn, #clothesSearchbtnForUpdateDiary{
+	background-color: rgba(223,132,166,255);
+	border-color: rgba(223,132,166,255);
+} 
+#styleSearchbtn{
+	background-color: rgba(223,132,166,255);
+	border-color: rgba(223,132,166,255);
+}
+
+/* 의류리스트 이미지*/
+#whatsInCloset, #whatsInClosetForUpdateDiary {
+	max-height: 40em; /* 스크롤 가능한 최대 높이를 지정 (필요에 따라 조정) */
+ 	overflow-y: auto; /* 세로 스크롤을 활성화 */
+	text-align:center;
+}
+#whatsInCloset > div, #whatsInClosetForUpdateDiary > div{
+	margin-right:1em;
+	margin-bottom:1em;
+	border-color: pink; 
+	border:1px;
+	border-style:solid;
+	border-radius:3%;
+	display:inline-block;
+	position:relative;
+}
+#whatsInCloset img, #whatsInClosetForUpdateDiary img {
+	width:13em;
+	height:10em;
+}
+#whatsInCloset div:hover{
+	transform: translate3d(1px,1px,1px);
+	cursor:pointer;	
+}
+#whatsInClosetForUpdateDiary div:hover{
+	transform: translate3d(1px,1px,1px);
+	cursor:pointer;	
+}
+
+
+/*세탁바구니 보기 버튼*/
+#TolaundryPageBtn {
+	display:inline-block; position:relative; right:-11.4rem; 
+	background-color: rgba(223,132,166,255); border-color: rgba(223,132,166,255);
+}
+/*코디등록 버튼*/
+#insertStyleBtn{
+	display:inline-block; float:right; background-color: rgba(223,132,166,255); border-color: rgba(223,132,166,255);
+}
+
+/* 옷등록 사진 미리보기*/
+#imagePreview, #imagePreviewForUpdateDiary {
+	text-align:center;
+	width:35em;
+	height:25em;
+	border: 2px; border-style:solid; border-color:rgba(223,132,166,255); border-radius:2%;
+}
+
+[class ^= imagePreview] {
+	display:inline-block; float:left;
+	background:white;
+	width:10em; height:7em;
+	margin-left:1.2em; margin-top:1.2em;
+}
+
+[class ^= imagePreview] img{
+	width:100%;
+	height:100%;
+	object-fit: contain;
+	cursor:pointer;
+}
+.insertStyle{
+	text-align:center;
+}
+.insertStyle > lable {
+	text-align:center;
+	font-size:10px;
+}
+.insertStyle > table {
+	width:70%;
+	margin: 2% auto;
+	font: 20px;
+	text-align:center;
+	border-collapse: separate;
+  	border-spacing: 0.4em;	
+}
+
+.insertStyle input {
+	text-align:center;
+	font-size:10px;
+}
+
+/*input file태그 안보이게하기*/
+#uploadIMG {
+	display:none;
+}
+#cssuploadIMG {
+	/*사진등록 라벨 */
+	text-align:center;
+	font-size:10px;
+	width:80px;
+  	border: 1px solid rgb(77,77,77);
+  	border-radius: 5px;	
+}
+
+
+
+
+
+/*input 파일태그 안보이게 (사진 수정할때)*/
+#updateIMG {
+	display:none;
+}
+#cssupdateIMG {
+	/*사진수정 라벨 */
+	text-align:center;
+	font-size:10px;
+	width:80px;
+  	border: 1px solid rgb(77,77,77);
+  	border-radius: 5px;	
+}
+
+
+/*의류수정 미리보기*/
+#updatePreview img{
+	width:100%;
+}
+
+
+/*의류 상세정보*/
+
+#IMGdetail{
+	width:100%;
+	height:37rem; 
+	overflow:hidden;
+}
+#myChart {
+	position:relative;
+	left:4.4em;
+}
+#IMGdetail img{
+	width:100%; 
+	height:25rem; 
+	object-fit:contain;
+}
+
+#IMGdetail ul{
+	list-style:none;
+}
+#IMGdetail li{
+	float:left;
+	font-size:1.2em;
+}
+#clothesFooter{
+	width:32rem;
+	position:absolute;
+	left:3rem;
+	bottom:1.5rem;
+}
+
+.btn-pink{
+	align-items: flex-start;
+	appearance: button;
+	background-color: rgba(223,132,166,255);
+	border-bottom-color: rgba(223,132,166,255);
+	border-bottom-left-radius: 6px;
+	border-bottom-right-radius: 6px;
+	border-bottom-style: solid;
+	border-bottom-width: 0.8px;
+	border-collapse: collapse;
+	border-image-outset: 0;
+	border-image-repeat: stretch;
+	border-image-slice: 100%;
+	border-image-source: none;
+	border-image-width: 1;
+	border-left-color: rgba(223,132,166,255);
+	border-left-style: solid;
+	border-left-width: 0.8px;
+	border-right-color: rgba(223,132,166,255);
+	border-right-style: solid;
+	border-right-width: 0.8px;
+	border-top-color: rgba(223,132,166,255);
+	border-top-left-radius: 6px;
+	border-top-right-radius: 6px;
+	border-top-style: solid;
+	border-top-width: 0.8px;
+	/*box-shadow: rgba(255, 62, 29, 0.4) 0px 2px 4px 0px;*/
+	box-sizing: border-box;
+	caption-side: bottom;
+	color: rgb(255, 255, 255);
+	color-scheme: light;
+	/*cursor: pointer;*/
+	display: inline-block;
+	font-family: "Public Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+	font-feature-settings: normal;
+	font-kerning: auto;
+	font-optical-sizing: auto;
+	font-size: 15px;
+	font-stretch: 100%;
+	font-style: normal;
+	font-variant-alternates: normal;
+	font-variant-caps: normal;
+	font-variant-east-asian: normal;
+	font-variant-ligatures: normal;
+	font-variant-numeric: normal;
+	font-variation-settings: normal;
+	font-weight: 400;
+	/*height: 38.55px;*/
+	letter-spacing: normal;
+	line-height: 22.95px;
+	/*margin-bottom: 0.2em;
+	margin-left: 5px;
+	margin-right: 0px;
+	margin-top: 0px;
+	padding-bottom: 7px;
+	padding-left: 20px;
+	padding-right: 20px;
+	padding-top: 7px;*/
+	text-align: center;
+	text-indent: 0px;
+	text-rendering: auto;
+	text-shadow: none;
+	text-transform: none;
+	text-wrap: nowrap;
+	transition-delay: 0s;
+	transition-duration: 0.2s;
+	transition-property: all;
+	transition-timing-function: ease-in-out;
+	user-select: none;
+	vertical-align: middle;
+	white-space-collapse: preserve;
+	/*width: 86.6px;*/
+	word-spacing: 0px;
+	writing-mode: horizontal-tb;
+	-webkit-font-smoothing: antialiased;
+	-webkit-rtl-ordering: logical;
+	-webkit-tap-highlight-color: rgba(67, 89, 113, 0);
+}

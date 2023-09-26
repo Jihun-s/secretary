@@ -10,8 +10,228 @@
 	values (Secretary_Closet_SEQ.nextval, #{familyId}, #{userId}, #{closetName})
 </insert>
 
-<!-- 옷장목록 불러오기 -->
+<!-- 옷장삭제 -->
+<delete id="delCloset" parameterType="Closet">
+	delete from Secretary_Closet where closet_num = #{closetNum} and family_id = #{familyId} and user_id =  #{userId}
+</delete>
+
+<!-- 옷장이름 수정 -->
+<update id="modifyCloset" parameterType="Closet">
+	update Secretary_Closet set closet_name = #{closetName}
+			where closet_num = #{closetNum} and family_id = #{familyId} and user_id = #{userId}
+</update>
+
+<!-- 옷장목록 전체 불러오기 -->
 <select id="findAllCloset" resultType="Closet">
 	select * from Secretary_Closet order by closet_num
+</select>
+
+<!-- 옷장에 의류추가 -->
+<insert id="insertClothes" parameterType="Clothes">
+	insert into Secretary_clothes (clothes_num, family_id, closet_num, 
+								clothes_material, clothes_category,
+								clothes_seasons,  clothes_size,
+								clothes_img, clothes_originalFile)
+	values (Secretary_Clothes_SEQ.nextval, #{familyId}, #{closetNum},
+			 	#{clothesMaterial}, #{clothesCategory},
+			 	#{clothesSeasons}, #{clothesSize},
+				#{clothesImg}, #{clothesOriginalFile})	
+</insert>
+
+<!-- 옷장안 의류수정 -->
+<update id="updateClothes" parameterType="Clothes">
+	update Secretary_clothes set clothes_material = #{clothesMaterial}, clothes_category = #{clothesCategory}
+								,clothes_seasons = #{clothesSeasons}, clothes_size = #{clothesSize}
+								,clothes_img = #{clothesImg}, clothes_originalFile = #{clothesOriginalFile}
+			where clothes_num = #{clothesNum} and closet_num = #{closetNum}
+</update>
+
+<!-- 옷장안 의류 전체목록 -->
+<select id="findAllClothes" parameterType="hashmap" resultType="Clothes">
+	select * from Secretary_clothes <where>
+			<if test="closetNum !=null and closetNum != 0">closet_num = #{closetNum}</if>
+			<if test="material !=null and material !='materialAll'">
+			and clothes_material = #{material}
+			</if>
+			<if test="category == 'topAll'">
+			and (clothes_category = 'Tshirt' or clothes_category = 'blouse' or clothes_category = 'sweatshirt' or clothes_category = 'knitwear')
+			</if>
+			<if test="category == 'bottomAll'">
+			and (clothes_category = 'skirt' or clothes_category = 'pants' or clothes_category = 'jeans' or clothes_category = 'trainingPants')
+			</if>
+			<if test="category == 'clothesOuterAll'">
+			and (clothes_category = 'coat' or clothes_category = 'jacket' or clothes_category = 'paddedJacket' or clothes_category = 'zipupHoodie' or clothes_category = 'cardigan')
+			</if>
+			<if test="category == 'dressAll'">
+			and (clothes_category = 'miniDress' or clothes_category = 'longDress')
+			</if>			
+			<if test="category == 'shoesAll'">
+			and (clothes_category = 'sneakers' or clothes_category = 'formalShoes' or clothes_category = 'boots' or clothes_category = 'sandals')
+			</if>
+			<if test="category == 'bagAll'">
+			and (clothes_category = 'backpack' or clothes_category = 'totebag' or clothes_category = 'crossbodybag' or clothes_category = 'clutchbag')
+			</if>
+			<if test="category == 'accessoryAll'">
+			and (clothes_category = 'hat' or clothes_category = 'socks' or clothes_category = 'jewelryOrWatch' or clothes_category = 'scarf' or clothes_category = 'belt' or clothes_category = 'accessoryEtc')
+			</if>
+			<if test="category == 'etcAll'">
+			and (clothes_category = 'innerwear' or clothes_category = 'sleepwear' or clothes_category = 'swimsuit')
+			</if>
+			<if test="category != null and category != 'CategoryAll' 
+			and category != 'topAll' and category != 'bottomAll' and category != 'clothesOuterAll' and category != 'dressAll' 
+			and category != 'shoesAll' and category != 'bagAll' and category != 'accessoryAll' and category != 'etcAll'">
+			and clothes_category = #{category}
+			</if>
+			<if test="seasons != null">
+			and upper(clothes_seasons) like upper('%' || #{seasons} || '%')		
+			</if>
+			<if test="size != null and size !='SizeAll'">
+			and clothes_size = #{size}
+			</if>
+			<if test="!clothesLaundry">
+			and clothes_laundry = 0
+			</if>
+			<if test="clothesLaundry">
+			and clothes_laundry = 1
+			</if>
+			</where>
+			order by clothes_num desc
+</select>
+
+<!-- 옷장안 의류전체 목록(옷장으로 찾기) -->
+<select id="findAllClothesByCloset" parameterType="Closet">
+	select * from Secretary_clothes where closet_num = #{closetNum} and family_id = #{familyId}
+</select>
+
+<!-- 옷장안 옷 찾기(옷장번호, 옷번호) -->
+<select id="findClothes" parameterType="hashmap" resultType="Clothes">
+	select * from Secretary_clothes where closet_num = #{closetNum} and clothes_num = #{clothesNum}
+</select>
+
+<!-- 옷장안 옷 삭제 -->
+<delete id="deleteClothes" parameterType="hashmap">
+	delete from Secretary_clothes where closet_num = #{closetNum} and clothes_num = #{clothesNum}
+</delete>
+
+<!-- 세탁물 체크 -->
+<update id="laundryIn" parameterType="Clothes">
+	update Secretary_clothes set clothes_laundry = 1
+			where closet_num = #{closetNum} and clothes_num = #{clothesNum}
+</update>
+
+<!-- 세탁물 다시 옷장으로 -->
+<update id="laundryOut" parameterType="hashmap">
+	update Secretary_clothes set clothes_laundry = 0
+		<where><if test="closetNum != 0 and clothesNum != 0">
+			closet_num = #{closetNum} and clothes_num = #{clothesNum}
+				</if>
+		</where>	
+</update>
+
+<!-- 차트데이터 값 불러오기 -->
+<select id="getChartValue" parameterType="int" resultType="hashmap">
+	select COUNT(CASE WHEN clothes_category IN ('Tshirt', 'blouse', 'sweatshirt', 'knitwear') THEN 1 ELSE NULL END) AS topCategoryCount,
+    COUNT(CASE WHEN clothes_category IN ('skirt', 'pants', 'jeans', 'trainingPants') THEN 1 ELSE NULL END) AS bottomCategoryCount,
+    COUNT(CASE WHEN clothes_category IN ('coat', 'jacket', 'paddedJacket', 'zipupHoodie','cardigan') THEN 1 ELSE NULL END) AS outerCategoryCount,
+    COUNT(CASE WHEN clothes_category IN ('miniDress', 'longDress') THEN 1 ELSE NULL END) AS dressCategoryCount,
+    COUNT(CASE WHEN clothes_category IN ('sneakers', 'formalShoes', 'boots', 'sandals') THEN 1 ELSE NULL END) AS shoesCategoryCount,
+    COUNT(CASE WHEN clothes_category IN ('backpack', 'totebag', 'crossbodybag', 'clutchbag') THEN 1 ELSE NULL END) AS bagCategoryCount,
+    COUNT(CASE WHEN clothes_category IN ('hat', 'socks', 'jewelryOrWatch', 'scarf','belt','accessoryEtc') THEN 1 ELSE NULL END) AS accessoryCategoryCount,
+    COUNT(CASE WHEN clothes_category IN ('innerwear', 'sleepwear', 'swimsuit') THEN 1 ELSE NULL END) AS etcCategoryCount
+	from Secretary_clothes <where><if test="closetNum != 0">
+							closet_num = #{closetNum}
+							</if></where>
+</select>
+
+<!-- 코디일지: 코디일지 등록 -->
+<insert id="createStyle" parameterType="ClosetStyleDiary">
+	insert into Secretary_StyleDiary (style_num, user_id, style_seasons, style_TPO, style_description, style_info, style_img)
+	values (Secretary_StyleDiary_SEQ.nextval, #{userId}, #{styleSeasons}, #{styleTPO}, #{styleDescription}, #{styleInfo}, #{styleImg})
+</insert>
+
+<!-- 코디일지: 코디일지 수정 -->
+<update id="updateStyle" parameterType="ClosetStyleDiary">
+	update Secretary_StyleDiary set style_seasons = #{styleSeasons}, style_TPO = #{styleTPO}
+								,style_description = #{styleDescription}, style_info = #{styleInfo}
+								,style_img = #{styleImg}
+			where style_num = #{styleNum} and user_id = #{userId}
+</update>
+
+<!-- 코디일지: 삭제 -->
+<delete id="deleteStyleDiary" parameterType="ClosetStyleDiary">
+	delete from Secretary_StyleDiary where style_num = #{styleNum} and user_id = #{userId} 
+</delete>
+
+<!-- 코디일지 찾기(일지번호, 유저아이디) -->
+<select id="findDiary" parameterType="hashmap" resultType="ClosetStyleDiary">
+	select * from Secretary_StyleDiary where user_id = #{userId} and style_num = #{styleNum}
+</select>
+
+<!-- 코디일지 전체 목록(검색기능 포함) -->
+<select id="findAllDiary" parameterType="hashmap" resultType="ClosetStyleDiary">
+	select * from Secretary_StyleDiary <where>
+			<if test="userId !=null">user_id = #{userId}</if>
+			<if test="seasons != null">
+			and upper(style_seasons) like upper('%' || #{seasons} || '%')		
+			</if>
+			<if test="styleTPO != null and styleTPO !='AllTPO'">
+			and style_TPO = #{styleTPO}
+			</if>
+			<if test="searchWord != null">
+			and upper(style_description) like upper('%' || #{searchWord} || '%')
+			</if>
+			</where>
+			order by style_num desc
+</select>
+
+<!-- 차트 데이터 값 불러오기(코디일지) -->
+<select id="getDiaryChartValue" parameterType="string" resultType="hashmap">
+	select COUNT(CASE WHEN style_TPO = 'office' THEN 1 ELSE NULL END) AS OFFICE,
+	COUNT(CASE WHEN style_TPO = 'gathering' THEN 1 ELSE NULL END) AS GATHERING,
+	COUNT(CASE WHEN style_TPO = 'daily' THEN 1 ELSE NULL END) AS DAILY,
+	COUNT(CASE WHEN style_TPO = 'friend' THEN 1 ELSE NULL END) AS FRIEND,
+	COUNT(CASE WHEN style_TPO = 'date' THEN 1 ELSE NULL END) AS DATECOUNT,
+	COUNT(CASE WHEN style_TPO = 'break' THEN 1 ELSE NULL END) AS BREAK,
+	COUNT(CASE WHEN style_TPO = 'exercise' THEN 1 ELSE NULL END) AS EXERCISE,
+	COUNT(CASE WHEN style_TPO = 'trip' THEN 1 ELSE NULL END) AS TRIP,
+	COUNT(CASE WHEN style_TPO = 'etcTPO' THEN 1 ELSE NULL END) AS ETCTPO
+	FROM Secretary_StyleDiary WHERE user_id = #{userId}
+</select>
+
+<!-- 의류등록 웹에서 찾기 - 의류 리스트 출력 -->
+<select id="findAllClothesFromStore" parameterType="hashmap" resultType="ClothesFromStore">
+	select * from Secretary_ClothesFromStore
+		<where>
+		<if test="searchKeyword != null">
+			upper(clothesFromStore_name) like upper('%' || #{searchKeyword} || '%')
+		</if>
+		<if test="clothesFromStoreBrand != null and clothesFromStoreBrand !='brandAll'">
+			and clothesFromStore_brand = #{clothesFromStoreBrand}
+		</if>			
+		<if test="clothesFromStoreCategory != null and clothesFromStoreCategory != 'CategoryAll'">
+			and clothesFromStore_category = #{clothesFromStoreCategory}
+		</if>
+		</where>
+</select>
+
+<!-- 웹에서 찾기 - ClothesFromStore 전체 글개수 -->
+<select id="getTotal" parameterType="hashmap" resultType="int">
+	select count(*) from Secretary_ClothesFromStore
+		<where>
+		<if test="searchKeyword != null and searchKeyword !=''" >
+			upper(clothesFromStore_name) like upper('%' || #{searchKeyword} || '%')
+		</if>
+		<if test="clothesFromStoreBrand != null and clothesFromStoreBrand !='brandAll'">
+			and clothesFromStore_brand = #{clothesFromStoreBrand}
+		</if>			
+		<if test="clothesFromStoreCategory != null and clothesFromStoreCategory != 'CategoryAll'">
+			and clothesFromStore_category = #{clothesFromStoreCategory}
+		</if>
+		</where>
+</select>
+
+<!-- 웹에서 찾기 - 옷정보 -->
+<select id="readClothesFromStore" parameterType="string" resultType="ClothesFromStore">
+	select * from Secretary_ClothesFromStore where clothesFromStore_img = #{clothesFromStore_img}
 </select>
 </mapper>

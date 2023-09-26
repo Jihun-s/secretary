@@ -1,0 +1,43 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.softsociety.secretary.dao.LivingCategoryDAO">
+	<!-- 특정 가족의 모든 카테고리 조회 -->
+    <select id="getAllCategoriesByFamily" parameterType="int" resultType="LivingCategory">
+        SELECT * FROM Secretary_LIVING_CATEGORY WHERE FAMILY_ID = #{familyId}
+    </select>
+    
+    <!-- 카테고리 추가 -->
+    <insert id="addCategory" parameterType="LivingCategory">
+        INSERT INTO Secretary_LIVING_CATEGORY (CATEGORY_ID, FAMILY_ID, ITEM_CATEGORY)
+        VALUES (LIVING_CATEGORY_SEQ.NEXTVAL, #{familyId}, #{itemCategory})
+    </insert>
+    
+    <!-- 존재 여부 -->
+    <select id="exists" resultType="boolean">
+	    SELECT COUNT(*)
+	    FROM Secretary_LIVING_CATEGORY
+	    WHERE ITEM_CATEGORY = #{itemCategory}
+	    AND FAMILY_ID = #{familyId}
+	</select>
+	
+	<!-- 카테고리 중복 확인 -->
+    <select id="checkCategoryDuplication" resultType="int" parameterType="LivingCategory">
+        SELECT COUNT(*) FROM Secretary_LIVING_CATEGORY
+        WHERE ITEM_CATEGORY = #{itemCategory} AND FAMILY_ID = #{familyId}
+    </select>
+    
+    <!-- 카테고리 수정 -->
+    <update id="updateCategoryName" parameterType="map">
+        UPDATE Secretary_LIVING_CATEGORY
+        SET ITEM_CATEGORY = #{newName}
+        WHERE ITEM_CATEGORY = #{originalName} AND FAMILY_ID = #{familyId}
+    </update>
+    
+    <!-- 카테고리 삭제 -->
+    <delete id="deleteCategory" parameterType="LivingCategory">
+        DELETE FROM Secretary_LIVING_CATEGORY
+    	WHERE ITEM_CATEGORY = #{itemCategory} AND FAMILY_ID = #{familyId}
+    </delete>
+</mapper>

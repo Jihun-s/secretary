@@ -35,13 +35,34 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 "/user/login",
                 "/user/forgotPw",
                 "/user/confirm",
+                "/user/idcheck",
+                "/user/emailcheck",
+                "/user/forgot-password",
+                "/user/reset-password",
+                "/user/register",
+                "/user/verify",
+                "/user/failed-verification",
+                "/user/confirm",
+                "/user/check-email",
                 "/homeView/home",
                 "/boardView/list",
                 "/boardView/list2",
                 "/boardView/write",
                 "/cashbook/trans/setTrans",
-                "/thymeleaf",
-                "/**"
+                "/thymeleaf", 
+                
+                // static 하위 폴더들
+                "/assets/**",
+                "/assets2/**",
+                "/css/**",
+                "/fonts/**",
+                "/fridgeimg/**",
+                "/images/**",
+                "/js/**",
+                "/libs/**",
+                "/scss/**",
+                "/tasks/**",
+                "/fridgeFood/image/**"
                     ).permitAll()
             .antMatchers("/admin").hasRole("ADMIN")
             .anyRequest().authenticated()
@@ -83,5 +104,4 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         tokenRepository.setDataSource(dataSource);
         return tokenRepository;
     }
-    
 }

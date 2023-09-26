@@ -45,6 +45,7 @@ dependencies {
     implementation 'javax.persistence:javax.persistence-api:2.2' // 로그
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa' // 로그
 	implementation 'com.google.code.gson:gson:2.8.8'
+    implementation 'org.springframework.boot:spring-boot-starter-mail' // 초대 메일 발송
 }
 
 tasks.named('test') {

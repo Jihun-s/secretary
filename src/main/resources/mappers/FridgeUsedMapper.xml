@@ -1,0 +1,28 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.softsociety.secretary.dao.FridgeUsedDAO">
+	<!-- 소비 이력 추가 -->
+	<insert id="insertUsedFood" parameterType="FridgeUsed">
+	    INSERT INTO Secretary_Fridge_Used (fridge_used_id, fridge_id, food_id, fridge_quantity_used, fridge_food_name)
+	    VALUES (fridge_used_seq.NEXTVAL, #{fridgeId}, #{foodId}, #{fridgeQuantityUsed}, #{fridgeFoodName})
+	</insert>
+	
+	<select id="getAllUsedFoods" resultType="FridgeUsed">
+	    SELECT fridge_food_name, fridge_quantity_used, fridge_used_date
+	    FROM Secretary_Fridge_Used
+	    ORDER BY fridge_used_date DESC
+	</select>
+	
+	<select id="getFoodsNotAccessedForDays" resultType="FridgeFood" parameterType="int">
+	    SELECT f.food_id, f.food_name, f.fridge_id, fr.fridge_name, COALESCE(MAX(u.fridge_used_date), f.food_input_date) as reference_date
+	    FROM Secretary_FRIDGE_FOOD f
+	    LEFT JOIN Secretary_Fridge_Used u ON f.food_id = u.food_id
+	    JOIN Secretary_Fridge fr ON f.fridge_id = fr.fridge_id
+	    GROUP BY f.food_id, f.food_name, f.fridge_id, fr.fridge_name, f.food_input_date
+	    HAVING (SYSDATE - COALESCE(MAX(u.fridge_used_date), f.food_input_date)) >= #{days}
+	</select>
+
+	
+</mapper>

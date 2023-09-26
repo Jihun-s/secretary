@@ -1,0 +1,126 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.softsociety.secretary.dao.LivingGoodsDAO">
+	<!-- 생활용품 추가 -->
+	<insert id="insertLivingGood" parameterType="LivingGoods">
+	    INSERT INTO SECRETARY_LIVING_GOODS (
+	        ITEM_ID, ITEM_NAME,
+	        ITEM_CATEGORY, ITEM_QUANTITY
+	        <if test="itemPrice != null">
+	        ,ITEM_PRICE
+	        </if>
+	        <if test="itemInputDate != null">
+	        ,ITEM_INPUT_DATE
+	        </if>
+	        <if test="itemPurchaseDate != null">
+        	,ITEM_PURCHASE_DATE
+	        </if>
+	        <if test="itemMadeDate != null">
+	        ,ITEM_MADE_DATE
+	        </if>
+	        <if test="itemExpiryDate != null">
+	        ,ITEM_EXPIRY_DATE
+	        </if>
+	        <if test="itemOriginalFile != null and itemSavedFile != null">
+	        ,ITEM_ORIGINAL_FILE, ITEM_SAVED_FILE
+	        </if>
+	    )
+	    VALUES (
+	        LIVING_GOODS_SEQ.NEXTVAL,
+	        #{itemName},
+	        #{itemCategory},
+	        #{itemQuantity}
+	        <if test="itemPrice != null">
+	        ,#{itemPrice}
+	        </if>
+	        <if test="itemInputDate != null">
+	        ,#{itemInputDate}
+	        </if>
+	        <if test="itemPurchaseDate != null">
+	        ,#{itemPurchaseDate}
+	        </if>
+	        <if test="itemMadeDate != null">
+	        ,#{itemMadeDate}
+	        </if>
+	        <if test="itemExpiryDate != null">
+	        ,#{itemExpiryDate}
+	        </if>
+	        <if test="itemOriginalFile != null and itemSavedFile != null">
+	        ,#{itemOriginalFile}, #{itemSavedFile}
+	        </if>
+	    )
+	</insert>
+	
+	<!-- 전체 가져오기 -->
+	<select id="getLivingGoods" resultType="LivingGoods">
+        SELECT * FROM SECRETARY_LIVING_GOODS
+    </select>
+    
+    <!-- 한 개 가져오기 -->
+	<select id="getGoodsDetails" resultType="LivingGoods">
+        SELECT * FROM SECRETARY_LIVING_GOODS WHERE ITEM_ID = #{itemId}
+    </select>
+
+	<!-- 해당 카테고리를 사용하는 음식 수 확인 -->
+	<select id="countItemsUsingCategory" resultType="int" parameterType="net.softsociety.secretary.domain.LivingCategory">
+	    SELECT COUNT(*) FROM SECRETARY_LIVING_GOODS
+	    WHERE ITEM_CATEGORY = #{itemCategory} AND family_id = #{familyId}
+	</select>
+	
+	<!-- 카테고리 이름 일괄 업데이트 -->
+	<update id="updateItemsCategoryName" parameterType="map">
+	    UPDATE SECRETARY_LIVING_GOODS
+	    SET ITEM_CATEGORY = #{newName}
+	    WHERE ITEM_CATEGORY = #{originalName} AND FAMILY_ID = #{familyId}
+	</update>
+	
+	<!-- 아이템 수정 -->
+	<update id="modifyLivingGood" parameterType="LivingGoods">
+	    UPDATE Secretary_LIVING_GOODS
+	    SET 
+	        ITEM_NAME = #{itemName},
+	        ITEM_CATEGORY = #{itemCategory},
+	        ITEM_QUANTITY = #{itemQuantity}
+	        <if test="itemPrice != null">
+	        , ITEM_PRICE = #{itemPrice}
+	        </if>
+	        <if test="itemPurchaseDate != null">
+	        , ITEM_PURCHASE_DATE = #{itemPurchaseDate}
+	        </if>
+	        <if test="itemMadeDate != null">
+	        , ITEM_MADE_DATE = #{itemMadeDate}
+	        </if>
+	        <if test="itemExpiryDate != null">
+	        , ITEM_EXPIRY_DATE = #{itemExpiryDate}
+	        </if>
+	        <if test="itemOriginalFile != null">
+	        , ITEM_ORIGINAL_FILE = #{itemOriginalFile}
+	        </if>
+	        <if test="itemSavedFile != null">
+	        , ITEM_SAVED_FILE = #{itemSavedFile}
+	        </if>
+	    WHERE ITEM_ID = #{itemId}
+	</update>
+	
+	<!-- 아이템 삭제 -->
+	<delete id="deleteLivingGoods" parameterType="int">
+	    DELETE FROM Secretary_LIVING_GOODS WHERE ITEM_ID = #{itemId}
+	</delete>
+	
+	<!-- 아이템 수량 감소 -->
+	<update id="reduceItemQuantity" parameterType="LivingGoods">
+	    UPDATE Secretary_LIVING_GOODS
+	    SET ITEM_QUANTITY = ITEM_QUANTITY - #{itemQuantity}
+	    WHERE ITEM_ID = #{itemId}
+	</update>
+	
+	<!-- 아이템 수량 확인 -->
+	<select id="checkItemQuantity" parameterType="LivingGoods" resultType="int">
+	    SELECT ITEM_QUANTITY
+	    FROM Secretary_LIVING_GOODS
+	    WHERE ITEM_ID = #{itemId}
+	</select>
+	
+</mapper>
