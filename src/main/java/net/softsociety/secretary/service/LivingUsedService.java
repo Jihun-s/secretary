@@ -11,4 +11,10 @@ public interface LivingUsedService {
 
 	List<LivingUsed> getUsedGoodsHistory();
 
+	List<LivingGoods> getLivingGoodsNotAccessedForDays(int i);
+
+	int deleteById(int fridgeUsedId);
+
+	void deleteAll(int familyId);
+
 }

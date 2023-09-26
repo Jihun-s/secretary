@@ -9,14 +9,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import lombok.extern.slf4j.Slf4j;
 import net.softsociety.secretary.domain.FridgeFood;
 import net.softsociety.secretary.domain.FridgeUsed;
+import net.softsociety.secretary.domain.User;
 import net.softsociety.secretary.service.FridgeUsedService;
 
 @Slf4j
@@ -59,4 +62,31 @@ public class FridgeUsedController {
 	    return resultMap;
 	}
 
+	@ResponseBody
+	@PostMapping("deleteConsumptionHistory")
+	public ResponseEntity<String> deleteConsumptionHistory(@RequestParam int fridgeUsedId) {
+        try {
+            int rowsAffected = fridgeUsedService.deleteById(fridgeUsedId);
+            if (rowsAffected > 0) {
+                return ResponseEntity.ok("소비 이력이 삭제되었습니다.");
+            } else {
+                return ResponseEntity.badRequest().body("해당 ID의 소비 이력이 존재하지 않습니다.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("소비 이력 삭제에 실패하였습니다.");
+        }
+    }
+	
+	@ResponseBody
+	@PostMapping("/deleteAllConsumptionHistory")
+	public ResponseEntity<String> deleteAllConsumptionHistory(@ModelAttribute("loginUser") User user) {
+	    try {
+	    	fridgeUsedService.deleteAll(user.getFamilyId());
+	        return ResponseEntity.ok("모든 소비 이력이 삭제되었습니다.");
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("소비 이력 전체 삭제에 실패하였습니다.");
+	    }
+	}
 }

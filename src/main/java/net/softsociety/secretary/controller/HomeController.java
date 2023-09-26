@@ -6,10 +6,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import lombok.extern.slf4j.Slf4j;
 import net.softsociety.secretary.domain.CustomUserDetails;
-import net.softsociety.secretary.domain.User;
 import net.softsociety.secretary.service.UserService;
 
+@Slf4j
 @Controller
 public class HomeController {
 	
@@ -20,8 +21,8 @@ public class HomeController {
 	 */
 	@GetMapping({"", "/"})
     public String home() {
+		log.debug("홈페이지 로그");
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
         if (authentication != null && authentication.isAuthenticated()) {
             // Check if the principal is a CustomUserDetails
             if (authentication.getPrincipal() instanceof CustomUserDetails) {

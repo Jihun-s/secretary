@@ -69,6 +69,47 @@
 
         <!-- 스크립트 삭제.. -->
         <style>
+            .delete-all-consumption-text {
+                cursor: pointer; /* 마우스 커서를 손가락 모양으로 변경 */
+                transition: color 0.3s; /* 색상 변화에 애니메이션 효과 추가 */
+            }
+
+            .delete-all-consumption-text:hover {
+                color: red; /* 마우스를 올렸을 때의 텍스트 색상 */
+            }
+
+            .consumption-item {
+                position: relative; /* 이렇게 설정하면 안에 있는 child elements에 position: absolute;를 적용할 수 있습니다. */
+                padding-right: 30px; /* X 문자를 위한 우측 패딩 */
+                margin-right: 10px;
+            }
+
+            .delete-consumption-text {
+                position: absolute;
+                top: 50%;
+                right: 10px;
+                transform: translateY(-50%); /* 이 속성은 X 문자를 세로로 중앙에 위치하게 합니다. */
+                cursor: pointer;
+                font-size: 20px; /* 폰트 사이즈 설정 */
+            }
+
+            .delete-consumption-text:hover {
+                color: red; /* 빨간색으로 변경 */
+            }
+            .delete-text {
+                cursor: pointer;
+                font-weight: bold;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 100%;
+                height: 100%;
+            }
+
+            .delete-text:hover {
+                color: #c9302c; /* Slightly darker shade of the danger color */
+            }
+
             .item-image {
                 max-width: 100%;
                 max-height: 100%;
@@ -107,10 +148,65 @@
                 display: block;
                 text-align: center;
             }
+
+            #consumptionHistoryContainer {
+                height: 510px; /* 4개의 아이템이 약 300px에 해당될 것으로 예상됩니다. 조절이 필요하면 값을 변경해 주세요. */
+                overflow-y: auto; /* 세로 스크롤 */
+                font-size: 10px;
+            }
+
+            .consumption-item {
+                padding: 10px 0;
+                border-bottom: 1px solid #eaeaea; /* 아이템 사이에 선 추가 */
+            }
+
+            .used-item-name {
+                font-size: 14px;
+                margin-bottom: 5px;
+            }
+
+            .used-date {
+                font-size: 12px;
+            }
         </style>
     </head>
     <body>
         <!-- Layout wrapper -->
+        <!-- Modal -->
+        <div
+            class="modal fade"
+            id="trackingModal"
+            tabindex="-1"
+            aria-labelledby="trackingModalLabel"
+            aria-hidden="true"
+        >
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="trackingModalLabel">소비 패턴 등록</h5>
+                    </div>
+                    <div class="modal-body">
+                        <p>선택하신 물품에 대하여 소비 패턴을 추적하여 예상 구매일을 알려드립니다.</p>
+                        <!-- 물품 선택 입력란 -->
+                        <div id="itemSelection">
+                            <!-- 여기에 물품 목록이 들어갈 예정 -->
+                        </div>
+                        <!-- 선택한 물품 정보 -->
+                        <div id="selectedItemInfo">
+                            <!-- 여기에 선택한 물품의 정보가 표시될 예정 -->
+                        </div>
+                        <!-- 예상 다음 구매일 입력란 -->
+                        <label for="nextPurchaseDate">예상 다음 구매일:</label>
+                        <input type="date" id="nextPurchaseDate" />
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                        <button type="button" class="btn btn-primary" id="registerButton">등록</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="layout-wrapper layout-content-navbar">
             <div class="layout-container">
                 <!-- Menu -->
@@ -194,11 +290,11 @@
                         <li class="menu-header small text-uppercase">
                             <span class="menu-header-text">Inventories</span>
                         </li>
-                        <!-- 생활 용품 -->
+                        <!-- 냉장고 -->
                         <li class="menu-item">
                             <a class="menu-link menu-toggle" href="javascript:void(0);">
                                 <i class="menu-icon tf-icons bx bx-dock-top"></i>
-                                <div data-i18n="Layouts">생활 용품</div>
+                                <div data-i18n="Layouts">냉장고</div>
                             </a>
                             <ul class="menu-sub">
                                 <li class="menu-item">
@@ -231,33 +327,19 @@
                             </a>
                             <ul class="menu-sub">
                                 <li class="menu-item">
-                                    <a class="menu-link" href="pages-account-settings-account.html">
-                                        <div data-i18n="Account">물품 등록</div>
+                                    <a class="menu-link" th:href="@{/livingGoods}">
+                                        <div data-i18n="Basic">생활 용품 메인</div>
                                     </a>
                                 </li>
                                 <li class="menu-item">
-                                    <a class="menu-link" href="pages-account-settings-notifications.html">
-                                        <div data-i18n="Notifications">물품 검색</div>
-                                    </a>
-                                </li>
-                                <li class="menu-item">
-                                    <a class="menu-link" href="pages-account-settings-connections.html">
-                                        <div data-i18n="Connections">한 눈에 보기</div>
-                                    </a>
-                                </li>
-                                <li class="menu-item">
-                                    <a class="menu-link" href="pages-account-settings-connections.html">
-                                        <div data-i18n="Connections">소비기한 보기</div>
-                                    </a>
-                                </li>
-                                <li class="menu-item">
-                                    <a class="menu-link" href="auth-login-basic.html" target="_blank">
-                                        <div data-i18n="Basic">보관 장소 보기</div>
-                                    </a>
-                                </li>
-                                <li class="menu-item">
-                                    <a class="menu-link" href="auth-register-basic.html" target="_blank">
-                                        <div data-i18n="Basic">구매 시기 보기</div>
+                                    <!-- 모달창을 열기 위한 버튼 -->
+                                    <a
+                                        class="menu-link"
+                                        href="#"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#trackingModal"
+                                    >
+                                        <div data-i18n="Pattern">소비 패턴 등록</div>
                                     </a>
                                 </li>
                             </ul>
@@ -547,13 +629,17 @@
                                     <span class="mb-3" style="display: inline-block">
                                         <img
                                             style="height: 4rem; width: 4rem; vertical-align: middle"
-                                            th:src="@{/images/ck8.png}"
+                                            th:src="@{/images/fridgeimg/생활용품.jpg}"
                                         />
                                         <h1 id="fName" style="display: inline; vertical-align: middle">생활 용품</h1>
                                     </span>
                                     <h3>소비 이력</h3>
                                     <div class="card mb-4">
-                                        <div class="card-body">
+                                        <div class="card-body" style="padding-top: 5px">
+                                            <div style="text-align: right">
+                                                <span class="delete-all-consumption-text">전체 삭제</span>
+                                                <hr style="margin-top: 0px" />
+                                            </div>
                                             <div id="consumptionHistoryContainer"></div>
                                         </div>
                                     </div>

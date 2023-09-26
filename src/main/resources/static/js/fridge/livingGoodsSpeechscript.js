@@ -193,16 +193,18 @@ document.addEventListener("DOMContentLoaded", function() {
         let headerDiv = document.createElement('div');
         headerDiv.classList.add('d-flex', 'mb-2', 'bg-light', 'p-2');
         headerDiv.innerHTML = `
-            <div style="width: 20%;" class="text-center"><strong>카테고리</strong></div>
-            <div style="width: 40%;" class="text-center"><strong>상품명</strong></div>
+            <div style="width: 30%;" class="text-center"><strong>카테고리</strong></div>
+            <div style="width: 30%;" class="text-center"><strong>상품명</strong></div>
             <div style="width: 20%;" class="text-center"><strong>수량</strong></div>
             <div style="width: 20%;" class="text-center"><strong>가격</strong></div>
-        `;
+            <div style="width: 7%;" class="text-center"><strong>삭제</strong></div>
+            `;
         productsContainer.appendChild(headerDiv);
 
         productNames.forEach((product, index) => {
             let productDiv = document.createElement('div');
             productDiv.classList.add('d-flex', 'mb-2');
+            productDiv.style.height = '40px';  // 높이 추가
 
             // 카테고리 입력
             let categorySelect = document.createElement('select');
@@ -243,7 +245,16 @@ document.addEventListener("DOMContentLoaded", function() {
             priceInput.classList.add('form-control');
             priceInput.style.width = '60px';
             productDiv.appendChild(priceInput);
-            // 이 부분이 추가되어야 합니다.
+            
+            // 기존 상품 행의 삭제 텍스트
+            let deleteText = document.createElement('span');
+            deleteText.textContent = 'X';
+            deleteText.classList.add('delete-text', 'ml-2');
+            productDiv.appendChild(deleteText);
+
+            deleteText.addEventListener('click', function(event) {
+                productsContainer.removeChild(productDiv);
+            });
             productsContainer.appendChild(productDiv);
         });
     
@@ -258,6 +269,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
             let newProductDiv = document.createElement('div');
             newProductDiv.classList.add('d-flex', 'mb-2');
+            newProductDiv.style.height = '40px';  // 높이 추가
 
             let categorySelect = document.createElement('select');
             categorySelect.setAttribute('name', `livingGoods[${index}].itemCategory`);
@@ -293,6 +305,16 @@ document.addEventListener("DOMContentLoaded", function() {
             priceInput.classList.add('form-control');
             priceInput.style.width = '60px';
             newProductDiv.appendChild(priceInput);
+
+            // 새로 추가된 상품 행의 삭제 텍스트
+            let newDeleteText = document.createElement('span');
+            newDeleteText.textContent = 'X';
+            newDeleteText.classList.add('delete-text', 'ml-2');
+            newProductDiv.appendChild(newDeleteText);
+
+            newDeleteText.addEventListener('click', function(event) {
+                productsContainer.removeChild(newProductDiv);
+            });
     
             productsContainer.insertBefore(newProductDiv, addButton);
         });

@@ -356,20 +356,144 @@ function refreshConsumptionHistory() {
             let content = '';
             data.forEach((item) => {
                 content += `
-                    <div class="consumption-item">
-                        <h5 class="used-item-name">${item.itemCategory}의 ${item.itemName}을/를 ${item.livingQuantityUsed}개 소비하셨습니다!</h5>
-                        <p class="used-date">${new Date(item.livingUsedDate).toLocaleString()}</p>
-                    </div>
-                `;
+                <div class="consumption-item">
+                    <h5 class="used-item-name">${item.itemCategory}의 ${item.itemName}을/를 ${item.livingQuantityUsed}개 소비하셨습니다!</h5>
+                    <p class="used-date">${new Date(item.livingUsedDate).toLocaleString()}</p>
+                    <span class="delete-consumption-text" data-consumption-id="${item.livingUsedId}">X</span>
+                </div>
+            `;
             });
             $('#consumptionHistoryContainer').html(content);
         },
     });
 }
 
+//소비 이력 각각 삭제
+$(document).on('click', '.delete-consumption-text', function () {
+    const consumptionId = $(this).data('consumption-id');
+    if (confirm('정말 이 소비 이력을 삭제하시겠습니까?')) {
+        // 서버에 소비 이력 삭제 요청
+        $.ajax({
+            url: 'livingUsed/deleteConsumptionHistory',
+            type: 'POST',
+            data: { livingUsedId: consumptionId },
+            success: function (response) {
+                alert('소비 이력이 삭제되었습니다.');
+                refreshConsumptionHistory();
+            },
+            error: function (error) {
+                console.log('Error deleting consumption:', error);
+                alert('소비 이력 삭제에 실패하였습니다.');
+            },
+        });
+    }
+});
+
+//소비 이력 전체 삭제
+$(document).on('click', '.delete-all-consumption-text', function () {
+    if (confirm('정말 모든 소비 이력을 삭제하시겠습니까?')) {
+        // 서버에 전체 소비 이력 삭제 요청
+        $.ajax({
+            url: 'livingUsed/deleteAllConsumptionHistory',
+            type: 'POST',
+            success: function (response) {
+                alert('모든 소비 이력이 삭제되었습니다.');
+                refreshConsumptionHistory();
+            },
+            error: function (error) {
+                console.log('Error deleting all consumptions:', error);
+                alert('모든 소비 이력 삭제에 실패하였습니다.');
+            },
+        });
+    }
+});
+
+
 // 페이지 로딩 후 자동으로 소비 이력 갱신
 refreshConsumptionHistory();
 
+let allLivingGoods = [];
+
+function loadLivingGoodsForNotification(callback) {
+    $.ajax({
+        url: `livingGoods/getLivingGoods`,
+        type: 'GET',
+        dataType: 'json',
+        success: function (data) {
+            allLivingGoods = data;
+            callback();
+        },
+        error: function (error) {
+            console.error('Error fetching living goods items for notification:', error);
+        },
+    });
+}
+
+function createEssentialNotifications() {
+    const today = new Date();
+    const oneWeekFromNow = new Date(today);
+    oneWeekFromNow.setDate(today.getDate() + 7);
+
+    const essentialItems = allLivingGoods.filter((item) => {
+        if(item.itemExpiryDate === null) return false;
+        const expiryDate = new Date(item.itemExpiryDate);
+        return expiryDate <= oneWeekFromNow;
+    });
+
+    essentialItems.sort((a, b) => {
+        const expiryDateA = new Date(a.itemExpiryDate);
+        const expiryDateB = new Date(b.itemExpiryDate);
+        return expiryDateA - expiryDateB;
+    });
+
+    essentialItems.forEach((item) => {
+        const expiryDate = new Date(item.itemExpiryDate);
+        const diffDays = Math.ceil((expiryDate - today) / (1000 * 60 * 60 * 24));
+        const color = diffDays <= 3 ? 'red' : 'blue';
+        const notification = `<div style="margin-bottom: 10px;">
+                                  <p style="margin-bottom: 0;">${item.itemName}의 유통기한이 <span style="color:${color}">${diffDays}일</span> 남았습니다!</p>
+                              </div>`;
+        $('#navs-pills-justified-home').append(notification);
+    });
+}
+
+function createSuggestedNotifications() {
+    // 이 부분은 서버에서 15일, 30일 사용하지 않은 제품 정보를 가져와야 함
+    // 아래는 예시 코드
+    $.ajax({
+        url: `livingUsed/getLivingGoodsNotAccessedForDays`,
+        type: 'GET',
+        dataType: 'json',
+        success: function (data) {
+            displaySuggestedNotifications(data.goods15Days, 15);
+            displaySuggestedNotifications(data.goods30Days, 30);
+        },
+        error: function (error) {
+            console.error('Error fetching suggested notifications:', error);
+        },
+    });
+}
+
+function displaySuggestedNotifications(goods, days) {
+    goods.forEach((item) => {
+        const notification = `
+            <div>
+                <p>${item.itemName}을(를) 사용하지 않은 지 <span style="color:red">${days}일</span>이 지났습니다!</p>
+            </div>
+        `;
+        $('#navs-pills-justified-profile').append(notification);
+    });
+}
+
+function loadData() {
+    loadLivingGoodsForNotification(function () {
+        createEssentialNotifications();
+        createSuggestedNotifications();
+    });
+}
+
+// 데이터 로드 및 알림 생성 및 표시 시작
+loadData();
 
 });
 //readyEND
