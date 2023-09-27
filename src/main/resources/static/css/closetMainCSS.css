@@ -141,6 +141,14 @@ body {
     position: relative; 
 	text-align: center;
 	overflow-y: auto;
+	height:7rem;
+}
+#navs-pills-justified-profile{
+    position: relative; 
+	overflow: hidden;	
+	font-size:0.9rem;
+	line-height:0.2rem;
+	height:7rem;
 }
 .btn-pink{
 	align-items: flex-start;

@@ -5,6 +5,7 @@
  $(document).ready(function(){
 	const ps = new PerfectScrollbar('#ManageCloset');
 	const ps1 = new PerfectScrollbar('#navs-pills-justified-home');
+	const ps2 = new PerfectScrollbar('#navs-pills-justified-profile');
 	let closetNum = 0; //전체 옷장
 	
 // !!!!!!!!!!!!!!!!! 	알림 기능

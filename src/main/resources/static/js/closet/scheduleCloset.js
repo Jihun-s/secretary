@@ -160,26 +160,94 @@ function loadSchedule(schYear, schMonth, groupBy) {
               html += `<br><small class="text-light fw-semibold">${date}</small>`;
               groupedByDate[date].forEach(sch => {
                  html += `
-                    <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                   
                      <a href="javascript:openDetailModal(${sch.schId});">
-                      <div>
+                      
                       <span class="badge rounded-pill ${getBadgeClass(sch.schType, sch.schCate)}">${sch.schCate}</span>
                           ${convertTimeToKor(sch.schStartHm)}&nbsp;${sch.schContent}
-                      </div>
+                      
                       </a>
-                   <i class="bx bx-x" style="cursor: pointer;" onclick="deleteSch(${sch.schId});"></i>
-                   </div>
+                   <i class="bx bx-x" style="cursor: pointer;" onclick="deleteSch(${sch.schId});"></i><br>
                       `;
                   });
               } 
 
-          $("#schListDiv").html(html);
+          $("#navs-pills-justified-profile").html(html);
       },
       error: function(e) {
           alert(JSON.stringify(e));
           alert('일정 목록 서버 전송 실패');
       }
   });
+}
+
+
+/** 일정 하나 당 모달 열기 */
+function openDetailModal(schId) {
+  // 값 불러오기
+  $.ajax({
+    url: '/secretary/schedule/selectOne',
+    type: 'POST',
+    data: { schId: schId },
+    dataType: 'JSON',
+    success: (schObj) => {
+      // 수정전송버튼, 수정취소버튼 숨기기
+      $('#schUpdateBt').hide();
+      $('#schCancelBt').hide();
+
+      // 모달에 데이터 채우기
+      $("#schId").val(schObj.schId); 
+      $("#schContent").val(schObj.schContent);
+      $("#schTypeSelect").val(schObj.schType);
+      $("#schCateSelect").val(schObj.schCate);
+      $("#schLevel").val(schObj.schLevel); 
+      $("#schStart").val(convertDateTimeToLocal(schObj.schStart));
+      $("#schEnd").val(convertDateTimeToLocal(schObj.schEnd));
+      $("#schAllday").prop('checked', schObj.schAllday);
+      
+      // 유형에 따라 카테고리 옵션 업데이트하고 선택
+      updateSchCateOptions(schObj.schType, schObj.schCate, 'schTypeSelect');      
+
+      // 모든 input을 readonly로 설정
+      $('#schDetailModal input').prop('readonly', true);
+      // 모든 select을 disabled로 설정
+      $('#schDetailModal select, #schDetailModal :checkbox').prop('disabled', true);
+
+      // 모달 표시
+      $('#schDetailModal').modal('show');
+    },
+    error: (e) => {
+      alert(JSON.stringify(e));
+      alert('일정 하나 불러오기 전송 실패');
+    }
+  });
+}
+
+/** 일정 삭제 매개변수 있음 */
+function deleteSch(schId) {
+  console.log("삭제할 일정의 schId는 " + schId);
+  
+  if(confirm("일정을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.")) {
+    $.ajax({
+      url: '/secretary/schedule/deleteSch',
+      type: 'POST',
+      data: { schId: schId },
+      dataType: 'TEXT',
+      success: (data) => {
+        if(data == 1) {
+          alert('일정을 삭제했습니다.');
+        } else {
+          alert('일정을 삭제할 수 없습니다.');
+        }
+  
+        location.reload();
+      },
+      error: (e) => {
+        alert('일정 삭제 전송 실패');
+        alert(JSON.stringify(e));
+      }
+    });
+  }
 }
 
 // YYYY-MM-DD' 'HH24:MI:SS -> HH24시
