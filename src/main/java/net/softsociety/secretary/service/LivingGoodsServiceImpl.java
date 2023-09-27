@@ -71,4 +71,9 @@ public class LivingGoodsServiceImpl implements LivingGoodsService {
 		livingGoodsDAO.deleteLivingGoods(itemId);
 	}
 
+	@Override
+	public List<LivingGoods> searchLivingGoods(String query) {
+		return livingGoodsDAO.searchLivingGoods(query);
+	}
+
 }

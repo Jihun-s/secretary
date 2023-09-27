@@ -63,6 +63,20 @@
         <script th:src="@{/js/fridge/speechscript.js}"></script>
         <script th:src="@{/assets/vendor/libs/jquery/jquery.js}"></script>
         <style>
+            .btn-group .btn {
+                height: 30px;
+                display: flex;
+                align-items: center; /* 수직 중앙 정렬 */
+                justify-content: center; /* 수평 중앙 정렬 (필요한 경우에만) */
+            }
+
+            .category-editIcon {
+                display: none;
+                top: 5px;
+                left: 5px;
+                margin-top: 2px;
+            }
+
             .consume-text-btn {
                 cursor: pointer;
                 text-decoration: underline;
@@ -253,10 +267,6 @@
             .fridgeBox img {
                 display: block;
                 width: 100%; /* 이미지가 부모 요소의 폭에 맞게 조정됩니다. */
-            }
-
-            .category-editIcon {
-                display: none;
             }
 
             #consumptionHistoryContainer {
@@ -607,14 +617,14 @@
                         currentCategory = '냉장실';
                         button.textContent = '냉동실 보기';
                         button.classList.remove('btn-primary');
-                        button.classList.add('btn-warning');
+                        button.classList.add('btn-info');
                         loadFridgesByCategory(currentCategory);
                         loadAllFoodsByCategory(currentCategory);
                         document.getElementById('fName').textContent = '전체 냉장고';
                     } else {
                         currentCategory = '냉동실';
                         button.textContent = '냉장실 보기';
-                        button.classList.remove('btn-warning');
+                        button.classList.remove('btn-info');
                         button.classList.add('btn-primary');
                         loadFridgesByCategory(currentCategory);
                         loadAllFoodsByCategory(currentCategory);
@@ -1362,40 +1372,38 @@
                         },
                     });
                 });
-                $(document).ready(function () {
-                    // DOM 엘리먼트 선택
-                    const previewContainer = document.querySelector('.image-preview');
-                    const previewImage = previewContainer.querySelector('.image-preview__image');
-                    const previewDefaultText = previewContainer.querySelector('.image-preview__default-text');
-                    const fileInput = document.getElementById('foodImage'); // 파일 입력 필드의 id를 "foodImage"로 가정
+                // DOM 엘리먼트 선택
+                const previewContainer = document.querySelector('.image-preview');
+                const previewImage = previewContainer.querySelector('.image-preview__image');
+                const previewDefaultText = previewContainer.querySelector('.image-preview__default-text');
+                const fileInput = document.getElementById('foodImage'); // 파일 입력 필드의 id를 "foodImage"로 가정
 
-                    // 파일 입력 필드에 이벤트 리스너 추가
-                    fileInput.addEventListener('change', function () {
-                        const file = this.files[0];
+                // 파일 입력 필드에 이벤트 리스너 추가
+                fileInput.addEventListener('change', function () {
+                    const file = this.files[0];
 
-                        if (file) {
-                            // FileReader 객체 생성
-                            const reader = new FileReader();
+                    if (file) {
+                        // FileReader 객체 생성
+                        const reader = new FileReader();
 
-                            // 이미지 미리보기 및 기본 텍스트 숨김
-                            previewDefaultText.style.display = 'none';
-                            previewImage.style.display = 'block';
+                        // 이미지 미리보기 및 기본 텍스트 숨김
+                        previewDefaultText.style.display = 'none';
+                        previewImage.style.display = 'block';
 
-                            // 파일 읽기가 완료되면 실행되는 이벤트 리스너
-                            reader.addEventListener('load', function () {
-                                // 읽은 결과를 미리보기 이미지의 src 속성에 설정
-                                previewImage.setAttribute('src', this.result);
-                            });
+                        // 파일 읽기가 완료되면 실행되는 이벤트 리스너
+                        reader.addEventListener('load', function () {
+                            // 읽은 결과를 미리보기 이미지의 src 속성에 설정
+                            previewImage.setAttribute('src', this.result);
+                        });
 
-                            // 파일 읽기 시작
-                            reader.readAsDataURL(file);
-                        } else {
-                            // 파일이 선택되지 않았을 경우, 미리보기 및 기본 텍스트를 초기 상태로 되돌림
-                            previewImage.style.display = null;
-                            previewImage.setAttribute('src', '');
-                            previewDefaultText.style.display = null;
-                        }
-                    });
+                        // 파일 읽기 시작
+                        reader.readAsDataURL(file);
+                    } else {
+                        // 파일이 선택되지 않았을 경우, 미리보기 및 기본 텍스트를 초기 상태로 되돌림
+                        previewImage.style.display = null;
+                        previewImage.setAttribute('src', '');
+                        previewDefaultText.style.display = null;
+                    }
                 });
             });
             //ready_End;
@@ -2295,6 +2303,35 @@
                                                         "
                                                     />
                                                 </div>
+                                                <!-- 카테고리 편집 모달 시작 -->
+                                                <div class="modal" tabindex="-1" id="categoryEditModal">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title">카테고리 편집</h5>
+                                                                <button
+                                                                    type="button"
+                                                                    class="btn-close"
+                                                                    data-bs-dismiss="modal"
+                                                                    aria-label="Close"
+                                                                ></button>
+                                                            </div>
+                                                            <div class="modal-body category-modify-modal">
+                                                                <!-- 여기에 카테고리 리스트를 표시합니다 -->
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button
+                                                                    type="button"
+                                                                    class="btn btn-secondary"
+                                                                    data-bs-dismiss="modal"
+                                                                >
+                                                                    닫기
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- 카테고리 편집 모달 끝 -->
                                                 <!-- 정렬순서 버튼 그룹 -->
                                                 <div class="btn-group flex-fill" style="margin: 0 3px">
                                                     <button
@@ -2306,7 +2343,38 @@
                                                         정렬순서
                                                     </button>
                                                     <ul class="dropdown-menu">
-                                                        <!-- 정렬 순서 항목들... -->
+                                                        <li>
+                                                            <a
+                                                                class="dropdown-item"
+                                                                href="javascript:void(0);"
+                                                                onclick="updateSortOrder('유효기간 순')"
+                                                                >유효기간 순</a
+                                                            >
+                                                        </li>
+                                                        <li>
+                                                            <a
+                                                                class="dropdown-item"
+                                                                href="javascript:void(0);"
+                                                                onclick="updateSortOrder('유효기간 역순')"
+                                                                >유효기간 역순</a
+                                                            >
+                                                        </li>
+                                                        <li>
+                                                            <a
+                                                                class="dropdown-item"
+                                                                href="javascript:void(0);"
+                                                                onclick="updateSortOrder('입력 날짜 순')"
+                                                                >입력 날짜 순</a
+                                                            >
+                                                        </li>
+                                                        <li>
+                                                            <a
+                                                                class="dropdown-item"
+                                                                href="javascript:void(0);"
+                                                                onclick="updateSortOrder('입력 날짜 역순')"
+                                                                >입력 날짜 역순</a
+                                                            >
+                                                        </li>
                                                     </ul>
                                                 </div>
                                                 <!-- 편집 버튼 -->

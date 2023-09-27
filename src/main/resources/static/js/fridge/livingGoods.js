@@ -174,6 +174,28 @@ $(document).ready(function () {
     
         $('#livingItemsContainer').append(itemElement);
     }
+
+    // 검색창 요소 선택
+    let $itemSearchInput = $('#itemSearchInput');
+
+    // 검색창에 키 입력 이벤트 추가
+    $itemSearchInput.on('keyup', function () {
+        let searchTerm = $(this).val(); // 사용자가 입력한 검색어
+
+        $.ajax({
+            url: 'livingGoods/search', // 생활용품 검색을 위한 백엔드 엔드포인트. 실제 엔드포인트 경로로 수정 필요
+            method: 'GET',
+            data: { query: searchTerm }, // 검색어를 쿼리 파라미터로 전달
+            success: function (response) {
+                // 응답에서 받아온 검색 결과를 화면에 표시
+                $('#livingItemsContainer').empty(); // 기존에 표시되던 생활용품 항목을 모두 제거합니다.
+                response.forEach(displayLivingItem); // 각 검색된 생활용품 항목을 화면에 표시합니다.
+            },
+            error: function (error) {
+                console.error('Error fetching search results:', error);
+            },
+        });
+    });
     
     //아이템 출력
     $.get(`livingGoods/getLivingGoods`, function (items) {
@@ -266,6 +288,7 @@ $(document).ready(function () {
             previewDefaultText.style.display = null;
         }
     });
+
 });
 //readyEND
 

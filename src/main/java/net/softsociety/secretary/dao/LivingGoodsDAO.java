@@ -29,4 +29,6 @@ public interface LivingGoodsDAO {
 
 	void reduceItemQuantity(LivingGoods livingGoods);
 
+	List<LivingGoods> searchLivingGoods(String query);
+
 }

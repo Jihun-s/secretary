@@ -16,4 +16,6 @@ public interface LivingGoodsService {
 
 	void deleteLivingGoods(int itemId);
 
+	List<LivingGoods> searchLivingGoods(String query);
+
 }

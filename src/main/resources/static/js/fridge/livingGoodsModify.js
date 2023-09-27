@@ -1,4 +1,5 @@
 $(document).ready(function () {
+
     let isEditMode = false; // 편집 모드 상태를 저장하는 변수
 
     // 편집 버튼 클릭 이벤트
@@ -496,6 +497,5 @@ function loadData() {
 
 // 데이터 로드 및 알림 생성 및 표시 시작
 loadData();
-
 });
 //readyEND
