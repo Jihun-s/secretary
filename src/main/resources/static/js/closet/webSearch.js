@@ -48,7 +48,7 @@ function InsertOrUpdate(imgUrl){
 
 
 $(document).ready(function(){
-
+	const ps = new PerfectScrollbar('#whatsInStore');
 //!!!!!!!!!!!!!!!!!!!!!! 옷 찾기  
 		$('#topCategory').hide();
 		$('#bottomCategory').hide();

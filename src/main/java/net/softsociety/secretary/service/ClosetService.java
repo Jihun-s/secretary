@@ -18,6 +18,7 @@ public interface ClosetService {
 	
 	//옷장정보 불러오기
 	ArrayList<Closet> findAllCloset();
+	Closet findCloset(int closetNum);
 	
 	//옷장에 의류등록
 	void insertClothes(Clothes clothes);
@@ -40,7 +41,7 @@ public interface ClosetService {
 	void laundryOut(int closetNum, int clothesNum);
 	
 	//차트데이터 값 불러오기
-	HashMap<String, BigDecimal> getChartValue(int closetNum);
+	HashMap<String, BigDecimal> getChartValue(int closetNum, boolean clothesLaundry);
 	
 	//코디일지 - 코디일지 등록
 	void createStyle(ClosetStyleDiary diary);
@@ -63,6 +64,9 @@ public interface ClosetService {
 			String clothesFromStoreBrand, String clothesFromStoreCategory);
 	//웹에서 찾기 - 옷 정보
 	ClothesFromStore readClothesFromStore(String imgUrl);
+	
+	//세탁물 체크하면 착용횟수 증가
+	void plusPutOnCnt(Clothes clothes);
 
 	
 }

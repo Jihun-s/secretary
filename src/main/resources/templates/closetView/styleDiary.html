@@ -41,6 +41,10 @@
 	<script th:src="@{/js/closet/styleDiary.js}"></script>
 	<!-- 스크롤바 -->
     <script th:src="@{/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js}"></script>
+    
+    <script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
+    
+    
     <meta name="description" content="" />
 
     <!-- Favicon -->
@@ -1187,7 +1191,27 @@
     <div class="layout-overlay layout-menu-toggle"></div>
 
     <!-- / Layout wrapper -->
-
+    
+    
+  <!-- sns공유 Modal -->
+        <div class="modal fade" id="snsModal" tabindex="-1" aria-hidden="true">
+          <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel2">SNS 공유하기</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body" id="snsBody">
+              	<div id="btnNaver"><img th:src="@{/images/icon-naver.png}"><p>네이버</p></div>
+              	<div id="btnKakao"><img th:src="@{/images/icon-kakao.png}"><p>카카오</p></div>
+              	<div id="btnTwitter"><img th:src="@{/images/icon-twitter.png}"><p>메타</p></div>
+              	<div id="btnFacebook"><img th:src="@{/images/icon-facebook.png}"><p>페이스북</p></div>
+              </div> <!-- modal-body -->
+            </div>
+          </div>
+        </div>
+        
+        
     <!-- Core JS -->
     <!-- build:js assets/vendor/js/core.js -->
     <script th:src="@{/assets/vendor/libs/jquery/jquery.js}"></script>

@@ -135,6 +135,21 @@ body {
 .fc-list-table div.fc-list-day-cushion{
 	background-color: #ffcbcb;
 }
+
+/*알림*/
+#navs-pills-justified-home{
+    position: relative; 
+	text-align: center;
+	overflow-y: auto;
+	height:7rem;
+}
+#navs-pills-justified-profile{
+    position: relative; 
+	overflow: hidden;	
+	font-size:0.9rem;
+	line-height:0.2rem;
+	height:7rem;
+}
 .btn-pink{
 	align-items: flex-start;
 	appearance: button;

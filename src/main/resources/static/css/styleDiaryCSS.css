@@ -215,6 +215,18 @@ body {
 	bottom:1.5rem;
 }
 
+/* SNS 공유 모달 */
+#snsBody{
+	font-family: "NanumSquareNeo-Variable", sans-serif;
+	display:flex;
+	text-align:center;
+	justify-content:center;
+}
+#snsBody img{
+	width:3rem;
+	height:3rem;
+	margin:0.5rem;
+}
 .btn-pink{
 	align-items: flex-start;
 	appearance: button;
