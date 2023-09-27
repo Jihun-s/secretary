@@ -385,6 +385,46 @@ function openSnSModal(styleNum){
 	const SnSModal = new bootstrap.Modal(document.getElementById('snsModal'));
     SnSModal.show();
     console.log(styleNum);
+    $('#btnNaver').on('click',shareNaver);
+    $('#btnKakao').on('click',shareKakao);
+    $('#btnTwitter').on('click',shareTwitter);
+    $('#btnFacebook').on('click',shareFacebook);
+}
+
+function shareKakao() {
+	  // 사용할 앱의 JavaScript 키 설정
+	  Kakao.init('34cf32c300f82852eaf0b99359732509');
+
+	  // 카카오링크 버튼 생성
+	  Kakao.Link.createDefaultButton({
+	    container: '#btnKakao', // 카카오공유버튼ID
+	    objectType: 'feed',
+	    content: {
+	      title: "생활비서 서비스 나의 코디일지", // 보여질 제목
+	      description: "코디일지", // 보여질 설명
+	      imageUrl: "http://localhost:8888/secretary/closet/styleDiary", // 콘텐츠 URL
+	      link: {
+	         mobileWebUrl: "http://localhost:8888/secretary/closet/styleDiary",
+	         webUrl: "http://localhost:8888/secretary/closet/styleDiary"
+	      }
+	    }//content
+	  });
+}
+function shareTwitter() {
+    var sendText = "생활비서 서비스 나의 코디일지"; // 전달할 텍스트
+    var sendUrl = "http://localhost:8888/secretary/closet/styleDiary"; // 전달할 URL
+    window.open("https://twitter.com/intent/tweet?text=" + sendText + "&url=" + sendUrl);
+}
+
+function shareFacebook() {
+    var sendUrl = "http://localhost:8888/secretary/closet/styleDiary"; // 전달할 URL
+    window.open("http://www.facebook.com/sharer/sharer.php?u=" + sendUrl);
+}
+
+function shareNaver() {
+	  var title = "생활비서 서비스 나의 코디일지";
+	  var url = "http://localhost:8888/secretary/closet/styleDiary";
+	  window.open("https://share.naver.com/web/shareView?url=" + url + "&title=" + title);
 }
 
 function openUpdateModal(styleNum){
