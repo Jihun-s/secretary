@@ -32,7 +32,8 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	@Transactional 
 	public Board read(int boardId) {
-		dao.addhits(boardId);
+		int num = dao.addhits(boardId);
+		log.debug("조회 {}", num);
 		Board b = dao.read(boardId);
 		return b;
 	}
