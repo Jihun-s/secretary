@@ -135,7 +135,7 @@ $(document).ready(function () {
             dDayColor = 'red';
         }
     
-        var expiryDateStr = expiryDate ? `기한: ${formatDate(item.itemExpiryDate)} (D-<span class="d-day" style="color:${dDayColor}">${diffDays}</span>)` : '';
+        var expiryDateStr = expiryDate ? `기한: ${formatDate(item.itemExpiryDate)} <br>(D-<span class="d-day" style="color:${dDayColor}">${diffDays}</span>)` : '';
         var purchaseDateStr = item.itemPurchaseDate ? `구매: ${formatDate(item.itemPurchaseDate)}` : `입력: ${formatDate(item.itemInputDate)}`;
 
         const itemModifyIcon = `
