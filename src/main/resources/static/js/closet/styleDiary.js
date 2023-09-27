@@ -2,6 +2,7 @@
  * 옷장 페이지
  */
 $(document).ready(function(){
+	
 	const ps = new PerfectScrollbar('#scrollCss');
 	let closetNum = 0; //  전체 옷장에서 찾기
 
@@ -366,12 +367,12 @@ function readDiary(styleNum){
 						<li>&nbsp;&nbsp;'+translatedTPO+'</li></ul><br>\
 						<ul><li><button class="btn-pink" style="cursor:auto;">메모내용</button></li>\
 						<li>&nbsp;&nbsp;'+diary.styleDescription+'</li></ul>'
-			//$('#InfoDetail').html(DiaryStr);
-			let footer = '<br><div id="clothesFooter"><button type="button" class="btn btn-primary" style="background-color: rgba(223,132,166,255); border-color: rgba(223,132,166,255);float:right;" \
+			let footer = '<br><div id="clothesFooter"><button class="btn btn-primary" style="background-color: rgba(223,132,166,255); border-color: rgba(223,132,166,255);"\
+								onclick="openSnSModal('+styleNum+')">SNS 공유하기</button>\
+						<button type="button" class="btn btn-primary" style="background-color: rgba(223,132,166,255); border-color: rgba(223,132,166,255);float:right;" \
 							onclick="deleteDiary('+styleNum+')"> 삭제 </button>\
 						<button type="button" class="btn btn-primary"	style="background-color: rgba(223,132,166,255); border-color: rgba(223,132,166,255); margin-right:0.5rem; float:right;" \
 							onclick="openUpdateModal('+styleNum+')"> 수정 </button></div>'
-		 	//$('#InfoFooter').html(footer);						
 			$('#IMGdetail').html(DiaryImgStr+DiaryStr+footer);
 		 },
 		error:function(e){
@@ -380,6 +381,11 @@ function readDiary(styleNum){
 	})//ajax	
 }
 
+function openSnSModal(styleNum){
+	const SnSModal = new bootstrap.Modal(document.getElementById('snsModal'));
+    SnSModal.show();
+    console.log(styleNum);
+}
 
 function openUpdateModal(styleNum){
     // 코디수정 모달 열기
