@@ -478,7 +478,9 @@
                 $(document).on('click', '#cancelEditButton', function () {
                     const fridgeItem = $(this).closest('.fridgeItem');
                     fridgeItem.find('.fridgeName').show();
-                    fridgeItem.find('.fridgeNameInput, #confirmEditButton, #cancelEditButton').remove();
+                    fridgeItem
+                        .find('.fridgeNameInput, #confirmEditButton, #cancelEditButton, .fridgeInputField')
+                        .remove();
                 });
                 $(document).on('click', '.deleteIcon', function () {
                     const fridgeId = $(this).data('fridge-id');
@@ -640,6 +642,7 @@
                         $('#addFridgeImage').remove(); // PlusButton.png 제거
                         $('#fridgeNameInput').remove();
                         $('#addConfirmButton').remove();
+                        $('.fridgeBox').remove();
                         $('#addCancelButton').remove();
 
                         $('.fridge-editIcon').css('display', 'none'); // 냉장고 편집 아이콘을 숨깁니다.
@@ -727,6 +730,7 @@
 
                 $(document).on('click', '#addCancelButton', function () {
                     $('#addFridgeImage').remove();
+                    $('.fridgeBox').remove();
                     $('#fridgeNameInput').remove();
                     $(this).remove();
                     $('#addConfirmButton').remove();
@@ -1252,7 +1256,7 @@
                     const foodId = $(this).data('food-id');
                     const maxQuantity = $(this).data('food-quantity');
                     const fridgeId = $(this).data('fridge-id');
-                    const responseFromPrompt = prompt(`소비할 수량을 입력하세요 (최대: ${maxQuantity})`);
+                    const responseFromPrompt = prompt(`소비할 수량을 입력하세요 (재고: ${maxQuantity})`);
                     const foodName = $(this).data('food-name');
 
                     if (responseFromPrompt === null) {
@@ -1975,7 +1979,7 @@
                                                                 <!-- 영수증 이미지 업로드 부분 -->
                                                                 <div class="mb-3">
                                                                     <label class="form-label" for="receiptUpload"
-                                                                        >파일 선택</label
+                                                                        >영수증 선택</label
                                                                     >
                                                                     <input
                                                                         class="form-control"
@@ -1989,7 +1993,7 @@
                                                                         id="uploadReceiptButton"
                                                                         type="button"
                                                                     >
-                                                                        Upload
+                                                                        영수증에서 내용 추출하기
                                                                     </button>
                                                                 </div>
                                                                 <!-- 구분선 -->
@@ -2020,7 +2024,7 @@
                                                                     data-bs-dismiss="modal"
                                                                     type="button"
                                                                 >
-                                                                    Close
+                                                                    닫기
                                                                 </button>
                                                                 <!-- 분석 결과를 서버로 전송하는 버튼 -->
                                                                 <button
@@ -2028,7 +2032,7 @@
                                                                     id="submitDataButton"
                                                                     type="submit"
                                                                 >
-                                                                    Submit
+                                                                    입력
                                                                 </button>
                                                             </div>
                                                         </form>
@@ -2255,13 +2259,13 @@
                                                                     data-bs-dismiss="modal"
                                                                     type="button"
                                                                 >
-                                                                    Close
+                                                                    닫기
                                                                 </button>
                                                                 <button
                                                                     class="btn btn-primary addsubmitBtn"
                                                                     type="submit"
                                                                 >
-                                                                    Submit
+                                                                    입력
                                                                 </button>
                                                             </div>
                                                         </form>

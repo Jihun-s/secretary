@@ -310,7 +310,7 @@ $(document).on('click', '.consume-btn', function () {
     const itemName = $(this).data('item-name');
     const itemCategory = $(this).data('item-category');
 
-    const responseFromPrompt = prompt(`소비할 수량을 입력하세요 (최대: ${maxQuantity})`);
+    const responseFromPrompt = prompt(`소비할 수량을 입력하세요 (재고: ${maxQuantity})`);
     
     if (responseFromPrompt === null) {
         return;
