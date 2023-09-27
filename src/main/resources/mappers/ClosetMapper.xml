@@ -25,6 +25,10 @@
 <select id="findAllCloset" resultType="Closet">
 	select * from Secretary_Closet order by closet_num
 </select>
+<!-- 옷장 하나 찾기 -->
+<select id="findCloset"  resultType="Closet">
+	select * from Secretary_Closet where closet_num = #{closetNum}
+</select>
 
 <!-- 옷장에 의류추가 -->
 <insert id="insertClothes" parameterType="Clothes">

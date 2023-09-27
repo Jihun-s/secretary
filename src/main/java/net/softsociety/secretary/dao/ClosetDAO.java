@@ -23,6 +23,7 @@ public interface ClosetDAO {
 
 	//옷장리스트 출력
 	ArrayList<Closet> findAllCloset();
+	Closet findCloset(int closetNum);
 
 	//옷장에 옷 추가
 	void insertClothes(Clothes clothes);

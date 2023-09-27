@@ -46,7 +46,11 @@ public class ClosetServiceImpl implements ClosetService {
 	public ArrayList<Closet> findAllCloset() {
 		return dao.findAllCloset();
 	}
-	
+	@Override
+	public Closet findCloset(int closetNum) {
+		return dao.findCloset(closetNum);
+	}
+
 	//옷장에 옷 추가
 	@Override
 	public void insertClothes(Clothes clothes) {
