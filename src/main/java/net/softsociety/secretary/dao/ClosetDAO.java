@@ -46,7 +46,7 @@ public interface ClosetDAO {
 	void laundryOut(HashMap<String, Integer> map);
 	
 	//차트데이터 값 불러오기
-	HashMap<String, BigDecimal> getChartValue(int closetNum);
+	HashMap<String, BigDecimal> getChartValue(HashMap<String, Integer> map);
 	
 	//코디일지 : 코디일지 작성
 	void createStyle(ClosetStyleDiary diary);

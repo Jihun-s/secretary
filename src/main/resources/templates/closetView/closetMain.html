@@ -684,7 +684,7 @@
 										<tr>
 										  <td><label for="clothesCategoryForSearch">분류</label></td>
                       					  <td> <!-- 의류 대분류 -->
-                      					  	<select id="clothesCategoryForSearch">
+                      					  	<select class="form-control" id="clothesCategoryForSearch">
                       					  		<option value="CategoryAll" selected>전체</option>
                       					  		<option value="top">상의</option>
                       					  		<option value="bottom">하의</option>
@@ -697,7 +697,7 @@
                       					  	</select>
                       					  
                       					   		<!-- 의류 소분류 -->
-												<select id="topCategory" >
+												<select class="form-control" id="topCategory" >
                       							<option value="topAll" selected>상의 전체</option>
                       							<option value="Tshirt">티셔츠</option>
                       							<option value="blouse">블라우스/셔츠</option>
@@ -705,7 +705,7 @@
                       							<option value="knitwear">니트</option>												
 												</select>
 
-												<select id="bottomCategory">
+												<select class="form-control" id="bottomCategory">
 												<option value="bottomAll">하의 전체</option>
 												<option value="skirt">치마</option>
                       							<option value="pants">바지</option>
@@ -713,7 +713,7 @@
                       							<option value="trainingPants">트레이닝/조거</option>
 												</select>
 												
-												<select id="outerCategory">
+												<select class="form-control" id="outerCategory">
                       							<option value="clothesOuterAll" selected>아우터 전체</option>
                       							<option value="coat">코트</option>
                       							<option value="jacket">자켓/점퍼</option>
@@ -722,13 +722,13 @@
                       							<option value="cardigan">가디건/베스트</option>												
 												</select>
 												
-												<select id="dressCategory">
+												<select class="form-control" id="dressCategory">
 												<option value="dressAll" selected>원피스 전체</option>
 												<option value="miniDress">미니원피스</option>
 												<option value="longDress">롱원피스</option>			
 												</select>
 												
-												<select id="shoesCategory">
+												<select class="form-control" id="shoesCategory">
                       							<option value="shoesAll" selected>신발 전체</option>                     			
                       							<option value="sneakers">운동화</option>                     			
                       							<option value="formalShoes">구두</option>                     			
@@ -736,7 +736,7 @@
                       							<option value="sandals">샌들</option>												
 												</select>
 												
-												<select id="bagCategory">
+												<select class="form-control" id="bagCategory">
                       							<option value="bagAll" selected>가방 전체</option>
                       							<option value="backpack">백팩</option>
                       							<option value="totebag">숄더/토트백</option>
@@ -744,7 +744,7 @@
                       							<option value="clutchbag">클러치</option>												
 												</select>
 												
-												<select id="accessoryCategory">
+												<select class="form-control" id="accessoryCategory">
 			                      				<option value="accessoryAll" selected>악세사리 전체</option>
 			                      				<option value="hat">모자</option>
                       							<option value="socks">양말</option>
@@ -754,16 +754,16 @@
                       							<option value="accessoryEtc">기타</option>												
 												</select>
 												
-												<select id="etcCategory">
+												<select class="form-control" id="etcCategory">
                       							<option value="etcAll" selected>기타 전체</option>
                       							<option value="innerwear">이너웨어</option>
                       							<option value="sleepwear">잠옷</option>
                       							<option value="swimsuit">수영복</option>												
 												</select>
                       					  </td><!-- 의류 소분류 끝 -->
-                      					  <td><label for="materialListForSearch">소재</label></td>
+                      					  <td><label for="materialListForSearch">&nbsp;&nbsp;소재</label></td>
                       					  <td>
-											<select id=materialListForSearch>
+											<select class="form-control" id=materialListForSearch>
 												<option value="materialAll">전체</option>
 												<option value="none">해당 없음</option>
 												<option value="cotton">면</option>
@@ -795,7 +795,7 @@
 										</td>
                       					<td><label for="sizeForSearch">사이즈</label></td>
 			                      		<td>
-                      						<select id="clothesSizeForSearch">
+                      						<select class="form-control" id="clothesSizeForSearch">
                       						<option value="SizeAll">전체</option>
                       						<option value="none">해당없음</option>
                       						<option value="free">FREE</option>
@@ -810,7 +810,7 @@
                       						<table id="shoesSizeForSearch">
                       						<tr>
                       						<td><input type="checkbox" name="shoesSizeAll" value="SizeAll"><small>전체</small></td>
-											<td><input type="number" name="shoesForSearch" value="210" min="210" max="300" step="5"></td>
+											<td><input type="number" class="form-control" name="shoesForSearch" value="210" min="210" max="300" step="5"></td>
 											</tr>
 											</table>
                       					</td>										

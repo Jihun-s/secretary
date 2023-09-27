@@ -309,9 +309,9 @@ public class ClosetController {
 	//차트데이터 값 불러오기
 	@ResponseBody
 	@GetMapping("chartValue")
-	public HashMap<String, BigDecimal> getChartValue(@RequestParam(name="closetNum", defaultValue="0") int closetNum) {
+	public HashMap<String, BigDecimal> getChartValue(@RequestParam(name="closetNum", defaultValue="0") int closetNum, boolean clothesLaundry) {
 		log.debug("chartValue 매핑!!!!!!!");
-		HashMap<String, BigDecimal> valueList = service.getChartValue(closetNum);
+		HashMap<String, BigDecimal> valueList = service.getChartValue(closetNum, clothesLaundry);
 		return valueList;
 	}
 
