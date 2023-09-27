@@ -330,23 +330,19 @@
                             </a>
                             <ul class="menu-sub">
                                 <li class="menu-item">
-                                    <a class="menu-link" href="layouts-without-menu.html">
-                                        <div data-i18n="Without menu">물품 등록</div>
+                                    <a class="menu-link" th:href="@{/fridge}">
+                                        <div data-i18n="Without menu">냉장고 메인</div>
                                     </a>
                                 </li>
                                 <li class="menu-item">
-                                    <a class="menu-link" href="layouts-without-navbar.html">
-                                        <div data-i18n="Without navbar">물품 검색</div>
-                                    </a>
-                                </li>
-                                <li class="menu-item">
-                                    <a class="menu-link" href="layouts-container.html">
-                                        <div data-i18n="Container">한 눈에 보기</div>
-                                    </a>
-                                </li>
-                                <li class="menu-item">
-                                    <a class="menu-link" href="layouts-fluid.html">
-                                        <div data-i18n="Fluid">소비기한 보기</div>
+                                    <!-- 모달창을 열기 위한 버튼 -->
+                                    <a
+                                        class="menu-link"
+                                        href="#"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#trackingModal"
+                                    >
+                                        <div data-i18n="Pattern">소비 패턴 등록</div>
                                     </a>
                                 </li>
                             </ul>
