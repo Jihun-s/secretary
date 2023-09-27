@@ -391,7 +391,7 @@
                             $('#foodMadeDate').val(foodItem.foodMadeDate);
 
                             const submitBtn = $('#manualInputModal .addsubmitBtn');
-                            submitBtn.text('Update');
+                            submitBtn.text('수정');
                             submitBtn.removeClass('btn-primary').addClass('btn-warning');
 
                             $('#manualInputModal form').attr('action', 'fridgeFood/modify/' + foodId);
@@ -406,7 +406,7 @@
 
                 $('#manualInputModal').on('hidden.bs.modal', function () {
                     const submitBtn = $('#manualInputModal .btn-warning');
-                    submitBtn.text('Submit');
+                    submitBtn.text('입력');
                     submitBtn.removeClass('btn-warning').addClass('btn-primary');
                     $('#manualInputModal form').attr('action', 'fridgeFood/add');
                 });
@@ -1452,6 +1452,22 @@
 
                 $('#foodItemsContainer').empty().append(sortedItems);
             }
+            document.addEventListener('DOMContentLoaded', function () {
+                var manualInputModal = document.getElementById('manualInputModal');
+
+                manualInputModal.addEventListener('show.bs.modal', function () {
+                    // 구매일자의 기본값 설정
+                    var purchaseDateInput = document.getElementById('foodPurchaseDate');
+                    var today = new Date().toISOString().slice(0, 10); // 현재 날짜를 YYYY-MM-DD 형식으로 변환
+                    purchaseDateInput.value = today;
+
+                    // 유통기한의 기본값 설정
+                    var expiryDateInput = document.getElementById('foodExpiryDate');
+                    var expiryDate = new Date();
+                    expiryDate.setDate(expiryDate.getDate() + 14);
+                    expiryDateInput.value = expiryDate.toISOString().slice(0, 10); // 현재 날짜 + 14일을 YYYY-MM-DD 형식으로 변환
+                });
+            });
         </script>
     </head>
     <body>
@@ -1993,7 +2009,7 @@
                                                                         id="uploadReceiptButton"
                                                                         type="button"
                                                                     >
-                                                                        영수증에서 내용 추출하기
+                                                                        영수증에서 상품명 추출하기
                                                                     </button>
                                                                 </div>
                                                                 <!-- 구분선 -->
@@ -2099,17 +2115,16 @@
                                                                         name="foodName"
                                                                         required=""
                                                                         type="text"
-                                                                    /><button class="voice-input-button">
-                                                                        <img
-                                                                            id="recordFoodName"
-                                                                            src="images/fridgeimg/MikeButton.png"
-                                                                            style="
-                                                                                width: 30px;
-                                                                                height: 30px;
-                                                                                vertical-align: middle;
-                                                                            "
-                                                                        />
-                                                                    </button>
+                                                                    />
+                                                                    <img
+                                                                        id="recordFoodName"
+                                                                        src="images/fridgeimg/MikeButton.png"
+                                                                        style="
+                                                                            width: 30px;
+                                                                            height: 30px;
+                                                                            vertical-align: middle;
+                                                                        "
+                                                                    />
                                                                 </div>
                                                                 <label class="form-label" for="foodCategory"
                                                                     >카테고리</label
@@ -2138,30 +2153,27 @@
                                                                         style="display: none"
                                                                         type="text"
                                                                     />
-                                                                    <button class="voice-input-button">
-                                                                        <img
-                                                                            id="recordFoodCategory"
-                                                                            src="images/fridgeimg/MikeButton.png"
-                                                                            style="
-                                                                                width: 30px;
-                                                                                height: 30px;
-                                                                                vertical-align: middle;
-                                                                            "
-                                                                        />
-                                                                    </button>
+
+                                                                    <img
+                                                                        id="recordFoodCategory"
+                                                                        src="images/fridgeimg/MikeButton.png"
+                                                                        style="
+                                                                            width: 30px;
+                                                                            height: 30px;
+                                                                            vertical-align: middle;
+                                                                        "
+                                                                    />
                                                                 </div>
-                                                                <button
-                                                                    class="btn btn-primary"
-                                                                    id="addCategoryBtn"
-                                                                    style="display: none"
-                                                                    type="button"
+                                                                <div id="addCategoryBtn" style="display: none">
+                                                                    <button class="btn btn-primary" type="button">
+                                                                        카테고리 추가하기
+                                                                    </button>
+                                                                    <br />
+                                                                </div>
+                                                                <label class="form-label" for="foodQuantity"
+                                                                    >개수</label
                                                                 >
-                                                                    카테고리 추가하기
-                                                                </button>
                                                                 <div style="display: flex; align-items: center">
-                                                                    <label class="form-label" for="foodQuantity"
-                                                                        >개수</label
-                                                                    >
                                                                     <input
                                                                         class="form-control"
                                                                         id="foodQuantity"
@@ -2170,42 +2182,42 @@
                                                                         type="number"
                                                                         value="1"
                                                                     />
-                                                                    <button class="voice-input-button">
-                                                                        <img
-                                                                            id="recordFoodQuantity"
-                                                                            style="
-                                                                                width: 30px;
-                                                                                height: 30px;
-                                                                                vertical-align: middle;
-                                                                            "
-                                                                            th:src="@{/images/fridgeimg/MikeButton.png}"
-                                                                        />
-                                                                    </button>
+
+                                                                    <img
+                                                                        id="recordFoodQuantity"
+                                                                        style="
+                                                                            width: 30px;
+                                                                            height: 30px;
+                                                                            vertical-align: middle;
+                                                                        "
+                                                                        th:src="@{/images/fridgeimg/MikeButton.png}"
+                                                                    />
                                                                 </div>
+                                                                <label class="form-label" for="foodPrice">가격</label>
                                                                 <div style="display: flex; align-items: center">
-                                                                    <label class="form-label" for="foodPrice"
-                                                                        >가격</label
-                                                                    >
                                                                     <input
                                                                         class="form-control"
                                                                         id="foodPrice"
                                                                         name="foodPrice"
                                                                         type="number"
                                                                     />
-                                                                    <button class="voice-input-button">
-                                                                        <img
-                                                                            id="recordFoodPrice"
-                                                                            style="
-                                                                                width: 30px;
-                                                                                height: 30px;
-                                                                                vertical-align: middle;
-                                                                            "
-                                                                            th:src="@{/images/fridgeimg/MikeButton.png}"
-                                                                        />
-                                                                    </button>
+
+                                                                    <img
+                                                                        id="recordFoodPrice"
+                                                                        style="
+                                                                            width: 30px;
+                                                                            height: 30px;
+                                                                            vertical-align: middle;
+                                                                        "
+                                                                        th:src="@{/images/fridgeimg/MikeButton.png}"
+                                                                    />
                                                                 </div>
                                                                 <label class="form-label" for="foodPurchaseDate"
                                                                     >구매일자</label
+                                                                >
+                                                                <small class="form-text text-muted">
+                                                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;입력하지 않으면 오늘
+                                                                    날짜로 자동 설정됩니다.</small
                                                                 >
                                                                 <input
                                                                     class="form-control"
@@ -2215,6 +2227,10 @@
                                                                 />
                                                                 <label class="form-label" for="foodExpiryDate"
                                                                     >유통기한</label
+                                                                >
+                                                                <small class="form-text text-muted">
+                                                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;입력하지 않으면
+                                                                    구매일자로부터 14일 후로 자동 설정됩니다.</small
                                                                 >
                                                                 <input
                                                                     class="form-control"

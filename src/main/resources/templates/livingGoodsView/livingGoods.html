@@ -719,7 +719,7 @@
                                                                 <!-- 영수증 이미지 업로드 부분 -->
                                                                 <div class="mb-3">
                                                                     <label class="form-label" for="receiptUpload"
-                                                                        >파일 선택</label
+                                                                        >영수증 선택</label
                                                                     >
                                                                     <input
                                                                         class="form-control"
@@ -733,7 +733,7 @@
                                                                         id="uploadReceiptButton"
                                                                         type="button"
                                                                     >
-                                                                        Upload
+                                                                        영수증에서 상품명 추출하기
                                                                     </button>
                                                                 </div>
                                                                 <!-- 구분선 -->
@@ -748,7 +748,7 @@
                                                                     data-bs-dismiss="modal"
                                                                     type="button"
                                                                 >
-                                                                    Close
+                                                                    닫기
                                                                 </button>
                                                                 <!-- 분석 결과를 서버로 전송하는 버튼 -->
                                                                 <button
@@ -756,7 +756,7 @@
                                                                     id="submitDataButton"
                                                                     type="submit"
                                                                 >
-                                                                    Submit
+                                                                    입력
                                                                 </button>
                                                             </div>
                                                         </form>
@@ -810,17 +810,16 @@
                                                                         name="itemName"
                                                                         required=""
                                                                         type="text"
-                                                                    /><button class="voice-input-button">
-                                                                        <img
-                                                                            id="recordFoodName"
-                                                                            src="images/fridgeimg/MikeButton.png"
-                                                                            style="
-                                                                                width: 30px;
-                                                                                height: 30px;
-                                                                                vertical-align: middle;
-                                                                            "
-                                                                        />
-                                                                    </button>
+                                                                    />
+                                                                    <img
+                                                                        id="recordFoodName"
+                                                                        src="images/fridgeimg/MikeButton.png"
+                                                                        style="
+                                                                            width: 30px;
+                                                                            height: 30px;
+                                                                            vertical-align: middle;
+                                                                        "
+                                                                    />
                                                                 </div>
                                                                 <label class="form-label" for="itemCategory"
                                                                     >카테고리</label
@@ -849,30 +848,26 @@
                                                                         style="display: none"
                                                                         type="text"
                                                                     />
-                                                                    <button class="voice-input-button">
-                                                                        <img
-                                                                            id="recordFoodCategory"
-                                                                            src="images/fridgeimg/MikeButton.png"
-                                                                            style="
-                                                                                width: 30px;
-                                                                                height: 30px;
-                                                                                vertical-align: middle;
-                                                                            "
-                                                                        />
-                                                                    </button>
+
+                                                                    <img
+                                                                        id="recordFoodCategory"
+                                                                        src="images/fridgeimg/MikeButton.png"
+                                                                        style="
+                                                                            width: 30px;
+                                                                            height: 30px;
+                                                                            vertical-align: middle;
+                                                                        "
+                                                                    />
                                                                 </div>
-                                                                <button
-                                                                    class="btn btn-primary"
-                                                                    id="addCategoryBtn"
-                                                                    style="display: none"
-                                                                    type="button"
+                                                                <div id="addCategoryBtn" style="display: none">
+                                                                    <button class="btn btn-primary" type="button">
+                                                                        카테고리 추가하기</button
+                                                                    ><br />
+                                                                </div>
+                                                                <label class="form-label" for="itemQuantity"
+                                                                    >개수</label
                                                                 >
-                                                                    카테고리 추가하기
-                                                                </button>
                                                                 <div style="display: flex; align-items: center">
-                                                                    <label class="form-label" for="itemQuantity"
-                                                                        >개수</label
-                                                                    >
                                                                     <input
                                                                         class="form-control"
                                                                         id="itemQuantity"
@@ -881,42 +876,42 @@
                                                                         type="number"
                                                                         value="1"
                                                                     />
-                                                                    <button class="voice-input-button">
-                                                                        <img
-                                                                            id="recordFoodQuantity"
-                                                                            style="
-                                                                                width: 30px;
-                                                                                height: 30px;
-                                                                                vertical-align: middle;
-                                                                            "
-                                                                            th:src="@{/images/fridgeimg/MikeButton.png}"
-                                                                        />
-                                                                    </button>
+
+                                                                    <img
+                                                                        id="recordFoodQuantity"
+                                                                        style="
+                                                                            width: 30px;
+                                                                            height: 30px;
+                                                                            vertical-align: middle;
+                                                                        "
+                                                                        th:src="@{/images/fridgeimg/MikeButton.png}"
+                                                                    />
                                                                 </div>
+                                                                <label class="form-label" for="itemPrice">가격</label>
                                                                 <div style="display: flex; align-items: center">
-                                                                    <label class="form-label" for="itemPrice"
-                                                                        >가격</label
-                                                                    >
                                                                     <input
                                                                         class="form-control"
                                                                         id="itemPrice"
                                                                         name="itemPrice"
                                                                         type="number"
                                                                     />
-                                                                    <button class="voice-input-button">
-                                                                        <img
-                                                                            id="recordFoodPrice"
-                                                                            style="
-                                                                                width: 30px;
-                                                                                height: 30px;
-                                                                                vertical-align: middle;
-                                                                            "
-                                                                            th:src="@{/images/fridgeimg/MikeButton.png}"
-                                                                        />
-                                                                    </button>
+
+                                                                    <img
+                                                                        id="recordFoodPrice"
+                                                                        style="
+                                                                            width: 30px;
+                                                                            height: 30px;
+                                                                            vertical-align: middle;
+                                                                        "
+                                                                        th:src="@{/images/fridgeimg/MikeButton.png}"
+                                                                    />
                                                                 </div>
                                                                 <label class="form-label" for="itemPurchaseDate"
                                                                     >구매일자</label
+                                                                >
+                                                                <small class="form-text text-muted">
+                                                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;입력하지 않으면 오늘
+                                                                    날짜로 자동 설정됩니다.</small
                                                                 >
                                                                 <input
                                                                     class="form-control"
@@ -926,6 +921,10 @@
                                                                 />
                                                                 <label class="form-label" for="itemExpiryDate"
                                                                     >유통기한</label
+                                                                >
+                                                                <small class="form-text text-muted">
+                                                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;입력하지 않으면
+                                                                    구매일자로부터 14일 후로 자동 설정됩니다.</small
                                                                 >
                                                                 <input
                                                                     class="form-control"
@@ -971,13 +970,13 @@
                                                                     data-bs-dismiss="modal"
                                                                     type="button"
                                                                 >
-                                                                    Close
+                                                                    닫기
                                                                 </button>
                                                                 <button
                                                                     class="btn btn-primary addsubmitBtn"
                                                                     type="submit"
                                                                 >
-                                                                    Submit
+                                                                    입력
                                                                 </button>
                                                             </div>
                                                         </form>
@@ -1133,7 +1132,7 @@
                                                         소비
                                                     </button>
                                                     <button class="btn btn-danger" data-dismiss="modal" type="button">
-                                                        Close
+                                                        닫기
                                                     </button>
                                                 </div>
                                             </div>

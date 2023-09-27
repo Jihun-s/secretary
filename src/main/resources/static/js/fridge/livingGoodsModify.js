@@ -81,7 +81,7 @@ $(document).on('click', '.modal-category-editIcon', function () {
     const categoryItem = $(this).closest('.category-item');
     const categoryNameSpan = categoryItem.find('.category-name');
     const categoryName = categoryNameSpan.text();
-    categoryNameSpan.hide().after('<div class="d-flex align-items-center justify-content-between" style="width: 100%;"><input type="text" class="form-control category-input" value="' + categoryName + '" /><div class="d-flex flex-direction-row"><button class="btn btn-sm btn-warning confirm-edit">Confirm</button><button class="btn btn-sm btn-outline-secondary cancel-edit">Cancel</button></div></div>');
+    categoryNameSpan.hide().after('<div class="d-flex align-items-center justify-content-between" style="width: 100%;"><input type="text" class="form-control category-input" value="' + categoryName + '" style="flex: 1; margin-right: 5px;" /><div class="d-flex flex-direction-row"><button class="btn btn-sm btn-warning confirm-edit">수정</button><button class="btn btn-sm btn-outline-secondary cancel-edit">취소</button></div></div>');
 
     $(this).hide();
     categoryItem.find('.modal-category-deleteIcon').hide();
@@ -270,7 +270,7 @@ function setExistingImageInEditMode(existingImageSrc) {
                     setExistingImageInEditMode(existingImageSrc);
                 }
                 const submitBtn = $('#manualInputModal .addsubmitBtn');
-                submitBtn.text('Update');
+                submitBtn.text('수정');
                 submitBtn.removeClass('btn-primary').addClass('btn-warning');
                 $('#manualInputModal form').attr('action', 'livingGoods/modify/' + itemId);
                 $('#manualInputModal').modal('show');
@@ -285,7 +285,7 @@ function setExistingImageInEditMode(existingImageSrc) {
     // 모달이 닫힐 때 초기 상태로 복구
     $('#manualInputModal').on('hidden.bs.modal', function () {
         const submitBtn = $('#manualInputModal .btn-warning');
-        submitBtn.text('Submit');
+        submitBtn.text('입력');
         submitBtn.removeClass('btn-warning').addClass('btn-primary');
         $('#manualInputModal form').attr('action', 'livingGoods/add');
     });
