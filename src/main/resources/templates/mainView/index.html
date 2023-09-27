@@ -178,98 +178,56 @@
             <li class="menu-header small text-uppercase">
               <span class="menu-header-text">Inventories</span>
             </li>
-
-            <!-- 냉장고 -->
-            <li class="menu-item">
-              <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons bx bx-dock-top"></i>
-                <div data-i18n="Layouts">냉장고</div>
-              </a>
-
-              <ul class="menu-sub">
-                <li class="menu-item">
-                  <a th:href="@{/fridge}" class="menu-link">
-                    <div data-i18n="Without menu">물품 등록</div>
-                  </a>
-                </li>
-                <li class="menu-item">
-                  <a th:href="@{/fridge}" class="menu-link">
-                    <div data-i18n="Without navbar">물품 검색</div>
-                  </a>
-                </li>
-                <li class="menu-item">
-                  <a th:href="@{/fridge}" class="menu-link">
-                    <div data-i18n="Container">한 눈에 보기</div>
-                  </a>
-                </li>
-                <li class="menu-item">
-                  <a th:href="@{/fridge}" class="menu-link">
-                    <div data-i18n="Fluid">소비기한 보기</div>
-                  </a>
-                </li>
-              </ul>
-            </li>
-
-            <!-- 생활용품 -->
-            <li class="menu-item">
-              <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons bx bx-box"></i>
-                <div data-i18n="Account Settings">생활용품</div>
-              </a>
-              <ul class="menu-sub">
-                <li class="menu-item">
-                  <a
-                    th:href="@{/livingGoods}"
-                    class="menu-link"
-                  >
-                    <div data-i18n="Account">물품 등록</div>
-                  </a>
-                </li>
-                <li class="menu-item">
-                  <a
-                    th:href="@{/livingGoods}"
-                    class="menu-link"
-                  >
-                    <div data-i18n="Notifications">물품 검색</div>
-                  </a>
-                </li>
-                <li class="menu-item">
-                  <a
-                    th:href="@{/livingGoods}"
-                    class="menu-link"
-                  >
-                    <div data-i18n="Connections">한 눈에 보기</div>
-                  </a>
-                </li>
-                <li class="menu-item">
-                  <a
-                    th:href="@{/livingGoods}"
-                    class="menu-link"
-                  >
-                    <div data-i18n="Connections">소비기한 보기</div>
-                  </a>
-                </li>
-                <li class="menu-item">
-                  <a
-                    th:href="@{/livingGoods}"
-                    class="menu-link"
-                    target="_blank"
-                  >
-                    <div data-i18n="Basic">보관 장소 보기</div>
-                  </a>
-                </li>
-                <li class="menu-item">
-                  <a
-                    th:href="@{/livingGoods}"
-                    class="menu-link"
-                    target="_blank"
-                  >
-                    <div data-i18n="Basic">구매 시기 보기</div>
-                  </a>
-                </li>
-              </ul>
-            </li>
-
+                        <!-- 냉장고 -->
+                        <li class="menu-item">
+                          <a class="menu-link menu-toggle" href="javascript:void(0);">
+                              <i class="menu-icon tf-icons bx bx-dock-top"></i>
+                              <div data-i18n="Layouts">냉장고</div>
+                          </a>
+                          <ul class="menu-sub">
+                              <li class="menu-item">
+                                  <a class="menu-link" th:href="@{/fridge}">
+                                      <div data-i18n="Without menu">냉장고 메인</div>
+                                  </a>
+                              </li>
+                              <li class="menu-item">
+                                  <!-- 모달창을 열기 위한 버튼 -->
+                                  <a
+                                      class="menu-link"
+                                      href="#"
+                                      data-bs-toggle="modal"
+                                      data-bs-target="#trackingModal"
+                                  >
+                                      <div data-i18n="Pattern">소비 패턴 등록</div>
+                                  </a>
+                              </li>
+                          </ul>
+                      </li>
+                      <!-- 생활용품 -->
+                      <li class="menu-item">
+                          <a class="menu-link menu-toggle" href="javascript:void(0);">
+                              <i class="menu-icon tf-icons bx bx-box"></i>
+                              <div data-i18n="Account Settings">생활용품</div>
+                          </a>
+                          <ul class="menu-sub">
+                              <li class="menu-item">
+                                  <a class="menu-link" th:href="@{/livingGoods}">
+                                      <div data-i18n="Basic">생활 용품 메인</div>
+                                  </a>
+                              </li>
+                              <li class="menu-item">
+                                  <!-- 모달창을 열기 위한 버튼 -->
+                                  <a
+                                      class="menu-link"
+                                      href="#"
+                                      data-bs-toggle="modal"
+                                      data-bs-target="#trackingModal"
+                                  >
+                                      <div data-i18n="Pattern">소비 패턴 등록</div>
+                                  </a>
+                              </li>
+                          </ul>
+                      </li>
             <!-- 옷장 -->
             <li class="menu-item">
               <a href="javascript:void(0);" class="menu-link menu-toggle">

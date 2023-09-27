@@ -12,10 +12,12 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.extern.slf4j.Slf4j;
+import net.softsociety.secretary.domain.FridgeFood;
 import net.softsociety.secretary.domain.LivingGoods;
 import net.softsociety.secretary.domain.LivingGoodsListWrapper;
 import net.softsociety.secretary.domain.User;
@@ -109,4 +111,10 @@ public class LivingGoodsController {
         return "success";
     }
 
+    // 검색 엔드포인트
+    @ResponseBody
+    @GetMapping("/search")
+    public List<LivingGoods> searchLivingGoods(@RequestParam String query) {
+        return livingGoodsService.searchLivingGoods(query);
+    }
 }

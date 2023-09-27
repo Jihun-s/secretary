@@ -123,4 +123,9 @@
 	    WHERE ITEM_ID = #{itemId}
 	</select>
 	
+	<!-- 이름 검색 -->
+	<select id="searchLivingGoods" parameterType="string" resultType="LivingGoods">
+		SELECT * FROM Secretary_LIVING_GOODS
+		WHERE LOWER(ITEM_NAME) LIKE '%' || LOWER(#{query}) || '%'
+	</select>
 </mapper>

@@ -1,12 +1,14 @@
 package net.softsociety.secretary.service;
 
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.ModelAttribute;
 
 import lombok.extern.slf4j.Slf4j;
 import net.softsociety.secretary.dao.FoodCategoryDAO;
@@ -80,15 +82,19 @@ public class FridgeFoodServiceImpl implements FridgeFoodService {
             fridgeFood.setFoodExpiryDate(formattedDate);
         }
 
+     // 기본 카테고리 목록
+        Set<String> defaultCategories = new HashSet<>(Arrays.asList("일반", "야채", "생선", "육류", "과일"));
+
         // 카테고리 존재 여부 확인 및 추가 로직
         String category = fridgeFood.getFoodCategory();
-        FoodCategory foodCategory = new FoodCategory();
-        foodCategory.setFoodCategory(category);
-        foodCategory.setFamilyId(familyId);
-        if (!foodCategoryDAO.exists(foodCategory)) {
-            foodCategoryDAO.addCategory(foodCategory);
+        if (!defaultCategories.contains(category)) {
+            FoodCategory foodCategory = new FoodCategory();
+            foodCategory.setFoodCategory(category);
+            foodCategory.setFamilyId(familyId);
+            if (!foodCategoryDAO.exists(foodCategory)) {
+                foodCategoryDAO.addCategory(foodCategory);
+            }
         }
-
         fridgeFoodDAO.modifyFridgeFood(fridgeFood);
     }
 

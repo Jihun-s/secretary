@@ -69,6 +69,19 @@
 
         <!-- 스크립트 삭제.. -->
         <style>
+            .btn-group .btn {
+                height: 30px;
+                display: flex;
+                align-items: center; /* 수직 중앙 정렬 */
+                justify-content: center; /* 수평 중앙 정렬 (필요한 경우에만) */
+            }
+
+            .category-editIcon {
+                display: none;
+                top: 5px;
+                left: 5px;
+                margin-top: 2px;
+            }
             .consume-text {
                 cursor: pointer;
                 text-decoration: underline;
@@ -175,6 +188,17 @@
 
             .used-date {
                 font-size: 12px;
+            }
+            @font-face {
+                font-family: 'NanumSquareNeo-Variable';
+                src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_11-01@1.0/NanumSquareNeo-Variable.woff2')
+                    format('woff2');
+                font-weight: normal;
+                font-style: normal;
+            }
+
+            body {
+                font-family: 'NanumSquareNeo-Variable', sans-serif;
             }
         </style>
     </head>
@@ -306,23 +330,19 @@
                             </a>
                             <ul class="menu-sub">
                                 <li class="menu-item">
-                                    <a class="menu-link" href="layouts-without-menu.html">
-                                        <div data-i18n="Without menu">물품 등록</div>
+                                    <a class="menu-link" th:href="@{/fridge}">
+                                        <div data-i18n="Without menu">냉장고 메인</div>
                                     </a>
                                 </li>
                                 <li class="menu-item">
-                                    <a class="menu-link" href="layouts-without-navbar.html">
-                                        <div data-i18n="Without navbar">물품 검색</div>
-                                    </a>
-                                </li>
-                                <li class="menu-item">
-                                    <a class="menu-link" href="layouts-container.html">
-                                        <div data-i18n="Container">한 눈에 보기</div>
-                                    </a>
-                                </li>
-                                <li class="menu-item">
-                                    <a class="menu-link" href="layouts-fluid.html">
-                                        <div data-i18n="Fluid">소비기한 보기</div>
+                                    <!-- 모달창을 열기 위한 버튼 -->
+                                    <a
+                                        class="menu-link"
+                                        href="#"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#trackingModal"
+                                    >
+                                        <div data-i18n="Pattern">소비 패턴 등록</div>
                                     </a>
                                 </li>
                             </ul>
@@ -695,7 +715,7 @@
                                                                 <!-- 영수증 이미지 업로드 부분 -->
                                                                 <div class="mb-3">
                                                                     <label class="form-label" for="receiptUpload"
-                                                                        >파일 선택</label
+                                                                        >영수증 선택</label
                                                                     >
                                                                     <input
                                                                         class="form-control"
@@ -709,7 +729,7 @@
                                                                         id="uploadReceiptButton"
                                                                         type="button"
                                                                     >
-                                                                        Upload
+                                                                        영수증에서 상품명 추출하기
                                                                     </button>
                                                                 </div>
                                                                 <!-- 구분선 -->
@@ -724,7 +744,7 @@
                                                                     data-bs-dismiss="modal"
                                                                     type="button"
                                                                 >
-                                                                    Close
+                                                                    닫기
                                                                 </button>
                                                                 <!-- 분석 결과를 서버로 전송하는 버튼 -->
                                                                 <button
@@ -732,7 +752,7 @@
                                                                     id="submitDataButton"
                                                                     type="submit"
                                                                 >
-                                                                    Submit
+                                                                    입력
                                                                 </button>
                                                             </div>
                                                         </form>
@@ -786,17 +806,16 @@
                                                                         name="itemName"
                                                                         required=""
                                                                         type="text"
-                                                                    /><button class="voice-input-button">
-                                                                        <img
-                                                                            id="recordFoodName"
-                                                                            src="images/fridgeimg/MikeButton.png"
-                                                                            style="
-                                                                                width: 30px;
-                                                                                height: 30px;
-                                                                                vertical-align: middle;
-                                                                            "
-                                                                        />
-                                                                    </button>
+                                                                    />
+                                                                    <img
+                                                                        id="recordFoodName"
+                                                                        src="images/fridgeimg/MikeButton.png"
+                                                                        style="
+                                                                            width: 30px;
+                                                                            height: 30px;
+                                                                            vertical-align: middle;
+                                                                        "
+                                                                    />
                                                                 </div>
                                                                 <label class="form-label" for="itemCategory"
                                                                     >카테고리</label
@@ -825,30 +844,26 @@
                                                                         style="display: none"
                                                                         type="text"
                                                                     />
-                                                                    <button class="voice-input-button">
-                                                                        <img
-                                                                            id="recordFoodCategory"
-                                                                            src="images/fridgeimg/MikeButton.png"
-                                                                            style="
-                                                                                width: 30px;
-                                                                                height: 30px;
-                                                                                vertical-align: middle;
-                                                                            "
-                                                                        />
-                                                                    </button>
+
+                                                                    <img
+                                                                        id="recordFoodCategory"
+                                                                        src="images/fridgeimg/MikeButton.png"
+                                                                        style="
+                                                                            width: 30px;
+                                                                            height: 30px;
+                                                                            vertical-align: middle;
+                                                                        "
+                                                                    />
                                                                 </div>
-                                                                <button
-                                                                    class="btn btn-primary"
-                                                                    id="addCategoryBtn"
-                                                                    style="display: none"
-                                                                    type="button"
+                                                                <div id="addCategoryBtn" style="display: none">
+                                                                    <button class="btn btn-primary" type="button">
+                                                                        카테고리 추가하기</button
+                                                                    ><br />
+                                                                </div>
+                                                                <label class="form-label" for="itemQuantity"
+                                                                    >개수</label
                                                                 >
-                                                                    카테고리 추가하기
-                                                                </button>
                                                                 <div style="display: flex; align-items: center">
-                                                                    <label class="form-label" for="itemQuantity"
-                                                                        >개수</label
-                                                                    >
                                                                     <input
                                                                         class="form-control"
                                                                         id="itemQuantity"
@@ -857,42 +872,42 @@
                                                                         type="number"
                                                                         value="1"
                                                                     />
-                                                                    <button class="voice-input-button">
-                                                                        <img
-                                                                            id="recordFoodQuantity"
-                                                                            style="
-                                                                                width: 30px;
-                                                                                height: 30px;
-                                                                                vertical-align: middle;
-                                                                            "
-                                                                            th:src="@{/images/fridgeimg/MikeButton.png}"
-                                                                        />
-                                                                    </button>
+
+                                                                    <img
+                                                                        id="recordFoodQuantity"
+                                                                        style="
+                                                                            width: 30px;
+                                                                            height: 30px;
+                                                                            vertical-align: middle;
+                                                                        "
+                                                                        th:src="@{/images/fridgeimg/MikeButton.png}"
+                                                                    />
                                                                 </div>
+                                                                <label class="form-label" for="itemPrice">가격</label>
                                                                 <div style="display: flex; align-items: center">
-                                                                    <label class="form-label" for="itemPrice"
-                                                                        >가격</label
-                                                                    >
                                                                     <input
                                                                         class="form-control"
                                                                         id="itemPrice"
                                                                         name="itemPrice"
                                                                         type="number"
                                                                     />
-                                                                    <button class="voice-input-button">
-                                                                        <img
-                                                                            id="recordFoodPrice"
-                                                                            style="
-                                                                                width: 30px;
-                                                                                height: 30px;
-                                                                                vertical-align: middle;
-                                                                            "
-                                                                            th:src="@{/images/fridgeimg/MikeButton.png}"
-                                                                        />
-                                                                    </button>
+
+                                                                    <img
+                                                                        id="recordFoodPrice"
+                                                                        style="
+                                                                            width: 30px;
+                                                                            height: 30px;
+                                                                            vertical-align: middle;
+                                                                        "
+                                                                        th:src="@{/images/fridgeimg/MikeButton.png}"
+                                                                    />
                                                                 </div>
                                                                 <label class="form-label" for="itemPurchaseDate"
                                                                     >구매일자</label
+                                                                >
+                                                                <small class="form-text text-muted">
+                                                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;입력하지 않으면 오늘
+                                                                    날짜로 자동 설정됩니다.</small
                                                                 >
                                                                 <input
                                                                     class="form-control"
@@ -902,6 +917,10 @@
                                                                 />
                                                                 <label class="form-label" for="itemExpiryDate"
                                                                     >유통기한</label
+                                                                >
+                                                                <small class="form-text text-muted">
+                                                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;입력하지 않으면
+                                                                    구매일자로부터 14일 후로 자동 설정됩니다.</small
                                                                 >
                                                                 <input
                                                                     class="form-control"
@@ -947,13 +966,13 @@
                                                                     data-bs-dismiss="modal"
                                                                     type="button"
                                                                 >
-                                                                    Close
+                                                                    닫기
                                                                 </button>
                                                                 <button
                                                                     class="btn btn-primary addsubmitBtn"
                                                                     type="submit"
                                                                 >
-                                                                    Submit
+                                                                    입력
                                                                 </button>
                                                             </div>
                                                         </form>
@@ -962,179 +981,132 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="d-flex">
-                                        <div class="btn-group flex-fill position-relative">
-                                            <!-- position-relative 추가 -->
-                                            <button
-                                                class="btn btn-sm btn-info no-wrap-text"
-                                                id="categoryDisplayButton"
-                                                style="pointer-events: none"
-                                                type="button"
-                                            >
-                                                카테고리
-                                            </button>
-                                            <!-- 카테고리 수정 아이콘 위치 변경 시작 -->
-                                            <img
-                                                src="images/fridgeimg/ModifyName.png"
-                                                alt="카테고리 수정"
-                                                class="category-editIcon position-absolute"
-                                                style="
-                                                    display: none;
-                                                    top: 0;
-                                                    left: 0;
-                                                    height: 25px;
-                                                    width: 25px;
-                                                    z-index: 999;
-                                                "
-                                            />
-                                            <!-- 카테고리 수정 아이콘 위치 변경 끝 -->
-                                            <button
-                                                aria-expanded="false"
-                                                class="btn btn-sm btn-info dropdown-toggle dropdown-toggle-split"
-                                                data-bs-toggle="dropdown"
-                                                type="button"
-                                            >
-                                                <span class="visually-hidden">Toggle Dropdown</span>
-                                            </button>
-                                            <ul class="dropdown-menu categoryDropdown"></ul>
-                                        </div>
-
-                                        <!-- 카테고리 편집 모달 시작 -->
-                                        <div class="modal" tabindex="-1" id="categoryEditModal">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title">카테고리 편집</h5>
-                                                        <button
-                                                            type="button"
-                                                            class="btn-close"
-                                                            data-bs-dismiss="modal"
-                                                            aria-label="Close"
-                                                        ></button>
-                                                    </div>
-                                                    <div class="modal-body category-modify-modal">
-                                                        <!-- 여기에 카테고리 리스트를 표시합니다 -->
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button
-                                                            type="button"
-                                                            class="btn btn-secondary"
-                                                            data-bs-dismiss="modal"
-                                                        >
-                                                            닫기
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- 카테고리 편집 모달 끝 -->
-                                        <div class="btn-group flex-fill" style="margin: 0 3px">
-                                            <button
-                                                class="btn btn-sm btn-info no-wrap-text"
-                                                id="sortOrderButton"
-                                                style="pointer-events: none"
-                                                type="button"
-                                            >
-                                                정렬순서
-                                            </button>
-                                            <button
-                                                aria-expanded="false"
-                                                class="btn btn-sm btn-info dropdown-toggle dropdown-toggle-split"
-                                                data-bs-toggle="dropdown"
-                                                type="button"
-                                            >
-                                                <span class="visually-hidden">Toggle Dropdown</span>
-                                            </button>
-                                            <ul class="dropdown-menu">
-                                                <li>
-                                                    <a
-                                                        class="dropdown-item"
-                                                        href="javascript:void(0);"
-                                                        onclick="updateSortOrder('유효기간 순')"
-                                                        >유효기간 순</a
-                                                    >
-                                                </li>
-                                                <li>
-                                                    <a
-                                                        class="dropdown-item"
-                                                        href="javascript:void(0);"
-                                                        onclick="updateSortOrder('유효기간 역순')"
-                                                        >유효기간 역순</a
-                                                    >
-                                                </li>
-                                                <li>
-                                                    <a
-                                                        class="dropdown-item"
-                                                        href="javascript:void(0);"
-                                                        onclick="updateSortOrder('입력 날짜 순')"
-                                                        >입력 날짜 순</a
-                                                    >
-                                                </li>
-                                                <li>
-                                                    <a
-                                                        class="dropdown-item"
-                                                        href="javascript:void(0);"
-                                                        onclick="updateSortOrder('입력 날짜 역순')"
-                                                        >입력 날짜 역순</a
-                                                    >
-                                                </li>
-                                            </ul>
-                                        </div>
-
-                                        <button
-                                            class="btn btn-sm btn-warning no-wrap-text"
-                                            id="livingItemModify"
-                                            type="button"
-                                        >
-                                            편집
-                                        </button>
-                                    </div>
-                                    <!-- 삭제 확인 모달 -->
-                                    <div
-                                        class="modal fade"
-                                        id="deleteConfirmModal"
-                                        tabindex="-1"
-                                        aria-labelledby="deleteConfirmModalLabel"
-                                        aria-hidden="true"
-                                    >
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="deleteConfirmModalLabel">삭제 확인</h5>
-                                                    <button
-                                                        type="button"
-                                                        class="btn-close"
-                                                        data-bs-dismiss="modal"
-                                                        aria-label="Close"
-                                                    ></button>
-                                                </div>
-                                                <div class="modal-body">정말로 이 물품 아이템을 삭제하시겠습니까?</div>
-                                                <div class="modal-footer">
-                                                    <button
-                                                        type="button"
-                                                        class="btn btn-secondary"
-                                                        data-bs-dismiss="modal"
-                                                    >
-                                                        아니오
-                                                    </button>
-                                                    <button type="button" class="btn btn-primary" id="confirmDelete">
-                                                        예
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
                                     <!-- Living Item Display -->
                                     <div class="card mb-4 living-item-box">
                                         <div class="card-body itembox">
+                                            <!-- 버튼 그룹 시작 -->
+                                            <div
+                                                class="d-flex"
+                                                style="position: absolute; top: 0; left: 0; right: 0; margin-bottom: 0"
+                                            >
+                                                <!-- 카테고리 버튼 그룹 -->
+                                                <div class="btn-group flex-fill">
+                                                    <button
+                                                        type="button"
+                                                        class="btn btn-outline-primary dropdown-toggle"
+                                                        data-bs-toggle="dropdown"
+                                                        id="categoryDisplayButton"
+                                                    >
+                                                        카테고리
+                                                    </button>
+                                                    <ul class="dropdown-menu categoryDropdown"></ul>
+                                                    <img
+                                                        src="images/fridgeimg/ModifyName.png"
+                                                        alt="카테고리 수정"
+                                                        class="category-editIcon position-absolute"
+                                                        style="
+                                                            top: 0;
+                                                            right: 0;
+                                                            height: 25px;
+                                                            width: 25px;
+                                                            z-index: 999;
+                                                        "
+                                                    />
+                                                </div>
+
+                                                <!-- 카테고리 편집 모달 -->
+                                                <div class="modal" tabindex="-1" id="categoryEditModal">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title">카테고리 편집</h5>
+                                                                <button
+                                                                    type="button"
+                                                                    class="btn-close"
+                                                                    data-bs-dismiss="modal"
+                                                                    aria-label="Close"
+                                                                ></button>
+                                                            </div>
+                                                            <div class="modal-body category-modify-modal"></div>
+                                                            <div class="modal-footer">
+                                                                <button
+                                                                    type="button"
+                                                                    class="btn btn-secondary"
+                                                                    data-bs-dismiss="modal"
+                                                                >
+                                                                    닫기
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- 정렬순서 버튼 그룹 -->
+                                                <div class="btn-group flex-fill" style="margin: 0 3px">
+                                                    <button
+                                                        type="button"
+                                                        class="btn btn-outline-primary dropdown-toggle"
+                                                        data-bs-toggle="dropdown"
+                                                        id="sortOrderButton"
+                                                    >
+                                                        정렬순서
+                                                    </button>
+                                                    <ul class="dropdown-menu">
+                                                        <li>
+                                                            <a
+                                                                class="dropdown-item"
+                                                                href="javascript:void(0);"
+                                                                onclick="updateSortOrder('유효기간 순')"
+                                                                >유효기간 순</a
+                                                            >
+                                                        </li>
+                                                        <li>
+                                                            <a
+                                                                class="dropdown-item"
+                                                                href="javascript:void(0);"
+                                                                onclick="updateSortOrder('유효기간 역순')"
+                                                                >유효기간 역순</a
+                                                            >
+                                                        </li>
+                                                        <li>
+                                                            <a
+                                                                class="dropdown-item"
+                                                                href="javascript:void(0);"
+                                                                onclick="updateSortOrder('입력 날짜 순')"
+                                                                >입력 날짜 순</a
+                                                            >
+                                                        </li>
+                                                        <li>
+                                                            <a
+                                                                class="dropdown-item"
+                                                                href="javascript:void(0);"
+                                                                onclick="updateSortOrder('입력 날짜 역순')"
+                                                                >입력 날짜 역순</a
+                                                            >
+                                                        </li>
+                                                    </ul>
+                                                </div>
+
+                                                <!-- 편집 버튼 -->
+                                                <button
+                                                    class="btn btn-sm btn-outline-warning no-wrap-text"
+                                                    id="livingItemModify"
+                                                    type="button"
+                                                >
+                                                    편집
+                                                </button>
+                                            </div>
+                                            <!-- 버튼 그룹 끝 -->
+
                                             <div
                                                 class="living-items-container"
                                                 id="livingItemsContainer"
-                                                style="padding-right: 20px"
+                                                style="padding-right: 20px; margin-top: 20px"
                                             ></div>
                                         </div>
                                     </div>
-                                    <!-- Food Detail Modal -->
+
+                                    <!-- Goods Detail Modal -->
                                     <div class="modal" id="itemModal">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
@@ -1142,7 +1114,7 @@
                                                     <h4 class="modal-title">상세 정보</h4>
                                                 </div>
                                                 <div class="modal-body">
-                                                    <!-- Food details will be loaded here -->
+                                                    <!-- Goods details will be loaded here -->
                                                 </div>
                                                 <!-- In your itemModal's modal-footer -->
                                                 <div class="modal-footer">
@@ -1156,7 +1128,7 @@
                                                         소비
                                                     </button>
                                                     <button class="btn btn-danger" data-dismiss="modal" type="button">
-                                                        Close
+                                                        닫기
                                                     </button>
                                                 </div>
                                             </div>

@@ -135,7 +135,7 @@ $(document).ready(function () {
             dDayColor = 'red';
         }
     
-        var expiryDateStr = expiryDate ? `기한: ${formatDate(item.itemExpiryDate)} (D-<span class="d-day" style="color:${dDayColor}">${diffDays}</span>)` : '';
+        var expiryDateStr = expiryDate ? `기한: ${formatDate(item.itemExpiryDate)} <br>(D-<span class="d-day" style="color:${dDayColor}">${diffDays}</span>)` : '';
         var purchaseDateStr = item.itemPurchaseDate ? `구매: ${formatDate(item.itemPurchaseDate)}` : `입력: ${formatDate(item.itemInputDate)}`;
 
         const itemModifyIcon = `
@@ -174,6 +174,28 @@ $(document).ready(function () {
     
         $('#livingItemsContainer').append(itemElement);
     }
+
+    // 검색창 요소 선택
+    let $itemSearchInput = $('#itemSearchInput');
+
+    // 검색창에 키 입력 이벤트 추가
+    $itemSearchInput.on('keyup', function () {
+        let searchTerm = $(this).val(); // 사용자가 입력한 검색어
+
+        $.ajax({
+            url: 'livingGoods/search', // 생활용품 검색을 위한 백엔드 엔드포인트. 실제 엔드포인트 경로로 수정 필요
+            method: 'GET',
+            data: { query: searchTerm }, // 검색어를 쿼리 파라미터로 전달
+            success: function (response) {
+                // 응답에서 받아온 검색 결과를 화면에 표시
+                $('#livingItemsContainer').empty(); // 기존에 표시되던 생활용품 항목을 모두 제거합니다.
+                response.forEach(displayLivingItem); // 각 검색된 생활용품 항목을 화면에 표시합니다.
+            },
+            error: function (error) {
+                console.error('Error fetching search results:', error);
+            },
+        });
+    });
     
     //아이템 출력
     $.get(`livingGoods/getLivingGoods`, function (items) {
@@ -266,6 +288,7 @@ $(document).ready(function () {
             previewDefaultText.style.display = null;
         }
     });
+
 });
 //readyEND
 
@@ -302,3 +325,20 @@ function updateSortOrder(sortOrder) {
 
     $('#livingItemsContainer').empty().append(sortedItems);
 }
+
+document.addEventListener('DOMContentLoaded', function () {
+    var manualInputModal = document.getElementById('manualInputModal');
+
+    manualInputModal.addEventListener('show.bs.modal', function () {
+        // 구매일자의 기본값 설정
+        var purchaseDateInput = document.getElementById('itemPurchaseDate');
+        var today = new Date().toISOString().slice(0, 10); // 현재 날짜를 YYYY-MM-DD 형식으로 변환
+        purchaseDateInput.value = today;
+
+        // 유통기한의 기본값 설정
+        var expiryDateInput = document.getElementById('itemExpiryDate');
+        var expiryDate = new Date();
+        expiryDate.setDate(expiryDate.getDate() + 14);
+        expiryDateInput.value = expiryDate.toISOString().slice(0, 10); // 현재 날짜 + 14일을 YYYY-MM-DD 형식으로 변환
+    });
+});
