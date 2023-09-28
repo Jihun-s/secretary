@@ -69,6 +69,20 @@
 
         <!-- 스크립트 삭제.. -->
         <style>
+            img[src='images/fridgeimg/ModifyName.png']:hover,
+            img[src='images/fridgeimg/Red_X.png']:hover {
+                cursor: pointer;
+                opacity: 0.7;
+            }
+
+            #recordItemName:hover,
+            #recordItemQuantity:hover,
+            #recordItemPrice:hover,
+            #recordItemCategory:hover {
+                opacity: 0.7;
+                cursor: pointer;
+            }
+
             .btn-group .btn {
                 height: 30px;
                 display: flex;
@@ -808,12 +822,13 @@
                                                                         type="text"
                                                                     />
                                                                     <img
-                                                                        id="recordFoodName"
+                                                                        id="recordItemName"
                                                                         src="images/fridgeimg/MikeButton.png"
                                                                         style="
                                                                             width: 30px;
                                                                             height: 30px;
                                                                             vertical-align: middle;
+                                                                            margin-left: 6px;
                                                                         "
                                                                     />
                                                                 </div>
@@ -846,12 +861,13 @@
                                                                     />
 
                                                                     <img
-                                                                        id="recordFoodCategory"
+                                                                        id="recordItemCategory"
                                                                         src="images/fridgeimg/MikeButton.png"
                                                                         style="
                                                                             width: 30px;
                                                                             height: 30px;
                                                                             vertical-align: middle;
+                                                                            margin-left: 6px;
                                                                         "
                                                                     />
                                                                 </div>
@@ -874,11 +890,12 @@
                                                                     />
 
                                                                     <img
-                                                                        id="recordFoodQuantity"
+                                                                        id="recordItemQuantity"
                                                                         style="
                                                                             width: 30px;
                                                                             height: 30px;
                                                                             vertical-align: middle;
+                                                                            margin-left: 6px;
                                                                         "
                                                                         th:src="@{/images/fridgeimg/MikeButton.png}"
                                                                     />
@@ -893,11 +910,12 @@
                                                                     />
 
                                                                     <img
-                                                                        id="recordFoodPrice"
+                                                                        id="recordItemPrice"
                                                                         style="
                                                                             width: 30px;
                                                                             height: 30px;
                                                                             vertical-align: middle;
+                                                                            margin-left: 6px;
                                                                         "
                                                                         th:src="@{/images/fridgeimg/MikeButton.png}"
                                                                     />

@@ -63,6 +63,19 @@
         <script th:src="@{/js/fridge/speechscript.js}"></script>
         <script th:src="@{/assets/vendor/libs/jquery/jquery.js}"></script>
         <style>
+            img[src='images/fridgeimg/ModifyName.png']:hover,
+            img[src='images/fridgeimg/Red_X.png']:hover {
+                cursor: pointer;
+                opacity: 0.7;
+            }
+
+            #recordFoodName:hover,
+            #recordFoodQuantity:hover,
+            #recordFoodPrice:hover,
+            #recordFoodCategory:hover {
+                opacity: 0.7;
+                cursor: pointer;
+            }
             .btn-group .btn {
                 height: 30px;
                 display: flex;
@@ -2105,6 +2118,7 @@
                                                                             width: 30px;
                                                                             height: 30px;
                                                                             vertical-align: middle;
+                                                                            margin-left: 6px;
                                                                         "
                                                                     />
                                                                 </div>
@@ -2143,6 +2157,7 @@
                                                                             width: 30px;
                                                                             height: 30px;
                                                                             vertical-align: middle;
+                                                                            margin-left: 6px;
                                                                         "
                                                                     />
                                                                 </div>
@@ -2171,6 +2186,7 @@
                                                                             width: 30px;
                                                                             height: 30px;
                                                                             vertical-align: middle;
+                                                                            margin-left: 6px;
                                                                         "
                                                                         th:src="@{/images/fridgeimg/MikeButton.png}"
                                                                     />
@@ -2190,6 +2206,7 @@
                                                                             width: 30px;
                                                                             height: 30px;
                                                                             vertical-align: middle;
+                                                                            margin-left: 6px;
                                                                         "
                                                                         th:src="@{/images/fridgeimg/MikeButton.png}"
                                                                     />

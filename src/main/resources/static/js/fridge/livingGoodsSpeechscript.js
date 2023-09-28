@@ -4,19 +4,19 @@ document.addEventListener("DOMContentLoaded", function() {
     // 각 필드별 음성 입력 버튼과 입력란에 대한 참조를 가져옵니다.
     const buttons = {
         itemName: {
-            btn: document.getElementById('recordFoodName'),
+            btn: document.getElementById('recordItemName'),
             input: document.getElementById('itemName'),
         },
         itemQuantity: {
-            btn: document.getElementById('recordFoodQuantity'),
+            btn: document.getElementById('recordItemQuantity'),
             input: document.getElementById('itemQuantity'),
         },
         itemPrice: {
-            btn: document.getElementById('recordFoodPrice'),
+            btn: document.getElementById('recordItemPrice'),
             input: document.getElementById('itemPrice'),
         },
         itemCategory: {
-            btn: document.getElementById('recordFoodCategory'),
+            btn: document.getElementById('recordItemCategory'),
             input: document.getElementById('itemCategory'),
         },
     };
@@ -182,7 +182,7 @@ document.addEventListener("DOMContentLoaded", function() {
     
     
     // 추출된 상품명을 HTML에 추가하는 함수
-    const DEFAULT_CATEGORIES = ['욕실용품', '주방용품', '청소용품', '세탁용품', '일반물품'];
+    const DEFAULT_CATEGORIES = ['일반물품', '욕실용품', '주방용품', '청소용품', '세탁용품'];
 
     function appendProductNamesToHTML(productNames) {
         let productsContainer = document.getElementById('productsContainer');
@@ -250,6 +250,7 @@ document.addEventListener("DOMContentLoaded", function() {
             let deleteText = document.createElement('span');
             deleteText.textContent = 'X';
             deleteText.classList.add('delete-text', 'ml-2');
+            deleteText.style.width = '170px';  // 원하는 크기로 조절
             productDiv.appendChild(deleteText);
 
             deleteText.addEventListener('click', function(event) {
@@ -310,6 +311,7 @@ document.addEventListener("DOMContentLoaded", function() {
             let newDeleteText = document.createElement('span');
             newDeleteText.textContent = 'X';
             newDeleteText.classList.add('delete-text', 'ml-2');
+            newDeleteText.style.width = '170px';  // 원하는 크기로 조절
             newProductDiv.appendChild(newDeleteText);
 
             newDeleteText.addEventListener('click', function(event) {
