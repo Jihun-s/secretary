@@ -22,5 +22,9 @@ public class CashbookAlert {
 	String alertDate;
 	String alertStart;
 	String alertEnd;
+	String alertDateYmd;
+	String alertDateYear;
+	String alertDateMonth;
+	String alertDateDay;
 	
 }

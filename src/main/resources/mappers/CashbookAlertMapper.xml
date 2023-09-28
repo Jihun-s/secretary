@@ -30,4 +30,66 @@
 		    )
 </insert>
 
+<!-- 필수 알림 목록 불러오기 -->
+<select id="getPilsuAlert" parameterType="hashmap" resultType="CashbookAlert">
+	SELECT
+	    alert_id
+	    , family_id
+	    , user_id
+	    , alert_type
+	    , alert_trans_type
+	    , alert_content
+	    , alert_date
+	    , alert_start
+	    , alert_end
+   		, TO_CHAR(alert_date, 'YYYY-MM-DD') AS alert_date_Ymd
+   		, TO_CHAR(alert_date, 'YYYY') AS alert_date_year
+	    , TO_CHAR(alert_date, 'MM') AS alert_date_month
+	    , TO_CHAR(alert_date, 'DD') AS alert_date_day
+	FROM Secretary_Cashbook_Alert
+	WHERE 
+	    family_id = #{familyId}
+        AND EXTRACT(YEAR FROM alert_date) = #{curYear}
+        AND EXTRACT(MONTH FROM alert_date) >= #{curMonth}
+        AND alert_type = '필수'
+    	AND alert_date >= TRUNC(SYSDATE)
+    	AND alert_date &lt;= TRUNC(SYSDATE + 30)
+	ORDER BY
+		alert_date
+</select>
+
+<!-- 제안 알림 목록 불러오기 -->
+<select id="getJeahnAlert" parameterType="hashmap" resultType="CashbookAlert">
+	SELECT
+	    alert_id
+	    , family_id
+	    , user_id
+	    , alert_type
+	    , alert_trans_type
+	    , alert_content
+	    , alert_date
+	    , alert_start
+	    , alert_end
+	FROM Secretary_Cashbook_Alert
+	WHERE 
+	    family_id = #{familyId}
+        AND EXTRACT(YEAR FROM alert_date) = #{curYear}
+        AND EXTRACT(MONTH FROM alert_date) >= #{curMonth}
+        AND alert_type = '제안'
+    	AND alert_date >= TRUNC(SYSDATE)
+    	AND alert_date &lt;= TRUNC(SYSDATE + 30)
+	ORDER BY
+		alert_date
+</select>
+
+<!-- 알림 삭제 -->
+<delete id="deleteAlert" parameterType="hashmap">
+	DELETE FROM
+		Secretary_Cashbook_Alert
+	WHERE
+		alert_id = #{alertId}
+		<!-- AND user_id = #{userId} -->
+		AND family_id = #{familyId}
+</delete>
+
 </mapper>
