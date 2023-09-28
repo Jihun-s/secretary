@@ -79,7 +79,7 @@
     	AND alert_date >= TRUNC(SYSDATE)
     	AND alert_date &lt;= TRUNC(SYSDATE + 30)
 	ORDER BY
-		alert_date
+		alert_date DESC
 </select>
 
 <!-- 알림 삭제 -->
@@ -92,4 +92,13 @@
 		AND family_id = #{familyId}
 </delete>
 
+<!-- 알림 삭제 -->
+<delete id="deleteAllPilsuAlert" parameterType="hashmap">
+	DELETE FROM
+		Secretary_Cashbook_Alert
+	WHERE
+		alert_type = '필수'
+		<!-- AND user_id = #{userId} -->
+		AND family_id = #{familyId}
+</delete>
 </mapper>

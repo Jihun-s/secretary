@@ -727,7 +727,10 @@
                     <div class="card-body">
                       <div class="notification">
                         <div class="col-xl-6" style="width: 100%">
-                          <h6 class="text-muted">알림</h6>
+                          <span class="d-flex justify-content-between">
+                            <h6 class="text-muted">알림</h6>
+                            <h6 class="text-muted" style="cursor: pointer;" onclick="deleteAllPilsuAlert();">모두 삭제</h6>
+                          </span>
                           <div class="nav-align-top mb-4">
                             <ul
                               class="nav nav-pills mb-3 nav-fill"
@@ -739,15 +742,11 @@
                                   class="nav-link active"
                                   role="tab"
                                   data-bs-toggle="tab"
-                                  data-bs-target="#AlertListDiv"
-                                  aria-controls="AlertListDiv"
+                                  data-bs-target="#pilsuAlertListDiv"
+                                  aria-controls="pilsuAlertListDiv"
                                   aria-selected="true"
                                 >
                                   <i class="tf-icons bx bx-home"></i> 필수 알림
-                                  <span
-                                    class="badge rounded-pill badge-center h-px-20 w-px-20 bg-danger"
-                                    >3</span
-                                  >
                                 </button>
                               </li>
                               <li class="nav-item">
@@ -771,9 +770,13 @@
                               <!-- 필수 알림 탭 내용 -->
                               <div
                                 class="tab-pane fade show active"
-                                id="AlertListDiv"
+                                id="pilsuAlertListDiv"
                                 role="tabpanel"
-                              ></div>
+                              >
+                                <p>
+                                  표시할 필수 알림이 없습니다.
+                                </p>
+                              </div>
 
                               <!-- 제안 알림 탭 내용 -->
                               <div
@@ -782,7 +785,7 @@
                                 role="tabpanel"
                               >
                                 <p>
-                                  8월 23일은 처서입니다. 여름옷을 정리해볼까요?
+                                  표시할 제안 알림이 없습니다.
                                 </p>
                               </div>
                             </div>

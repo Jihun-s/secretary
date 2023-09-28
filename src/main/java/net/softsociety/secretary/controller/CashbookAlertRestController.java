@@ -30,6 +30,7 @@ public class CashbookAlertRestController {
 	CashbookAlertDAO dao;
 	
 	
+	/** 필수알림 목록 가져오기 */
 	@PostMapping("getPilsuAlert")
 	public ArrayList<CashbookAlert> getPilsuAlert(
 			Model model
@@ -78,5 +79,22 @@ public class CashbookAlertRestController {
 		map.put("alertId", alertId);
 		
 		int n = dao.deleteAlert(map);
+	}
+	
+	/** 필수알림 모두 삭제 */
+	@PostMapping("deleteAllPilsuAlert")
+	public void deleteAllPilsuAlert(
+			Model model) {
+		
+		User loginUser = (User) model.getAttribute("loginUser");
+		int familyId = loginUser.getFamilyId();
+		String userId = loginUser.getUserId();
+		
+		log.debug("필수알림 전체 삭제할게요:{}번가족", familyId);
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("userId", userId);
+		map.put("familyId", familyId);
+		
+		int n = dao.deleteAllPilsuAlert(map);
 	}
 }

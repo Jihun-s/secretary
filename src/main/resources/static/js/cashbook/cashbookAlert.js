@@ -40,6 +40,12 @@ function getPilsuAlert() {
     console.log("data: " + JSON.stringify(data));
 
     let html = "";
+
+    if (!data || data.length === 0) {
+      html = '표시할 필수 알림이 없습니다.';
+      $('#pilsuAlertListDiv').html(html);
+      return;
+    }
     
     // 예산 없을 때 알림
     if(budgetExist == 0) {
@@ -57,7 +63,6 @@ function getPilsuAlert() {
 
     // 알림을 alertDateYmd 기준으로 그룹화
     let groupedByDate = {};
-    // 자동이체 
     data.forEach(alert => {
       if (!groupedByDate[alert.alertDateYmd]) {
           groupedByDate[alert.alertDateYmd] = [];
@@ -65,8 +70,17 @@ function getPilsuAlert() {
       groupedByDate[alert.alertDateYmd].push(alert);
     });
 
+    // 객체의 키를 추출해 내림차순으로 정렬
+    let sortedDates = Object.keys(groupedByDate).sort((a, b) => b.localeCompare(a));
 
-    console.log("groupedByDate: " + JSON.stringify(groupedByDate));
+    // 내림차순한 배열 
+    let sortedGroupedByDate = {};
+    sortedDates.forEach(date => {
+      sortedGroupedByDate[date] = groupedByDate[date];
+    });
+
+
+    console.log("sortedGroupedByDate: " + JSON.stringify(sortedGroupedByDate));
 
     // 그룹별 키워드
     // 지출
@@ -78,14 +92,18 @@ function getPilsuAlert() {
     let exGoodday = ["생일", "생신", "결혼", "백일", "돌잔치", "환갑", "칠순", "팔순", "구순", "파티"]
     // 조사 
     let exSadday = ["기일", "장례"];
+    
     // 수입
+    // 정기소득
     let inSalary = ["월급", "급여", "주급"];
+    // 비정기소득
+    let inLuck = ["용돈", "주식"];
 
     // 그룹화된 데이터를 기반으로 HTML 생성
-    for (let date in groupedByDate) {
+    for (let date in sortedGroupedByDate) {
       html += `<br><small class="text-light fw-semibold">${date}</small>`;
       // 가져온 데이터 분기
-      groupedByDate[date].forEach(alert => {
+      sortedGroupedByDate[date].forEach(alert => {
         html += `
         <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" style="border: none;">
         <a href="javascript:openDetailModal(${alert.alertId});">
@@ -122,6 +140,12 @@ function getPilsuAlert() {
             ${alert.alertDateMonth}월 ${alert.alertDateDay}일은 기다리던 ${alert.alertContent}입니다! 야호! 이번 달은 알차게 써보자고요.
           `;
           }
+          // 용돈
+          else if (inLuck.some(keyword => alert.alertContent.includes(keyword))) {
+            html += `
+            ${alert.alertDateMonth}월 ${alert.alertDateDay}일 받은 ${alert.alertContent}은 비상금으로 모아두는 건 어떨까요? 
+          `;
+          }
 
           html += `
           </div>
@@ -135,7 +159,7 @@ function getPilsuAlert() {
 
       }
 
-      $('#AlertListDiv').html(html);
+      $('#pilsuAlertListDiv').html(html);
     },
     error: (e) => {
         alert('가계부 필수알림 목록 전송 실패');
@@ -162,4 +186,23 @@ function deleteAlert(alertId) {
       console.log(JSON.stringify(e));
     }
   });
+}
+
+/////////////////////////////////////////////////////////////////////////
+
+/** 필수알림 전체 삭제 */
+function deleteAllPilsuAlert() {
+  if(confirm("필수 알림을 모두 삭제할까요?")) {
+    $.ajax({
+      url: '/secretary/cashbook/alert/deleteAllPilsuAlert',
+      type: 'POST',
+      success: () => {
+        getPilsuAlert();
+      },
+      error: (e) => {
+        alert("필수알림 모두 삭제 서버 전송 실패");
+        console.log(JSON.stringify(e));
+      }
+    });
+  }
 }
