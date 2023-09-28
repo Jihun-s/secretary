@@ -201,7 +201,7 @@ $(document).ready(function () {
   $('#schUpdateBt').click(updateSch);
 
   // 일정 삭제
-  $('#schDetailDeleteBt').click(deleteSch);
+  $('#schDetailDeleteBt').click(deleteSch1);
 
   // 달력 렌더링
   calendar.render();
@@ -376,9 +376,11 @@ function openDetailModal(schId) {
 ////////////////////////////////////////////////////////////////////////
 
 /** 일정 삭제 */
-function deleteSch() {
+function deleteSch1() {
   let schId = $('#schId').val();
+  let schContent = $('#schContent').val();
   console.log("삭제할 일정의 schId는 " + schId);
+  console.log("삭제할 일정의 schContent는 " + schContent);
   
   if(confirm("일정을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.")) {
     $.ajax({
