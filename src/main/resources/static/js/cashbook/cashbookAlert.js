@@ -4,9 +4,9 @@ $(document).ready(function() {
   // 60초에 한번씩 알림창 새로고침 
   setInterval(function() {
     getPilsuAlert();
-  }, 60000);
+    getJeahnAlert();
+  }, 6000);
 });
-
 
 //////////////////////////////////////////////////////////
 
@@ -38,7 +38,7 @@ function getPilsuAlert() {
                 success: (result) => {
                   if (result <= 0) {
                     budgetMinus = 1;
-                    alert("예산초과?:" + budgetMinus);
+                    // alert("예산초과?:" + budgetMinus);
                   }
                 },
                 error: (e) => {
@@ -88,18 +88,18 @@ function getPilsuAlert() {
         
     // 예산 초과했을 때 알림
     if(budgetMinus == 1) {
-      alert("알림 추가하자!");
+      // alert("알림 추가하자!");
       html += `<br><small class="text-light fw-semibold">${curYear}-${curMonth}-${curDate}</small>`;
       html += `
       <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" style="border: none;">
-      <a href="javascript:openSetBudgetModal()">
+      <a href="javascript:openUpdateBudgetModal()">
       <div>
       ${curMonth}월 예산을 초과했어요! 과소비를 계속하면 길바닥에 나앉을 수 있어요. 여기를 눌러 예산을 다시 설정할 수 있어요.
       </div>
       </a>
       </div>
       `;
-      alert("알림 추가 완료!");
+      // alert("알림 추가 완료!");
     }
 
     // 알림을 alertDateYmd 기준으로 그룹화
@@ -239,6 +239,7 @@ function deleteAllPilsuAlert() {
       type: 'POST',
       success: () => {
         getPilsuAlert();
+        getJeahnAlert();
       },
       error: (e) => {
         alert("필수알림 모두 삭제 서버 전송 실패");
@@ -346,3 +347,9 @@ function getJeahnAlert() {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
+
+/** 예산 재설정 알림 클릭하면 예산 설정 모달 띄우는 함수 */
+function openUpdateBudgetModal() {
+  initUpdateBudgetModal();
+  $('#ModalUpdateBudget').modal('show');
+}

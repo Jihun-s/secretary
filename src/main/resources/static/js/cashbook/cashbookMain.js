@@ -13,6 +13,7 @@ $(document).ready(function() {
     $('#setBudgetBtModal').click(setBudgetModal);
     $('#updateBudgetBtModal').click(updateBudgetModal);
     $('#deleteBudgetBtModal').click(deleteBudgetModal);
+
 });
 
 /** 현재 날짜 전역변수 */
