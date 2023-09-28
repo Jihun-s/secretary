@@ -97,7 +97,7 @@ function getAlerts() {
                           <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" style="border: none;">
                             <a href="javascript:openDetailModal(${sch.schId});">
                               <div>
-                                ${sch.schStartMonth}월 ${sch.schStartDate}일은 ${sch.schContent}입니다! 야호!
+                                ${sch.schStartMonth}월 ${sch.schStartDate}일은 기다리던 ${sch.schContent}입니다. 야호! 월급의 50%는 저축하는 편이 좋아요.
                               </div>
                             </a>
                             <i class="bx bx-x" style="cursor: pointer;" onclick="deleteSch(${sch.schId});"></i>

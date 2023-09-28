@@ -1,0 +1,33 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.softsociety.secretary.dao.CashbookAlertDAO">
+
+<!-- 가계부 알림 입력 -->
+<insert id="insertAlert" parameterType="hashmap">
+	INSERT INTO
+	    Secretary_Cashbook_Alert
+		    (alert_id
+		    , family_id
+		    , user_id
+		    , alert_type
+		    , alert_trans_type
+		    , alert_content
+		    , alert_date
+		    , alert_start
+		    , alert_end)
+		VALUES
+		    (Secretary_Cashbook_Alert_SEQ.nextval
+		    , #{familyId}
+		    , #{userId}
+		    , '제안'
+		    , '수입'
+		    , #{alertContent}
+        	, TO_DATE(#{alertDate}, 'YYYY-MM-DD"T"HH24:MI')
+        	, TO_DATE(#{alertDate}, 'YYYY-MM-DD"T"HH24:MI') - 3
+        	, TO_DATE(#{alertDate}, 'YYYY-MM-DD"T"HH24:MI') + 3
+		    )
+</insert>
+
+</mapper>
