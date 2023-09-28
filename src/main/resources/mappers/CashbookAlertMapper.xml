@@ -70,6 +70,10 @@
 	    , alert_date
 	    , alert_start
 	    , alert_end
+   		, TO_CHAR(alert_date, 'YYYY-MM-DD') AS alert_date_Ymd
+   		, TO_CHAR(alert_date, 'YYYY') AS alert_date_year
+	    , TO_CHAR(alert_date, 'MM') AS alert_date_month
+	    , TO_CHAR(alert_date, 'DD') AS alert_date_day
 	FROM Secretary_Cashbook_Alert
 	WHERE 
 	    family_id = #{familyId}

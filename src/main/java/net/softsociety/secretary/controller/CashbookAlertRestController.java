@@ -59,6 +59,37 @@ public class CashbookAlertRestController {
 
 		
 		return result;
+	}	
+	
+	/** 제안알림 목록 가져오기 */
+	@PostMapping("getJeahnAlert")
+	public ArrayList<CashbookAlert> getJeahnAlert(
+			Model model
+			, String curDateTime
+			, int curYear
+			, int curMonth
+			, int curDate
+			) {
+		log.debug("제안알림 컨트로러 왔당!!!!!!!!!!!!!!!");
+		
+		User loginUser = (User) model.getAttribute("loginUser");
+		int familyId = loginUser.getFamilyId();
+		String userId = loginUser.getUserId();
+		
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("userId", userId);
+		map.put("familyId", familyId);
+		map.put("curDateTime", curDateTime);
+		map.put("curYear", curYear);
+		map.put("curMonth", curMonth);
+		map.put("curDate", curDate);
+		log.debug("{}번 가족 {}의 {} 기준 제안알림 가져오기", familyId, userId, curDateTime);
+
+		ArrayList<CashbookAlert> result = dao.getJeahnAlert(map);
+		log.debug("화면에 출력할 제안알림 리스트:{}", result);
+
+		
+		return result;
 	}
 	
 	

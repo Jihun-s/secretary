@@ -13,7 +13,6 @@ $(document).ready(function() {
     $('#setBudgetBtModal').click(setBudgetModal);
     $('#updateBudgetBtModal').click(updateBudgetModal);
     $('#deleteBudgetBtModal').click(deleteBudgetModal);
-    $('necessaryAlertBt').click(getAlerts);
 });
 
 /** 현재 날짜 전역변수 */
@@ -224,6 +223,7 @@ function initSetBudgetModal() {
     
         },
         error: (e) => {
+            alert('예산에 필요한 일정 전송 실패');
             console.log(JSON.stringify(e));
         }
     });
@@ -266,6 +266,7 @@ function initUpdateBudgetModal() {
 
         },
         error: (e) => {
+            alert('예산 수정 모달 전송 실패');
             console.log(JSON.stringify(e));
         }
     });
@@ -429,7 +430,7 @@ function convertDateTimeToLocal(dateTimeStr) {
 /** 일정 삭제 */
 function deleteSch() {
     let schId = $('#schId').val();
-    console.log("삭제할 일정의 schId는 " + schId);
+    // console.log("삭제할 일정의 schId는 " + schId);
     
     if(confirm("일정을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.")) {
       $.ajax({
@@ -491,7 +492,7 @@ function curPreInExSum() {
         data: { chYear: curYear, chMonth: curMonth },
         dataType: 'JSON',
         success: (data) => {
-            console.log(JSON.stringify(data));
+            // console.log(JSON.stringify(data));
             // 현재 달 / 이전 달 정보 쪼개기
             let curMonthData = data.find(item => item.chMonth == curMonth && item.chYear == curYear);
             let preMonthData = data.find(item => item.chMonth == curMonth - 1 && item.chYear == curYear);

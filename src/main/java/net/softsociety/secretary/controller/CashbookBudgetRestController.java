@@ -1,5 +1,6 @@
 package net.softsociety.secretary.controller;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -147,4 +148,25 @@ public class CashbookBudgetRestController {
 		return result;
 	}
 	
+	/** 이번달 예산 조회 */
+	@GetMapping("getBudgetRest")
+	public BigDecimal getBudgetRest(
+			int curYear
+			, int  curMonth
+			, Model model) {
+		User loginUser = (User) model.getAttribute("loginUser");
+		int familyId = loginUser.getFamilyId();
+		String userId = loginUser.getUserId();
+		
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("userId", userId);
+		map.put("familyId", familyId);
+		map.put("curYear", curYear);
+		map.put("curMonth", curMonth);
+		
+		BigDecimal result = dao.getBudgetRest(map);
+		log.debug("{}년 {}월 남은 예산: {}", result);
+		
+		return result;
+	}
 }

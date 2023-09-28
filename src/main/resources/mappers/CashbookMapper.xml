@@ -729,4 +729,35 @@ GROUP BY
         ELSE #{chMonth} - 1
     END
 </select>
+
+<select id="getBudgetRest" parameterType="hashmap" resultType="BigDecimal">
+	WITH BudgetSubquery AS (
+	    SELECT 
+	        SUM(budget_amount) as budget_amount
+	    FROM 
+	        Secretary_Budget
+	    WHERE
+	        budget_year = #{curYear} AND
+	        budget_month = #{curMonth} AND
+	        family_id = #{familyId}
+	),
+	TransSubquery AS (
+	    SELECT 
+	        SUM(trans_amount) as trans_amount
+	    FROM 
+	        Secretary_Transaction
+	    WHERE
+	        EXTRACT(YEAR FROM trans_date) = #{curYear} AND
+	        EXTRACT(MONTH FROM trans_date) = #{curMonth} AND
+	        family_id = #{familyId} 
+	        AND trans_type = '지출'
+	)
+	SELECT 
+	<!--     b.budget_amount,
+	    COALESCE(t.trans_amount, 0) as trans_amount, -->
+	    (b.budget_amount - COALESCE(t.trans_amount, 0)) as budget_rest
+	FROM
+	    BudgetSubquery b,
+	    TransSubquery t
+</select>
 </mapper>

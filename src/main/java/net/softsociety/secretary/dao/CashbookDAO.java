@@ -1,5 +1,6 @@
 package net.softsociety.secretary.dao;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Optional;
@@ -131,4 +132,7 @@ public interface CashbookDAO {
 	
 	/** 이번달 저번달 수입/지출 */
 	ArrayList<CashbookChart> getCurPreInExSum(HashMap<String, Object> map);
+
+	/** 이번달 남은 예산 */
+	BigDecimal getBudgetRest(HashMap<String, Object> map);
 }
