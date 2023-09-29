@@ -30,4 +30,10 @@ public interface CashbookAlertDAO {
 	/** 제안알림 전체 삭제 */
 	int deleteAllJeahnAlert(HashMap<String, Object> map);
 
+	/** 예산 제안알림 입력 */ 
+	void insertJeahnBudgetAlert(HashMap<String, Object> map);
+
+	/** 지난주 총 지출 입력 */
+	void insertJeahnTWEAlert(HashMap<String, Object> map);
+
 }

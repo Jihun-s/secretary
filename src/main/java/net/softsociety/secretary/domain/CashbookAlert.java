@@ -1,5 +1,7 @@
 package net.softsociety.secretary.domain;
 
+import java.math.BigDecimal;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,5 +29,7 @@ public class CashbookAlert {
 	String alertDateYear;
 	String alertDateMonth;
 	String alertDateDay;
+	BigDecimal totalWeekExpense;
+	BigDecimal budgetRest;
 	
 }

@@ -730,6 +730,7 @@ GROUP BY
     END
 </select>
 
+<!-- 이번달 남은 예산 -->
 <select id="getBudgetRest" parameterType="hashmap" resultType="BigDecimal">
 	WITH BudgetSubquery AS (
 	    SELECT 
@@ -759,5 +760,20 @@ GROUP BY
 	FROM
 	    BudgetSubquery b,
 	    TransSubquery t
+</select>
+
+<!-- 지난주 총 지출 -->
+<select id="getTotalWeekExpense" parameterType="hashmap" resultType="BigDecimal">
+	SELECT 
+		SUM(trans_amount) AS total_week_expense
+	FROM 
+		Secretary_Transaction
+	WHERE 
+		family_id = #{familyId}
+		AND trans_type = '지출'
+		AND trans_date >= TRUNC(SYSDATE, 'IW') - 7
+		AND trans_date &lt; TRUNC(SYSDATE, 'IW')
+		AND EXTRACT(YEAR FROM trans_date) = #{curYear}
+		AND EXTRACT(MONTH FROM trans_date) = #{curMonth}
 </select>
 </mapper>

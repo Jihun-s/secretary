@@ -178,7 +178,7 @@ function getPilsuAlert() {
           // 월급
           else if (inSalary.some(keyword => alert.alertContent.includes(keyword))) {
             html += `
-            ${alert.alertDateMonth}월 ${alert.alertDateDay}일은 대망의 ${alert.alertContent}입니다! 야호! 월급의 50%는 저축하는 편이 좋아요.
+            ${alert.alertDateMonth}월 ${alert.alertDateDay}일은 대망의 ${alert.alertContent} 입니다! 야호! 월급의 50%는 저축하는 편이 좋아요.
           `;
           }
           // 용돈
@@ -317,20 +317,11 @@ function getJeahnAlert() {
 
     // 그룹별 키워드
     // 지출
-    // 정기결제
-    let exSubscript = ["카드", "구독", "정기", "결제", "납부"];
-    // 명절
-    let exHoliday = ["명절", "설날", "추석"];
-    // 경사
-    let exGoodday = ["생일", "생신", "결혼", "백일", "돌잔치", "환갑", "칠순", "팔순", "구순", "파티"]
-    // 조사 
-    let exSadday = ["기일", "장례"];
+    let exWeek = ["지출"];
     
-    // 수입
+    // 예산
     // 정기소득
-    let inSalary = ["월급", "급여", "주급"];
-    // 비정기소득
-    let inLuck = ["용돈", "주식"];
+    let bgRest = ["예산"];
 
     // 그룹화된 데이터를 기반으로 HTML 생성
     for (let date in sortedGroupedByDate) {
@@ -343,41 +334,29 @@ function getJeahnAlert() {
           <div>
         `;
 
-          // 정기결제
-          if (exSubscript.some(keyword => alert.alertContent.includes(keyword))) {
+          // 지출
+          if (exWeek.some(keyword => alert.alertContent.includes(keyword))) {
             html += `
-              ${alert.alertDateMonth}월 ${alert.alertDateDay}일은 ${alert.alertContent}입니다. 연결된 계좌의 잔고를 확인하세요.
+              지난 주 총 지출은 ${alert.totalWeekExpense.toLocaleString('en-US')}원입니다.
             `;
           } 
-          // 명절
-          else if (exHoliday.some(keyword => alert.alertContent.includes(keyword))) {
+          // 예산
+          else if (bgRest.some(keyword => alert.alertContent.includes(keyword))) {
             html += `
-            ${alert.alertDateMonth}월 ${alert.alertDateDay}일은 ${alert.alertContent}입니다. 예산을 확인하세요.
+            
             `;
+            if(alert.budgetRest <= 0) {
+              html += `예산보다 ${alert.budgetRest.toLocaleString('en-US') * -1}원 더 지출했어요. 길바닥에 나앉기 직전이에요.`;
+            }
+            else {
+              html += `이번 달 남은 예산은 ${alert.budgetRest.toLocaleString('en-US')}원입니다. 이번 주도 알뜰살뜰 노력해봐요.`;
+            }
           } 
-          // 경사
-          else if (exGoodday.some(keyword => alert.alertContent.includes(keyword))) {
+          // 기타
+          else {
             html += `
-            ${alert.alertDateMonth}월 ${alert.alertDateDay}일은 대망의 ${alert.alertContent}입니다. 선물을 준비할 예산을 챙겨두세요.
+            ${alert.alertDateMonth}월 ${alert.alertDateDay}일은 ${alert.alertContent}입니다.
             `;
-          } 
-          // 조사
-          else if (exSadday.some(keyword => alert.alertContent.includes(keyword))) {
-            html += `
-            ${alert.alertDateMonth}월 ${alert.alertDateDay}일은 ${alert.alertContent}입니다. 성의 표현을 위해 예산을 확인하세요.
-          `;
-          }
-          // 월급
-          else if (inSalary.some(keyword => alert.alertContent.includes(keyword))) {
-            html += `
-            ${alert.alertDateMonth}월 ${alert.alertDateDay}일은 기다리던 ${alert.alertContent}입니다! 야호! 월급의 50%는 저축하는 편이 좋아요.
-          `;
-          }
-          // 용돈
-          else if (inLuck.some(keyword => alert.alertContent.includes(keyword))) {
-            html += `
-            ${alert.alertDateMonth}월 ${alert.alertDateDay}일 받은 ${alert.alertContent}은 비상금으로 모아두는 건 어떨까요? 
-          `;
           }
 
           html += `
