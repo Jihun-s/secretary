@@ -285,18 +285,6 @@ $(document).ready(function() {
 
 ////////////////////////////////////////////////////////////////////////
 
-
-/** 사진 입력 버튼 */
-function inputByImg() {
-    alert('사진입력 기다려요');
-}
-
-/** 음성 입력 버튼 */
-function inputByVoice() {
-    alert('음성입력 기다려요');
-}
-
-
 /** 날짜입력 기본값 현재시간으로 설정 */
 function dateToSysdate() {
     const now = new Date();
@@ -717,6 +705,15 @@ function init() {
                         <tbody class="table-border-bottom-0">`;
 
                 $(groupedData[date]).each(function(idx, ta) {
+                    // 수입 대분류 없으면 초록색
+                    if (ta.transType === '수입') {
+                        ta.labelColor = 'success';
+                    } 
+                    // 지출 대분류 없으면 회색
+                    else if (ta.transType === '지출' && ta.labelColor == null) {
+                        ta.labelColor = 'dark';
+                    }
+
                     table += `<tr>
                                 <td style="width: 5rem;">
                                     <span class="badge bg-label-${ta.labelColor} me-1">${ta.cate2Name || ta.cate1Name || '미분류'}</span>
@@ -1526,27 +1523,36 @@ function selectConditionTrans() {
                         </thead>
                         <tbody class="table-border-bottom-0">`;
 
-                $(groupedData[date]).each(function(idx, ta) {
-                    table += `<tr>
-                                <td style="width: 5rem;">
-                                    <span class="badge bg-label-${ta.labelColor} me-1">${ta.cate2Name || ta.cate1Name || '미분류'}</span>
-                                    <input type="hidden" value="${ta.transId}">
-                                </td>
-                                <td style="width: 5rem;">${ta.transTime}</td>
-                                <td><i class="fab fa-react fa-lg text-info me-3"></i> <strong>${ta.transPayee}</strong></td>
-                                <td>${ta.transMemo || ''}</td>
-                                <td style="width: 5rem;">${parseInt(ta.transAmount).toLocaleString('en-US')}</td>
-                                <td>
-                                <div class="dropdown">
-                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></button>
-                                    <div class="dropdown-menu">
-                                    <a class="dropdown-item" href="javascript:openModalUpdate(${ta.transId});"><i class="bx bx-edit-alt me-2"></i> 수정</a>
-                                    <a class="dropdown-item" href="javascript:deleteTrans(${ta.transId});"><i class="bx bx-trash me-2"></i> 삭제</a>
-                                    </div>
-                                </div>
-                                </td>
-                            </tr>`;
-                });
+                        $(groupedData[date]).each(function(idx, ta) {
+                            // 수입 대분류 없으면 초록색
+                            if (ta.transType === '수입') {
+                                ta.labelColor = 'success';
+                            } 
+                            // 지출 대분류 없으면 회색
+                            else if (ta.transType === '지출' && ta.labelColor == null) {
+                                ta.labelColor = 'dark';
+                            }
+        
+                            table += `<tr>
+                                        <td style="width: 5rem;">
+                                            <span class="badge bg-label-${ta.labelColor} me-1">${ta.cate2Name || ta.cate1Name || '미분류'}</span>
+                                            <input type="hidden" value="${ta.transId}">
+                                        </td>
+                                        <td style="width: 5rem;">${ta.transTime}</td>
+                                        <td><i class="fab fa-react fa-lg text-info me-3"></i> <strong>${ta.transPayee}</strong></td>
+                                        <td>${ta.transMemo || ''}</td>
+                                        <td style="width: 5rem;">${parseInt(ta.transAmount).toLocaleString('en-US')}</td>
+                                        <td>
+                                        <div class="dropdown">
+                                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></button>
+                                            <div class="dropdown-menu">
+                                            <a class="dropdown-item" href="javascript:openModalUpdate(${ta.transId});"><i class="bx bx-edit-alt me-2"></i> 수정</a>
+                                            <a class="dropdown-item" href="javascript:deleteTrans(${ta.transId});"><i class="bx bx-trash me-2"></i> 삭제</a>
+                                            </div>
+                                        </div>
+                                        </td>
+                                    </tr>`;
+                        });
 
                 table += `</tbody>`;
             }
