@@ -776,4 +776,31 @@ GROUP BY
 		AND EXTRACT(YEAR FROM trans_date) = #{curYear}
 		AND EXTRACT(MONTH FROM trans_date) = #{curMonth}
 </select>
+
+<!-- 한달 총 수입 -->
+<select id="getTotalIncomeMonth" parameterType="hashmap" resultType="BigDecimal">
+	SELECT 
+		SUM(trans_amount) AS total_month_income
+	FROM 
+		Secretary_Transaction 
+	WHERE 
+		trans_type = '수입' 
+		AND EXTRACT(YEAR FROM trans_date) = #{curYear}
+		AND EXTRACT(MONTH FROM trans_date) = #{curMonth} - 1
+		AND family_id = ${familyId}
+</select>
+
+<!-- 한달 총 지출 -->
+<select id="getTotalExpenseMonth" parameterType="hashmap" resultType="BigDecimal">
+	SELECT 
+		SUM(trans_amount) AS total_month_expense
+	FROM 
+		Secretary_Transaction 
+	WHERE 
+		trans_type = '지출' 
+		AND EXTRACT(YEAR FROM trans_date) = #{curYear}
+		AND EXTRACT(MONTH FROM trans_date) = #{curMonth} - 1
+		AND family_id = ${familyId}
+</select>
+
 </mapper>

@@ -36,4 +36,7 @@ public interface CashbookAlertDAO {
 	/** 지난주 총 지출 입력 */
 	void insertJeahnTWEAlert(HashMap<String, Object> map);
 
+	/** 지난달 총 수입 총 지출 입력 */
+	void insertJeahnTMIEAlert(HashMap<String, Object> map);
+
 }

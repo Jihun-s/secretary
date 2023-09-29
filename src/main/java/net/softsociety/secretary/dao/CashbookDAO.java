@@ -139,4 +139,12 @@ public interface CashbookDAO {
 
 	/** 지난주 총 지출 */
 	BigDecimal getTotalWeekExpense(HashMap<String, Object> map);
+
+	/** 지난달 총 수입 */
+	BigDecimal getTotalIncomeMonth(HashMap<String, Object> map);
+
+	/** 지난달 총 지출 */
+	BigDecimal getTotalExpenseMonth(HashMap<String, Object> map);
+	
+	
 }

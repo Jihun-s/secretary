@@ -199,8 +199,10 @@ function getPilsuAlert() {
         });
 
       }
+      
+      $('#jeahnAlertListDiv').html(html);
 
-      $('#pilsuAlertListDiv').html(html);
+
     },
     error: (e) => {
         alert('가계부 필수알림 목록 전송 실패');
@@ -316,12 +318,16 @@ function getJeahnAlert() {
     console.log("제안 sortedGroupedByDate: " + JSON.stringify(sortedGroupedByDate));
 
     // 그룹별 키워드
+
+    // 총수입 총지출
+    let inexTotal = ["지난달"];
+
     // 지출
-    let exWeek = ["지출"];
+    let exWeek = ["지난주"];
     
     // 예산
     // 정기소득
-    let bgRest = ["예산"];
+    let bgRest = ["남은예산"];
 
     // 그룹화된 데이터를 기반으로 HTML 생성
     for (let date in sortedGroupedByDate) {
@@ -334,22 +340,40 @@ function getJeahnAlert() {
           <div>
         `;
 
-          // 지출
-          if (exWeek.some(keyword => alert.alertContent.includes(keyword))) {
+        // 지난달총수입총지출
+          if (inexTotal.some(keyword => alert.alertContent.includes(keyword))) {
+            html += `
+            지난 달에는 ${alert.totalIncomeMonth.toLocaleString('en-US')}원을 벌고 ${alert.totalExpenseMonth.toLocaleString('en-US')}원을 지출했어요.
+          `;
+            // 수입 < 지출
+            if(alert.totalIncomeMonth < alert.totalExpenseMonth) {
+              html += `배보다 배꼽이 더 큰 한 달이네요. 🤯`;
+            }
+            // 수입 = 지출
+            else if (alert.totalIncomeMonth == alert.totalExpenseMonth) {
+              html += `버는 족족 써버리고 말았네요. 💸`;
+            }
+            // 수입 > 지출
+            else if (alert.totalIncomeMonth == alert.totalExpenseMonth) {
+              html += `저축이나 재테크의 비중을 높여도 좋겠어요.`;
+            }
+          }
+          // 지난주총지출
+          else if (exWeek.some(keyword => alert.alertContent.includes(keyword))) {
             html += `
               지난 주 총 지출은 ${alert.totalWeekExpense.toLocaleString('en-US')}원입니다.
             `;
           } 
-          // 예산
+          // 남은예산
           else if (bgRest.some(keyword => alert.alertContent.includes(keyword))) {
             html += `
             
             `;
             if(alert.budgetRest <= 0) {
-              html += `예산보다 ${alert.budgetRest.toLocaleString('en-US') * -1}원 더 지출했어요. 길바닥에 나앉기 직전이에요.`;
+              html += `예산보다 ${alert.budgetRest.toLocaleString('en-US') * -1}원 더 지출했어요. 와! 길바닥에 나앉기 직전이에요. 🫵`;
             }
             else {
-              html += `이번 달 남은 예산은 ${alert.budgetRest.toLocaleString('en-US')}원입니다. 이번 주도 알뜰살뜰 노력해봐요.`;
+              html += `이번 달 남은 예산은 ${alert.budgetRest.toLocaleString('en-US')}원입니다. 이번 주도 알뜰살뜰 노력해봐요. ☺️`;
             }
           } 
           // 기타

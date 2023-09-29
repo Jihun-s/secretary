@@ -30,6 +30,8 @@ public class CashbookAlert {
 	String alertDateMonth;
 	String alertDateDay;
 	BigDecimal totalWeekExpense;
+	BigDecimal totalIncomeMonth;
+	BigDecimal totalExpenseMonth;
 	BigDecimal budgetRest;
 	
 }
