@@ -29,7 +29,7 @@ $(document).ready(function() {
 
 
    // 거래유형 클릭 이벤트 (대분류 출력)
-   $('body').on('change', "input[name='transType']", function() {
+   $('body').on('change', "#transType input[name='transType']", function() {
     showTransCategoriesDiv();
     loadMainCategories($(this).val());
    });
@@ -46,7 +46,7 @@ $(document).ready(function() {
    });
 
    // 모달 거래유형 클릭 이벤트 (대분류 출력)
-   $('body').on('change', ".modal-radio-group input[name='transType']", function() {
+   $('body').on('change', "#transTypeModal input[name='transType']", function() {
     showTransCategoriesDivModal();
     loadMainCategoriesModal($(this).val());
    });
@@ -201,6 +201,26 @@ $(document).ready(function() {
             setCustomCategory2();
         }
     });
+
+        // 모달 대분류 커스텀 카테고리 추가
+        $('body').on('change', '#cate1NameModal', function() {
+            const selectedOptionText = $(this).find("option:selected").text();
+    
+            // 입력한 선택지가 '직접입력'인 경우
+            if (selectedOptionText === "직접입력") {
+                setCustomCategory1Modal();
+            }
+        });
+
+        // 모달 소분류 커스텀 카테고리 추가 
+        $('body').on('change', '#cate2NameModal', function() {
+            const selectedOptionText = $(this).find("option:selected").text();
+        
+            // 입력한 선택지가 '직접입력'인 경우
+            if (selectedOptionText === "직접입력") {
+                setCustomCategory2Modal();
+            }
+        });
 
     // 1000단위 콤마 찍기
     $('body').on('input', '#transAmount', function() {
@@ -483,27 +503,28 @@ function validateTransModal() {
 
 
 /** 모달 거래유형 유효성 검사 */
-function validateTransTypeModal() {
-    const radios = document.getElementsByName('transTypeModal');
-    const transTypeErrorModal = document.getElementById('transTypeErrorModal');
+// 생각해보니 원래 눌려있어서 주석처리함 
+// function validateTransTypeModal() {
+//     const radios = document.getElementsByName('transTypeModal');
+//     const transTypeErrorModal = document.getElementById('transTypeErrorModal');
     
-    let isSelected = false;
-    for(let i = 0; i < radios.length; i++) {
-        if(radios[i].checked) {
-            isSelected = true;
-            break;
-        }
-    }
+//     let isSelected = false;
+//     for(let i = 0; i < radios.length; i++) {
+//         if(radios[i].checked) {
+//             isSelected = true;
+//             break;
+//         }
+//     }
     
-    // 오류 메세지 출력
-    if(!isSelected) {
-        transTypeErrorModal.textContent = "거래 유형을 선택하세요.";
-    } else {
-        transTypeErrorModal.textContent = "";
-    }
+//     // 오류 메세지 출력
+//     if(!isSelected) {
+//         transTypeErrorModal.textContent = "거래 유형을 선택하세요.";
+//     } else {
+//         transTypeErrorModal.textContent = "";
+//     }
     
-    return isSelected;
-}
+//     return isSelected;
+// }
 
 
 /** 모달 거래내용 유효성 검사 */
@@ -1191,7 +1212,7 @@ function setCustomCategory1() {
                 etcOption.parentNode.insertBefore(newOption, etcOption);
                 newOption.selected = true;  // 새로 추가된 옵션을 선택 상태로 설정
             } else {
-                alert("'직접입력' 옵션이 찾아지지 않습니다.");
+                alert("기존 입력 '직접입력' 옵션이 찾아지지 않습니다.");
             }
         },
         error: () => {
@@ -1264,6 +1285,153 @@ function setCustomCategory2() {
 
                 newOption.selected = true;  // 새로 추가된 옵션을 선택 상태로 설정
             } else {
+                alert("기존 입력 '직접입력' 옵션이 찾아지지 않습니다.");
+            }
+        },
+        error: () => {
+            alert('소분류 추가 전송 실패');
+        }
+    });
+
+}
+
+
+/** 모달 커스텀 대분류 카테고리 추가 */
+function setCustomCategory1Modal() {
+    alert("모달용 대분류 커스텀");
+    let familyId = $('#familyId').val();
+    let transType = $("#transTypeModal input[name='transType']:checked").val();
+    let customCate1Name = prompt("새로운 대분류명을 입력하세요:");
+    
+        // '취소' 버튼 클릭
+        if (customCate1Name === null) {
+            return;
+        }
+
+    // 미입력
+    if (customCate1Name === "") {
+        alert("카테고리명을 입력하세요.");
+        return setCustomCategory1Modal();
+    }
+
+    // 한글, 영문, 숫자만 사용
+    const regex = /^[가-힣A-Za-z0-9]+$/;
+
+    // 연속 공백 제한
+    if (/\s{2,}/.test(customCate1Name)) {
+        alert("카테고리 이름에 연속된 공백을 포함할 수 없습니다.");
+
+        return setCustomCategory1Modal();
+    }
+
+    // 중복 제한
+    const isDuplicate = [...$("#cate1NameModal option")].some(option => option.textContent === customCate1Name);
+    if (isDuplicate) {
+        alert("이미 존재하는 카테고리 이름입니다.");
+        
+        return setCustomCategory1Modal();
+    }
+
+    // 길이는 한글 기준 10자 이내(30BYTE)
+    if (!regex.test(customCate1Name) || new Blob([customCate1Name]).size > 30) {
+        alert("카테고리 이름은 한글, 영문, 숫자만 포함하여 30Byte(한글 10자) 이내로 입력해야 합니다.");
+        
+        return setCustomCategory1Modal();
+    }
+
+    $.ajax({
+        url: '/secretary/cashbook/trans/addCate1',
+        type: 'POST',
+        data: { cate1Name: customCate1Name, transType: transType, familyId:familyId },
+        success: () => {
+            // '직접입력' 옵션 바로 앞에 새 옵션 삽입
+            const newOption = document.createElement("option");
+            newOption.value = customCate1Name; 
+            newOption.textContent = customCate1Name;
+    
+            // '직접입력' 옵션 찾기
+            const etcOptions = Array.from(document.querySelectorAll('#cate1NameModal option')).filter(option => option.textContent.trim() === '직접입력');
+            const etcOption = etcOptions.length > 0 ? etcOptions[0] : null;
+    
+            if (etcOption) {
+                // '직접입력' 옵션 바로 앞에 새 옵션 삽입
+                etcOption.parentNode.insertBefore(newOption, etcOption);
+                newOption.selected = true;  // 새로 추가된 옵션을 선택 상태로 설정
+            } else {
+                alert("'직접입력' 옵션이 찾아지지 않습니다.");
+            }
+        },
+        error: () => {
+            alert('대분류 추가 전송 실패');
+        }
+    });
+
+}
+
+
+/** 모달 커스텀 소분류 카테고리 추가 */
+function setCustomCategory2Modal() {
+    alert("모달용 커스텀 소분류");
+    let familyId = $('#familyId').val();
+    let cate1Name = $('#cate1NameModal').val();
+    let customCate2Name = prompt("새로운 소분류명을 입력하세요:");
+    
+        // '취소' 버튼 클릭
+        if (customCate2Name === null) {
+            return;
+        }
+
+    // 미입력
+    if (customCate2Name === "") {
+        alert("카테고리명을 입력하세요.");
+        return setCustomCategory2Modal();
+    }
+
+    // 한글, 영문, 숫자만 사용
+    const regex = /^[가-힣A-Za-z0-9]+$/;
+
+    // 연속 공백 제한
+    if (/\s{2,}/.test(customCate2Name)) {
+        alert("카테고리 이름에 연속된 공백을 포함할 수 없습니다.");
+
+        return setCustomCategory2Modal();
+    }
+
+    // 중복 제한
+    const isDuplicate = [...$("#cate2NameModal option")].some(option => option.textContent === customCate2Name);
+    if (isDuplicate) {
+        alert("이미 존재하는 카테고리 이름입니다.");
+        
+        return setCustomCategory2Modal();
+    }
+
+    // 길이는 한글 기준 10자 이내(30BYTE)
+    if (!regex.test(customCate2Name) || new Blob([customCate2Name]).size > 30) {
+        alert("카테고리 이름은 한글, 영문, 숫자만 포함하여 30Byte(한글 10자) 이내로 입력해야 합니다.");
+        
+        return setCustomCategory2Modal();
+    }
+
+    $.ajax({
+        url: '/secretary/cashbook/trans/addCate2',
+        type: 'POST',
+        data: { cate2Name: customCate2Name, cate1Name: cate1Name, familyId:familyId },
+        success: () => {
+            // '직접입력' 옵션 바로 앞에 새 옵션 삽입
+            const newOption = document.createElement("option");
+            newOption.value = customCate2Name; // value와 textContent를 입력받은 값으로 통일
+            newOption.textContent = customCate2Name;
+
+            // '직접입력' 옵션 찾기
+            const etcOptions = Array.from(document.querySelectorAll('#cate2NameModal option')).filter(option => option.textContent.trim() === '직접입력');
+            const etcOption = etcOptions.length > 0 ? etcOptions[0] : null;
+
+            if (etcOption) {
+                // '직접입력' 옵션 바로 앞에 새 옵션 삽입
+                etcOption.parentNode.insertBefore(newOption, etcOption);
+
+                newOption.selected = true;  // 새로 추가된 옵션을 선택 상태로 설정
+            } else {
                 alert("'직접입력' 옵션이 찾아지지 않습니다.");
             }
         },
@@ -1273,6 +1441,7 @@ function setCustomCategory2() {
     });
 
 }
+
 
 
 /** 조건별 보기 */
