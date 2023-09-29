@@ -991,6 +991,7 @@
                 }
 
                 function loadData() {
+                    allFoods = []; // 초기화
                     // 냉장실 음식 아이템 데이터 가져오기
                     loadFoodsForNotification('냉장실', function () {
                         // 냉동실 음식 아이템 데이터 가져오기
@@ -1003,6 +1004,7 @@
                 }
 
                 function createEssentialNotifications() {
+                    $('#navs-pills-justified-home').empty();
                     const today = new Date();
                     const oneWeekFromNow = new Date(today);
                     oneWeekFromNow.setDate(today.getDate() + 7);
@@ -1031,6 +1033,7 @@
                 }
 
                 function createSuggestedNotifications() {
+                    $('#navs-pills-justified-profile').empty();
                     $.ajax({
                         url: `fridgeUsed/getFoodsNotAccessedForDays`,
                         type: 'GET',
@@ -1296,6 +1299,7 @@
                                 $('#foodModal').modal('hide');
                                 loadAllFoodsByCategory(currentCategory);
                                 refreshConsumptionHistory();
+                                loadData();
                             },
                             error: function (error) {
                                 console.log('Error consuming food:', error);

@@ -337,6 +337,7 @@ $(document).on('click', '.consume-btn', function () {
                 updateItemQuantity(itemId, newQuantity);
 
                 refreshConsumptionHistory();
+                loadData();
             },
             error: function (error) {
                 console.log('Error consuming item:', error);
@@ -431,6 +432,7 @@ function loadLivingGoodsForNotification(callback) {
 }
 
 function createEssentialNotifications() {
+    $('#navs-pills-justified-home').empty();
     const today = new Date();
     const oneWeekFromNow = new Date(today);
     oneWeekFromNow.setDate(today.getDate() + 7);
@@ -460,6 +462,7 @@ function createEssentialNotifications() {
 }
 
 function createSuggestedNotifications() {
+    $('#navs-pills-justified-profile').empty();
     // 이 부분은 서버에서 15일, 30일 사용하지 않은 제품 정보를 가져와야 함
     // 아래는 예시 코드
     $.ajax({
@@ -489,6 +492,7 @@ function displaySuggestedNotifications(goods, days) {
 }
 
 function loadData() {
+    allLivingGoods = [];
     loadLivingGoodsForNotification(function () {
         createEssentialNotifications();
         createSuggestedNotifications();
