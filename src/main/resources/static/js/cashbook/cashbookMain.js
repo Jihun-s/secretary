@@ -1,3 +1,8 @@
+/**
+ * 가계부 메인화면 .js
+ */
+
+
 $(document).ready(function() {
     setCurDate();
     $('#nowYear').text(curYear);
@@ -16,6 +21,18 @@ $(document).ready(function() {
 
 });
 
+
+
+////READY/////READY/////READY/////READY/////READY/////READY/////READY/////READY/////READY/////READY/////READY/////READY/////
+////READY/////READY/////READY/////READY/////READY/////READY/////READY/////READY/////READY/////READY/////READY/////READY///// 
+////READY/////READY/////READY/////READY/////READY/////READY/////READY/////READY/////READY/////READY/////READY/////READY///// 
+
+/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////
+/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////
+/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////
+
+
+
 /** 현재 날짜 전역변수 */
 let date = new Date();
 let curYear = date.getFullYear();
@@ -26,7 +43,62 @@ let curMin = date.getMinutes().toString().padStart(2, '0');
 
 let curDateTime = `${curYear}-${curMonth}-${curDate} ${curHour}:${curMin}:00`;
 
-////////////////////////////////////////////////////////////
+
+/** 현재 날짜 html에 심어놓는 함수 */
+function setCurDate() {
+    let date = new Date();
+    let curYear = date.getFullYear();
+    let curMonth = (date.getMonth() + 1).toString().padStart(2, '0');
+    let curDate = date.getDate().toString().padStart(2, '0');
+    let curHour = date.getHours().toString().padStart(2, '0');
+    let curMin = date.getMinutes().toString().padStart(2, '0');
+
+    let curDateTime = `${curYear}-${curMonth}-${curDate} ${curHour}:${curMin}:00`;
+
+    // alert(curYear + ' ' + curMonth + ' ' + curDate + ' ' + curDateTime);
+
+    $('#curDateTime').val(curDateTime);
+    $('#curYear').val(curYear);
+    $('#curMonth').val(curMonth);
+    $('#curDate').val(curDate);
+    
+    $('#nowYear').html(curYear);
+    $('#nowMonth').html(curMonth);
+}
+
+
+/** 날짜 포맷 YYYY-MM-DD' 'HH24:MI:SS -> YYYY-MM-DD'T'HH24:MI:SS 변환 */
+// YYYY-MM-DD' 'HH24:MI:SS -> YYYY-MM-DD'T'HH24:MI:SS 
+function convertDateTimeToLocal(dateTimeStr) {
+
+    return dateTimeStr.replace(" ", "T");
+  }
+  
+  // YYYY-MM-DD -> MM월 DD일
+  function convertDateToKor(dateString) {
+    let date = new Date(dateString);
+  
+    return `${date.getMonth() + 1}월 ${date.getDate()}일`;
+  }
+  
+  // YYYY-MM-DD' 'HH24:MI:SS -> HH24시
+  function convertTimeToKor(dateTimeStr) {
+    let hour = dateTimeStr.slice(0, 2);
+  
+    return `${hour}시`;
+  }
+
+
+
+/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////
+/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////
+/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////
+
+/////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////
+/////초기화/////초기화/////초기화/////초기화/////초기화/////초기화/////초기화/////초기화/////초기화/////초기화/////초기화/////초기화/////초기화/////초기화/////초기화/////초기화/////초기화/////초기화/////초기화/////
+/////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////
+
+
 
 /** 화면 초기화 */
 function init() {
@@ -69,97 +141,18 @@ function init() {
 }
 
 
-/** 현재 날짜 심기 */
-function setCurDate() {
-    let date = new Date();
-    let curYear = date.getFullYear();
-    let curMonth = (date.getMonth() + 1).toString().padStart(2, '0');
-    let curDate = date.getDate().toString().padStart(2, '0');
-    let curHour = date.getHours().toString().padStart(2, '0');
-    let curMin = date.getMinutes().toString().padStart(2, '0');
 
-    let curDateTime = `${curYear}-${curMonth}-${curDate} ${curHour}:${curMin}:00`;
+/////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////
+/////초기화/////초기화/////초기화/////초기화/////초기화/////초기화/////초기화/////초기화/////초기화/////초기화/////초기화/////초기화/////초기화/////초기화/////초기화/////초기화/////초기화/////초기화/////초기화/////
+/////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////
 
-    // alert(curYear + ' ' + curMonth + ' ' + curDate + ' ' + curDateTime);
-
-    $('#curDateTime').val(curDateTime);
-    $('#curYear').val(curYear);
-    $('#curMonth').val(curMonth);
-    $('#curDate').val(curDate);
-    
-    $('#nowYear').html(curYear);
-    $('#nowMonth').html(curMonth);
-}
+/////예산설정/////예산설정/////예산설정/////예산설정/////예산설정/////예산설정/////예산설정/////예산설정/////예산설정/////예산설정/////예산설정/////예산설정/////
+/////예산설정/////예산설정/////예산설정/////예산설정/////예산설정/////예산설정/////예산설정/////예산설정/////예산설정/////예산설정/////예산설정/////예산설정/////
+/////예산설정/////예산설정/////예산설정/////예산설정/////예산설정/////예산설정/////예산설정/////예산설정/////예산설정/////예산설정/////예산설정/////예산설정/////
 
 
-/** 예산 설정 유효성 검사 */
-function validateBudget() {
-    let budgetAmount = $('#setModalInput').val();
-    let budgetAmountErrorModal = $('#budgetAmountErrorModal');
 
-    // 미입력
-    if(budgetAmount.length < 1 || budgetAmount === '' || budgetAmount == null) {
-        budgetAmountErrorModal.text('예산을 입력하세요.');
-        return false;
-    }
-
-    // 숫자가 아님
-    if(isNaN(budgetAmount)) {
-        budgetAmountErrorModal.text('숫자를 입력하세요.');
-        return false;
-    }
-
-    // 정수가 아님
-    if(budgetAmount != parseInt(budgetAmount)) {
-        budgetAmountErrorModal.text('정수를 입력하세요.');
-        return false;
-    }
-
-    // 범위 오류 (음수 or 12자리 이상)
-    if(parseInt(budgetAmount) < 0 || budgetAmount.length > 12) {
-        budgetAmountErrorModal.text('0부터 12자리수까지 입력하세요.');
-        return false;
-    }
-    budgetAmountErrorModal.text('');
-    
-    return true;
-}
-
-/** 예산 수정 유효성 검사 */
-function validateBudgetUpdate() {
-    let budgetAmount = $('#updateModalInput').val();
-    let budgetAmountErrorModal = $('#budgetAmountErrorUpdateModal');
-
-    // 미입력
-    if(budgetAmount.length < 1 || budgetAmount === '' || budgetAmount == null) {
-        budgetAmountErrorModal.text('예산을 입력하세요.');
-        return false;
-    }
-
-    // 숫자가 아님
-    if(isNaN(budgetAmount)) {
-        budgetAmountErrorModal.text('숫자를 입력하세요.');
-        return false;
-    }
-
-    // 정수가 아님
-    if(budgetAmount != parseInt(budgetAmount)) {
-        budgetAmountErrorModal.text('정수를 입력하세요.');
-        return false;
-    }
-
-    // 범위 오류 (음수 or 12자리 이상)
-    if(parseInt(budgetAmount) < 0 || budgetAmount.length > 12) {
-        budgetAmountErrorModal.text('0부터 12자리수까지 입력하세요.');
-        return false;
-    }
-    budgetAmountErrorModal.text('');
-    
-    return true;
-}
-
-
-/** 모달 예산 입력 */
+/** 예산 유효성 검사해서 DB에 입력하는 함수 */
 function setBudgetModal() {
     if(validateBudget()) {
         setBudgetAjax();
@@ -238,6 +231,112 @@ function openSetBudgetModal() {
 
 }
 
+/** 예산 설정 유효성 검사 */
+function validateBudget() {
+    let budgetAmount = $('#setModalInput').val();
+    let budgetAmountErrorModal = $('#budgetAmountErrorModal');
+
+    // 미입력
+    if(budgetAmount.length < 1 || budgetAmount === '' || budgetAmount == null) {
+        budgetAmountErrorModal.text('예산을 입력하세요.');
+        return false;
+    }
+
+    // 숫자가 아님
+    if(isNaN(budgetAmount)) {
+        budgetAmountErrorModal.text('숫자를 입력하세요.');
+        return false;
+    }
+
+    // 정수가 아님
+    if(budgetAmount != parseInt(budgetAmount)) {
+        budgetAmountErrorModal.text('정수를 입력하세요.');
+        return false;
+    }
+
+    // 범위 오류 (음수 or 12자리 이상)
+    if(parseInt(budgetAmount) < 0 || budgetAmount.length > 12) {
+        budgetAmountErrorModal.text('0부터 12자리수까지 입력하세요.');
+        return false;
+    }
+    budgetAmountErrorModal.text('');
+    
+    return true;
+}
+
+
+/** 모달 예산 입력 */
+function setBudgetModal() {
+    if(validateBudget()) {
+        setBudgetAjax();
+        $('#ModalSetBudget').modal('hide');
+        init();
+    }
+}
+
+
+/** 예산 전송 Ajax */
+function setBudgetAjax() {
+    let budgetAmount = $('#setModalInput').val();
+
+    $.ajax({
+        url: '/secretary/cashbook/budget/setBudget',
+        type: 'POST',
+        data: { budgetAmount: budgetAmount },
+        success: () => {
+            location.reload();
+        },
+        error: () => {
+            alert('예산 서버 전송 실패');
+        }
+    });
+}
+
+
+/////예산설정/////예산설정/////예산설정/////예산설정/////예산설정/////예산설정/////예산설정/////예산설정/////예산설정/////예산설정/////예산설정/////예산설정/////
+/////예산설정/////예산설정/////예산설정/////예산설정/////예산설정/////예산설정/////예산설정/////예산설정/////예산설정/////예산설정/////예산설정/////예산설정/////
+/////예산설정/////예산설정/////예산설정/////예산설정/////예산설정/////예산설정/////예산설정/////예산설정/////예산설정/////예산설정/////예산설정/////예산설정/////
+
+////예산수정/////예산수정/////예산수정/////예산수정/////예산수정/////예산수정/////예산수정/////예산수정/////예산수정/////예산수정/////예산수정/////예산수정/////
+////예산수정/////예산수정/////예산수정/////예산수정/////예산수정/////예산수정/////예산수정/////예산수정/////예산수정/////예산수정/////예산수정/////예산수정/////
+////예산수정/////예산수정/////예산수정/////예산수정/////예산수정/////예산수정/////예산수정/////예산수정/////예산수정/////예산수정/////예산수정/////예산수정/////
+
+
+
+/** 예산 수정 유효성 검사 */
+function validateBudgetUpdate() {
+    let budgetAmount = $('#updateModalInput').val();
+    let budgetAmountErrorModal = $('#budgetAmountErrorUpdateModal');
+
+    // 미입력
+    if(budgetAmount.length < 1 || budgetAmount === '' || budgetAmount == null) {
+        budgetAmountErrorModal.text('예산을 입력하세요.');
+        return false;
+    }
+
+    // 숫자가 아님
+    if(isNaN(budgetAmount)) {
+        budgetAmountErrorModal.text('숫자를 입력하세요.');
+        return false;
+    }
+
+    // 정수가 아님
+    if(budgetAmount != parseInt(budgetAmount)) {
+        budgetAmountErrorModal.text('정수를 입력하세요.');
+        return false;
+    }
+
+    // 범위 오류 (음수 or 12자리 이상)
+    if(parseInt(budgetAmount) < 0 || budgetAmount.length > 12) {
+        budgetAmountErrorModal.text('0부터 12자리수까지 입력하세요.');
+        return false;
+    }
+    budgetAmountErrorModal.text('');
+    
+    return true;
+}
+
+
 /** 예산 수정 모달 init */
 function initUpdateBudgetModal() {
     let familyId = $('#familyId').val();
@@ -310,37 +409,6 @@ function updateBudgetModal() {
     }
 }
 
-/** 모달 예산 입력 */
-function setBudgetModal() {
-    if(validateBudget()) {
-        setBudgetAjax();
-        $('#ModalSetBudget').modal('hide');
-        init();
-    }
-}
-/** 모달 예산 삭제 */
-function deleteBudgetModal() {
-    deleteBudgetAjax();
-    $('#ModalDeleteBudget').modal('hide');
-}
-
-/** 예산 전송 Ajax */
-function setBudgetAjax() {
-    let budgetAmount = $('#setModalInput').val();
-
-    $.ajax({
-        url: '/secretary/cashbook/budget/setBudget',
-        type: 'POST',
-        data: { budgetAmount: budgetAmount },
-        success: () => {
-            location.reload();
-        },
-        error: () => {
-            alert('예산 서버 전송 실패');
-        }
-    });
-}
-
 
 /** 예산 수정 Ajax */
 function updateBudgetAjax() {
@@ -360,6 +428,23 @@ function updateBudgetAjax() {
 }
 
 
+
+////예산수정/////예산수정/////예산수정/////예산수정/////예산수정/////예산수정/////예산수정/////예산수정/////예산수정/////예산수정/////예산수정/////예산수정/////
+////예산수정/////예산수정/////예산수정/////예산수정/////예산수정/////예산수정/////예산수정/////예산수정/////예산수정/////예산수정/////예산수정/////예산수정/////
+////예산수정/////예산수정/////예산수정/////예산수정/////예산수정/////예산수정/////예산수정/////예산수정/////예산수정/////예산수정/////예산수정/////예산수정/////
+
+/////예산삭제/////예산삭제/////예산삭제/////예산삭제/////예산삭제/////예산삭제/////예산삭제/////예산삭제/////예산삭제/////예산삭제/////예산삭제/////
+/////예산삭제/////예산삭제/////예산삭제/////예산삭제/////예산삭제/////예산삭제/////예산삭제/////예산삭제/////예산삭제/////예산삭제/////예산삭제/////
+/////예산삭제/////예산삭제/////예산삭제/////예산삭제/////예산삭제/////예산삭제/////예산삭제/////예산삭제/////예산삭제/////예산삭제/////예산삭제/////
+
+
+
+/** 모달 예산 삭제 */
+function deleteBudgetModal() {
+    deleteBudgetAjax();
+    $('#ModalDeleteBudget').modal('hide');
+}
+
 /** 예산 삭제 Ajax */
 function deleteBudgetAjax() {
     let curYear = $('#curYear').val();
@@ -378,54 +463,6 @@ function deleteBudgetAjax() {
         }
     });
 }
-
-
-////////////////////////////////////////////////////////////////
-
-
-/** 일정 목록 뱃지 색 지정 */
-function getBadgeClass(type, cate) {
-    let classes = {
-        '일정': 'bg-primary',
-        '냉장고': 'bg-warning',
-        '생활용품': 'bg-info',
-        '옷장': 'bg-label-danger',
-        '가계부': 'bg-success'
-    };
-  
-    if (type === '일정' && (cate === '명절' || cate === '공휴일')) {
-        return 'bg-danger';
-    }
-  
-    return classes[type] || 'bg-primary';
-  }
-
-///////////////////////////////////////////////////////////////////////////
-
-/** 날짜 포맷 변환 */
-// YYYY-MM-DD' 'HH24:MI:SS -> YYYY-MM-DD'T'HH24:MI:SS 
-function convertDateTimeToLocal(dateTimeStr) {
-
-    return dateTimeStr.replace(" ", "T");
-  }
-  
-  // YYYY-MM-DD -> MM월 DD일
-  function convertDateToKor(dateString) {
-    let date = new Date(dateString);
-  
-    return `${date.getMonth() + 1}월 ${date.getDate()}일`;
-  }
-  
-  // YYYY-MM-DD' 'HH24:MI:SS -> HH24시
-  function convertTimeToKor(dateTimeStr) {
-    let hour = dateTimeStr.slice(0, 2);
-  
-    return `${hour}시`;
-  }
-
-
-
-////////////////////////////////////////////////////////////////////////
 
 
 /** 일정 삭제 */
@@ -456,6 +493,7 @@ function deleteSch() {
     }
   }
   
+
   /** 일정 삭제 매개변수 있음 */
   function deleteSch(schId) {
     console.log("삭제할 일정의 schId는 " + schId);
@@ -483,7 +521,31 @@ function deleteSch() {
     }
   }
 
-  ////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+/////예산삭제/////예산삭제/////예산삭제/////예산삭제/////예산삭제/////예산삭제/////예산삭제/////예산삭제/////예산삭제/////예산삭제/////예산삭제/////
+/////예산삭제/////예산삭제/////예산삭제/////예산삭제/////예산삭제/////예산삭제/////예산삭제/////예산삭제/////예산삭제/////예산삭제/////예산삭제/////
+/////예산삭제/////예산삭제/////예산삭제/////예산삭제/////예산삭제/////예산삭제/////예산삭제/////예산삭제/////예산삭제/////예산삭제/////예산삭제/////
+
+
+
+/** 일정 목록 뱃지 색 지정 */
+function getBadgeClass(type, cate) {
+    let classes = {
+        '일정': 'bg-primary',
+        '냉장고': 'bg-warning',
+        '생활용품': 'bg-info',
+        '옷장': 'bg-label-danger',
+        '가계부': 'bg-success'
+    };
+  
+    if (type === '일정' && (cate === '명절' || cate === '공휴일')) {
+        return 'bg-danger';
+    }
+  
+    return classes[type] || 'bg-primary';
+  }
+
 
 /** 이전월 지금월 수입지출 비교 */
 function curPreInExSum() {

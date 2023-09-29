@@ -1,26 +1,45 @@
+/** 
+ * 가계부 알림 .js  
+ */
+
+
 $(document).ready(function() {
+  // 기본값인 필수함수만 먼저 불러오기 
   getPilsuAlert();
 
-  // 1분에 한번씩 알림창 새로고침 
+  /** 1분에 한번씩 알림창 새로고침하는 함수  */
   setInterval(function() {
     getPilsuAlert();
     getJeahnAlert();
   }, 60000);
 });
 
-//////////////////////////////////////////////////////////
 
+
+////READY/////READY/////READY/////READY/////READY/////READY/////READY/////READY/////READY/////READY/////READY/////READY/////
+////READY/////READY/////READY/////READY/////READY/////READY/////READY/////READY/////READY/////READY/////READY/////READY///// 
+////READY/////READY/////READY/////READY/////READY/////READY/////READY/////READY/////READY/////READY/////READY/////READY///// 
+
+/////필수알림/////필수알림/////필수알림/////필수알림/////필수알림/////필수알림/////필수알림/////필수알림/////필수알림/////필수알림/////
+/////필수알림/////필수알림/////필수알림/////필수알림/////필수알림/////필수알림/////필수알림/////필수알림/////필수알림/////필수알림/////
+/////필수알림/////필수알림/////필수알림/////필수알림/////필수알림/////필수알림/////필수알림/////필수알림/////필수알림/////필수알림/////
+
+
+
+/** 예산 설정 여부 확인하는 전역변수 */
 let budgetExist = 0;
+/** (예산-지출) > 0인지 확인하는 전역변수 */
 let budgetMinus = 0;
 
-/** 필수알림 */
+
+/** 필수알림 가져오는 함수 */
 function getPilsuAlert() {
   let curYear = $('#curYear').val();
   let curMonth = $('#curMonth').val();
   let curDate = $('#curDate').val();
   let curDateTime = $('#curDateTime').val();
 
-  // 예산 있없? 확인
+  /** 예산 있없? 확인 */
   $.ajax({
       url: '/secretary/cashbook/budgetExist',
       type: 'GET',
@@ -55,14 +74,14 @@ function getPilsuAlert() {
       }
   });
 
-  // 목록 가져오기
+  /** 필수알림 목록 가져오는 ajax */
   $.ajax({
     url: '/secretary/cashbook/alert/getPilsuAlert',
     type: 'POST',
     data: { curDateTime: curDateTime, curYear: curYear, curMonth: curMonth, curDate: curDate },
     dataType: 'JSON',
     success: function(data) {
-    console.log("필수알림 data: " + JSON.stringify(data));
+    // console.log("필수알림 data: " + JSON.stringify(data));
 
     let html = "";
 
@@ -122,7 +141,7 @@ function getPilsuAlert() {
     });
 
 
-    console.log("제안 sortedGroupedByDate: " + JSON.stringify(sortedGroupedByDate));
+    // console.log("제안 sortedGroupedByDate: " + JSON.stringify(sortedGroupedByDate));
 
     // 그룹별 키워드
 
@@ -197,7 +216,7 @@ function getPilsuAlert() {
           </div>
           `; 
 
-          console.log("이 알림의 번호는 " + alert.alertId);
+          // console.log("이 알림의 번호는 " + alert.alertId);
         });
 
       }
@@ -213,83 +232,32 @@ function getPilsuAlert() {
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////
 
-/** 알림 삭제 */
-function deleteAlert(alertId) {
-  console.log("삭제할 알림 번호:" + alertId);
+/////필수알림/////필수알림/////필수알림/////필수알림/////필수알림/////필수알림/////필수알림/////필수알림/////필수알림/////필수알림/////
+/////필수알림/////필수알림/////필수알림/////필수알림/////필수알림/////필수알림/////필수알림/////필수알림/////필수알림/////필수알림/////
+/////필수알림/////필수알림/////필수알림/////필수알림/////필수알림/////필수알림/////필수알림/////필수알림/////필수알림/////필수알림/////
 
-  $.ajax({
-    url: '/secretary/cashbook/alert/deleteAlert',
-    type: 'POST',
-    data: { alertId: alertId },
-    success: () => {
-      getPilsuAlert();
-    },
-    error: (e) => {
-      alert("알림 삭제 서버 전송 실패");
-      console.log(JSON.stringify(e));
-    }
-  });
-}
-
-/////////////////////////////////////////////////////////////////////////
-
-/** 필수알림 전체 삭제 */
-function deleteAllPilsuAlert() {
-  if(confirm("필수 알림을 모두 삭제할까요?")) {
-    $.ajax({
-      url: '/secretary/cashbook/alert/deleteAllPilsuAlert',
-      type: 'POST',
-      success: () => {
-        getPilsuAlert();
-        getJeahnAlert();
-      },
-      error: (e) => {
-        alert("필수알림 모두 삭제 서버 전송 실패");
-        console.log(JSON.stringify(e));
-      }
-    });
-  }
-}
-
-/** 제안알림 전체 삭제 */
-function deleteAllJeahnAlert() {
-  if(confirm("제안 알림을 모두 삭제할까요?")) {
-    $.ajax({
-      url: '/secretary/cashbook/alert/deleteAllJeahnAlert',
-      type: 'POST',
-      success: () => {
-        getPilsuAlert();
-        getJeahnAlert();
-      },
-      error: (e) => {
-        alert("제안알림 모두 삭제 서버 전송 실패");
-        console.log(JSON.stringify(e));
-      }
-    });
-  }
-}
-
-/////////////////////////////////////////////////////////////////////////
+/////제안알림/////제안알림/////제안알림/////제안알림/////제안알림/////제안알림/////제안알림/////제안알림/////제안알림/////제안알림/////
+/////제안알림/////제안알림/////제안알림/////제안알림/////제안알림/////제안알림/////제안알림/////제안알림/////제안알림/////제안알림/////
+/////제안알림/////제안알림/////제안알림/////제안알림/////제안알림/////제안알림/////제안알림/////제안알림/////제안알림/////제안알림/////
 
 
-/** 제안알림 */
+
+/** 제안알림 가져오는 함수 */
 function getJeahnAlert() {
   let curYear = $('#curYear').val();
   let curMonth = $('#curMonth').val();
   let curDate = $('#curDate').val();
   let curDateTime = $('#curDateTime').val();
 
-  // 목록 가져오기
+  /** 제안알림 목록 가져오는 ajax */
   $.ajax({
     url: '/secretary/cashbook/alert/getJeahnAlert',
     type: 'POST',
     data: { curDateTime: curDateTime, curYear: curYear, curMonth: curMonth, curDate: curDate },
     dataType: 'JSON',
     success: function(data) {
-    console.log("제안알림 data: " + JSON.stringify(data));
-
+    // console.log("제안알림 data: " + JSON.stringify(data));
     
     let html = "";
 
@@ -317,10 +285,9 @@ function getJeahnAlert() {
       sortedGroupedByDate[date] = groupedByDate[date];
     });
 
+    // console.log("sortedGroupedByDate: " + JSON.stringify(sortedGroupedByDate));
 
-    console.log("sortedGroupedByDate: " + JSON.stringify(sortedGroupedByDate));
-
-    // 그룹별 키워드
+    /** 그룹별 키워드 */
     // 지출
     // 정기결제
     let exSubscript = ["카드", "구독", "정기", "결제", "납부"];
@@ -392,7 +359,7 @@ function getJeahnAlert() {
           </div>
           `; 
 
-          console.log("이 알림의 번호는 " + alert.alertId);
+          // console.log("이 알림의 번호는 " + alert.alertId);
         });
 
       }
@@ -406,10 +373,92 @@ function getJeahnAlert() {
   });
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////
+
+/////제안알림/////제안알림/////제안알림/////제안알림/////제안알림/////제안알림/////제안알림/////제안알림/////제안알림/////제안알림/////
+/////제안알림/////제안알림/////제안알림/////제안알림/////제안알림/////제안알림/////제안알림/////제안알림/////제안알림/////제안알림/////
+/////제안알림/////제안알림/////제안알림/////제안알림/////제안알림/////제안알림/////제안알림/////제안알림/////제안알림/////제안알림/////
+
+/////알림삭제/////알림삭제/////알림삭제/////알림삭제/////알림삭제/////알림삭제/////알림삭제/////알림삭제/////알림삭제/////알림삭제/////
+/////알림삭제/////알림삭제/////알림삭제/////알림삭제/////알림삭제/////알림삭제/////알림삭제/////알림삭제/////알림삭제/////알림삭제/////
+/////알림삭제/////알림삭제/////알림삭제/////알림삭제/////알림삭제/////알림삭제/////알림삭제/////알림삭제/////알림삭제/////알림삭제/////
+
+
+
+/** 알림 삭제 */
+function deleteAlert(alertId) {
+  console.log("삭제할 알림 번호:" + alertId);
+
+  $.ajax({
+    url: '/secretary/cashbook/alert/deleteAlert',
+    type: 'POST',
+    data: { alertId: alertId },
+    success: () => {
+      getPilsuAlert();
+    },
+    error: (e) => {
+      alert("알림 삭제 서버 전송 실패");
+      console.log(JSON.stringify(e));
+    }
+  });
+}
+
+
+/////전체삭제/////전체삭제/////전체삭제/////전체삭제/////전체삭제/////전체삭제/////전체삭제/////전체삭제/////전체삭제/////전체삭제/////전체삭제/////
+
+
+/** 필수알림 전체 삭제 */
+function deleteAllPilsuAlert() {
+  if(confirm("필수 알림을 모두 삭제할까요?")) {
+    $.ajax({
+      url: '/secretary/cashbook/alert/deleteAllPilsuAlert',
+      type: 'POST',
+      success: () => {
+        getPilsuAlert();
+        getJeahnAlert();
+      },
+      error: (e) => {
+        alert("필수알림 모두 삭제 서버 전송 실패");
+        console.log(JSON.stringify(e));
+      }
+    });
+  }
+}
+
+/** 제안알림 전체 삭제 */
+function deleteAllJeahnAlert() {
+  if(confirm("제안 알림을 모두 삭제할까요?")) {
+    $.ajax({
+      url: '/secretary/cashbook/alert/deleteAllJeahnAlert',
+      type: 'POST',
+      success: () => {
+        getPilsuAlert();
+        getJeahnAlert();
+      },
+      error: (e) => {
+        alert("제안알림 모두 삭제 서버 전송 실패");
+        console.log(JSON.stringify(e));
+      }
+    });
+  }
+}
+
+
+/////알림삭제/////알림삭제/////알림삭제/////알림삭제/////알림삭제/////알림삭제/////알림삭제/////알림삭제/////알림삭제/////알림삭제/////
+/////알림삭제/////알림삭제/////알림삭제/////알림삭제/////알림삭제/////알림삭제/////알림삭제/////알림삭제/////알림삭제/////알림삭제/////
+/////알림삭제/////알림삭제/////알림삭제/////알림삭제/////알림삭제/////알림삭제/////알림삭제/////알림삭제/////알림삭제/////알림삭제/////
+
+/////알림 상호작용/////알림 상호작용/////알림 상호작용/////알림 상호작용/////알림 상호작용/////알림 상호작용/////알림 상호작용/////알림 상호작용/////
+/////알림 상호작용/////알림 상호작용/////알림 상호작용/////알림 상호작용/////알림 상호작용/////알림 상호작용/////알림 상호작용/////알림 상호작용/////
+/////알림 상호작용/////알림 상호작용/////알림 상호작용/////알림 상호작용/////알림 상호작용/////알림 상호작용/////알림 상호작용/////알림 상호작용/////
+
 
 /** 예산 재설정 알림 클릭하면 예산 설정 모달 띄우는 함수 */
 function openUpdateBudgetModal() {
   initUpdateBudgetModal();
   $('#ModalUpdateBudget').modal('show');
 }
+
+
+/////알림 상호작용/////알림 상호작용/////알림 상호작용/////알림 상호작용/////알림 상호작용/////알림 상호작용/////알림 상호작용/////알림 상호작용/////
+/////알림 상호작용/////알림 상호작용/////알림 상호작용/////알림 상호작용/////알림 상호작용/////알림 상호작용/////알림 상호작용/////알림 상호작용/////
+/////알림 상호작용/////알림 상호작용/////알림 상호작용/////알림 상호작용/////알림 상호작용/////알림 상호작용/////알림 상호작용/////알림 상호작용/////

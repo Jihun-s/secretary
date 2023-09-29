@@ -1,10 +1,21 @@
+/** 
+ * 거래내역 목록<->달력 .js  
+ */
+
+
 $(document).ready(function() {
 
 });
 
-////////////////////////////////////////////////////////////////
 
-/** 날짜입력 기본값 현재시간으로 설정 */
+
+////READY/////READY/////READY/////READY/////READY/////READY/////READY/////READY/////READY/////READY/////READY/////READY/////
+////READY/////READY/////READY/////READY/////READY/////READY/////READY/////READY/////READY/////READY/////READY/////READY///// 
+////READY/////READY/////READY/////READY/////READY/////READY/////READY/////READY/////READY/////READY/////READY/////READY///// 
+
+
+
+/** 내역 날짜 선택 기본값을 현재시각으로 설정하는 함수 */
 function dateToSysdate() {
   const now = new Date();
   const year = now.getFullYear();
@@ -21,11 +32,16 @@ function dateToSysdate() {
 }
 
 
-////////////////////////////////////////////////////////////////
+
+/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////
+/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////
+/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////
+
+
 
 let isCal = false;
 
-/** transType별 색상 매핑 */
+/** transType별 색상 매핑하는 함수 */
 function getColorBytransType(transType) {
   switch (transType) {
     // 'success' color
@@ -53,7 +69,9 @@ function numberWithCommas(x) {
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+/////기존HTML/////기존HTML/////기존HTML/////기존HTML/////기존HTML/////기존HTML/////기존HTML/////기존HTML/////기존HTML/////기존HTML/////기존HTML/////
+/////기존HTML/////기존HTML/////기존HTML/////기존HTML/////기존HTML/////기존HTML/////기존HTML/////기존HTML/////기존HTML/////기존HTML/////기존HTML/////
+/////기존HTML/////기존HTML/////기존HTML/////기존HTML/////기존HTML/////기존HTML/////기존HTML/////기존HTML/////기존HTML/////기존HTML/////기존HTML/////
 
 let listHtml = `
     <!-- 내역 제목 -->
@@ -171,16 +189,22 @@ let listHtml = `
 `;
 
 
-/////////////////////////////////////////////////////////////////////////////
+/////달력-목록 전환/////달력-목록 전환/////달력-목록 전환/////달력-목록 전환/////달력-목록 전환/////달력-목록 전환/////달력-목록 전환/////달력-목록 전환/////달력-목록 전환/////달력-목록 전환/////
+/////달력-목록 전환/////달력-목록 전환/////달력-목록 전환/////달력-목록 전환/////달력-목록 전환/////달력-목록 전환/////달력-목록 전환/////달력-목록 전환/////달력-목록 전환/////달력-목록 전환/////
+/////달력-목록 전환/////달력-목록 전환/////달력-목록 전환/////달력-목록 전환/////달력-목록 전환/////달력-목록 전환/////달력-목록 전환/////달력-목록 전환/////달력-목록 전환/////달력-목록 전환/////
 
+
+
+/** calendar 객체 */
 let calendar = null;
 
-/** 달력 보이기 */
+
+/** 달력으로 보기 전환 함수 */
 function showCalendar() {
   isCal = true;
   let calendarEl = $('#transViewDiv')[0];
 
-  /* 현재 날짜 구하기 */
+  // 현재 날짜 구하기
   let now = new Date();
 
   let curYear = now.getFullYear();
@@ -190,6 +214,8 @@ function showCalendar() {
   
   $('#transViewDiv').html('');
 
+
+  // 달력 객체 만들기 
   calendar = new FullCalendar.Calendar(calendarEl, {
       initialView: 'dayGridMonth',
       locale: 'ko',
@@ -197,7 +223,7 @@ function showCalendar() {
       events: function(info, successCallback, failureCallback) {
       // 현재 달력 연월 추출
       let date = new Date(info.start);
-      date.setDate(date.getDate() + 15);  // 중간값 작업
+      date.setDate(date.getDate() + 15);  // 중간값
       let calYear = date.getFullYear();
       let calMonth = date.getMonth() + 1;
       // alert("events 함수에서 읽은 연월:" + calYear + " " + calMonth);
@@ -255,12 +281,13 @@ function showCalendar() {
           }
       });
     },
+    /** 이벤트 클릭하면 상세 모달 표시 */
     eventClick: function(info) {
       // 현재 달력 연월 추출
       let detailListDiv = $('#detailListDiv');
-      let eventDate = new Date(info.event.start); // 이벤트의 시작 날짜를 가져옵니다.
+      let eventDate = new Date(info.event.start); // 시작 날짜를 기준으로 
       let calYear = eventDate.getFullYear();
-      let calMonth = eventDate.getMonth() + 1; // 월은 0부터 시작하므로 1을 더해줍니다.
+      let calMonth = eventDate.getMonth() + 1;
       let calDate = eventDate.getDate();
       let transType = info.event.extendedProps.type;
       // alert(calYear + "년 " + calMonth + "월 " + calDate + "일의 " + transType + "을 클릭");
@@ -345,15 +372,14 @@ function showCalendar() {
   calendar.render();
 }
 
-/** 목록 보이기 */
+
+/** 목록으로 보기 전환 함수 */
 function showList() {
   isCal = false;
   $('#transViewDiv').html(listHtml);
-  calendar.destroy();
   
-  loadMainCategoriesSearch();
-
-  
+  calendar.destroy(); // 만들었던 달력 객체 폐기
+    
   // 오늘 날짜로 초기화
   $('#dateReset').click(function() {
     resetToCurrentDate();
@@ -366,19 +392,28 @@ function showList() {
   initializeDateSelector();
 
   // 조건 & 검색 & 정렬 
+  // 대분류 카테고리 가져오기 
+  loadMainCategoriesSearch();
+  // 카테고리 필터링
+  $('body').on('change', '#selectCondition input, #selectCondition select', selectConditionTrans);
+  // 수입 체크박스
+  $('body').on('click', '#transSearchCheckIncome', selectConditionTrans);
+  // 지출 체크박스
+  $('body').on('click', '#transSearchCheckExpense', selectConditionTrans);
+  // 나의내역만 체크박스
+  $('body').on('click', '#transSearchCheckUserId', selectConditionTrans);
+  // 검색용 카테고리
+  $('body').on('change', '#transSearchCategoriesDiv', selectConditionTrans);
   // 검색어 입력
   $('body').on('click', '#searchSubmitBt', selectConditionTrans);
-  $('body').on('change', '#selectCondition input, #selectCondition select', selectConditionTrans);
-  $('body').on('click', '#transSearchCheckIncome', selectConditionTrans);
-  $('body').on('click', '#transSearchCheckExpense', selectConditionTrans);
-  $('body').on('click', '#transSearchCheckUserId', selectConditionTrans);
-  $('body').on('change', '#transSearchCategoriesDiv', selectConditionTrans);
+  // 정렬
   $('body').on('change', '#sortBy', selectConditionTrans);
 
   // 목록 불러오기
   init();
   $('body').on('click', '#prevYear, #prevMonth, #nextYear, #nextMonth', init);
   
+  // 숨기기 
   $("#transCategoriesDiv").hide();
   $("#transSearchCategory2Div").hide();
 

@@ -627,7 +627,7 @@
                       <form>
                         <div class="mb-3">
                           <label class="form-label" for="transDate">거래일자</label>
-                          <input class="form-control" type="datetime-local" name="transDate" value="2021-06-18T12:30:00" id="transDate">
+                          <input class="form-control" type="datetime-local" name="transDate" value="" id="transDate">
                         </div>
                         <div class="mb-3">
                           <label class="form-label" for="transType">내역 유형</label>
@@ -917,7 +917,6 @@
                 <div>
                   <p id="transCategoryErrorModal"></p>
                 </div>
-                <!-- <div class="form-text"> You can use letters, numbers &amp; periods </div> -->
               </div>
               <div class="mb-3">
                 <label class="form-label" for="transPayee">거래내용</label>
@@ -946,8 +945,8 @@
             </form>
           </div>
           <div class="modal-footer">
+            <button type="button" id="setTransBtModal" class="btn btn-success">수정하기</button>
             <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">취소</button>
-            <button type="button" id="setTransBtModal" class="btn btn-primary">수정</button>
           </div>
         </div>
       </div>
@@ -965,7 +964,7 @@
             <div id="detailListDiv"></div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">확인</button>
+            <button type="button" class="btn btn-success" data-bs-dismiss="modal">확인</button>
           </div>
         </div>
       </div>
