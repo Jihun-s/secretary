@@ -1,11 +1,11 @@
 $(document).ready(function() {
   getPilsuAlert();
 
-  // 60초에 한번씩 알림창 새로고침 
-  // setInterval(function() {
-  //   getPilsuAlert();
-  //   getJeahnAlert();
-  // }, 6000);
+  // 1분에 한번씩 알림창 새로고침 
+  setInterval(function() {
+    getPilsuAlert();
+    getJeahnAlert();
+  }, 60000);
 });
 
 //////////////////////////////////////////////////////////
