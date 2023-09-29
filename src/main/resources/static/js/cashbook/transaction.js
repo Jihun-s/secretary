@@ -1,10 +1,10 @@
 $(document).ready(function() {
 
-    // 날짜 설정
+    /* 날짜 설정 */
     setCurDate();
     initializeDateSelector();
 
-    // 오늘 날짜로 초기화
+    /* 오늘 날짜로 초기화 */
     $('#dateReset').click(function() {
         resetToCurrentDate();
         initializeDateSelector();
@@ -12,7 +12,7 @@ $(document).ready(function() {
     });
 
     
-    // 목록 불러오기
+    /* 목록 불러오기 */
     init();
     $('body').on('click', '#prevYear, #prevMonth, #nextYear, #nextMonth', init);
 
@@ -971,7 +971,15 @@ function loadMainCategoriesSearch() {
             let options = '';
             
             cate1List.forEach(cate1 => {
-                options += `<option value="${cate1.cate1Name}">${cate1.cate1Name}</option>`;
+                // '대분류를 추가하세요'인데 리스트에 없을 경우에만 추가 
+                if (cate1.cate1Name === "대분류를 선택하세요" && !options.includes("대분류를 선택하세요")) {
+                    options += `<option value="${cate1.cate1Name}">${cate1.cate1Name}</option>`;
+                }
+                // '대분류를 추가하세요'가 애초에 아닌 경우 
+                else if (cate1.cate1Name !== "대분류를 선택하세요") {
+                    options += `<option value="${cate1.cate1Name}">${cate1.cate1Name}</option>`;
+                }
+
             });
 
             $("#cate1NameSearch").html(options);
@@ -1489,18 +1497,32 @@ function selectConditionTrans() {
             , nowMonth: nowMonth },
         dataType: 'JSON',
         success: (list) => {
+            let sumIncome = 0;
+            let sumExpense = 0;
+            
             // 넘어올 값: 내역리스트
             if(list.length == 0 || list == null) {
                 transListDiv.html("내역이 존재하지 않습니다.");
+
+                $("#transSumIncomeMonth").text(sumIncome.toLocaleString('en-US'));
+                $("#transSumExpenseMonth").text(sumExpense.toLocaleString('en-US'));  
             } else {
                 let groupedData = {};
 
             // 일자별로 데이터 그룹화
             $(list).each(function(idx, ta) {
-                let date = ta.transDate;  // 거래날짜를 가져옵니다. (예: "2023-08-28")
+                let date = ta.transDate;
                 if (!groupedData[date]) {
                     groupedData[date] = [];
                 }
+
+                // 수입 총합 지출 총합 계산
+                if (ta.transType === '수입') {
+                    sumIncome += parseInt(ta.transAmount);
+                } else if (ta.transType === '지출') {
+                    sumExpense += parseInt(ta.transAmount);
+                }
+
                 groupedData[date].push(ta);
             });
 
@@ -1562,6 +1584,10 @@ function selectConditionTrans() {
 
             transCntMonth.html(list.length);
             transListDiv.html(table);
+
+            $("#transSumIncomeMonth").text(sumIncome.toLocaleString('en-US'));
+            $("#transSumExpenseMonth").text(sumExpense.toLocaleString('en-US'));  
+
             }
 
         },
