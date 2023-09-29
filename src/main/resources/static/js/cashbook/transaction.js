@@ -1,4 +1,5 @@
 $(document).ready(function() {
+
     // 날짜 설정
     setCurDate();
     initializeDateSelector();

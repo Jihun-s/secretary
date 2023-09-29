@@ -2,10 +2,10 @@ $(document).ready(function() {
   getPilsuAlert();
 
   // 60초에 한번씩 알림창 새로고침 
-  setInterval(function() {
-    getPilsuAlert();
-    getJeahnAlert();
-  }, 6000);
+  // setInterval(function() {
+  //   getPilsuAlert();
+  //   getJeahnAlert();
+  // }, 6000);
 });
 
 //////////////////////////////////////////////////////////
@@ -301,7 +301,18 @@ function getJeahnAlert() {
     // 지출
     // 정기결제
     let exSubscript = ["카드", "구독", "정기", "결제", "납부"];
-    let inKong = ["꽁돈"];
+    // 명절
+    let exHoliday = ["명절", "설날", "추석"];
+    // 경사
+    let exGoodday = ["생일", "생신", "결혼", "백일", "돌잔치", "환갑", "칠순", "팔순", "구순", "파티"]
+    // 조사 
+    let exSadday = ["기일", "장례"];
+    
+    // 수입
+    // 정기소득
+    let inSalary = ["월급", "급여", "주급"];
+    // 비정기소득
+    let inLuck = ["용돈", "주식"];
 
     // 그룹화된 데이터를 기반으로 HTML 생성
     for (let date in sortedGroupedByDate) {
@@ -320,9 +331,34 @@ function getJeahnAlert() {
               ${alert.alertDateMonth}월 ${alert.alertDateDay}일은 ${alert.alertContent}입니다. 연결된 계좌의 잔고를 확인하세요.
             `;
           } 
-          else if (inKong.some(keyword => alert.alertContent.includes(keyword))) {
+          // 명절
+          else if (exHoliday.some(keyword => alert.alertContent.includes(keyword))) {
             html += `
-            ${alert.alertDateMonth}월 ${alert.alertDateDay}일은 ${alert.alertContent}입니다. 꽁돈 굿~.
+            ${alert.alertDateMonth}월 ${alert.alertDateDay}일은 ${alert.alertContent}입니다. 예산을 확인하세요.
+            `;
+          } 
+          // 경사
+          else if (exGoodday.some(keyword => alert.alertContent.includes(keyword))) {
+            html += `
+            ${alert.alertDateMonth}월 ${alert.alertDateDay}일은 대망의 ${alert.alertContent}입니다. 선물을 준비할 예산을 챙겨두세요.
+            `;
+          } 
+          // 조사
+          else if (exSadday.some(keyword => alert.alertContent.includes(keyword))) {
+            html += `
+            ${alert.alertDateMonth}월 ${alert.alertDateDay}일은 ${alert.alertContent}입니다. 성의 표현을 위해 예산을 확인하세요.
+          `;
+          }
+          // 월급
+          else if (inSalary.some(keyword => alert.alertContent.includes(keyword))) {
+            html += `
+            ${alert.alertDateMonth}월 ${alert.alertDateDay}일은 기다리던 ${alert.alertContent}입니다! 야호! 이번 달은 알차게 써보자고요.
+          `;
+          }
+          // 용돈
+          else if (inLuck.some(keyword => alert.alertContent.includes(keyword))) {
+            html += `
+            ${alert.alertDateMonth}월 ${alert.alertDateDay}일 받은 ${alert.alertContent}은 비상금으로 모아두는 건 어떨까요? 
           `;
           }
 

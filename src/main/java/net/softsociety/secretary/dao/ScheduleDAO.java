@@ -45,5 +45,8 @@ public interface ScheduleDAO {
 	/** 오늘 이후 일정 목록 */
 	ArrayList<Schedule> selectAllScheListAfter(HashMap<String, Object> map);
 
+	/** 알림 넣기 위해 가져온 방금 넣은 일정 */
+	Schedule selectOneAlert(HashMap<String, Object> map);
+
 
 }

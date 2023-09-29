@@ -165,7 +165,7 @@ public class CashbookBudgetRestController {
 		map.put("curMonth", curMonth);
 		
 		BigDecimal result = dao.getBudgetRest(map);
-		log.debug("{}년 {}월 남은 예산: {}", result);
+		log.debug("{}년 {}월 남은 예산: {}", curYear, curMonth, result);
 		
 		return result;
 	}

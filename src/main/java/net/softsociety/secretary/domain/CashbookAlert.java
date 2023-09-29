@@ -15,6 +15,7 @@ public class CashbookAlert {
 
 	int alertId;
 	int familyId;
+	int schId;
 	String userId;
 	String alertType;
 	String alertTransType;

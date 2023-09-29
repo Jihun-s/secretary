@@ -109,8 +109,14 @@ public class ScheduleRestController {
 		map.put("schId", schId);
 		log.debug("DAO로 보낼 삭제할 일정 map:{}", map);
 
+		Schedule sch = dao.selectOne(map);
+		log.debug("삭제할 일정 정보:{}", sch);
+		
 		int n = dao.deleteSch(map);
 		log.debug("일정 삭제했나염?:{}", n);
+		
+		// 알림도 같이 삭제 
+		
 		
 		return n;
 	}

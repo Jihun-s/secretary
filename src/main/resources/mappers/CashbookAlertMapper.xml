@@ -10,6 +10,7 @@
 	    Secretary_Cashbook_Alert
 		    (alert_id
 		    , family_id
+		    , sch_id
 		    , user_id
 		    , alert_type
 		    , alert_trans_type
@@ -20,9 +21,10 @@
 		VALUES
 		    (Secretary_Cashbook_Alert_SEQ.nextval
 		    , #{familyId}
+		    , #{schId}
 		    , #{userId}
-		    , '제안'
-		    , '수입'
+		    , #{alertType}
+		    , #{alertTransType}
 		    , #{alertContent}
         	, TO_DATE(#{alertDate}, 'YYYY-MM-DD"T"HH24:MI')
         	, TO_DATE(#{alertDate}, 'YYYY-MM-DD"T"HH24:MI') - 3
@@ -52,8 +54,8 @@
         AND EXTRACT(YEAR FROM alert_date) = #{curYear}
         AND EXTRACT(MONTH FROM alert_date) >= #{curMonth}
         AND alert_type = '필수'
-    	AND alert_date >= TRUNC(SYSDATE)
-    	AND alert_date &lt;= TRUNC(SYSDATE + 30)
+    	AND SYSDATE >= alert_start
+    	AND SYSDATE &lt;= alert_end
 	ORDER BY
 		alert_date
 </select>
@@ -80,8 +82,8 @@
         AND EXTRACT(YEAR FROM alert_date) = #{curYear}
         AND EXTRACT(MONTH FROM alert_date) >= #{curMonth}
         AND alert_type = '제안'
-    	AND alert_date >= TRUNC(SYSDATE)
-    	AND alert_date &lt;= TRUNC(SYSDATE + 30)
+    	AND SYSDATE >= alert_start
+    	AND SYSDATE &lt;= alert_end
 	ORDER BY
 		alert_date DESC
 </select>
