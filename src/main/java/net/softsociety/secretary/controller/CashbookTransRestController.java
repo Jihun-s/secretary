@@ -50,6 +50,7 @@ public class CashbookTransRestController {
 		User loginUser = (User) model.getAttribute("loginUser");
 		trans.setUserId(loginUser.getUserId());
 		trans.setFamilyId(loginUser.getFamilyId());
+		trans.setCashbookId(loginUser.getFamilyId());
 		
 		log.debug("입력할 거래내역:{}", trans);
 		log.debug("입력할 cashbookId:{}", trans.getCashbookId());

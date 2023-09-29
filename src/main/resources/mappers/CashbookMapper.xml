@@ -26,8 +26,22 @@ INSERT INTO
         , #{familyId}
         , TO_DATE(#{transDate}, 'YYYY-MM-DD"T"HH24:MI')
         , #{transType}
-        , (SELECT cate1_id FROM Secretary_Trans_Category1 WHERE cate1_name = #{cate1Name})
-        , (SELECT cate2_id FROM Secretary_Trans_Category2 WHERE cate2_name = #{cate2Name} AND cate1_id = (SELECT cate1_id FROM Secretary_Trans_Category1 WHERE cate1_name = #{cate1Name}))
+        , <choose>
+            <when test="cate1Id != 0">
+                #{cate1Id}
+            </when>
+            <otherwise>
+                null
+            </otherwise>
+          </choose>
+        , <choose>
+            <when test="cate2Id != 0">
+                #{cate2Id}
+            </when>
+            <otherwise>
+                null
+            </otherwise>
+          </choose>
         , #{transPayee}
         , #{transMemo}
         , #{transAmount}
@@ -213,7 +227,7 @@ INSERT INTO
 </insert>
 
 <!-- 대분류 name으로 id 찾기 -->
-<select id="selectCate1Id" parameterType="string" resultType="int">
+<select id="selectCate1Id" parameterType="string" resultType="integer">
 	SELECT
 		cate1_id
 	FROM
@@ -251,22 +265,30 @@ INSERT INTO
 
 <!-- 내역 수정 -->
 <update id="updateTrans" parameterType="Transaction">	        
-	UPDATE
-	    Secretary_Transaction
-	SET
-	    trans_date = TO_DATE(#{transDate}, 'YYYY-MM-DD HH24:MI:SS')
-	    , trans_type = #{transType}
-	    , cate1_id = #{cate1Id}
-	    , cate2_id = #{cate2Id}
-	    , trans_payee = #{transPayee}
-	    , trans_memo = #{transMemo}
-	    , trans_amount = #{transAmount}
-	WHERE trans_id = #{transId}
-		AND family_id = #{familyId}
+    UPDATE
+        Secretary_Transaction
+    SET
+        trans_date = TO_DATE(#{transDate}, 'YYYY-MM-DD HH24:MI:SS')
+        , trans_type = #{transType}
+        , cate1_id = 
+          CASE 
+            WHEN #{cate1Id} = 0 THEN NULL
+            ELSE #{cate1Id}
+          END
+        , cate2_id = 
+          CASE 
+            WHEN #{cate2Id} = 0 THEN NULL
+            ELSE #{cate2Id}
+          END
+        , trans_payee = #{transPayee}
+        , trans_memo = #{transMemo}
+        , trans_amount = #{transAmount}
+    WHERE trans_id = #{transId}
+        AND family_id = #{familyId}
 </update>
 
 <!-- 소분류 name으로 id찾기 -->
-<select id="selectCate2Id" parameterType="string" resultType="int">
+<select id="selectCate2Id" parameterType="string" resultType="integer">
 	SELECT
 	    cate2_id
 	FROM

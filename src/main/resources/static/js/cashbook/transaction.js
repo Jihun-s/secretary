@@ -598,7 +598,7 @@ function setTransAjax() {
             // 입력창 비우기 
             transDate.html("");
             $('#transAmount').val("");
-            cate1Name.val('대분류를 입력하세요');
+            cate1Name.val('대분류를 선택하세요');
             cate2Name.val('소분류를 선택하세요');
             $('#inlineRadio1').prop('checked', false);
             $('#inlineRadio2').prop('checked', false);
@@ -927,7 +927,7 @@ function loadMainCategories(transType) {
         type: 'GET',
         data: { transType: transType },
         success: function(cate1List) {
-            let options = '<option>대분류를 선택하세요</option>';
+            let options = '';
             
             cate1List.forEach(cate1 => {
                 options += `<option value="${cate1.cate1Name}">${cate1.cate1Name}</option>`;
@@ -950,7 +950,7 @@ function loadMainCategoriesSearch() {
         url: '/secretary/cashbook/trans/loadCate1Search', 
         type: 'GET',
         success: function(cate1List) {
-            let options = '<option>대분류를 선택하세요</option>';
+            let options = '';
             
             cate1List.forEach(cate1 => {
                 options += `<option value="${cate1.cate1Name}">${cate1.cate1Name}</option>`;
@@ -972,7 +972,7 @@ function loadMainCategoriesSms(transType) {
         type: 'GET',
         data: { transType: transType },
         success: function(cate1List) {
-            let options = '<option>대분류를 선택하세요</option>';
+            let options = '';
             
             cate1List.forEach(cate1 => {
                 options += `<option value="${cate1.cate1Name}">${cate1.cate1Name}</option>`;
@@ -1077,7 +1077,7 @@ function loadMainCategoriesModal(transType, cate1Name) {
         type: 'GET',
         data: { transType: transType },
         success: function(cate1List) {
-            let options = '<option>대분류를 선택하세요</option>';
+            let options = '';
             
             cate1List.forEach(cate1 => {
                 // cate1Name과 cate1.cate1Name이 일치하는 경우에만 selected 속성 추가

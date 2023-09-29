@@ -56,7 +56,7 @@ public interface CashbookDAO {
 	int insertCustomCate1(Category1 cate1);
 
 	/** 대분류 name으로 id 찾기 */
-	int selectCate1Id(String cate1Name);
+	Integer selectCate1Id(String cate1Name);
 
 	/** 커스텀 소분류 추가 */
 	int insertCustomCate2(Category2 cate2);
@@ -65,7 +65,7 @@ public interface CashbookDAO {
 	Transaction selectTrans(int transId);
 
 	/** 소분류 name으로 id 찾기 */
-	int selectCate2Id(String cate2Name);
+	Integer selectCate2Id(String cate2Name);
 
 	/** 한달 총 수입 */
 	int selectSumIncomeMonth(HashMap<String, Object> map);
