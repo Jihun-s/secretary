@@ -32,6 +32,54 @@
 		    )
 </insert>
 
+
+<!-- 가계부 예산 제안알림 입력 -->
+<insert id="insertJeahnBudgetAlert" parameterType="hashmap">
+	INSERT INTO
+	    Secretary_Cashbook_Alert
+		    (alert_id
+		    , family_id
+		    , user_id
+		    , alert_type
+		    , alert_trans_type
+		    , alert_content
+		    , alert_date
+		    , budget_rest)
+		VALUES
+		    (Secretary_Cashbook_Alert_SEQ.nextval
+		    , #{familyId}
+		    , #{userId}
+		    , #{alertType}
+		    , '예산'
+		    , '이번 주 남은 예산'
+        	, SYSDATE
+        	, #{budgetRest})
+</insert>
+
+
+<!-- 가계부 지난주총지출 제안알림 입력 -->
+<insert id="insertJeahnTWEAlert" parameterType="hashmap">
+	INSERT INTO
+	    Secretary_Cashbook_Alert
+		    (alert_id
+		    , family_id
+		    , user_id
+		    , alert_type
+		    , alert_trans_type
+		    , alert_content
+		    , alert_date
+		    , total_week_expense)
+		VALUES
+		    (Secretary_Cashbook_Alert_SEQ.nextval
+		    , #{familyId}
+		    , #{userId}
+		    , #{alertType}
+		    , '지출'
+		    , '지난 주 총 지출'
+        	, SYSDATE
+        	, #{totalWeekExpense})
+</insert>
+
 <!-- 필수 알림 목록 불러오기 -->
 <select id="getPilsuAlert" parameterType="hashmap" resultType="CashbookAlert">
 	SELECT
@@ -48,14 +96,17 @@
    		, TO_CHAR(alert_date, 'YYYY') AS alert_date_year
 	    , TO_CHAR(alert_date, 'MM') AS alert_date_month
 	    , TO_CHAR(alert_date, 'DD') AS alert_date_day
+   	    , total_week_expense
+	    , budget_rest
 	FROM Secretary_Cashbook_Alert
 	WHERE 
 	    family_id = #{familyId}
+   	    AND user_id = #{userId}
         AND EXTRACT(YEAR FROM alert_date) = #{curYear}
         AND EXTRACT(MONTH FROM alert_date) >= #{curMonth}
         AND alert_type = '필수'
-    	AND SYSDATE >= alert_start
-    	AND SYSDATE &lt;= alert_end
+    	AND SYSDATE >= alert_date - 3
+    	AND SYSDATE &lt;= alert_date + 3
 	ORDER BY
 		alert_date
 </select>
@@ -76,14 +127,17 @@
    		, TO_CHAR(alert_date, 'YYYY') AS alert_date_year
 	    , TO_CHAR(alert_date, 'MM') AS alert_date_month
 	    , TO_CHAR(alert_date, 'DD') AS alert_date_day
+	    , total_week_expense
+	    , budget_rest
 	FROM Secretary_Cashbook_Alert
 	WHERE 
 	    family_id = #{familyId}
+	    AND user_id = #{userId}
         AND EXTRACT(YEAR FROM alert_date) = #{curYear}
         AND EXTRACT(MONTH FROM alert_date) >= #{curMonth}
         AND alert_type = '제안'
-    	AND SYSDATE >= alert_start
-    	AND SYSDATE &lt;= alert_end
+    	AND SYSDATE >= alert_date - 3
+    	AND SYSDATE &lt;= alert_date + 3
 	ORDER BY
 		alert_date DESC
 </select>

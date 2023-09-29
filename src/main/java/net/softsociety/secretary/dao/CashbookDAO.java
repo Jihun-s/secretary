@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Optional;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import lombok.Data;
@@ -135,4 +136,7 @@ public interface CashbookDAO {
 
 	/** 이번달 남은 예산 */
 	BigDecimal getBudgetRest(HashMap<String, Object> map);
+
+	/** 지난주 총 지출 */
+	BigDecimal getTotalWeekExpense(HashMap<String, Object> map);
 }
