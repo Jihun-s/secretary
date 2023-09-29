@@ -128,4 +128,21 @@ public class CashbookAlertRestController {
 		
 		int n = dao.deleteAllPilsuAlert(map);
 	}
+	
+	/** 제안알림 모두 삭제 */
+	@PostMapping("deleteAllJeahnAlert")
+	public void deleteAllJeahnAlert(
+			Model model) {
+		
+		User loginUser = (User) model.getAttribute("loginUser");
+		int familyId = loginUser.getFamilyId();
+		String userId = loginUser.getUserId();
+		
+		log.debug("제안알림 전체 삭제할게요:{}번가족", familyId);
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("userId", userId);
+		map.put("familyId", familyId);
+		
+		int n = dao.deleteAllJeahnAlert(map);
+	}
 }

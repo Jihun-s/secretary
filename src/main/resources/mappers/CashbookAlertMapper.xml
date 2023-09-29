@@ -98,12 +98,22 @@
 		AND family_id = #{familyId}
 </delete>
 
-<!-- 알림 삭제 -->
+<!-- 필수알림 전체 삭제 -->
 <delete id="deleteAllPilsuAlert" parameterType="hashmap">
 	DELETE FROM
 		Secretary_Cashbook_Alert
 	WHERE
 		alert_type = '필수'
+		<!-- AND user_id = #{userId} -->
+		AND family_id = #{familyId}
+</delete>
+
+<!-- 제안알림 전체 삭제 -->
+<delete id="deleteAllJeahnAlert" parameterType="hashmap">
+	DELETE FROM
+		Secretary_Cashbook_Alert
+	WHERE
+		alert_type = '제안'
 		<!-- AND user_id = #{userId} -->
 		AND family_id = #{familyId}
 </delete>

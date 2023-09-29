@@ -27,4 +27,7 @@ public interface CashbookAlertDAO {
 	/** 필수알림 전체 삭제 */
 	int deleteAllPilsuAlert(HashMap<String, Object> map);
 
+	/** 제안알림 전체 삭제 */
+	int deleteAllJeahnAlert(HashMap<String, Object> map);
+
 }

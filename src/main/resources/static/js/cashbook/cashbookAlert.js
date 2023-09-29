@@ -160,31 +160,31 @@ function getPilsuAlert() {
           // 명절
           else if (exHoliday.some(keyword => alert.alertContent.includes(keyword))) {
             html += `
-            ${alert.alertDateMonth}월 ${alert.alertDateDay}일은 ${alert.alertContent}입니다. 예산을 확인하세요.
+            ${alert.alertDateMonth}월 ${alert.alertDateDay}일은 ${alert.alertContent}입니다. 명절 맞이 준비는 하셨나요?
             `;
           } 
           // 경사
           else if (exGoodday.some(keyword => alert.alertContent.includes(keyword))) {
             html += `
-            ${alert.alertDateMonth}월 ${alert.alertDateDay}일은 대망의 ${alert.alertContent}입니다. 선물을 준비할 예산을 챙겨두세요.
+            ${alert.alertDateMonth}월 ${alert.alertDateDay}일은 기다리던 ${alert.alertContent}입니다. 선물로 마음을 전해요.
             `;
           } 
           // 조사
           else if (exSadday.some(keyword => alert.alertContent.includes(keyword))) {
             html += `
-            ${alert.alertDateMonth}월 ${alert.alertDateDay}일은 ${alert.alertContent}입니다. 성의 표현을 위해 예산을 확인하세요.
+            ${alert.alertDateMonth}월 ${alert.alertDateDay}일은 ${alert.alertContent}입니다. 성의 표현을 위해 일정과 예산을 확인하세요.
           `;
           }
           // 월급
           else if (inSalary.some(keyword => alert.alertContent.includes(keyword))) {
             html += `
-            ${alert.alertDateMonth}월 ${alert.alertDateDay}일은 기다리던 ${alert.alertContent}입니다! 야호! 이번 달은 알차게 써보자고요.
+            ${alert.alertDateMonth}월 ${alert.alertDateDay}일은 대망의 ${alert.alertContent}입니다! 야호! 월급의 50%는 저축하는 편이 좋아요.
           `;
           }
           // 용돈
           else if (inLuck.some(keyword => alert.alertContent.includes(keyword))) {
             html += `
-            ${alert.alertDateMonth}월 ${alert.alertDateDay}일 받은 ${alert.alertContent}은 비상금으로 모아두는 건 어떨까요? 
+            ${alert.alertDateMonth}월 ${alert.alertDateDay}일 받은 ${alert.alertContent}! 비상금으로 모아두는 건 어떨까요? 
           `;
           }
 
@@ -243,6 +243,24 @@ function deleteAllPilsuAlert() {
       },
       error: (e) => {
         alert("필수알림 모두 삭제 서버 전송 실패");
+        console.log(JSON.stringify(e));
+      }
+    });
+  }
+}
+
+/** 제안알림 전체 삭제 */
+function deleteAllJeahnAlert() {
+  if(confirm("제안 알림을 모두 삭제할까요?")) {
+    $.ajax({
+      url: '/secretary/cashbook/alert/deleteAllJeahnAlert',
+      type: 'POST',
+      success: () => {
+        getPilsuAlert();
+        getJeahnAlert();
+      },
+      error: (e) => {
+        alert("제안알림 모두 삭제 서버 전송 실패");
         console.log(JSON.stringify(e));
       }
     });
@@ -352,7 +370,7 @@ function getJeahnAlert() {
           // 월급
           else if (inSalary.some(keyword => alert.alertContent.includes(keyword))) {
             html += `
-            ${alert.alertDateMonth}월 ${alert.alertDateDay}일은 기다리던 ${alert.alertContent}입니다! 야호! 이번 달은 알차게 써보자고요.
+            ${alert.alertDateMonth}월 ${alert.alertDateDay}일은 기다리던 ${alert.alertContent}입니다! 야호! 월급의 50%는 저축하는 편이 좋아요.
           `;
           }
           // 용돈
