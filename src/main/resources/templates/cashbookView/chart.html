@@ -569,15 +569,17 @@
               
               <!-- 메뉴 행 -->
               <div class="row mb-4">
-                <span style="display: inline-block">
-                  <!-- 메뉴 앞 이미지 src 수정해주세요 -->
-                  <img
-                    th:src="@{/images/cashbookimg/9441883.png}"
-                    style="height: 4rem; width: 4rem; vertical-align: middle"
-                  />
-                  <!-- 메뉴이름 -->
-                  <h1 style="display: inline; vertical-align: middle">소비 분석</h1>
-                </span>
+                <a th:href="@{/cashbook/chart}">
+                  <span style="display: inline-block">
+                    <!-- 메뉴 앞 이미지 src 수정해주세요 -->
+                    <img
+                      th:src="@{/images/cashbookimg/9441883.png}"
+                      style="height: 4rem; width: 4rem; vertical-align: middle"
+                    />
+                    <!-- 메뉴이름 -->
+                    <h1 style="display: inline; vertical-align: middle">소비 분석</h1>
+                  </span>
+                </a>
               </div>
 
               <!-- 컨텐츠 -->

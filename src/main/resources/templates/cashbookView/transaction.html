@@ -596,15 +596,17 @@
               
               <!-- 메뉴 행 -->
               <div class="row mb-4">
-                <span style="display: inline-block">
-                  <!-- 메뉴 앞 이미지 src 수정해주세요 -->
-                  <img
-                    th:src="@{/images/cashbookimg/11613739.png}"
-                    style="height: 4rem; width: 4rem; vertical-align: middle"
-                  />
-                  <!-- 메뉴이름 -->
-                  <h1 style="display: inline; vertical-align: middle">내역 보기</h1>
-                </span>
+                <a th:href="@{/cashbook/trans}">
+                  <span style="display: inline-block">
+                    <!-- 메뉴 앞 이미지 src 수정해주세요 -->
+                    <img
+                      th:src="@{/images/cashbookimg/11613739.png}"
+                      style="height: 4rem; width: 4rem; vertical-align: middle"
+                    />
+                    <!-- 메뉴이름 -->
+                    <h1 style="display: inline; vertical-align: middle">내역</h1>
+                  </span>
+                </a>
               </div>
 
               <!-- 컨텐츠 -->
@@ -696,7 +698,7 @@
                   <!-- 2열 1행 -->
                   <div class="row">
                     <div class="col d-flex">
-                      <h3>내역</h3>
+                      <h3>내역 보기</h3>
                       <span class="justify-content-end">
                         <a href="javascript:showList()" class="me-2"><i class="bx bx-md bx-list-ul"></i></a>
                         <a href="javascript:showCalendar()"><i class="bx bx-md bx-calendar"></i></a>

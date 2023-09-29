@@ -74,7 +74,7 @@ function getPilsuAlert() {
 
     // 예산 없을 때 알림
     if(budgetExist == 0) {
-      html += `<br><small class="text-light fw-semibold">${curYear}-${curMonth}-${curDate}</small>`;
+      html += `<br><small class="text-light fw-semibold mb-2">${curYear}-${curMonth}-${curDate}</small>`;
       html += `
           <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" style="border: none;">
               <a href="javascript:openSetBudgetModal()">
@@ -89,7 +89,7 @@ function getPilsuAlert() {
     // 예산 초과했을 때 알림
     if(budgetMinus == 1) {
       // alert("알림 추가하자!");
-      html += `<br><small class="text-light fw-semibold">${curYear}-${curMonth}-${curDate}</small>`;
+      html += `<br><small class="text-light fw-semibold mb-2">${curYear}-${curMonth}-${curDate}</small>`;
       html += `
           <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" style="border: none;">
             <a href="javascript:openUpdateBudgetModal()">
@@ -138,7 +138,7 @@ function getPilsuAlert() {
 
     // 그룹화된 데이터를 기반으로 HTML 생성
     for (let date in sortedGroupedByDate) {
-      html += `<br><small class="text-light fw-semibold">${date}</small>`;
+      html += `<br><small class="text-light fw-semibold mb-2">${date}</small>`;
       // 가져온 데이터 분기
       sortedGroupedByDate[date].forEach(alert => {
         html += `
@@ -339,7 +339,7 @@ function getJeahnAlert() {
 
     // 그룹화된 데이터를 기반으로 HTML 생성
     for (let date in sortedGroupedByDate) {
-      html += `<br><small class="text-light fw-semibold">${date}</small>`;
+      html += `<br><small class="text-light fw-semibold mb-2">${date}</small>`;
       // 가져온 데이터 분기
       sortedGroupedByDate[date].forEach(alert => {
         html += `
