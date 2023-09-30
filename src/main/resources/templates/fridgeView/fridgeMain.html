@@ -775,7 +775,7 @@
 
                             const imagePath = data.foodSavedFile
                                 ? 'fridgeFood/image/' + data.foodSavedFile
-                                : 'images/fridgeimg/DefaultFood.webp';
+                                : 'images/fridgeimg/DefaultFood.png';
                             const madeDate = data.foodMadeDate ? data.foodMadeDate : '미입력';
 
                             // D-Day 계산
@@ -830,7 +830,7 @@
                 function displayFoodItem(foodItem) {
                     var imagePath = foodItem.foodSavedFile
                         ? 'fridgeFood/image/' + foodItem.foodSavedFile // Serve image from C:/secretaryfile/
-                        : 'images/fridgeimg/DefaultFood.webp';
+                        : 'images/fridgeimg/DefaultFood.png';
 
                     var today = new Date();
                     var expiryDate = new Date(foodItem.foodExpiryDate);
@@ -991,6 +991,7 @@
                 }
 
                 function loadData() {
+                    allFoods = []; // 초기화
                     // 냉장실 음식 아이템 데이터 가져오기
                     loadFoodsForNotification('냉장실', function () {
                         // 냉동실 음식 아이템 데이터 가져오기
@@ -1003,6 +1004,7 @@
                 }
 
                 function createEssentialNotifications() {
+                    $('#navs-pills-justified-home').empty();
                     const today = new Date();
                     const oneWeekFromNow = new Date(today);
                     oneWeekFromNow.setDate(today.getDate() + 7);
@@ -1031,6 +1033,7 @@
                 }
 
                 function createSuggestedNotifications() {
+                    $('#navs-pills-justified-profile').empty();
                     $.ajax({
                         url: `fridgeUsed/getFoodsNotAccessedForDays`,
                         type: 'GET',
@@ -1296,6 +1299,7 @@
                                 $('#foodModal').modal('hide');
                                 loadAllFoodsByCategory(currentCategory);
                                 refreshConsumptionHistory();
+                                loadData();
                             },
                             error: function (error) {
                                 console.log('Error consuming food:', error);
@@ -2252,7 +2256,7 @@
                                                                 <!-- 추가될 이미지 미리보기 태그 -->
                                                                 <div class="image-preview">
                                                                     <img
-                                                                        src="images/fridgeimg/DefaultFood.webp"
+                                                                        src="images/fridgeimg/DefaultFood.png"
                                                                         style="height: 100px; width: 100px"
                                                                         alt="Image Preview"
                                                                         class="image-preview__image"
