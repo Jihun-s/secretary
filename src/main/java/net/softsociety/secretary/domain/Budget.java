@@ -1,5 +1,7 @@
 package net.softsociety.secretary.domain;
 
+import java.math.BigDecimal;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,6 +20,6 @@ public class Budget {
 	int familyId;
 	int budgetYear;
 	int budgetMonth;
-	int budgetAmount;
+	BigDecimal budgetAmount;
 	
 }

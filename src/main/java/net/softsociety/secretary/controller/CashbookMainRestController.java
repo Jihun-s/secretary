@@ -71,8 +71,17 @@ public class CashbookMainRestController {
 		
 		// 수입 지출 총합 
 		HashMap<String, Object> sum = dao.selectInExSumMonth(map2);
-		BigDecimal incomeSumMonth = (BigDecimal) sum.get("INCOMESUMMONTH"); 
-		BigDecimal expenseSumMonth = (BigDecimal) sum.get("EXPENSESUMMONTH");
+		
+		// incomeSumMonth가 null이면 BigDecimal.ZERO로 설정
+		BigDecimal incomeSumMonth = (sum != null && sum.get("INCOMESUMMONTH") != null) 
+		                           ? (BigDecimal) sum.get("INCOMESUMMONTH")
+		                           : BigDecimal.ZERO;
+
+		// expenseSumMonth가 null이면 BigDecimal.ZERO로 설정
+		BigDecimal expenseSumMonth = (sum != null && sum.get("EXPENSESUMMONTH") != null) 
+		                            ? (BigDecimal) sum.get("EXPENSESUMMONTH")
+		                            : BigDecimal.ZERO;
+
 		log.debug("총합 가져오기:{}", sum);
 		log.debug("{}년 {}월 총수입{} 총지출{}", curYear, curMonth, incomeSumMonth, expenseSumMonth);
 		result.put("incomeSumMonth", incomeSumMonth);
@@ -87,18 +96,19 @@ public class CashbookMainRestController {
 		log.debug("DAO에 보낼 map:{}", map);
 		
 		// 예산 존재 여부
-		int budgetExist = dao.budgetExist(map);		
+		int budgetExist = (dao.budgetExist(map) != 0) ? dao.budgetExist(map) : 0;
 		log.debug("예산 있나요?:{}", budgetExist);
 		result.put("budgetExist", budgetExist);
 		
 		if(budgetExist == 1) {
-			Budget budget = dao.selectBudget(map);
-			// 예산 - 지출 금액 
-			BigDecimal budgetAmount = BigDecimal.valueOf(budget.getBudgetAmount());
-			BigDecimal remainingAmount = budgetAmount.subtract(expenseSumMonth);
+		    Budget budget = dao.selectBudget(map);
+		    BigDecimal budgetAmount = (budget != null && budget.getBudgetAmount() != null) 
+                    ? budget.getBudgetAmount()
+                    : BigDecimal.ZERO;
+		    BigDecimal remainingAmount = budgetAmount.subtract(expenseSumMonth);
 
-			result.put("remainingAmount", remainingAmount);
-			result.put("budgetAmount", budget.getBudgetAmount());
+		    result.put("remainingAmount", remainingAmount);
+		    result.put("budgetAmount", budgetAmount);
 		}
 		
 		return result;
@@ -255,9 +265,20 @@ public class CashbookMainRestController {
 		map.put("chMonth", chMonth);
 		log.debug("이전월 비교 보낼 map:{}", map);
 		
-		ArrayList<CashbookChart> result = dao.getCurPreInExSum(map);
-		log.debug("이전월 비교 결과:{}", result);
-		
-		return result;
+	    ArrayList<CashbookChart> result = dao.getCurPreInExSum(map);
+	    
+	    // null을 0으로 변환
+	    for (CashbookChart chart : result) {
+	        if (chart.getTotalMonthExpense() == null) {
+	            chart.setTotalMonthExpense(BigDecimal.ZERO);
+	        }
+	        if (chart.getTotalMonthIncome() == null) {
+	            chart.setTotalMonthIncome(BigDecimal.ZERO);
+	        }
+	    }
+
+	    log.debug("이전월 비교 결과:{}", result);
+	    return result;
+	
 	}
 }

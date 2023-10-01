@@ -562,10 +562,15 @@ function curPreInExSum() {
 
             // alert(curMonthData.totalMonthExpense);
             // alert(preMonthData.totalMonthExpense);
-
+            
             // 데이터 확인
             if (!curMonthData || !preMonthData) {
-                console.log("현월 또는 이전월 데이터 없음");
+                if (!curMonthData) {
+                    console.log("내역 비교 - 현월 데이터 없음");
+                }
+                if (!preMonthData) {
+                    console.log("내역 비교 - 이전월 데이터 없음");
+                }
                 return;
             }
 
