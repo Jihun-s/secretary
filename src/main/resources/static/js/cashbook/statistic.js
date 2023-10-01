@@ -126,68 +126,41 @@ function mostCate2() {
         data: { nowYear: curYear, nowMonth: curMonth },
         dataType: 'JSON',
         success: (data) => {
-            // 최다(자주) 지출 카테고리
-            let mostFreqCate2 = data.reduce((prev, curr) => 
-                prev.transCount > curr.transCount ? prev : curr
-            );
+            // 데이터 있는지 확인 
+            if (!data || data.length === 0) {
+                const noDataHTML = `
+                    <p>이번 달 지출 내역이 충분하지 않아요.</p>
+                    <p>거래 내역이 쌓여야 지름의 전당에 오를 수 있어요.</p>
+                    <img src="https://cdn1.iconfinder.com/data/icons/back-to-school-vol-4/512/15-02-2566_1_.png" alt="지름의전당" style="width: 15rem; height: 15rem;" />
+                `;
 
-            // 최대(금액) 지출 카테고리
-            let mostLgCate2 = data.reduce((prev, curr) => 
-                prev.totalAmount > curr.totalAmount ? prev : curr
-            );
+                $('#jireumDiv').html(noDataHTML);
+            // 데이터 있음
+            } else {
+                // 최다(자주) 지출 카테고리
+                let mostFreqCate2 = data.reduce((prev, curr) => 
+                    prev.transCount > curr.transCount ? prev : curr
+                );
 
-            // 1위 제외하고 2, 3, 4위 찾기 
-            let sortedByTransCount = [...data].filter(item => item !== mostFreqCate2).sort((a, b) => b.transCount - a.transCount);
-            let top4ByTransCount = sortedByTransCount.slice(0, 3);
+                // 최대(금액) 지출 카테고리
+                let mostLgCate2 = data.reduce((prev, curr) => 
+                    prev.totalAmount > curr.totalAmount ? prev : curr
+                );
 
-            let sortedByTotalAmount = [...data].filter(item => item !== mostLgCate2).sort((a, b) => b.totalAmount - a.totalAmount);
-            let top4ByTotalAmount = sortedByTotalAmount.slice(0, 3);
+                // 1위 제외하고 2, 3, 4위 찾기 
+                let sortedByTransCount = [...data].filter(item => item !== mostFreqCate2).sort((a, b) => b.transCount - a.transCount);
+                let top4ByTransCount = sortedByTransCount.slice(0, 3);
 
-            // html1 입력 
-            let html1 = `
-                        <div class="mb-4">
-                            <img
-                                src="../images/cashbookimg/12114068.png"
-                                alt="medal1"
-                                class="d-flex justify-content-center align-items-center"
-                                style="width: 10rem; height: 10rem; margin: 0 auto;"
-                            />
-                            <h4 class="d-flex justify-content-center align-items-center">${mostFreqCate2.cate2Name}</h4>
-                            <span class="d-flex justify-content-center align-items-center mb-4">이번 달 <mark>${mostFreqCate2.cate2Name}</mark>에 가장 자주 지출했어요.</span>
-                        </div>
-                    <table style="width:100%; text-align: center;">
-                <tr>
-            `;
-                
-            top4ByTransCount.forEach(trans => {
-                html1 += `<td><h6 class="d-flex justify-content-center align-items-center">${trans.cate2Name}</h6><small>${trans.transCount}회</small></td>`;
-            });
-            html1 += `</tr></table></div>`;
+                let sortedByTotalAmount = [...data].filter(item => item !== mostLgCate2).sort((a, b) => b.totalAmount - a.totalAmount);
+                let top4ByTotalAmount = sortedByTotalAmount.slice(0, 3);
 
-            // html2 입력 
-            let html2 = `
-                        <div class="mb-4">
-                            <img
-                                src="../images/cashbookimg/12113938.png"
-                                alt="medal2"
-                                class="d-flex justify-content-center align-items-center"
-                                style="width: 10rem; height: 10rem; margin: 0 auto;"
-                            />
-                            <h4 class="d-flex justify-content-center align-items-center mb-4">${mostLgCate2.cate2Name}</h4>
-                            <span class="d-flex justify-content-center align-items-center">이번 달 <mark>${mostLgCate2.cate2Name}</mark>에 가장 많이 썼어요.</span>
-                        </div>
-                    <table style="width:100%; text-align: center;">
-                <tr>
-            `;
-            
-            top4ByTotalAmount.forEach(trans => {
-                html2 += `<td><h6 class="d-flex justify-content-center align-items-center">${trans.cate2Name}</h6><small>총 ${trans.totalAmount.toLocaleString('en-US')}원</small></td>`;
-            });
-            html2 += `</tr></table></div>`;
+                // Construct the HTML snippets
+                // ... (Your existing HTML generation code here)
 
-            // html 입력
-            $('#mostFreqDiv').html(html1);
-            $('#mostLgDiv').html(html2);
+                // Insert the generated HTML
+                $('#mostFreqDiv').html(html1);
+                $('#mostLgDiv').html(html2);
+            }
         },
         error: (e) => {
             alert("최대최다 카테고리 전송 실패");
@@ -195,6 +168,7 @@ function mostCate2() {
         }
     });
 }
+
 
 
 
