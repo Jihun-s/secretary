@@ -76,7 +76,7 @@ public class ScheduleController {
 			HashMap<String, Object> map = new HashMap<>();
 			map.put("familyId", familyId);
 			map.put("userId", userId);
-			map.put("alertType", "필수");
+			map.put("alertType", "제안");
 			map.put("alertTransType", "지출"); // 수입 or 지출
 			map.put("alertContent", sch.getSchContent()); // '소영 생일'
 			map.put("alertDate", sch.getSchStart());
