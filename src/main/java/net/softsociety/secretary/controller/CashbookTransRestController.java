@@ -214,6 +214,13 @@ public class CashbookTransRestController {
 		
 		HashMap<String, Object> result = dao.selectInExSumMonth(map);
 		log.debug("총수입지출:{}", result);
+		
+		// 이번달 데이터 없음 
+		if(result == null) {
+		    log.error("{}년 {}월 데이터 없음", nowYear, nowMonth);
+		    return new HashMap<>(); 
+		}
+		
 		return result;
 	}
 	

@@ -228,7 +228,24 @@ function totalMonthIncome() {
       data: { chYear: curYear, chMonth: curMonth },
       dataType: "JSON",
       success: (result) => {
-        // alert(JSON.stringify(result));
+        alert("도넛 그릴 데이터:" + JSON.stringify(result));
+        // 데이터가 없거나 비어있다
+        // if (!result || result.length === 0) {
+        //   alert('이번달 지출 데이터가 없습니다.');
+
+        //   let nodata = '';
+        //   nodata += `
+        //       <p>이번 달 가계부 데이터가 존재하지 않아요. 내역을 작성하러 가볼까요?</p>
+        //       <a th:href="@{/cashbook/trans}">
+        //         <button type="button" class="btn btn-success">
+        //           내역 바로가기
+        //         </button>
+        //       </a>`;
+        //   $('#donutDiv').html(nodata);
+          
+        //   return;
+        // }
+
         let dataFromServer = result;
   
         const labels = dataFromServer.map(
