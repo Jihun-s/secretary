@@ -47,6 +47,7 @@ function setCurDate() {
 
 
 /** 도넛차트 - 월 대분류별 총지출 총수입 불러오기 */
+/** 월 총 지출 불러오기 */
 function sumInExMonth() {
     nowYear = new Date().getFullYear();
     nowMonth = new Date().getMonth()+1;
@@ -58,19 +59,57 @@ function sumInExMonth() {
         data: { nowYear: nowYear, nowMonth: nowMonth },
         dataType: 'JSON',
         success: (data) => {
-            if (data == null || data == undefined) {
-                $('#sumExpenseMonth').html("0");
-                $('#sumIncomeMonth').html("0");
+            console.log("받은 데이터:", JSON.stringify(data));
+            
+            const noExDataHTML = `
+                <img src="https://cdn3.iconfinder.com/data/icons/eco-tech/512/10_Circular_Economy.png" alt="noCashbookData" style="width: 15rem; height: 15rem;" />
+                <div class="mt-3 mb-3">
+                    <p>이번 달 지출 거래내역이 존재하지 않습니다.</p>
+                    <p>내역을 입력하러 가볼까요?</p>
+                    <a href="/secretary/cashbook/trans">
+                        <button type="button" class="btn btn-success">
+                            가계부 내역 바로가기
+                        </button>
+                    </a>
+                </div>    
+            `;
+
+            const noInDataHTML = `
+            <img src="https://cdn3.iconfinder.com/data/icons/eco-tech/512/10_Circular_Economy.png" alt="noCashbookData" style="width: 15rem; height: 15rem;" />
+            <div class="mt-3 mb-3">
+                <p>이번 달 수입 거래내역이 존재하지 않습니다.</p>
+                <p>내역을 입력하러 가볼까요?</p>
+                <a href="/secretary/cashbook/trans">
+                    <button type="button" class="btn btn-success">
+                        가계부 내역 바로가기
+                    </button>
+                </a>
+            </div>    
+        `;
+
+            // 수입 데이터 있는지 확인
+            if (!data || jQuery.isEmptyObject(data) || !data.INCOMESUMMONTH) {
+                console.error("이번달 수입 데이터 없음:", data);
+                $('#donutIncomeDiv').html(noInDataHTML);
+            } else {
+                $('#sumIncomeMonth').html(data.INCOMESUMMONTH.toLocaleString('en-US'));
+            }
+
+            // 지출 데이터 있는지 확인 
+            if (!data || jQuery.isEmptyObject(data) || !data.EXPENSESUMMONTH) {
+                console.error("이번달 지출 데이터 없음:", data);
+                $('#donutExpenseDiv').html(noExDataHTML);
             } else {
                 $('#sumExpenseMonth').html(data.EXPENSESUMMONTH.toLocaleString('en-US'));
-                $('#sumIncomeMonth').html(data.INCOMESUMMONTH.toLocaleString('en-US'));
             }
         },
         error: (e) => {
-            console.log("총지출 총수입 실패:" + JSON.stringify(e));
+            console.error("총수입 총지출 데이터 서버 전송 실패:", JSON.stringify(e));
         }
+        
     });
 }
+
 
 
 

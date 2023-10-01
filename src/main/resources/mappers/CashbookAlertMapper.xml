@@ -201,4 +201,13 @@
 		<!-- AND user_id = #{userId} -->
 		AND family_id = #{familyId}
 </delete>
+
+<!-- 가계부 알림 전체 삭제 -->
+<delete id="deleteAllCashbookAlert" parameterType="hashmap">
+	DELETE FROM
+		Secretary_Cashbook_Alert
+	WHERE
+		<!-- AND user_id = #{userId} -->
+		family_id = #{familyId}
+</delete>
 </mapper>

@@ -228,24 +228,6 @@ function totalMonthIncome() {
       data: { chYear: curYear, chMonth: curMonth },
       dataType: "JSON",
       success: (result) => {
-        alert("도넛 그릴 데이터:" + JSON.stringify(result));
-        // 데이터가 없거나 비어있다
-        // if (!result || result.length === 0) {
-        //   alert('이번달 지출 데이터가 없습니다.');
-
-        //   let nodata = '';
-        //   nodata += `
-        //       <p>이번 달 가계부 데이터가 존재하지 않아요. 내역을 작성하러 가볼까요?</p>
-        //       <a th:href="@{/cashbook/trans}">
-        //         <button type="button" class="btn btn-success">
-        //           내역 바로가기
-        //         </button>
-        //       </a>`;
-        //   $('#donutDiv').html(nodata);
-          
-        //   return;
-        // }
-
         let dataFromServer = result;
   
         const labels = dataFromServer.map(
@@ -531,12 +513,13 @@ function otherUserTotal() {
       }
   
       // 고유한 시간 라벨을 생성
-      const uniqueLabels = Array.from(new Set([...myExpenseMap.keys(), ...otherExpenseAvgMap.keys()])).sort();
-  
+      const uniqueLabels = Array.from(new Set([...myExpenseMap.keys(), ...otherExpenseAvgMap.keys()]))
+        .sort((a, b) => new Date(a) - new Date(b));  // 날짜를 기준으로 정렬
+
       // Chart.js 데이터 배열 생성
       const labels = uniqueLabels.map(label => `${label.split('-')[0]}년 ${label.split('-')[1]}월`);
       const myExpenseData = uniqueLabels.map(label => myExpenseMap.get(label) || 0);
-      const otherExpenseAvgData = uniqueLabels.map(label => otherExpenseAvgMap.get(label) || 0);  
+      const otherExpenseAvgData = uniqueLabels.map(label => otherExpenseAvgMap.get(label) || 0);
 
       // Chart.js 설정
       const ctx = document.getElementById('lineOtherUserTotal').getContext('2d');

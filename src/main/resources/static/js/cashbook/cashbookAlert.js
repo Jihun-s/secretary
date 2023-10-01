@@ -407,17 +407,17 @@ function deleteAlert(alertId) {
 
 
 /** 필수알림 전체 삭제 */
-function deleteAllPilsuAlert() {
-  if(confirm("필수 알림을 모두 삭제할까요?")) {
+function deleteAllCashbookAlert() {
+  if(confirm("가계부 관련 알림을 모두 삭제할까요?")) {
     $.ajax({
-      url: '/secretary/cashbook/alert/deleteAllPilsuAlert',
+      url: '/secretary/cashbook/alert/deleteAllCashbookAlert',
       type: 'POST',
       success: () => {
         getPilsuAlert();
         getJeahnAlert();
       },
       error: (e) => {
-        alert("필수알림 모두 삭제 서버 전송 실패");
+        alert("가계부 알림 모두 삭제 서버 전송 실패");
         console.log(JSON.stringify(e));
       }
     });
