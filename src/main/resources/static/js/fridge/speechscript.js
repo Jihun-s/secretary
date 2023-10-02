@@ -88,7 +88,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
     //영수증
     document.getElementById('submitDataButton').addEventListener('click', function(event) {
-        alert("Fridge ID before submitting: " + $('.fridgeSelect').val());
         let selectedFridgeId = Number($('.fridgeSelect').val());  // 선택된 냉장고의 ID 값을 가져옵니다.
         
         if (!selectedFridgeId || isNaN(parseInt(selectedFridgeId))) {

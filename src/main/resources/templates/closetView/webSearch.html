@@ -103,7 +103,6 @@
     <div class="layout-wrapper layout-content-navbar">
       <div class="layout-container">
         <!-- Menu -->
-
         <aside
           id="layout-menu"
           class="layout-menu menu-vertical menu bg-menu-theme"
@@ -112,13 +111,13 @@
             <a th:href="@{/}" class="app-brand-link">
               <span class="app-brand-logo demo">
                 <img
-                  th:src="@{/assets/img/favicon/favicon.ico}"
+                  th:src="@{/images/12124889.png}"
                   alt="logo"
                   style="width: 3rem"
                 />
               </span>
               <span class="app-brand-text demo menu-text fw-bolder ms-2"
-                >생비서</span
+                >생비</span
               >
             </a>
 
@@ -135,7 +134,7 @@
           <ul class="menu-inner py-1">
             <!-- 홈 -->
             <li class="menu-item active">
-              <a th:href="@{/}" class="menu-link">
+              <a th:href="@{/main}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-home-circle"></i>
                 <div data-i18n="Analytics">홈</div>
               </a>
@@ -148,150 +147,79 @@
 
             <!-- 알림 -->
             <li class="menu-item">
-              <a href="javascript:void(0);" class="menu-link menu-toggle">
+              <a
+                th:href="@{/main}"
+                class="menu-link"
+              >
                 <i class="menu-icon tf-icons bx bx-detail"></i>
-                <div data-i18n="Layouts">알림</div>
+                <div data-i18n="Support">알림</div>
               </a>
-
-              <ul class="menu-sub">
-                <li class="menu-item">
-                  <a href="layouts-without-menu.html" class="menu-link">
-                    <div data-i18n="Without menu">필수 알림</div>
-                  </a>
-                </li>
-                <li class="menu-item">
-                  <a href="layouts-without-navbar.html" class="menu-link">
-                    <div data-i18n="Without navbar">제안 알림</div>
-                  </a>
-                </li>
-                <li class="menu-item">
-                  <a href="layouts-container.html" class="menu-link">
-                    <div data-i18n="Container">알림 설정</div>
-                  </a>
-                </li>
-              </ul>
             </li>
 
             <!-- 일정 -->
             <li class="menu-item">
-              <a href="javascript:void(0);" class="menu-link menu-toggle">
+              <a
+                th:href="@{/schedule}"
+                class="menu-link"
+              >
                 <i class="menu-icon tf-icons bx bx-table"></i>
-                <div data-i18n="Layouts">일정</div>
+                <div data-i18n="Support">일정</div>
               </a>
-
-              <ul class="menu-sub">
-                <li class="menu-item">
-                  <a href="layouts-without-menu.html" class="menu-link">
-                    <div data-i18n="Without menu">일정 등록</div>
-                  </a>
-                </li>
-                <li class="menu-item">
-                  <a href="layouts-without-navbar.html" class="menu-link">
-                    <div data-i18n="Without navbar">일정 보기</div>
-                  </a>
-                </li>
-                <li class="menu-item">
-                  <a href="layouts-container.html" class="menu-link">
-                    <div data-i18n="Container">일정 알림</div>
-                  </a>
-                </li>
-              </ul>
             </li>
 
             <!-- 인벤토리 -->
             <li class="menu-header small text-uppercase">
               <span class="menu-header-text">Inventories</span>
             </li>
-
             <!-- 냉장고 -->
             <li class="menu-item">
-              <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons bx bx-dock-top"></i>
-                <div data-i18n="Layouts">냉장고</div>
-              </a>
-
-              <ul class="menu-sub">
-                <li class="menu-item">
-                  <a href="layouts-without-menu.html" class="menu-link">
-                    <div data-i18n="Without menu">물품 등록</div>
-                  </a>
-                </li>
-                <li class="menu-item">
-                  <a href="layouts-without-navbar.html" class="menu-link">
-                    <div data-i18n="Without navbar">물품 검색</div>
-                  </a>
-                </li>
-                <li class="menu-item">
-                  <a href="layouts-container.html" class="menu-link">
-                    <div data-i18n="Container">한 눈에 보기</div>
-                  </a>
-                </li>
-                <li class="menu-item">
-                  <a href="layouts-fluid.html" class="menu-link">
-                    <div data-i18n="Fluid">소비기한 보기</div>
-                  </a>
-                </li>
-              </ul>
+                <a class="menu-link menu-toggle" href="javascript:void(0);">
+                    <i class="menu-icon tf-icons bx bx-dock-top"></i>
+                    <div data-i18n="Layouts">냉장고</div>
+                </a>
+                <ul class="menu-sub">
+                    <li class="menu-item">
+                        <a class="menu-link" th:href="@{/fridge}">
+                            <div data-i18n="Without menu">냉장고 홈</div>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <!-- 모달창을 열기 위한 버튼 -->
+                        <a
+                            class="menu-link"
+                            href="#"
+                            data-bs-toggle="modal"
+                            data-bs-target="#trackingModal"
+                        >
+                            <div data-i18n="Food-Pattern">소비패턴 등록</div>
+                        </a>
+                    </li>
+                </ul>
             </li>
-
             <!-- 생활용품 -->
             <li class="menu-item">
-              <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons bx bx-box"></i>
-                <div data-i18n="Account Settings">생활용품</div>
-              </a>
-              <ul class="menu-sub">
-                <li class="menu-item">
-                  <a
-                    href="pages-account-settings-account.html"
-                    class="menu-link"
-                  >
-                    <div data-i18n="Account">물품 등록</div>
-                  </a>
-                </li>
-                <li class="menu-item">
-                  <a
-                    href="pages-account-settings-notifications.html"
-                    class="menu-link"
-                  >
-                    <div data-i18n="Notifications">물품 검색</div>
-                  </a>
-                </li>
-                <li class="menu-item">
-                  <a
-                    href="pages-account-settings-connections.html"
-                    class="menu-link"
-                  >
-                    <div data-i18n="Connections">한 눈에 보기</div>
-                  </a>
-                </li>
-                <li class="menu-item">
-                  <a
-                    href="pages-account-settings-connections.html"
-                    class="menu-link"
-                  >
-                    <div data-i18n="Connections">소비기한 보기</div>
-                  </a>
-                </li>
-                <li class="menu-item">
-                  <a
-                    href="auth-login-basic.html"
-                    class="menu-link"
-                    target="_blank"
-                  >
-                    <div data-i18n="Basic">보관 장소 보기</div>
-                  </a>
-                </li>
-                <li class="menu-item">
-                  <a
-                    href="auth-register-basic.html"
-                    class="menu-link"
-                    target="_blank"
-                  >
-                    <div data-i18n="Basic">구매 시기 보기</div>
-                  </a>
-                </li>
-              </ul>
+                <a class="menu-link menu-toggle" href="javascript:void(0);">
+                    <i class="menu-icon tf-icons bx bx-box"></i>
+                    <div data-i18n="Account Settings">생활용품</div>
+                </a>
+                <ul class="menu-sub">
+                    <li class="menu-item">
+                        <a class="menu-link" th:href="@{/livingGoods}">
+                            <div data-i18n="Basic">생활용품 홈</div>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <!-- 모달창을 열기 위한 버튼 -->
+                        <a
+                            class="menu-link"
+                            href="#"
+                            data-bs-toggle="modal"
+                            data-bs-target="#trackingModal"
+                        >
+                            <div data-i18n="Goods-Pattern">소비패턴 등록</div>
+                        </a>
+                    </li>
+                </ul>
             </li>
 
             <!-- 옷장 -->
@@ -302,32 +230,17 @@
               </a>
               <ul class="menu-sub">
                 <li class="menu-item">
-                  <a href="pages-misc-error.html" class="menu-link">
-                    <div data-i18n="Error">의류 등록</div>
+                  <a th:href="@{/closet}" class="menu-link">
+                    <div data-i18n="Error">옷장 홈</div>
                   </a>
                 </li>
                 <li class="menu-item">
-                  <a href="pages-misc-under-maintenance.html" class="menu-link">
-                    <div data-i18n="Under Maintenance">의류 검색</div>
+                  <a th:href="@{/closet/laundryPage}" class="menu-link">
+                    <div data-i18n="Under Maintenance">세탁 바구니</div>
                   </a>
                 </li>
                 <li class="menu-item">
-                  <a href="pages-misc-under-maintenance.html" class="menu-link">
-                    <div data-i18n="Under Maintenance">한 눈에 보기</div>
-                  </a>
-                </li>
-                <li class="menu-item">
-                  <a href="pages-misc-under-maintenance.html" class="menu-link">
-                    <div data-i18n="Under Maintenance">의류 관리</div>
-                  </a>
-                </li>
-                <li class="menu-item">
-                  <a href="pages-misc-under-maintenance.html" class="menu-link">
-                    <div data-i18n="Under Maintenance">세탁물 확인하기</div>
-                  </a>
-                </li>
-                <li class="menu-item">
-                  <a href="pages-misc-under-maintenance.html" class="menu-link">
+                  <a th:href="@{/closet/styleDiary}" class="menu-link">
                     <div data-i18n="Under Maintenance">코디 일지</div>
                   </a>
                 </li>
@@ -347,22 +260,17 @@
               </a>
               <ul class="menu-sub">
                 <li class="menu-item">
-                  <a href="ui-accordion.html" class="menu-link">
-                    <div data-i18n="Accordion">내역 입력</div>
+                  <a th:href="@{/cashbook/}" class="menu-link">
+                    <div data-i18n="Alerts">가계부 홈</div>
                   </a>
                 </li>
                 <li class="menu-item">
-                  <a href="ui-alerts.html" class="menu-link">
+                  <a th:href="@{/cashbook/trans}" class="menu-link">
                     <div data-i18n="Alerts">내역 보기</div>
                   </a>
                 </li>
                 <li class="menu-item">
-                  <a href="ui-badges.html" class="menu-link">
-                    <div data-i18n="Badges">예산 보기</div>
-                  </a>
-                </li>
-                <li class="menu-item">
-                  <a href="ui-buttons.html" class="menu-link">
+                  <a th:href="@{/cashbook/chart}" class="menu-link">
                     <div data-i18n="Buttons">소비 분석</div>
                   </a>
                 </li>
@@ -373,16 +281,32 @@
             <li class="menu-header small text-uppercase">
               <span class="menu-header-text">Support</span>
             </li>
+
+            <!-- 고객지원 -->
             <li class="menu-item">
-              <a
-                href="https://chat.openai.com/"
-                target="_blank"
-                class="menu-link"
-              >
+              <a href="javascript:void(0)" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-support"></i>
-                <div data-i18n="Support">고객지원</div>
+                <div data-i18n="User interface">고객지원</div>
               </a>
+              <ul class="menu-sub">
+                <li class="menu-item">
+                 <a th:href="@{/board/notification/list}" class="menu-link">
+                  <div data-i18n="Buttons">공지사항</div>
+                 </a> 
+                </li>
+                <li class="menu-item">
+                  <a th:href="@{/board/frequently/list}" class="menu-link">
+                   <div data-i18n="Buttons">자주 묻는 질문</div>
+                  </a> 
+                 </li>
+                 <li class="menu-item">
+                    <a th:href="@{/board/inquiry/list}" class="menu-link">
+                      <div data-i18n="Buttons">문의 게시판</div>
+                    </a> 
+                 </li>
+              </ul>
             </li>
+            
           </ul>
         </aside>
         <!-- / Menu -->
