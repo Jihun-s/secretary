@@ -1798,7 +1798,7 @@ function initSmsModal() {
 
     // footer 버튼 바꾸기 
     let footer = `
-    <button type="button" class="btn btn-primary" onclick="parseBySms();">메세지 인식하기</button>
+    <button type="button" class="btn btn-success" onclick="parseBySms();">메세지 인식하기</button>
     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">닫기</button>
     `;
     $('#smsModalFooter').html(footer);
@@ -1927,10 +1927,10 @@ function initImgModal() {
 
     // footer 버튼 바꾸기 
     let footer = `
-    <button type="button" class="btn btn-primary" onclick="submitReceiptImg();">이미지 인식하기</button>
+    <button type="button" class="btn btn-success" onclick="submitReceiptImg();">이미지 인식하기</button>
     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">닫기</button>
     `;
-    $('#smsModalFooter').html(footer);
+    $('#imgModalFooter').html(footer);
 }
 
 

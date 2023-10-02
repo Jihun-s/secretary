@@ -222,6 +222,14 @@ function loadSchedule(schYear, schMonth, groupBy) {
       dataType: 'JSON',
       success: function(data) {
           let html = "";
+
+          // 일정목록 있는지 확인
+          if (!data || data.length === 0) {
+            html = `<p>등록된 일정이 없습니다.</p>`;
+            $("#schListDiv").html(html);
+            return; 
+        }
+  
           if (groupBy === "일자별") {
               // 일정을 schStartYmd 기준으로 그룹화
               let groupedByDate = {};

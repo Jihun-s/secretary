@@ -228,7 +228,6 @@ function totalMonthIncome() {
       data: { chYear: curYear, chMonth: curMonth },
       dataType: "JSON",
       success: (result) => {
-        // alert(JSON.stringify(result));
         let dataFromServer = result;
   
         const labels = dataFromServer.map(
@@ -377,22 +376,34 @@ function weekExpenseAcc() {
     data: { chYear: curYear, chMonth: curMonth },
     dataType: 'JSON',
     success: (data) => {
-      // console.log("주별 요약:" + JSON.stringify(data));
-      // [{"familyId":1,"userId":null,"cate1Name":null,"cate2Name":null,"labelColor":null,"curYear":2023,"curMonth":9,"weekOfMonth":1,"totalMonthExpense":null,"totalMonthIncome":null,"totalWeekExpense":780200,"weekAccumulatedExpense":780200}]
-
-      let htmlToInsert = '';
-      data.forEach((wea) => {
-      htmlToInsert += `
-          <p class="list-group-item list-group-item-action d-flex justify-content-between">
-            <span>${wea.weekOfMonth}주차</span>
-            <span>총 ${wea.weekAccumulatedExpense.toLocaleString('en-US')}원</span>
-            <small>+${wea.totalWeekExpense.toLocaleString('en-US')}</small>
-          </p>
+      // Check if data is empty
+      if (!data || data.length === 0) {
+        const noExDataHTML = `
+          <img src="https://cdn2.iconfinder.com/data/icons/business-1538/512/icbs01_1.png" alt="noCashbookData" style="width: 15rem; height: 15rem;" />
+          <div class="mt-3 mb-3">
+              <p>이번 달 지출 거래내역이 존재하지 않습니다.</p>
+              <p>내역을 입력하러 가볼까요?</p>
+              <a href="/secretary/cashbook/trans">
+                  <button type="button" class="btn btn-success">
+                      가계부 내역 바로가기
+                  </button>
+              </a>
+          </div>    
         `;
-      });
-
-      $('#weekExpenseAccDiv').html(htmlToInsert);
-
+        $('#weekExpenseAccDiv').html(noExDataHTML);
+      } else {
+        let htmlToInsert = '';
+        data.forEach((wea) => {
+          htmlToInsert += `
+            <p class="list-group-item list-group-item-action d-flex justify-content-between">
+              <span>${wea.weekOfMonth}주차</span>
+              <span>총 ${wea.weekAccumulatedExpense.toLocaleString('en-US')}원</span>
+              <small>+${wea.totalWeekExpense.toLocaleString('en-US')}</small>
+            </p>
+          `;
+        });
+        $('#weekExpenseAccDiv').html(htmlToInsert);
+      }
     },
     error: (e) => {
       alert("주별 요약 전송 실패");
@@ -400,7 +411,6 @@ function weekExpenseAcc() {
     }
   });
 }
-
 
 
 /////주별요약/////주별요약/////주별요약/////주별요약/////주별요약/////주별요약/////주별요약/////주별요약/////주별요약/////주별요약/////주별요약/////
@@ -514,12 +524,13 @@ function otherUserTotal() {
       }
   
       // 고유한 시간 라벨을 생성
-      const uniqueLabels = Array.from(new Set([...myExpenseMap.keys(), ...otherExpenseAvgMap.keys()])).sort();
-  
+      const uniqueLabels = Array.from(new Set([...myExpenseMap.keys(), ...otherExpenseAvgMap.keys()]))
+        .sort((a, b) => new Date(a) - new Date(b));  // 날짜를 기준으로 정렬
+
       // Chart.js 데이터 배열 생성
       const labels = uniqueLabels.map(label => `${label.split('-')[0]}년 ${label.split('-')[1]}월`);
       const myExpenseData = uniqueLabels.map(label => myExpenseMap.get(label) || 0);
-      const otherExpenseAvgData = uniqueLabels.map(label => otherExpenseAvgMap.get(label) || 0);  
+      const otherExpenseAvgData = uniqueLabels.map(label => otherExpenseAvgMap.get(label) || 0);
 
       // Chart.js 설정
       const ctx = document.getElementById('lineOtherUserTotal').getContext('2d');
