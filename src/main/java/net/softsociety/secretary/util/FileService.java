@@ -78,7 +78,7 @@ public class FileService {
 		//누끼따기
         try {
             // Python executable command and script path
-            String pythonCommand = "python"; // or "python3" depending on your setup
+        	String pythonCommand = "C:\\Python311\\python.exe"; // or "python3" depending on your setup
             String pythonScriptPath = "C:/Visual_Studio_Code/pythonWorkspace/changeImg.py";
 
             // Additional arguments to pass to the Python script
