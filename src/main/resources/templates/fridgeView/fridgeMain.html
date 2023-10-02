@@ -315,7 +315,7 @@
             }
         </style>
         <script>
-            const DEFAULT_CATEGORIES = ['일반', '야채', '생선', '육류', '과일'];
+            const DEFAULT_CATEGORIES = ['일반', '야채', '해산물', '육류', '과일'];
             $(document).ready(function () {
                 loadFridgesByCategory('냉장실');
                 loadAllFoodsByCategory('냉장실');
@@ -609,7 +609,7 @@
                         dropdownMenu.append(
                             `<li><a class="dropdown-item" href="javascript:void(0);" onclick="showFoodsByCategory('일반')">일반</a></li>
                             <li><a class="dropdown-item" href="javascript:void(0);" onclick="showFoodsByCategory('야채')">야채</a></li>
-                            <li><a class="dropdown-item" href="javascript:void(0);" onclick="showFoodsByCategory('생선')">생선</a></li>
+                            <li><a class="dropdown-item" href="javascript:void(0);" onclick="showFoodsByCategory('해산물')">해산물</a></li>
                             <li><a class="dropdown-item" href="javascript:void(0);" onclick="showFoodsByCategory('육류')">육류</a></li>
                             <li><a class="dropdown-item" href="javascript:void(0);" onclick="showFoodsByCategory('과일')">과일</a></li>`
                         );
@@ -1099,7 +1099,7 @@
                             modalBody.append(
                                 '<div class="card mb-4"><div class="card-header"><b>기본 카테고리</b></div><ul class="list-group list-group-flush default-categories">'
                             );
-                            ['일반', '야채', '생선', '육류', '과일'].forEach(function (categoryName) {
+                            ['일반', '야채', '해산물', '육류', '과일'].forEach(function (categoryName) {
                                 modalBody.find('.default-categories').append(`
         <li class="list-group-item d-flex align-items-center">
             <span class="category-name flex-grow-1">${categoryName}</span>
@@ -2142,7 +2142,7 @@
                                                                         <option value="custom">사용자 입력</option>
                                                                         <option value="일반">일반</option>
                                                                         <option value="야채">야채</option>
-                                                                        <option value="생선">생선</option>
+                                                                        <option value="해산물">해산물</option>
                                                                         <option value="육류">육류</option>
                                                                         <option value="과일">과일</option>
                                                                     </select>
