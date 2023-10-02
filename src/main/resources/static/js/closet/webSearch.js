@@ -9,15 +9,6 @@ function pagingFormSubmit(currentPage) {
 	form.submit();
 }
 
-/*let contentIndex = 0;
-const contents = ["추가하고 싶은 옷을 클릭하세요! 의류 등록 모드입니다.", "어떤 옷으로 바꾸고 싶으세요? 의류 수정 모드입니다."];
-function changeMode(){
-	const contentDiv = document.querySelector('#changeMode');
-    contentIndex = (contentIndex + 1) % contents.length; // 다음 내용으로 이동
-    contentDiv.textContent = contents[contentIndex]; // 내용 변경
-    console.log(contentIndex);	// 0이면 등록, 1이면 수정
-    console.log(typeof(contentIndex));	// 0이면 등록, 1이면 수정
-}*/
 function InsertOrUpdate(imgUrl){
 	const smallModal = new bootstrap.Modal(document.getElementById('smallModal'));
     smallModal.show();
