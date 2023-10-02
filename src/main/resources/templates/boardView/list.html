@@ -1,3 +1,4 @@
+<!--  
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
@@ -15,7 +16,7 @@ function pagingFormSubmit(currentPage) {
 	var page = document.getElementById('page')
 	page.value = currentPage;
 	form.submit();
-}
+}<!--
 function categoryChangeSubmit() {
     var selectedCategory = document.getElementById('boardCategory2').value;
     var form = document.getElementById('pagingForm');
@@ -55,7 +56,7 @@ function categoryFirst(){
 </head>
 <body>
 <h1><a th:href="@{/board/list}">[게시판]</a></h1>
-
+<!--  
 <div>
       	<form id="pagingForm" th:action="@{/board/list}" method="get">
       		<input type="hidden" name="page" id="page">
@@ -86,7 +87,7 @@ function categoryFirst(){
          </td>         
          <td>
             <a th:href="@{/board/write}">글쓰기</a>
-            <a th:href="@{/}">Home</a>
+            <a th:href="@{/main}">Home</a>
          </td>
 	  </tr>
 	  <tr>
@@ -113,7 +114,7 @@ function categoryFirst(){
 	 
 	 <div id="navigator">
 	
-	<!-- 페이지 이동 링크 -->     
+	<!-- 페이지 이동 링크     
 	<a th:href="|javascript:pagingFormSubmit(${navi.currentPage - navi.pagePerGroup})|">◁◁</a>
 	<a th:href="|javascript:pagingFormSubmit(${navi.currentPage - 1})|">◀</a> 
 
@@ -132,5 +133,107 @@ function categoryFirst(){
 	</div>
 	</section>  
 
+</body>
+</html>-->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>List</title>
+    <script th:src="@{/js/jquery-3.7.0.js}"></script>
+    <script>
+        // 답변 후 현재 페이지 리로딩
+        function reloadPage() {
+            location.reload();
+        }
+
+        function pagingFormSubmit(currentPage) {
+            var form = document.getElementById('pagingForm');
+            var page = document.getElementById('page');
+            page.value = currentPage;
+            form.submit();
+        }
+
+        function categoryFirst(){
+            let cate1 = document.getElementById('boardCategory1').value;
+            console.log("cate1:", cate1);
+            if(cate1 === 'inquiry'){
+                let str = `
+                <select id="boardCategory2" name="boardCategory2" onchange="categoryChangeSubmit()">
+                    <option value="all" th:selected="${boardCategory2} =='all'">전체</option>
+                    <option value="account" th:selected="${boardCategory2} =='account'">계정</option>
+                    <option value="service" th:selected="${boardCategory2} =='service'">서비스</option>
+                    <option value="error" th:selected="${boardCategory2} =='error'">오류</option>
+                    <option value="other" th:selected="${boardCategory2} =='other'">기타</option>
+                </select>
+                `;
+                // $('#category2Box').html(str)
+                // $('#category3Box').hide(); // '카테고리 3 박스' 내용 비우기
+            } else if(cate1 === 'frequently' || cate1 === 'notification') {
+                let str = ``;
+                $('#category2Box').hide(); // '카테고리 2 박스' 내용 비우기
+            }
+            // 카테고리가 변경되었으므로 페이지 제출
+            categoryChangeSubmit();
+        }
+
+        // 기존의 categoryChangeSubmit() 함수 정의 내용 추가
+        function categoryChangeSubmit() {
+            var selectedCategory = document.getElementById('boardCategory2').value;
+            var form = document.getElementById('pagingForm');
+            var page = document.getElementById('page');
+            page.value = 1; // 페이지를 1로 초기화 (선택한 카테고리 변경 시 첫 페이지로 이동)
+            form.submit();
+        }
+    </script>
+</head>
+<body>
+<h1><a th:href="@{/board/list}">[게시판]</a></h1>
+<section class="listbox">
+    <table>
+        <tr>
+            <td>
+                전체 <span th:text="${navi.totalRecordsCount}"></span>
+            </td>
+            <td>
+                <a th:href="@{/board/write}">글쓰기</a>
+                <a th:href="@{/main}">Home</a>
+            </td>
+        </tr>
+        <tr>
+            <td><span class="name">번호</span></td>
+            <td><span class="name">답변상태</span></td>
+            <td><span class="name">제목</span></td>
+            <td><span class="name">작성자</span></td>
+            <td><span class="name">조회수</span></td>
+            <td><span class="name">작성일</span></td>
+        </tr>
+        <tr th:each="b : ${list}">
+            <td><span th:text="${b.boardId}"></span></td>
+            <td><span th:if="${b.boardStatus == 0}">답변대기</span>
+                <span th:if="${b.boardStatus != 0}">답변완료</span>
+            </td>
+            <td><a th:href="@{/board/read(boardId=${b.boardId})}" th:text="${b.boardTitle}"></a></td>
+            <td><span th:text="${b.userId}"></span></td>
+            <td><span th:text="${b.boardHits}"></span></td>
+            <td><span th:text="${b.boardInputdate}"></span></td>
+        </tr>
+    </table>
+    <div id="navigator">
+        <!-- 페이지 이동 링크 -->
+        <a th:href="|javascript:pagingFormSubmit(${navi.currentPage - navi.pagePerGroup})|">◁◁</a>
+        <a th:href="|javascript:pagingFormSubmit(${navi.currentPage - 1})|">◀</a>
+
+        <span th:each="counter : ${#numbers.sequence(navi.startPageGroup, navi.endPageGroup)}">
+            <th:block th:if="${counter == navi.currentPage}"><b></th:block>
+            <a th:text="${counter}" th:href="|javascript:pagingFormSubmit(${counter})|"></a>&nbsp;
+            <th:block th:if="${counter == navi.currentPage}"></b></th:block>
+        </span>
+
+        <a th:href="|javascript:pagingFormSubmit(${navi.currentPage + 1})|">▶</a>
+        <a th:href="|javascript:pagingFormSubmit(${navi.currentPage + navi.pagePerGroup})|">▷▷</a>
+        <br><br>
+    </div>
+</section>
 </body>
 </html>

@@ -75,6 +75,57 @@ public class BoardController {
 		
 		return "boardView/list";
 	}
+	//자주묻는질문
+	@GetMapping("/frequently/list")
+	public String frequentlyList(Model m, @RequestParam(name="boardCategory2", defaultValue="all") String boardCategory2,
+	                             @RequestParam(name="page", defaultValue="1") int page) {
+	    // 기존 코드의 boardCategory1 값을 'frequently'로 고정
+	    String boardCategory1 = "frequently";
+	    PageNavigator navi = service.getPageNavigator(pagePerGroup, countPerPage, page, boardCategory1, boardCategory2);
+	    ArrayList<Board> list = service.getBoardList(navi, boardCategory1, boardCategory2);
+
+	    m.addAttribute("list", list);
+	    m.addAttribute("navi", navi);
+	    m.addAttribute("boardCategory1", boardCategory1);
+	    m.addAttribute("boardCategory2", boardCategory2);
+
+	    return "boardView/list";
+	}
+	//문의
+	@GetMapping("/inquiry/list")
+	public String inquiryList(Model m, @RequestParam(name = "boardCategory2", defaultValue = "all") String boardCategory2,
+	                          @RequestParam(name = "page", defaultValue = "1") int page) {
+	    String boardCategory1 = "inquiry";
+	    PageNavigator navi = service.getPageNavigator(pagePerGroup, countPerPage, page, boardCategory1, boardCategory2);
+	    ArrayList<Board> list = service.getBoardList(navi, boardCategory1, boardCategory2);
+
+	    m.addAttribute("list", list);
+	    m.addAttribute("navi", navi);
+	    m.addAttribute("boardCategory1", boardCategory1);
+
+	    // "문의게시판"에서만 카테고리 2를 사용하므로, 해당 카테고리일 때만 전달
+	    if (boardCategory1.equals("inquiry")) {
+	        m.addAttribute("boardCategory2", boardCategory2);
+	    }
+
+	    return "boardView/list";
+	}
+	//공지
+	@GetMapping("/notification/list")
+	public String notificationList(Model m, @RequestParam(name="boardCategory2", defaultValue="all") String boardCategory2,
+	                               @RequestParam(name="page", defaultValue="1") int page) {
+	    // 기존 코드의 boardCategory1 값을 'notification'으로 고정
+	    String boardCategory1 = "notification";
+	    PageNavigator navi = service.getPageNavigator(pagePerGroup, countPerPage, page, boardCategory1, boardCategory2);
+	    ArrayList<Board> list = service.getBoardList(navi, boardCategory1, boardCategory2);
+
+	    m.addAttribute("list", list);
+	    m.addAttribute("navi", navi);
+	    m.addAttribute("boardCategory1", boardCategory1);
+	    m.addAttribute("boardCategory2", boardCategory2);
+
+	    return "boardView/list";
+	}
 	
 	//1:1 문의글 등록으로 이동
 	@GetMapping("write")
