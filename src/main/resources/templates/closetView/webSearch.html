@@ -645,23 +645,23 @@
 							<td><!-- 의류 브랜드 -->
 								<select class="form-control" id="clothesFromStoreBrand" name="clothesFromStoreBrand">
 									<option value="brandAll" selected>전체</option>
-									<option value="musinsa">무신사</option>
-									<option value="Uniqlo">유니클로</option>
-									<option value="spao">스파오</option>
+									<option value="musinsa"  th:selected="${brand} == 'musinsa'">무신사</option>
+									<option value="Uniqlo"  th:selected="${brand} == 'Uniqlo'">유니클로</option>
+									<option value="spao"  th:selected="${brand} == 'spao'">스파오</option>
 								</select>
 							</td>
 							<td><label for="clothesCategoryForSearch">분류</label></td>
                       		<td> <!-- 의류 대분류 -->
                       			<select class="form-control" id="clothesCategoryForSearch" name="clothesFromStoreCategory">
                       				<option value="CategoryAll" selected>전체</option>
-                      				<option value="top">상의</option>
-                      				<option value="bottom">하의</option>
-                      				<option value="clothesOuter">아우터</option>
-                      				<option value="dress">원피스</option>
-                      				<option value="shoes">신발</option>
-                      				<option value="bag">가방</option>
-                      				<option value="accessory">악세사리</option>
-                      				<option value="etc">기타</option>
+                      				<option value="top" th:selected="${category} == 'top'">상의</option>
+                      				<option value="bottom" th:selected="${category} == 'bottom'">하의</option>
+                      				<option value="clothesOuter" th:selected="${category} == 'clothesOuter'">아우터</option>
+                      				<option value="dress" th:selected="${category} == 'dress'">원피스</option>
+                      				<option value="shoes" th:selected="${category} == 'shoes'">신발</option>
+                      				<option value="bag" th:selected="${category} == 'bag'">가방</option>
+                      				<option value="accessory" th:selected="${category} == 'accessory'">악세사리</option>
+                      				<option value="etc" th:selected="${category} == 'etc'">기타</option>
                       			</select> </td>
                       			</tr>
 					 <!-- 옷 찾기 1행 끝 -->
