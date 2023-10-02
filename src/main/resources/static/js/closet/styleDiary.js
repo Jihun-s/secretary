@@ -3,6 +3,7 @@
  */
 $(document).ready(function(){
 	
+	const ps = new PerfectScrollbar('#scrollCss');
 	let closetNum = 0; //  전체 옷장에서 찾기
 
 // !!!!!!!!!!!!!!!!!!			차트 그리기			!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!	
@@ -366,12 +367,12 @@ function readDiary(styleNum){
 						<li>&nbsp;&nbsp;'+translatedTPO+'</li></ul><br>\
 						<ul><li><button class="btn-pink" style="cursor:auto;">메모내용</button></li>\
 						<li>&nbsp;&nbsp;'+diary.styleDescription+'</li></ul>'
-			//$('#InfoDetail').html(DiaryStr);
-			let footer = '<br><div id="clothesFooter"><button type="button" class="btn btn-primary" style="background-color: rgba(223,132,166,255); border-color: rgba(223,132,166,255);float:right;" \
+			let footer = '<br><div id="clothesFooter"><button class="btn btn-primary" style="background-color: rgba(223,132,166,255); border-color: rgba(223,132,166,255);"\
+								onclick="openSnSModal('+styleNum+')">SNS 공유하기</button>\
+						<button type="button" class="btn btn-primary" style="background-color: rgba(223,132,166,255); border-color: rgba(223,132,166,255);float:right;" \
 							onclick="deleteDiary('+styleNum+')"> 삭제 </button>\
 						<button type="button" class="btn btn-primary"	style="background-color: rgba(223,132,166,255); border-color: rgba(223,132,166,255); margin-right:0.5rem; float:right;" \
 							onclick="openUpdateModal('+styleNum+')"> 수정 </button></div>'
-		 	//$('#InfoFooter').html(footer);						
 			$('#IMGdetail').html(DiaryImgStr+DiaryStr+footer);
 		 },
 		error:function(e){
@@ -380,6 +381,51 @@ function readDiary(styleNum){
 	})//ajax	
 }
 
+function openSnSModal(styleNum){
+	const SnSModal = new bootstrap.Modal(document.getElementById('snsModal'));
+    SnSModal.show();
+    console.log(styleNum);
+    $('#btnNaver').on('click',shareNaver);
+    $('#btnKakao').on('click',shareKakao);
+    $('#btnTwitter').on('click',shareTwitter);
+    $('#btnFacebook').on('click',shareFacebook);
+}
+
+function shareKakao() {
+	  // 사용할 앱의 JavaScript 키 설정
+	  Kakao.init('34cf32c300f82852eaf0b99359732509');
+
+	  // 카카오링크 버튼 생성
+	  Kakao.Link.createDefaultButton({
+	    container: '#btnKakao', // 카카오공유버튼ID
+	    objectType: 'feed',
+	    content: {
+	      title: "생활비서 서비스 나의 코디일지", // 보여질 제목
+	      description: "코디일지", // 보여질 설명
+	      imageUrl: "http://localhost:8888/secretary/closet/styleDiary", // 콘텐츠 URL
+	      link: {
+	         mobileWebUrl: "http://localhost:8888/secretary/closet/styleDiary",
+	         webUrl: "http://localhost:8888/secretary/closet/styleDiary"
+	      }
+	    }//content
+	  });
+}
+function shareTwitter() {
+    var sendText = "생활비서 서비스 나의 코디일지"; // 전달할 텍스트
+    var sendUrl = "http://localhost:8888/secretary/closet/styleDiary"; // 전달할 URL
+    window.open("https://twitter.com/intent/tweet?text=" + sendText + "&url=" + sendUrl);
+}
+
+function shareFacebook() {
+    var sendUrl = "http://localhost:8888/secretary/closet/styleDiary"; // 전달할 URL
+    window.open("http://www.facebook.com/sharer/sharer.php?u=" + sendUrl);
+}
+
+function shareNaver() {
+	  var title = "생활비서 서비스 나의 코디일지";
+	  var url = "http://localhost:8888/secretary/closet/styleDiary";
+	  window.open("https://share.naver.com/web/shareView?url=" + url + "&title=" + title);
+}
 
 function openUpdateModal(styleNum){
     // 코디수정 모달 열기

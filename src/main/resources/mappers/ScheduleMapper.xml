@@ -104,6 +104,31 @@
 		AND family_id = #{familyId}
 </select>
 
+<!-- 알림을 위해 일정 하나 불러오기 -->
+<select id="selectOneAlert" parameterType="hashmap" resultType="Schedule">
+	SELECT
+		sch_id
+		, user_id
+		, family_id
+		, sch_type
+		, sch_cate
+		, sch_level
+		, sch_content
+		, sch_start
+		, TO_CHAR(sch_start, 'YYYY-MM-DD') AS sch_start_ymd
+	    , TO_CHAR(sch_start, 'HH24:MI') AS sch_start_hm
+		, sch_end
+		, sch_allday
+	FROM
+		Secretary_Schedule
+	WHERE
+		family_id = #{familyId}
+		AND user_id = #{userId}
+		AND sch_type = #{schType}
+		AND sch_cate = #{schCate}
+		AND sch_content = #{schContent}
+		AND sch_start = TO_DATE(#{schStart}, 'YYYY-MM-DD"T"HH24:MI')
+</select>
 <!-- 일정 추가 -->
 <insert id="insertSch" parameterType="Schedule">
 	INSERT INTO 

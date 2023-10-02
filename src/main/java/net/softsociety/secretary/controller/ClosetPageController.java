@@ -46,7 +46,9 @@ public class ClosetPageController {
 	@GetMapping("InCloset")
 	public String InclosetPage(@RequestParam(name="closetNum") int closetNum
 								, Model model) {
+		Closet closet = service.findCloset(closetNum);
 		model.addAttribute("closetNum", closetNum);
+		model.addAttribute("closetName", closet.getClosetName());
 		return "closetView/InCloset";
 	}
 	

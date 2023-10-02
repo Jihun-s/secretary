@@ -201,7 +201,7 @@ $(document).ready(function () {
   $('#schUpdateBt').click(updateSch);
 
   // 일정 삭제
-  $('#schDetailDeleteBt').click(deleteSch);
+  $('#schDetailDeleteBt').click(deleteSch1);
 
   // 달력 렌더링
   calendar.render();
@@ -213,7 +213,7 @@ $(document).ready(function () {
 
 /** 일정 목록 불러오기 */
 function loadSchedule(schYear, schMonth, groupBy) {
-  console.log(schYear + "년 " + schMonth + "월 " + groupBy + "로 일정을 불러올게요");
+  // console.log(schYear + "년 " + schMonth + "월 " + groupBy + "로 일정을 불러올게요");
 
   $.ajax({
       url: '/secretary/schedule/loadSchList',
@@ -222,6 +222,14 @@ function loadSchedule(schYear, schMonth, groupBy) {
       dataType: 'JSON',
       success: function(data) {
           let html = "";
+
+          // 일정목록 있는지 확인
+          if (!data || data.length === 0) {
+            html = `<p>등록된 일정이 없습니다.</p>`;
+            $("#schListDiv").html(html);
+            return; 
+        }
+  
           if (groupBy === "일자별") {
               // 일정을 schStartYmd 기준으로 그룹화
               let groupedByDate = {};
@@ -376,9 +384,11 @@ function openDetailModal(schId) {
 ////////////////////////////////////////////////////////////////////////
 
 /** 일정 삭제 */
-function deleteSch() {
+function deleteSch1() {
   let schId = $('#schId').val();
-  console.log("삭제할 일정의 schId는 " + schId);
+  let schContent = $('#schContent').val();
+  // console.log("삭제할 일정의 schId는 " + schId);
+  // console.log("삭제할 일정의 schContent는 " + schContent);
   
   if(confirm("일정을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.")) {
     $.ajax({
@@ -405,7 +415,7 @@ function deleteSch() {
 
 /** 일정 삭제 매개변수 있음 */
 function deleteSch(schId) {
-  console.log("삭제할 일정의 schId는 " + schId);
+  // console.log("삭제할 일정의 schId는 " + schId);
   
   if(confirm("일정을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.")) {
     $.ajax({
@@ -434,7 +444,7 @@ function deleteSch(schId) {
 function updateSch() {
 
   let isValid = validateUpdateSch();
-  console.log("수정해도 될까요:" + isValid.toString());
+  // console.log("수정해도 될까요:" + isValid.toString());
 
   if(isValid) {
     let schId = $('#schId').val();
@@ -445,7 +455,7 @@ function updateSch() {
     let schStart = $('#schStart').val();
     let schEnd = $('#schEnd').val();
     let schAllday = $('#schAllday').val();
-    console.log(schId, schType, schCate, schContent, schLevel, schStart, schEnd, schAllday);
+    // console.log(schId, schType, schCate, schContent, schLevel, schStart, schEnd, schAllday);
 
     $.ajax({
       url: '/secretary/schedule/updateSch',
@@ -479,7 +489,7 @@ function updateSch() {
 
 /** schType -> schCate <option> 동적 변경 */ 
 function updateSchCateOptions(schType, schCate, triggerId) {
-  console.log(schType, schCate, triggerId);
+  // console.log(schType, schCate, triggerId);
 
   let schCateSelect;
 

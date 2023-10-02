@@ -46,7 +46,11 @@ public class ClosetServiceImpl implements ClosetService {
 	public ArrayList<Closet> findAllCloset() {
 		return dao.findAllCloset();
 	}
-	
+	@Override
+	public Closet findCloset(int closetNum) {
+		return dao.findCloset(closetNum);
+	}
+
 	//옷장에 옷 추가
 	@Override
 	public void insertClothes(Clothes clothes) {
@@ -121,6 +125,12 @@ public class ClosetServiceImpl implements ClosetService {
 		dao.laundryIn(clothes);
 	}
 
+	//세탁물 체크하면 착용횟수 증가
+	@Override
+	public void plusPutOnCnt(Clothes clothes) {
+		dao.plusPutOnCnt(clothes);
+	}
+
 	//세탁물 다시 옷장으로
 	@Override
 	public void laundryOut(int closetNum, int clothesNum) {
@@ -133,8 +143,15 @@ public class ClosetServiceImpl implements ClosetService {
 
 	//차트데이터 값 불러오기
 	@Override
-	public HashMap<String, BigDecimal> getChartValue(int closetNum) {
-		return dao.getChartValue(closetNum);
+	public HashMap<String, BigDecimal> getChartValue(int closetNum, boolean clothesLaundry) {
+		HashMap<String, Integer> map = new HashMap<>();
+		map.put("closetNum", closetNum);
+		if(clothesLaundry == true) {
+			map.put("clothesLaundry", 1);
+		} else {
+			map.put("clothesLaundry", 0);
+		}
+		return dao.getChartValue(map);
 	}
 	
 	//코디일지 : 코디일지 등록

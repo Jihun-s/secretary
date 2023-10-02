@@ -89,6 +89,7 @@ public class FridgePageController {
 	@ResponseBody
     @PostMapping("deleteFridge")
     public void deleteFridge(@RequestBody Fridge fridge) {
+		log.debug("냉장고 삭제 : {}",fridge);
         fridgeService.deleteFridge(fridge.getFridgeId());
     }
 }

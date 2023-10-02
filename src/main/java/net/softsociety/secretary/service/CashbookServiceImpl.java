@@ -25,16 +25,24 @@ public class CashbookServiceImpl implements CashbookService {
 	@Override
 	public int insertTrans(Transaction trans) {
 		// TODO Auto-generated method stub
-		// cate1_id 찾기
-		String cate1Name = trans.getCate1Name();
-		int cate1Id = dao.selectCate1Id(cate1Name);
-		log.debug("서비스에서 찾아온 대카테명:{}, 대카테id:{}", cate1Name, cate1Id);
-		if(cate1Name.equals("수입")) {
-			trans.setLabelColor("success");
-		}
+		log.debug("서비스 넘어온 입력할 거래내역:{}", trans);
 		
-		// trans에 넣어서 보내기
-		trans.setCate1Id(cate1Id);
+		// 대분류 선택됨
+		if(!trans.getCate1Name().equals("대분류를 선택하세요")) {
+			int cate1Id = dao.selectCate1Id(trans.getCate1Name());
+			log.debug("찾아온 대분류id:{}", cate1Id);
+			trans.setCate1Id(cate1Id);
+			log.debug("대분류 id 넣은 거래내역:{}", trans);
+			
+			// 지출 소분류 선택됨
+			if(trans.getTransType().equals("지출") && !trans.getCate2Name().equals("소분류를 선택하세요")) {
+				int cate2Id = dao.selectCate2Id(trans.getCate2Name());
+				trans.setCate2Id(cate2Id);
+			}
+		}	
+		
+		// DAO 보내기
+		log.debug("서비스에서 다오 주는 입력할 거래내역:{}", trans);
 		int n = dao.insertTrans(trans);
 		
 		return n;
@@ -44,21 +52,27 @@ public class CashbookServiceImpl implements CashbookService {
 	@Override
 	public int updateTrans(Transaction trans) {
 		// TODO Auto-generated method stub
-		String cate1Name = trans.getCate1Name();
-		int cate1Id = dao.selectCate1Id(cate1Name);
-		log.debug("서비스에서 찾아온 대카테명:{}, 대카테id:{}", cate1Name, cate1Id);
+		log.debug("서비스 넘어온 수정할 거래내역:{}", trans);
 		
-		if(!trans.getTransType().equals("수입")) {
-			String cate2Name = trans.getCate2Name();
-			int cate2Id = dao.selectCate2Id(cate2Name);
-			log.debug("서비스에서 찾아온 소카테명:{}, 소카테id:{}", cate1Name, cate1Id);
-			trans.setCate2Id(cate2Id);			
-		}
+		// 대분류 선택됨
+		if(!trans.getCate1Name().equals("대분류를 선택하세요")) {
+			int cate1Id = dao.selectCate1Id(trans.getCate1Name());
+			log.debug("찾아온 새로운 대분류id:{}", cate1Id);
+			trans.setCate1Id(cate1Id);
+			trans.setCate1Id(cate1Id);
+			log.debug("새로운 대분류 id 넣은 거래내역:{}", trans);
+			
+			// 지출 소분류 선택됨
+			if(trans.getTransType().equals("지출") && !trans.getCate2Name().equals("소분류를 선택하세요")) {
+				int cate2Id = dao.selectCate2Id(trans.getCate2Name());
+				log.debug("찾아온 새로운 소분류id:{}", cate1Id);
+				trans.setCate2Id(cate2Id);
+				log.debug("새로운 소분류 id 넣은 거래내역:{}", trans);
+			}
+		}	
 		
-		// trans에 넣어서 보내기
-		trans.setCate1Id(cate1Id);
-		log.debug("서비스에서 보낼 수정할 내용:{}", trans);
-
+		// DAO 보내기
+		log.debug("서비스에서 다오 주는 수정할 거래내역:{}", trans);
 		int n = dao.updateTrans(trans);
 		
 		return n;

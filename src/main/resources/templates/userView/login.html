@@ -68,9 +68,40 @@
         <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
         <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
         <script th:src="@{../assets/js/config.js}"></script>
+        <script th:src="@{/assets/vendor/libs/jquery/jquery.js}"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const urlParams = new URLSearchParams(window.location.search);
+                if (urlParams.has('error')) {
+                    const errorModal = new bootstrap.Modal(document.getElementById('errorModal'));
+                    errorModal.show();
+                }
+            });
+            window.onload = function () {
+                const urlParams = new URLSearchParams(window.location.search);
+                if (urlParams.get('error')) {
+                    const errorModal = new bootstrap.Modal(document.getElementById('errorModal'));
+                    errorModal.show();
+                }
+            };
+        </script>
     </head>
 
     <body>
+        <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="errorModalLabel">Login Error</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">아이디 또는 비밀번호를 다시 한 번 체크해주세요!</div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <!-- Content -->
 
         <div class="container-xxl">
@@ -159,57 +190,62 @@
                                 </a>
                             </div>
                             <!-- /Logo -->
-							<h4 class="mb-2">생활비서에 오신 것을 환영합니다!</h4>
-							<p class="mb-4">계정에 로그인하고 경험해보세요!</p>
-							
-							<form id="formAuthentication" class="mb-3" th:action="@{/user/login}" method="POST">
-							    <div class="mb-3">
-							        <label for="email" class="form-label">이메일 또는 사용자명</label>
-							        <input
-							            type="text"
-							            class="form-control"
-							            id="email"
-							            name="emailOrUserId"
-							            placeholder="이메일 또는 사용자명을 입력하세요"
-							            autofocus
-							        />
-							    </div>
-							    <div class="mb-3 form-password-toggle">
-							        <div class="d-flex justify-content-between">
-							            <label class="form-label" for="password">비밀번호</label>
-							            <a th:href="@{/user/forgot-password}">
-							                <small>비밀번호를 잊으셨나요?</small>
-							            </a>
-							        </div>
-							        <div class="input-group input-group-merge">
-							            <input
-							                type="password"
-							                id="password"
-							                class="form-control"
-							                name="userPw"
-							                placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
-							                aria-describedby="password"
-							            />
-							            <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
-							        </div>
-							    </div>
-							    <div class="mb-3">
-							        <div class="form-check">
-							            <input class="form-check-input" type="checkbox" id="remember-me" name="remember-me" />
-							            <label class="form-check-label" for="remember-me"> 로그인 유지 </label>
-							        </div>
-							    </div>
-							    <div class="mb-3">
-							        <button class="btn btn-primary d-grid w-100" type="submit">로그인</button>
-							    </div>
-							</form>
-							
-							<p class="text-center">
-							    <span>플랫폼에 처음 오셨나요?</span>
-							    <a th:href="@{../user/signup}">
-							        <span>계정 생성하기</span>
-							    </a>
-							</p>
+                            <h4 class="mb-2">생활비서에 오신 것을 환영합니다!</h4>
+                            <p class="mb-4">계정에 로그인하고 경험해보세요!</p>
+
+                            <form id="formAuthentication" class="mb-3" th:action="@{/user/login}" method="POST">
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">이메일 또는 사용자명</label>
+                                    <input
+                                        type="text"
+                                        class="form-control"
+                                        id="email"
+                                        name="emailOrUserId"
+                                        placeholder="이메일 또는 사용자명을 입력하세요"
+                                        autofocus
+                                    />
+                                </div>
+                                <div class="mb-3 form-password-toggle">
+                                    <div class="d-flex justify-content-between">
+                                        <label class="form-label" for="password">비밀번호</label>
+                                        <a th:href="@{/user/forgot-password}">
+                                            <small>비밀번호를 잊으셨나요?</small>
+                                        </a>
+                                    </div>
+                                    <div class="input-group input-group-merge">
+                                        <input
+                                            type="password"
+                                            id="password"
+                                            class="form-control"
+                                            name="userPw"
+                                            placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
+                                            aria-describedby="password"
+                                        />
+                                        <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <div class="form-check">
+                                        <input
+                                            class="form-check-input"
+                                            type="checkbox"
+                                            id="remember-me"
+                                            name="remember-me"
+                                        />
+                                        <label class="form-check-label" for="remember-me"> 로그인 유지 </label>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <button class="btn btn-primary d-grid w-100" type="submit">로그인</button>
+                                </div>
+                            </form>
+
+                            <p class="text-center">
+                                <span>플랫폼에 처음 오셨나요?</span>
+                                <a th:href="@{../user/signup}">
+                                    <span>계정 생성하기</span>
+                                </a>
+                            </p>
                         </div>
                     </div>
                     <!-- /Register -->

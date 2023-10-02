@@ -38,6 +38,8 @@
 	 let familyId = '[[${loginUser.familyId}]]';
 	</script>
 	<script th:src="@{/js/closet/AllCloset.js}"></script>
+	<!-- 스크롤바 -->
+    <script th:src="@{/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js}"></script>      
     <meta name="description" content="" />
 
     <!-- Favicon -->
@@ -616,12 +618,12 @@
                 <!-- 1열 -->
                 <div class="col-lg-6 mb-4">
                   <h3>나의 옷장</h3>
-                  <div class="card mb-4">
+                  <div class="card mb-4" id="scrollCss">
                     <div class="d-flex align-items-end"></div>
-                    <div class="card-body">
-        	 			<div id="accordionIcon" class="accordion mt-3 accordion-without-arrow" style="display:inline;">
+                    <div class="card-body" style="padding:0;">
+        	 			<div id="accordionIcon" class="accordion mt-3 accordion-without-arrow">
 					      <div class="accordion-item card">
-					        <h2 class="accordion-header text-body d-flex justify-content-between" id="accordionIconOne" style="border:1;">
+					        <h2 class="accordion-header text-body d-flex justify-content-between" id="accordionIconOne">
  						         <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#accordionIcon-1" aria-controls="accordionIcon-1">
  							           <strong>옷 찾기</strong> 
  							      </button> <button class="btn btn-danger" id="clothesSearchbtn">Search</button>
@@ -791,6 +793,7 @@
               	  <div class="d-flex align-items-end"></div>
                 		<div class="card-body">
 							<div id="IMGdetail">
+							<br><br><br>
 							<canvas id="myChart" style="height: 60vh; width: 35vw; left:0;"></canvas>
 							</div>
 							<div id="InfoDetail"></div>

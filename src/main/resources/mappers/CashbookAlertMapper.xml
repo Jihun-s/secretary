@@ -1,0 +1,213 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.softsociety.secretary.dao.CashbookAlertDAO">
+
+<!-- 가계부 알림 입력 -->
+<insert id="insertAlert" parameterType="hashmap">
+	INSERT INTO
+	    Secretary_Cashbook_Alert
+		    (alert_id
+		    , family_id
+		    , sch_id
+		    , user_id
+		    , alert_type
+		    , alert_trans_type
+		    , alert_content
+		    , alert_date
+		    , alert_start
+		    , alert_end)
+		VALUES
+		    (Secretary_Cashbook_Alert_SEQ.nextval
+		    , #{familyId}
+		    , #{schId}
+		    , #{userId}
+		    , #{alertType}
+		    , #{alertTransType}
+		    , #{alertContent}
+        	, TO_DATE(#{alertDate}, 'YYYY-MM-DD"T"HH24:MI')
+        	, TO_DATE(#{alertDate}, 'YYYY-MM-DD"T"HH24:MI') - 3
+        	, TO_DATE(#{alertDate}, 'YYYY-MM-DD"T"HH24:MI') + 3
+		    )
+</insert>
+
+
+<!-- 가계부 예산 제안알림 입력 -->
+<insert id="insertJeahnBudgetAlert" parameterType="hashmap">
+	INSERT INTO
+	    Secretary_Cashbook_Alert
+		    (alert_id
+		    , family_id
+		    , user_id
+		    , alert_type
+		    , alert_trans_type
+		    , alert_content
+		    , alert_date
+		    , budget_rest)
+		VALUES
+		    (Secretary_Cashbook_Alert_SEQ.nextval
+		    , #{familyId}
+		    , #{userId}
+		    , #{alertType}
+		    , '예산'
+		    , '이번주남은예산'
+        	, SYSDATE
+        	, #{budgetRest})
+</insert>
+
+
+<!-- 가계부 지난주총지출 제안알림 입력 -->
+<insert id="insertJeahnTWEAlert" parameterType="hashmap">
+	INSERT INTO
+	    Secretary_Cashbook_Alert
+		    (alert_id
+		    , family_id
+		    , user_id
+		    , alert_type
+		    , alert_trans_type
+		    , alert_content
+		    , alert_date
+		    , total_week_expense)
+		VALUES
+		    (Secretary_Cashbook_Alert_SEQ.nextval
+		    , #{familyId}
+		    , #{userId}
+		    , #{alertType}
+		    , '지출'
+		    , '지난주총지출'
+        	, SYSDATE
+        	, #{totalWeekExpense})
+</insert>
+
+
+<!-- 가계부 지난달 총수입 총지출 제안알림 입력 -->
+<insert id="insertJeahnTMIEAlert" parameterType="hashmap">
+	INSERT INTO
+	    Secretary_Cashbook_Alert
+		    (alert_id
+		    , family_id
+		    , user_id
+		    , alert_type
+		    , alert_trans_type
+		    , alert_content
+		    , alert_date
+		    , total_income_month
+		    , total_expense_month)
+		VALUES
+		    (Secretary_Cashbook_Alert_SEQ.nextval
+		    , #{familyId}
+		    , #{userId}
+		    , #{alertType}
+		    , '지출'
+		    , '지난달총수입총지출'
+        	, SYSDATE
+        	, #{totalIncomeMonth}
+        	, #{totalExpenseMonth})
+</insert>
+
+<!-- 필수 알림 목록 불러오기 -->
+<select id="getPilsuAlert" parameterType="hashmap" resultType="CashbookAlert">
+	SELECT
+	    alert_id
+	    , family_id
+	    , user_id
+	    , alert_type
+	    , alert_trans_type
+	    , alert_content
+	    , alert_date
+	    , alert_start
+	    , alert_end
+   		, TO_CHAR(alert_date, 'YYYY-MM-DD') AS alert_date_Ymd
+   		, TO_CHAR(alert_date, 'YYYY') AS alert_date_year
+	    , TO_CHAR(alert_date, 'MM') AS alert_date_month
+	    , TO_CHAR(alert_date, 'DD') AS alert_date_day
+   	    , total_week_expense
+	    , budget_rest
+   	    , total_income_month
+	    , total_expense_month
+	FROM Secretary_Cashbook_Alert
+	WHERE 
+	    family_id = #{familyId}
+   	    AND user_id = #{userId}
+        AND EXTRACT(YEAR FROM alert_date) = #{curYear}
+        AND EXTRACT(MONTH FROM alert_date) >= #{curMonth}
+        AND alert_type = '필수'
+    	AND SYSDATE >= alert_date - 3
+    	AND SYSDATE &lt;= alert_date + 3
+	ORDER BY
+		alert_date
+</select>
+
+<!-- 제안 알림 목록 불러오기 -->
+<select id="getJeahnAlert" parameterType="hashmap" resultType="CashbookAlert">
+	SELECT
+	    alert_id
+	    , family_id
+	    , user_id
+	    , alert_type
+	    , alert_trans_type
+	    , alert_content
+	    , alert_date
+	    , alert_start
+	    , alert_end
+   		, TO_CHAR(alert_date, 'YYYY-MM-DD') AS alert_date_Ymd
+   		, TO_CHAR(alert_date, 'YYYY') AS alert_date_year
+	    , TO_CHAR(alert_date, 'MM') AS alert_date_month
+	    , TO_CHAR(alert_date, 'DD') AS alert_date_day
+	    , total_week_expense
+	    , budget_rest
+	    , total_income_month
+	    , total_expense_month
+	FROM Secretary_Cashbook_Alert
+	WHERE 
+	    family_id = #{familyId}
+	    AND user_id = #{userId}
+        AND EXTRACT(YEAR FROM alert_date) = #{curYear}
+        AND EXTRACT(MONTH FROM alert_date) >= #{curMonth}
+        AND alert_type = '제안'
+    	AND SYSDATE >= alert_date - 3
+    	AND SYSDATE &lt;= alert_date + 3
+	ORDER BY
+		alert_date DESC
+</select>
+
+<!-- 알림 삭제 -->
+<delete id="deleteAlert" parameterType="hashmap">
+	DELETE FROM
+		Secretary_Cashbook_Alert
+	WHERE
+		alert_id = #{alertId}
+		<!-- AND user_id = #{userId} -->
+		AND family_id = #{familyId}
+</delete>
+
+<!-- 필수알림 전체 삭제 -->
+<delete id="deleteAllPilsuAlert" parameterType="hashmap">
+	DELETE FROM
+		Secretary_Cashbook_Alert
+	WHERE
+		alert_type = '필수'
+		<!-- AND user_id = #{userId} -->
+		AND family_id = #{familyId}
+</delete>
+
+<!-- 제안알림 전체 삭제 -->
+<delete id="deleteAllJeahnAlert" parameterType="hashmap">
+	DELETE FROM
+		Secretary_Cashbook_Alert
+	WHERE
+		alert_type = '제안'
+		<!-- AND user_id = #{userId} -->
+		AND family_id = #{familyId}
+</delete>
+
+<!-- 가계부 알림 전체 삭제 -->
+<delete id="deleteAllCashbookAlert" parameterType="hashmap">
+	DELETE FROM
+		Secretary_Cashbook_Alert
+	WHERE
+		<!-- AND user_id = #{userId} -->
+		family_id = #{familyId}
+</delete>
+</mapper>

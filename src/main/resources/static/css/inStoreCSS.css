@@ -25,22 +25,19 @@ body {
  	overflow-y: auto; 
  	height:31rem;
  	padding:0;
- 	display:flex;
- 	flex-flow:row wrap;
- 	justify-content:space-around;
+ 	display:relative;
 }
 
 #whatsInStore ul{
 	list-style:none;
 	margin:0;
 	padding:0;
-	
 }
 #whatsInStore li{
     text-overflow: ellipsis;
 }
-
-#whatsInStore > div{
+.storeGoods{
+	display:inline-block;
 	margin-right:1em;
 	margin-bottom:1em;
 	border-color: pink; 
@@ -51,11 +48,12 @@ body {
 	width:15rem;
 	height:15rem;
 }
-#whatsInStore >div img{
+
+.storeGoods img{
 	width:15rem;
 	height:15rem;
 }
-#whatsInStore div:hover{
+.storeGoods div:hover{
 	transform: translate3d(1px,1px,1px);
 } 
 

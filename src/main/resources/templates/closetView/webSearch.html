@@ -36,6 +36,9 @@
  	let userid = '[[${loginUser.userId}]]';
     </script>
 	<script th:src="@{/js/closet/webSearch.js}"></script>
+	
+	<!-- 스크롤바 -->
+    <script th:src="@{/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js}"></script>  	
     <meta name="description" content="" />
     <!-- Favicon -->
     <link
@@ -644,8 +647,7 @@
 									<option value="brandAll" selected>전체</option>
 									<option value="musinsa">무신사</option>
 									<option value="Uniqlo">유니클로</option>
-									<option value="Zara">자라</option>
-									<option value="Topten">탑텐</option>
+									<option value="spao">스파오</option>
 								</select>
 							</td>
 							<td><label for="clothesCategoryForSearch">분류</label></td>
@@ -679,7 +681,7 @@
       			   </div> <!-- id="body_top" card-body 상단바 (옷찾기..) -->
       			   
       			    <div class="card-body" id="whatsInStore">
-      			    <div th:each="item:${list}" th:onclick="InsertOrUpdate([[${item.clothesFromStoreImg}]])">
+      			    <div class="storeGoods" th:each="item:${list}" th:onclick="InsertOrUpdate([[${item.clothesFromStoreImg}]])">
       			    	<ul>
       			    	<li><img class="clothesList" th:src="@{/closet/clothesFromStoreDownload(clothesFromStoreImg=${item.clothesFromStoreImg})}"></li>
       			    	</ul>

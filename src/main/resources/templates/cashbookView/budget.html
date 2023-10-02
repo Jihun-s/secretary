@@ -34,9 +34,58 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script th:src="@{/js/cashbook/cashbookChart.js}"></script>
     <script th:src="@{/js/cashbook/statistic.js}"></script>
+    <script th:src="@{/js/cashbook}"></script>
   </head>
   <body>
     <a href="javascript:mostCate2();">클릭해보렴</a>
+
+    <div
+      class="card overflow-hidden mb-4"
+      style="
+        position: relative;
+        text-align: center;
+        width: 500px;
+        overflow-x: auto;
+      "
+    >
+      <div class="card-body ps ps--active-x" id="vertical-example">
+        <h5 class="card-header">DIV 타이틀</h5>
+        <p>1행</p>
+        <p>2행</p>
+        <p>3행</p>
+        <p>4행</p>
+        <p>5행</p>
+        <p>6행</p>
+        <p>1행</p>
+        <p>2행</p>
+        <p>3행</p>
+        <p>4행</p>
+        <p>5행</p>
+        <p>6행</p>
+        <p>1행</p>
+        <p>2행</p>
+        <p>3행</p>
+        <p>4행</p>
+        <p>5행</p>
+        <p>
+          6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행
+        </p>
+        <div class="ps__rail-x" style="left: 0px; bottom: 0px">
+          <div
+            class="ps__thumb-x"
+            tabindex="0"
+            style="top: 0px; height: 232px; right: 0px"
+          ></div>
+        </div> 
+        <div class="ps__rail-y" style="top: 0px; height: 232px; right: 0px">
+          <div
+            class="ps__thumb-y"
+            tabindex="0"
+            style="top: 0px; height: 37px"
+          ></div>
+        </div>
+      </div>
+    </div>
 
     <!-- Core JS -->
     <!-- build:js assets/vendor/js/core.js -->

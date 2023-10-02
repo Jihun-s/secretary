@@ -79,14 +79,21 @@
       }
     </style>
   </head>
-  <body>
-    <!--[if lte IE 9]>
-      <p class="browserupgrade">
-        You are using an <strong>outdated</strong> browser. Please
-        <a href="https://browsehappy.com/">upgrade your browser</a> to improve
-        your experience and security.
-      </p>
-    <![endif]-->
+  <body
+    style="
+      @font-face {
+        font-family: 'NanumSquareNeo-Variable';
+        src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_11-01@1.0/NanumSquareNeo-Variable.woff2')
+          format('woff2');
+        font-weight: normal;
+        font-style: normal;
+      }
+
+      body {
+        font-family: 'NanumSquareNeo-Variable', sans-serif;
+      }
+    "
+  >
     <!-- ========================= preloader start ========================= -->
     <div class="preloader">
       <div class="loader">
@@ -201,8 +208,8 @@
               <p class="wow fadeInUp" data-wow-delay=".4s">
                 바쁜 일상 속 놓치기 쉬운 살림살이, 생비가 도와드릴게요.
               </p>
-              <a th:href="@{/firstLogin}"
-                ><button type="button" class="btn btn-primary">
+              <a th:href="@{/main}"
+                ><button type="button" class="btn btn-xl btn-primary">
                   시작하기
                 </button></a
               >
@@ -224,7 +231,15 @@
         <div class="row">
           <div class="col-lg-12 text-center">
             <div class="about-img wow fadeInUp" data-wow-delay=".5s">
-              <h3>생비는 이러저러하고 이러저러합니다.</h3>
+              <h3>우리 가족의 살림살이를 한 눈에.</h3>
+              <h5>
+                언제부터 있었는지 모를 냉장고 속 미지의 음식, 동시에 똑 떨어져
+                곤란한 생활용품.<br />
+                사소해보이지만 바쁜 일상을 살다 보면 자칫 놓치기 쉬운 것이
+                살림살이입니다. <br />
+                살림에 필요한 데이터를 모아 알려드릴게요. <br />
+                생비와 함께라면 당신의 일상이 훨씬 편리해질 거예요.
+              </h5>
             </div>
           </div>
         </div>
@@ -253,59 +268,13 @@
           <div class="col-lg-6">
             <div class="about-content">
               <div class="section-title">
-                <span class="wow fadeInUp" data-wow-delay=".2s">About Us</span>
-                <h1 class="wow fadeInUp" data-wow-delay=".4s">
-                  On-time Delivery and Customer Satisfaction
-                </h1>
+                <span class="wow fadeInUp" data-wow-delay=".2s"
+                  >알림과 일정</span
+                >
+                <h1 class="wow fadeInUp" data-wow-delay=".4s"></h1>
                 <p class="wow fadeInUp" data-wow-delay=".6s">
-                  Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
-                  diam nonumy eirmod tempor invidunt ut labore et dolore magna
-                  aliquyam erat, sed diam voluptua.
+                  일정 관리! 알림 기능!
                 </p>
-              </div>
-              <div
-                class="rating-meta d-flex align-items-center wow fadeInUp"
-                data-wow-delay=".65s"
-              >
-                <h5>Rating 4.8</h5>
-                <div class="rating">
-                  <i class="lni lni-star-filled"></i>
-                  <i class="lni lni-star-filled"></i>
-                  <i class="lni lni-star-filled"></i>
-                  <i class="lni lni-star-filled"></i>
-                  <i class="lni lni-star-filled"></i>
-                </div>
-              </div>
-
-              <div class="counter-up wow fadeInUp" data-wow-delay=".8s">
-                <div class="single-counter">
-                  <h3 id="secondo1" class="countup" cup-end="1" cup-append="M+">
-                    1
-                  </h3>
-                  <h5>Download</h5>
-                </div>
-                <div class="single-counter position-relative">
-                  <h3
-                    id="secondo2"
-                    class="countup"
-                    cup-end="234"
-                    cup-append="K+"
-                  >
-                    234
-                  </h3>
-                  <h5>Happy User</h5>
-                </div>
-                <div class="single-counter">
-                  <h3
-                    id="secondo3"
-                    class="countup"
-                    cup-end="34"
-                    cup-append="K+"
-                  >
-                    34
-                  </h3>
-                  <h5>Reviews</h5>
-                </div>
               </div>
             </div>
           </div>
@@ -322,16 +291,12 @@
             <div class="delivery-content">
               <div class="section-title">
                 <span class="wow fadeInUp" data-wow-delay=".2s"
-                  >Fast Delivery</span
-                >
+                  >냉장고 & 생활용품
+                </span>
                 <h1 class="mb-35 wow fadeInUp" data-wow-delay=".4s">
-                  Order Now, Recieve Within 30mins
+                  재고관리 소비제안
                 </h1>
-                <p class="mb-35 wow fadeInUp" data-wow-delay=".6s">
-                  Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
-                  diam nonumy eirmod tempor invidunt ut labore hdht dolore magna
-                  aliquyam erat, sed diam voluptua.
-                </p>
+                <p class="mb-35 wow fadeInUp" data-wow-delay=".6s">편리하다!</p>
                 <a
                   href="javscript:void(0)"
                   class="main-btn btn-hover wow fadeInUp"
@@ -384,16 +349,13 @@
           <div class="col-lg-6">
             <div class="about-content received-content">
               <div class="section-title">
-                <span class="wow fadeInUp" data-wow-delay=".2s"
-                  >Contactless Delivery</span
-                >
+                <span class="wow fadeInUp" data-wow-delay=".2s">옷장</span>
                 <h1 class="mb-25 wow fadeInUp" data-wow-delay=".4s">
-                  On-time Delivery to Your Doorstep
+                  나의 옷을 한눈에 파악하고 코디 일지를 기록할 수 있어요
                 </h1>
                 <p class="wow fadeInUp" data-wow-delay=".6s">
-                  Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
-                  diam nonumy eirmod tempor invidunt ut labore et dolore magna
-                  aliquyam erat, sed diam voluptua.
+                  직접 찍어서 올리든 있던 사진 활용하든 웹에서 찾아오든
+                  어떻게저떻게
                 </p>
               </div>
             </div>

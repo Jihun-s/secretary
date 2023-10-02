@@ -1,3 +1,8 @@
+/** 
+ * 가계부 메인화면 달력 .js 
+ */
+
+
 $(document).ready(function() {
   let calendarEl = $('#transViewDiv')[0];
 
@@ -9,8 +14,11 @@ $(document).ready(function() {
   let curDate = now.getDate().toString().padStart(2, '0');
   let curDateFormat = curYear + '-' + curMonth + '-' + curDate; 
   
+  // 일단 비우기 
   $('#transViewDiv').html('');
 
+
+  /** 메인용 달력 객체 만들기 */
   calendar = new FullCalendar.Calendar(calendarEl, {
       initialView: 'dayGridMonth',
       locale: 'ko',
@@ -81,9 +89,9 @@ $(document).ready(function() {
     eventClick: function(info) {
       // 현재 달력 연월 추출
       let detailListDiv = $('#detailListDiv');
-      let eventDate = new Date(info.event.start); // 이벤트의 시작 날짜를 가져옵니다.
+      let eventDate = new Date(info.event.start);
       let calYear = eventDate.getFullYear();
-      let calMonth = eventDate.getMonth() + 1; // 월은 0부터 시작하므로 1을 더해줍니다.
+      let calMonth = eventDate.getMonth() + 1;
       let calDate = eventDate.getDate();
       let transType = info.event.extendedProps.type;
       // alert(calYear + "년 " + calMonth + "월 " + calDate + "일의 " + transType + "을 클릭");
@@ -168,7 +176,13 @@ $(document).ready(function() {
   calendar.render();
 });
 
-////////////////////////////////////////////////////////////////
+
+
+////READY/////READY/////READY/////READY/////READY/////READY/////READY/////READY/////READY/////READY/////READY/////READY/////
+////READY/////READY/////READY/////READY/////READY/////READY/////READY/////READY/////READY/////READY/////READY/////READY///// 
+////READY/////READY/////READY/////READY/////READY/////READY/////READY/////READY/////READY/////READY/////READY/////READY///// 
+
+
 
 /** 날짜입력 기본값 현재시간으로 설정 */
 function dateToSysdate() {
@@ -187,7 +201,24 @@ function dateToSysdate() {
 }
 
 
-////////////////////////////////////////////////////////////////
+/** YYYY-MM-DD 형식의 문자열을 받아서 "월 일 요일" 형식으로 반환하는 함수 */
+function formatDate(inputDate) {
+  let dateObj = new Date(inputDate);
+  let month = dateObj.getMonth() + 1;
+  let date = dateObj.getDate();
+  let dayNames = ["일", "월", "화", "수", "목", "금", "토"];
+  let day = dayNames[dateObj.getDay()];
+
+  return `${month}월 ${date}일　　${day}`;
+}
+
+
+
+/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////
+/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////
+/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////날짜/////
+
+
 
 let isCal = false;
 
@@ -213,19 +244,17 @@ function getColorBytransType(transType) {
 }
 
 
+/////이벤트색상/////이벤트색상/////이벤트색상/////이벤트색상/////이벤트색상/////이벤트색상/////이벤트색상/////이벤트색상/////이벤트색상/////  
+/////이벤트색상/////이벤트색상/////이벤트색상/////이벤트색상/////이벤트색상/////이벤트색상/////이벤트색상/////이벤트색상/////이벤트색상/////  
+/////이벤트색상/////이벤트색상/////이벤트색상/////이벤트색상/////이벤트색상/////이벤트색상/////이벤트색상/////이벤트색상/////이벤트색상/////  
+
+
 /** 숫자에 1000 단위로 , 찍기 */
 function numberWithCommas(x) {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
 
-/** 날짜 형식 변환 */
-function formatDate(inputDate) {
-  // YYYY-MM-DD 형식의 문자열을 받아서 "월 일 요일" 형식으로 반환하는 함수
-  let dateObj = new Date(inputDate);
-  let month = dateObj.getMonth() + 1;
-  let date = dateObj.getDate();
-  let dayNames = ["일", "월", "화", "수", "목", "금", "토"];
-  let day = dayNames[dateObj.getDay()];
-  return `${month}월 ${date}일　　${day}`;
-}
+/////숫자포맷/////숫자포맷/////숫자포맷/////숫자포맷/////숫자포맷/////숫자포맷/////숫자포맷/////숫자포맷/////숫자포맷/////숫자포맷/////숫자포맷/////
+/////숫자포맷/////숫자포맷/////숫자포맷/////숫자포맷/////숫자포맷/////숫자포맷/////숫자포맷/////숫자포맷/////숫자포맷/////숫자포맷/////숫자포맷/////
+/////숫자포맷/////숫자포맷/////숫자포맷/////숫자포맷/////숫자포맷/////숫자포맷/////숫자포맷/////숫자포맷/////숫자포맷/////숫자포맷/////숫자포맷/////

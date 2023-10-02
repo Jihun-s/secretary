@@ -581,17 +581,19 @@
             <div class="container-xxl flex-grow-1 container-p-y">
               <!-- 메뉴 행 -->
               <div class="row mb-4">
-                <span style="display: inline-block">
-                  <!-- 메뉴 앞 이미지 src 수정해주세요 -->
-                  <img
-                    th:src="@{/images/cashbookimg/10475334.png}"
-                    style="height: 4rem; width: 4rem; vertical-align: middle"
-                  />
-                  <!-- 메뉴이름 -->
-                  <h1 style="display: inline; vertical-align: middle">
-                    가계부
-                  </h1>
-                </span>
+                <a th:href="@{/cashbook}">
+                  <span style="display: inline-block">
+                    <!-- 메뉴 앞 이미지 src 수정해주세요 -->
+                    <img
+                      th:src="@{/images/cashbookimg/10475334.png}"
+                      style="height: 4rem; width: 4rem; vertical-align: middle"
+                    />  
+                    <!-- 메뉴이름 -->
+                    <h1 style="display: inline; vertical-align: middle">
+                      가계부
+                    </h1>
+                  </span>
+                </a>
               </div>
 
               <!-- 컨텐츠 -->
@@ -639,7 +641,7 @@
                       <!-- 예산 미지정 -->
                       <th:block th:if="${budgetExist == 0}">
                         <div id="budgetNotExistDiv">
-                          <p>아직 이번달 예산을 설정하지 않았어요.</p>
+                          <p>한 달 예산을 세워볼까요? 예산을 설정하고 계획적으로 관리해보세요.</p>
                           <button
                             type="button"
                             class="btn btn-success"
@@ -723,11 +725,14 @@
 
                 <!-- 3열 -->
                 <div class="col-lg-4 mb-4">
-                  <div class="card">
+                  <div class="card" style="height: 43rem;">
                     <div class="card-body">
                       <div class="notification">
                         <div class="col-xl-6" style="width: 100%">
-                          <h6 class="text-muted">알림</h6>
+                          <span class="d-flex justify-content-between">
+                            <h6 class="text-muted">알림</h6>
+                            <h6 class="text-muted" style="cursor: pointer;" onclick="deleteAllCashbookAlert();">모두 삭제</h6>
+                          </span>
                           <div class="nav-align-top mb-4">
                             <ul
                               class="nav nav-pills mb-3 nav-fill"
@@ -739,15 +744,11 @@
                                   class="nav-link active"
                                   role="tab"
                                   data-bs-toggle="tab"
-                                  data-bs-target="#AlertListDiv"
-                                  aria-controls="AlertListDiv"
+                                  data-bs-target="#pilsuAlertListDiv"
+                                  aria-controls="pilsuAlertListDiv"
                                   aria-selected="true"
                                 >
                                   <i class="tf-icons bx bx-home"></i> 필수 알림
-                                  <span
-                                    class="badge rounded-pill badge-center h-px-20 w-px-20 bg-danger"
-                                    >3</span
-                                  >
                                 </button>
                               </li>
                               <li class="nav-item">
@@ -756,9 +757,10 @@
                                   class="nav-link"
                                   role="tab"
                                   data-bs-toggle="tab"
-                                  data-bs-target="#navs-pills-justified-profile"
-                                  aria-controls="navs-pills-justified-profile"
+                                  data-bs-target="#jeahnAlertListDiv"
+                                  aria-controls="jeahnAlertListDiv"
                                   aria-selected="false"
+                                  onclick="getJeahnAlert();"
                                 >
                                   <i class="tf-icons bx bx-user"></i> 제안 알림
                                 </button>
@@ -766,23 +768,27 @@
                             </ul>
                             <div
                               class="tab-content flex-fill"
-                              style="height: 18rem; padding-top: 0"
+                              style="height: 100%; padding-top: 0; overflow: auto;"
                             >
                               <!-- 필수 알림 탭 내용 -->
                               <div
                                 class="tab-pane fade show active"
-                                id="AlertListDiv"
+                                id="pilsuAlertListDiv"
                                 role="tabpanel"
-                              ></div>
+                              >
+                                <p>
+                                   
+                                </p>
+                              </div>
 
                               <!-- 제안 알림 탭 내용 -->
                               <div
                                 class="tab-pane fade"
-                                id="navs-pills-justified-profile"
+                                id="jeahnAlertListDiv"
                                 role="tabpanel"
                               >
                                 <p>
-                                  8월 23일은 처서입니다. 여름옷을 정리해볼까요?
+                                   
                                 </p>
                               </div>
                             </div>
@@ -1066,17 +1072,17 @@
           <div class="modal-footer">
             <button
               type="button"
-              class="btn btn-outline-success"
-              data-bs-dismiss="modal"
-            >
-              취소
-            </button>
-            <button
-              type="button"
               id="deleteBudgetBtModal"
               class="btn btn-success"
             >
               삭제
+            </button>
+            <button
+              type="button"
+              class="btn btn-outline-success"
+              data-bs-dismiss="modal"
+            >
+              취소
             </button>
           </div>
         </div>

@@ -27,7 +27,7 @@ public class FoodCategoryController {
     private FoodCategoryService foodCategoryService;
 
  // 미리 지정된 default 카테고리 목록
-    private static final List<String> DEFAULT_CATEGORIES = Arrays.asList("일반", "야채", "육류", "생선", "과일", "사용자 입력", "custom"); // ... 등등 추가 가능
+    private static final List<String> DEFAULT_CATEGORIES = Arrays.asList("일반", "야채", "육류", "해산물", "과일", "사용자 입력", "custom"); // ... 등등 추가 가능
 
     @PostMapping
     public int addCategory(@RequestBody FoodCategory foodCategory, @ModelAttribute("loginUser") User user) {

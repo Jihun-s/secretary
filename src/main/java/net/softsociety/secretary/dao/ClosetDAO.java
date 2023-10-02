@@ -23,6 +23,7 @@ public interface ClosetDAO {
 
 	//옷장리스트 출력
 	ArrayList<Closet> findAllCloset();
+	Closet findCloset(int closetNum);
 
 	//옷장에 옷 추가
 	void insertClothes(Clothes clothes);
@@ -40,11 +41,13 @@ public interface ClosetDAO {
 	
 	//세탁물 체크
 	void laundryIn(Clothes clothes);
+	//세탁물 체크하면 착용횟수 증가
+	void plusPutOnCnt(Clothes clothes);
 	//세탁물 다시 옷장으로
 	void laundryOut(HashMap<String, Integer> map);
 	
 	//차트데이터 값 불러오기
-	HashMap<String, BigDecimal> getChartValue(int closetNum);
+	HashMap<String, BigDecimal> getChartValue(HashMap<String, Integer> map);
 	
 	//코디일지 : 코디일지 작성
 	void createStyle(ClosetStyleDiary diary);

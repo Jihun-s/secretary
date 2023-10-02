@@ -2,16 +2,18 @@
  * 옷장 페이지
  */
 $(document).ready(function(){
+	const ps = new PerfectScrollbar('#scrollCss');
 	closetNum = parseInt(closetNum); // 스트링에서 정수형으로 변환
-
+	let laundryCheck = false;
 	$('#webSearchbtn').on('click',webSearch);
+	
 	
 // !!!!!!!!!!!!!!!!!!			차트 그리기			!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!	
 	let dataValue = new Array(8);
 	$.ajax({
 		url:'chartValue',
 		type:'get',
-		data:{closetNum: closetNum},
+		data:{closetNum: closetNum, laundryCheck:laundryCheck},
 		dataType:'json',
 		success:function(valueList){
 			console.log(valueList);
@@ -437,9 +439,10 @@ function chartDraw(dataValue){
 							<li>&nbsp;&nbsp;'+translatedCategory+'</li>\
 							<li>&nbsp;&nbsp;'+ translatedMaterial+'</li>\
 							<li>&nbsp;&nbsp;'+seasonresult+'</td>\
-							<li>&nbsp;&nbsp;'+clothes.clothesSize+'</li></ul><br>\
+							<li>&nbsp;&nbsp;'+clothes.clothesSize+'</li></ul>\
+							<br><ul><li><button class="btn-pink" style="cursor:auto;">착용횟수</button></li>\
+							<li>&nbsp;&nbsp;'+clothes.clothesPutOnCnt+'번</li></ul><br>\
 							<ul><li><button class="btn-pink" style="cursor:auto;">관리방법</button>&nbsp;&nbsp;'+manageTip+'</li></ui><br>'
-
 				let footer = '<br><div id="clothesFooter"><button class="btn btn-primary" style="background-color: rgba(223,132,166,255); border-color: rgba(223,132,166,255);"\
 								onclick="laundryIn('+clothes.closetNum+','+clothes.clothesNum+')">세탁물 체크</button>\
 							&nbsp;&nbsp;<button type="button" class="btn btn-primary" style="background-color: rgba(223,132,166,255); border-color: rgba(223,132,166,255); float:right;" \

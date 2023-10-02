@@ -25,7 +25,6 @@ public class LivingUsedServiceImpl implements LivingUsedService {
 	@Transactional
 	public void consumeItem(LivingGoods livingGoods) {
 		
-		log.debug("서비스 임플 !!!!!!!!!!!!!!!!!!!!!!!!!! :{}",livingGoods);
 		// 수량 확인
 	    int currentQuantity = livingGoodsDAO.checkItemQuantity(livingGoods);
 	    // 현재 수량이 소비하려는 수량보다 많거나 같다면
@@ -62,5 +61,18 @@ public class LivingUsedServiceImpl implements LivingUsedService {
 		return livingUsedDAO.getAllUsedItems();
 	}
 
-	
+	@Override
+	public List<LivingGoods> getLivingGoodsNotAccessedForDays(int days) {
+	    return livingUsedDAO.getLivingGoodsNotAccessedForDays(days);
+	}
+
+	@Override
+	public int deleteById(int fridgeUsedId) {
+		return livingUsedDAO.deleteById(fridgeUsedId);
+	}
+
+	@Override
+	public void deleteAll(int familyId) {
+		livingUsedDAO.deleteAll(familyId);
+	}
 }

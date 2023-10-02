@@ -29,7 +29,7 @@ public class SpeechController {
 
             // 결과가 있는지 확인
             if (response.getResultsList().isEmpty()) {
-                return "No transcription available";
+                return "음성이 인식되지 않았습니다.";
             }
 
             SpeechRecognitionResult result = response.getResultsList().get(0);

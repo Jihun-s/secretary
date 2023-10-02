@@ -1,10 +1,12 @@
 package net.softsociety.secretary.dao;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Optional;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import lombok.Data;
@@ -54,7 +56,7 @@ public interface CashbookDAO {
 	int insertCustomCate1(Category1 cate1);
 
 	/** 대분류 name으로 id 찾기 */
-	int selectCate1Id(String cate1Name);
+	Integer selectCate1Id(String cate1Name);
 
 	/** 커스텀 소분류 추가 */
 	int insertCustomCate2(Category2 cate2);
@@ -63,7 +65,7 @@ public interface CashbookDAO {
 	Transaction selectTrans(int transId);
 
 	/** 소분류 name으로 id 찾기 */
-	int selectCate2Id(String cate2Name);
+	Integer selectCate2Id(String cate2Name);
 
 	/** 한달 총 수입 */
 	int selectSumIncomeMonth(HashMap<String, Object> map);
@@ -131,4 +133,18 @@ public interface CashbookDAO {
 	
 	/** 이번달 저번달 수입/지출 */
 	ArrayList<CashbookChart> getCurPreInExSum(HashMap<String, Object> map);
+
+	/** 이번달 남은 예산 */
+	BigDecimal getBudgetRest(HashMap<String, Object> map);
+
+	/** 지난주 총 지출 */
+	BigDecimal getTotalWeekExpense(HashMap<String, Object> map);
+
+	/** 지난달 총 수입 */
+	BigDecimal getTotalIncomeMonth(HashMap<String, Object> map);
+
+	/** 지난달 총 지출 */
+	BigDecimal getTotalExpenseMonth(HashMap<String, Object> map);
+	
+	
 }

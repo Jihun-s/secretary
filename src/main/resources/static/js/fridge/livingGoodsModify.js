@@ -1,4 +1,5 @@
 $(document).ready(function () {
+
     let isEditMode = false; // 편집 모드 상태를 저장하는 변수
 
     // 편집 버튼 클릭 이벤트
@@ -80,7 +81,7 @@ $(document).on('click', '.modal-category-editIcon', function () {
     const categoryItem = $(this).closest('.category-item');
     const categoryNameSpan = categoryItem.find('.category-name');
     const categoryName = categoryNameSpan.text();
-    categoryNameSpan.hide().after('<div class="d-flex align-items-center justify-content-between" style="width: 100%;"><input type="text" class="form-control category-input" value="' + categoryName + '" /><div class="d-flex flex-direction-row"><button class="btn btn-sm btn-warning confirm-edit">Confirm</button><button class="btn btn-sm btn-outline-secondary cancel-edit">Cancel</button></div></div>');
+    categoryNameSpan.hide().after('<div class="d-flex align-items-center justify-content-between" style="width: 100%;"><input type="text" class="form-control category-input" value="' + categoryName + '" style="flex: 1; margin-right: 5px;" /><div class="d-flex flex-direction-row"><button class="btn btn-sm btn-warning confirm-edit">수정</button><button class="btn btn-sm btn-outline-secondary cancel-edit">취소</button></div></div>');
 
     $(this).hide();
     categoryItem.find('.modal-category-deleteIcon').hide();
@@ -269,7 +270,7 @@ function setExistingImageInEditMode(existingImageSrc) {
                     setExistingImageInEditMode(existingImageSrc);
                 }
                 const submitBtn = $('#manualInputModal .addsubmitBtn');
-                submitBtn.text('Update');
+                submitBtn.text('수정');
                 submitBtn.removeClass('btn-primary').addClass('btn-warning');
                 $('#manualInputModal form').attr('action', 'livingGoods/modify/' + itemId);
                 $('#manualInputModal').modal('show');
@@ -284,7 +285,7 @@ function setExistingImageInEditMode(existingImageSrc) {
     // 모달이 닫힐 때 초기 상태로 복구
     $('#manualInputModal').on('hidden.bs.modal', function () {
         const submitBtn = $('#manualInputModal .btn-warning');
-        submitBtn.text('Submit');
+        submitBtn.text('입력');
         submitBtn.removeClass('btn-warning').addClass('btn-primary');
         $('#manualInputModal form').attr('action', 'livingGoods/add');
     });
@@ -309,7 +310,7 @@ $(document).on('click', '.consume-btn', function () {
     const itemName = $(this).data('item-name');
     const itemCategory = $(this).data('item-category');
 
-    const responseFromPrompt = prompt(`소비할 수량을 입력하세요 (최대: ${maxQuantity})`);
+    const responseFromPrompt = prompt(`소비할 수량을 입력하세요 (재고: ${maxQuantity})`);
     
     if (responseFromPrompt === null) {
         return;
@@ -336,6 +337,7 @@ $(document).on('click', '.consume-btn', function () {
                 updateItemQuantity(itemId, newQuantity);
 
                 refreshConsumptionHistory();
+                loadData();
             },
             error: function (error) {
                 console.log('Error consuming item:', error);
@@ -356,20 +358,148 @@ function refreshConsumptionHistory() {
             let content = '';
             data.forEach((item) => {
                 content += `
-                    <div class="consumption-item">
-                        <h5 class="used-item-name">${item.itemCategory}의 ${item.itemName}을/를 ${item.livingQuantityUsed}개 소비하셨습니다!</h5>
-                        <p class="used-date">${new Date(item.livingUsedDate).toLocaleString()}</p>
-                    </div>
-                `;
+                <div class="consumption-item">
+                    <h5 class="used-item-name">${item.itemCategory}의 ${item.itemName}을/를 ${item.livingQuantityUsed}개 소비하셨습니다!</h5>
+                    <p class="used-date">${new Date(item.livingUsedDate).toLocaleString()}</p>
+                    <span class="delete-consumption-text" data-consumption-id="${item.livingUsedId}">X</span>
+                </div>
+            `;
             });
             $('#consumptionHistoryContainer').html(content);
         },
     });
 }
 
+//소비 이력 각각 삭제
+$(document).on('click', '.delete-consumption-text', function () {
+    const consumptionId = $(this).data('consumption-id');
+    if (confirm('정말 이 소비 이력을 삭제하시겠습니까?')) {
+        // 서버에 소비 이력 삭제 요청
+        $.ajax({
+            url: 'livingUsed/deleteConsumptionHistory',
+            type: 'POST',
+            data: { livingUsedId: consumptionId },
+            success: function (response) {
+                alert('소비 이력이 삭제되었습니다.');
+                refreshConsumptionHistory();
+            },
+            error: function (error) {
+                console.log('Error deleting consumption:', error);
+                alert('소비 이력 삭제에 실패하였습니다.');
+            },
+        });
+    }
+});
+
+//소비 이력 전체 삭제
+$(document).on('click', '.delete-all-consumption-text', function () {
+    if (confirm('정말 모든 소비 이력을 삭제하시겠습니까?')) {
+        // 서버에 전체 소비 이력 삭제 요청
+        $.ajax({
+            url: 'livingUsed/deleteAllConsumptionHistory',
+            type: 'POST',
+            success: function (response) {
+                alert('모든 소비 이력이 삭제되었습니다.');
+                refreshConsumptionHistory();
+            },
+            error: function (error) {
+                console.log('Error deleting all consumptions:', error);
+                alert('모든 소비 이력 삭제에 실패하였습니다.');
+            },
+        });
+    }
+});
+
+
 // 페이지 로딩 후 자동으로 소비 이력 갱신
 refreshConsumptionHistory();
 
+let allLivingGoods = [];
 
+function loadLivingGoodsForNotification(callback) {
+    $.ajax({
+        url: `livingGoods/getLivingGoods`,
+        type: 'GET',
+        dataType: 'json',
+        success: function (data) {
+            allLivingGoods = data;
+            callback();
+        },
+        error: function (error) {
+            console.error('Error fetching living goods items for notification:', error);
+        },
+    });
+}
+
+function createEssentialNotifications() {
+    $('#navs-pills-justified-home').empty();
+    const today = new Date();
+    const oneWeekFromNow = new Date(today);
+    oneWeekFromNow.setDate(today.getDate() + 7);
+
+    const essentialItems = allLivingGoods.filter((item) => {
+        if(item.itemExpiryDate === null) return false;
+        const expiryDate = new Date(item.itemExpiryDate);
+        return expiryDate <= oneWeekFromNow;
+    });
+
+    essentialItems.sort((a, b) => {
+        const expiryDateA = new Date(a.itemExpiryDate);
+        const expiryDateB = new Date(b.itemExpiryDate);
+        return expiryDateA - expiryDateB;
+    });
+
+    essentialItems.forEach((item) => {
+        const expiryDate = new Date(item.itemExpiryDate);
+        const diffDays = Math.ceil((expiryDate - today) / (1000 * 60 * 60 * 24));
+        const color = diffDays <= 3 ? 'red' : 'blue';
+        const notification = `<div style="margin-bottom: 10px;">
+                                  <p style="margin-bottom: 0;">[${item.itemCategory}]${item.itemName}의 유통기한이 <span style="color:${color}">${diffDays}일</span> 남았습니다! - </p>
+                                  <span class="consume-text consume-btn" data-item-id="${item.itemId}" data-item-quantity="${item.itemQuantity}" data-item-name="${item.itemName}" data-item-category="${item.itemCategory}"> [소비]</span></p>
+                              </div>`;
+        $('#navs-pills-justified-home').append(notification);
+    });
+}
+
+function createSuggestedNotifications() {
+    $('#navs-pills-justified-profile').empty();
+    // 이 부분은 서버에서 15일, 30일 사용하지 않은 제품 정보를 가져와야 함
+    // 아래는 예시 코드
+    $.ajax({
+        url: `livingUsed/getLivingGoodsNotAccessedForDays`,
+        type: 'GET',
+        dataType: 'json',
+        success: function (data) {
+            displaySuggestedNotifications(data.goods15Days, 15);
+            displaySuggestedNotifications(data.goods30Days, 30);
+        },
+        error: function (error) {
+            console.error('Error fetching suggested notifications:', error);
+        },
+    });
+}
+
+function displaySuggestedNotifications(goods, days) {
+    goods.forEach((item) => {
+        const notification = `
+            <div>
+                <p style="margin-bottom: 0;">${item.itemName}을(를) 사용하지 않은 지 <span style="color:red">${days}일</span>이 지났습니다! - </p>
+                <span class="consume-text consume-btn" data-item-id="${item.itemId}" data-item-quantity="${item.itemQuantity}" data-item-name="${item.itemName}" data-item-category="${item.itemCategory}"> [소비]</span></p>
+            </div>
+        `;
+        $('#navs-pills-justified-profile').append(notification);
+    });
+}
+
+function loadData() {
+    allLivingGoods = [];
+    loadLivingGoodsForNotification(function () {
+        createEssentialNotifications();
+        createSuggestedNotifications();
+    });
+}
+
+// 데이터 로드 및 알림 생성 및 표시 시작
+loadData();
 });
 //readyEND

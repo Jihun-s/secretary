@@ -4,19 +4,19 @@ document.addEventListener("DOMContentLoaded", function() {
     // 각 필드별 음성 입력 버튼과 입력란에 대한 참조를 가져옵니다.
     const buttons = {
         itemName: {
-            btn: document.getElementById('recordFoodName'),
+            btn: document.getElementById('recordItemName'),
             input: document.getElementById('itemName'),
         },
         itemQuantity: {
-            btn: document.getElementById('recordFoodQuantity'),
+            btn: document.getElementById('recordItemQuantity'),
             input: document.getElementById('itemQuantity'),
         },
         itemPrice: {
-            btn: document.getElementById('recordFoodPrice'),
+            btn: document.getElementById('recordItemPrice'),
             input: document.getElementById('itemPrice'),
         },
         itemCategory: {
-            btn: document.getElementById('recordFoodCategory'),
+            btn: document.getElementById('recordItemCategory'),
             input: document.getElementById('itemCategory'),
         },
     };
@@ -182,7 +182,7 @@ document.addEventListener("DOMContentLoaded", function() {
     
     
     // 추출된 상품명을 HTML에 추가하는 함수
-    const DEFAULT_CATEGORIES = ['욕실용품', '주방용품', '청소용품', '세탁용품', '일반물품'];
+    const DEFAULT_CATEGORIES = ['일반물품', '욕실용품', '주방용품', '청소용품', '세탁용품'];
 
     function appendProductNamesToHTML(productNames) {
         let productsContainer = document.getElementById('productsContainer');
@@ -193,16 +193,18 @@ document.addEventListener("DOMContentLoaded", function() {
         let headerDiv = document.createElement('div');
         headerDiv.classList.add('d-flex', 'mb-2', 'bg-light', 'p-2');
         headerDiv.innerHTML = `
-            <div style="width: 20%;" class="text-center"><strong>카테고리</strong></div>
-            <div style="width: 40%;" class="text-center"><strong>상품명</strong></div>
+            <div style="width: 30%;" class="text-center"><strong>카테고리</strong></div>
+            <div style="width: 30%;" class="text-center"><strong>상품명</strong></div>
             <div style="width: 20%;" class="text-center"><strong>수량</strong></div>
             <div style="width: 20%;" class="text-center"><strong>가격</strong></div>
-        `;
+            <div style="width: 7%;" class="text-center"><strong>삭제</strong></div>
+            `;
         productsContainer.appendChild(headerDiv);
 
         productNames.forEach((product, index) => {
             let productDiv = document.createElement('div');
             productDiv.classList.add('d-flex', 'mb-2');
+            productDiv.style.height = '40px';  // 높이 추가
 
             // 카테고리 입력
             let categorySelect = document.createElement('select');
@@ -243,7 +245,17 @@ document.addEventListener("DOMContentLoaded", function() {
             priceInput.classList.add('form-control');
             priceInput.style.width = '60px';
             productDiv.appendChild(priceInput);
-            // 이 부분이 추가되어야 합니다.
+            
+            // 기존 상품 행의 삭제 텍스트
+            let deleteText = document.createElement('span');
+            deleteText.textContent = 'X';
+            deleteText.classList.add('delete-text', 'ml-2');
+            deleteText.style.width = '170px';  // 원하는 크기로 조절
+            productDiv.appendChild(deleteText);
+
+            deleteText.addEventListener('click', function(event) {
+                productsContainer.removeChild(productDiv);
+            });
             productsContainer.appendChild(productDiv);
         });
     
@@ -258,6 +270,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
             let newProductDiv = document.createElement('div');
             newProductDiv.classList.add('d-flex', 'mb-2');
+            newProductDiv.style.height = '40px';  // 높이 추가
 
             let categorySelect = document.createElement('select');
             categorySelect.setAttribute('name', `livingGoods[${index}].itemCategory`);
@@ -293,6 +306,17 @@ document.addEventListener("DOMContentLoaded", function() {
             priceInput.classList.add('form-control');
             priceInput.style.width = '60px';
             newProductDiv.appendChild(priceInput);
+
+            // 새로 추가된 상품 행의 삭제 텍스트
+            let newDeleteText = document.createElement('span');
+            newDeleteText.textContent = 'X';
+            newDeleteText.classList.add('delete-text', 'ml-2');
+            newDeleteText.style.width = '170px';  // 원하는 크기로 조절
+            newProductDiv.appendChild(newDeleteText);
+
+            newDeleteText.addEventListener('click', function(event) {
+                productsContainer.removeChild(newProductDiv);
+            });
     
             productsContainer.insertBefore(newProductDiv, addButton);
         });
