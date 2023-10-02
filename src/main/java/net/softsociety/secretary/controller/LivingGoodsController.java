@@ -52,7 +52,7 @@ public class LivingGoodsController {
 	        livingGoodsService.addLivingGood(livingGood, user.getFamilyId());
 	        return "redirect:/livingGoods";
 	    } catch (Exception e) {
-	        log.error("An error occurred: {}", e.getMessage(), e);
+            log.error("An error occurred: {}", e.getMessage(), e);
 	        return "error-page";
 	    }
 	}

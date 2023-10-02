@@ -21,7 +21,8 @@ public class LivingGoodsServiceImpl implements LivingGoodsService {
 	
 	@Override
 	public void addLivingGood(LivingGoods livingGood, int familyId) {
-	    // 필요한 로직 (예: 유통기한 설정, 카테고리 확인 등)
+		//아이템 추가
+		livingGood.setFamilyId(familyId);
 	    livingGoodsDAO.insertLivingGood(livingGood);
 	    
 	    // 카테고리가 이미 존재하는지 확인

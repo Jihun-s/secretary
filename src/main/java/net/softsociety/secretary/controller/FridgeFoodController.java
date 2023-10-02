@@ -29,6 +29,7 @@ import net.softsociety.secretary.domain.FridgeFoodListWrapper;
 import net.softsociety.secretary.domain.User;
 import net.softsociety.secretary.service.FridgeFoodService;
 import net.softsociety.secretary.util.FileService;
+import org.springframework.ui.Model;
 
 @Slf4j
 @Controller
@@ -54,8 +55,7 @@ public class FridgeFoodController {
             fridgeFoodService.addFridgeFood(fridgeFood, user.getFamilyId());
             return "redirect:/fridge";
         } catch (Exception e) {
-        	log.error("An error occurred: {}", e.getMessage(), e);
-        	return "error-page";
+            return "error-page";
         }
     }
   //영수증을 통한 다중 추가
