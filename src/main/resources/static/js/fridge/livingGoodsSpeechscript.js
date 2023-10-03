@@ -178,6 +178,14 @@ document.addEventListener("DOMContentLoaded", function() {
         return productNames.filter(name => name);
     }
 
+    $('#addFromReceipt').on('submit', function(e) {
+        if ($('#productsContainer .product-item').length === 0) {
+            alert('항목을 추가해주세요.');
+            e.preventDefault();  // 폼 제출 중지
+            return false;
+        }
+    });
+
     $('#submitDataButton').on('click', function(e) {
         let hasEmptyFields = false;
         
