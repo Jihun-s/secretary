@@ -84,8 +84,33 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script th:src="@{/js/main/index.js}"></script>
     <script th:src="@{/js/main/mainCal.js}"></script>
+    <script th:src="@{/js/cashbook/cashbookAlert.js}"></script>
     <script th:src="@{/js/cashbook/cashbookChart.js}"></script>
 
+    <!-- 종이나 알림 메뉴 누르면 모달 띄우기 -->
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        // 모달을 열 함수 정의
+        function openAlertModal() {
+          var alertModal = new bootstrap.Modal(document.getElementById('alertModal'));
+          alertModal.show();
+        }
+    
+        // 종 아이콘에 이벤트 리스너 추가
+        var bellIcon = document.querySelector('.bx-bell');
+        if(bellIcon) {
+          bellIcon.addEventListener('click', openAlertModal);
+        }
+    
+        // 메뉴 링크에 이벤트 리스너 추가
+        var alertMenu = document.getElementById('openAlertModalMenu');
+        if(alertMenu) {
+          alertMenu.addEventListener('click', openAlertModal);
+        }
+      });
+    </script>
+    
+  
 
     <!-- Helpers -->
     <script th:src="@{/assets/vendor/js/helpers.js}"></script>
@@ -95,210 +120,6 @@
     <script th:src="@{/assets/js/config.js}"></script>
 
     <script>
-      /** 예산 설정 여부 확인하는 전역변수 */
-      let budgetExist = 0;
-      /** (예산-지출) > 0인지 확인하는 전역변수 */
-      let budgetMinus = 0;
-
-
-      /** 필수알림 가져오는 함수 */
-      function getPilsuAlert() {
-        let now = new Date(); 
-        let curYear = now.getFullYear();
-        let curMonth = now.getMonth() + 1;
-        let curDate = now.getDate();
-
-        /** 예산 있없? 확인 */
-        $.ajax({
-            url: '/secretary/cashbook/budgetExist',
-            type: 'GET',
-            data: { curYear: curYear, curMonth: curMonth },
-            dataType: 'text',
-            success: (result) => {
-                if(result == 1) {
-                    budgetExist = 1;
-
-                    // 예산 초과했는지 확인
-                    $.ajax({
-                      url: '/secretary/cashbook/budget/getBudgetRest',
-                      type: 'GET',
-                      data: { curYear: curYear, curMonth: curMonth },
-                      success: (result) => {
-                        if (result <= 0) {
-                          budgetMinus = 1;
-                          // alert("예산초과?:" + budgetMinus);
-                        }
-                      },
-                      error: (e) => {
-                        alert('남은 예산 서버 전송 실패');
-                        console.log(JSON.stringify(e));
-                      }
-                    });
-
-                }
-            },
-            error: (e) => {
-                alert('알림 출력 직전 예산 있없 조회 실패');
-                console.log(JSON.stringify(e));
-            }
-        });
-
-        /** 필수알림 목록 가져오는 ajax */
-        $.ajax({
-          url: '/secretary/cashbook/alert/getPilsuAlert',
-          type: 'POST',
-          data: { curDateTime: curDateTime, curYear: curYear, curMonth: curMonth, curDate: curDate },
-          dataType: 'JSON',
-          success: function(data) {
-          // console.log("필수알림 data: " + JSON.stringify(data));
-
-          let html = "";
-
-          if (!data || data.length === 0) {
-            html = `<p>표시할 필수 알림이 없습니다.</p>`;
-            $('#pilsuAlertListDiv').html(html);
-            return;
-          }
-
-          // 예산 없을 때 알림
-          if(budgetExist == 0) {
-            html += `<br><small class="text-light fw-semibold mb-2">${curYear}-${curMonth}-${curDate}</small>`;
-            html += `
-                <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" style="border: none;">
-                    <a href="/secretary/cashbook">
-                      <div>
-                        ${curMonth}월 예산이 설정되지 않았습니다. 여기를 클릭하면 예산을 설정할 수 있어요.
-                      </div>
-                    </a>
-                </div>
-                `;
-          }
-              
-          // 예산 초과했을 때 알림
-          if(budgetMinus == 1) {
-            // alert("알림 추가하자!");
-            html += `<br><small class="text-light fw-semibold mb-2">${curYear}-${curMonth}-${curDate}</small>`;
-            html += `
-                <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" style="border: none;">
-                  <a href="javascript:openUpdateBudgetModal()">
-                  <div>
-                    ${curMonth}월 예산을 초과했어요! 과소비를 계속하면 길바닥에 나앉을 수 있어요. 여기를 눌러 예산을 다시 설정할 수 있어요.
-                  </div>
-                  </a>
-                </div>
-            `;
-            // alert("알림 추가 완료!");
-          }
-
-
-          // 알림을 alertDateYmd 기준으로 그룹화
-          let groupedByDate = {};
-          data.forEach(alert => {
-            if (!groupedByDate[alert.alertDateYmd]) {
-                groupedByDate[alert.alertDateYmd] = [];
-            }
-            groupedByDate[alert.alertDateYmd].push(alert);
-          });
-
-          // 객체의 키를 추출해 내림차순으로 정렬
-          let sortedDates = Object.keys(groupedByDate).sort((a, b) => b.localeCompare(a));
-
-          // 내림차순한 배열 
-          let sortedGroupedByDate = {};
-          sortedDates.forEach(date => {
-            sortedGroupedByDate[date] = groupedByDate[date];
-          });
-
-
-          // console.log("제안 sortedGroupedByDate: " + JSON.stringify(sortedGroupedByDate));
-
-          // 그룹별 키워드
-
-          // 총수입 총지출
-          let inexTotal = ["지난달"];
-
-          // 지출
-          let exWeek = ["지난주"];
-          
-          // 예산
-          // 정기소득
-          let bgRest = ["남은예산"];
-
-          // 그룹화된 데이터를 기반으로 HTML 생성
-          for (let date in sortedGroupedByDate) {
-            html += `<br><small class="text-light fw-semibold mb-2">${date}</small>`;
-            // 가져온 데이터 분기
-            sortedGroupedByDate[date].forEach(alert => {
-              html += `
-              <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" style="border: none;">
-              <a href="javascript:openDetailModal(${alert.alertId});">
-                <div>
-              `;
-
-              // 지난달총수입총지출
-                if (inexTotal.some(keyword => alert.alertContent.includes(keyword))) {
-                  html += `
-                  지난 달에는 ${alert.totalIncomeMonth.toLocaleString('en-US')}원을 벌고 ${alert.totalExpenseMonth.toLocaleString('en-US')}원을 지출했어요.
-                `;
-                  // 수입 < 지출
-                  if(alert.totalIncomeMonth < alert.totalExpenseMonth) {
-                    html += `배보다 배꼽이 더 큰 한 달이네요. 🤯`;
-                  }
-                  // 수입 = 지출
-                  else if (alert.totalIncomeMonth == alert.totalExpenseMonth) {
-                    html += `버는 족족 써버리고 말았네요. 💸`;
-                  }
-                  // 수입 > 지출
-                  else if (alert.totalIncomeMonth == alert.totalExpenseMonth) {
-                    html += `저축이나 재테크의 비중을 높여도 좋겠어요.`;
-                  }
-                }
-                // 지난주총지출
-                else if (exWeek.some(keyword => alert.alertContent.includes(keyword))) {
-                  html += `
-                    지난 주 총 지출은 ${alert.totalWeekExpense.toLocaleString('en-US')}원입니다.
-                  `;
-                } 
-                // 남은예산
-                else if (bgRest.some(keyword => alert.alertContent.includes(keyword))) {
-                  html += `
-                  
-                  `;
-                  if(alert.budgetRest <= 0) {
-                    html += `예산보다 ${alert.budgetRest.toLocaleString('en-US') * -1}원 더 지출했어요. 와! 길바닥에 나앉기 직전이에요. 🫵`;
-                  }
-                  else {
-                    html += `이번 달 남은 예산은 ${alert.budgetRest.toLocaleString('en-US')}원입니다. 이번 주도 알뜰살뜰 노력해봐요. ☺️`;
-                  }
-                } 
-                // 기타
-                else {
-                  html += `
-                  ${alert.alertDateMonth}월 ${alert.alertDateDay}일은 ${alert.alertContent}입니다.
-                  `;
-                }
-
-                html += `
-                </div>
-                  </a>
-                  <i class="bx bx-x" style="cursor: pointer;" onclick="deleteAlert(${alert.alertId});"></i>
-                </div>
-                `; 
-
-                // console.log("이 알림의 번호는 " + alert.alertId);
-              });
-
-            }
-
-            $('#pilsuAlertListDiv').html(html);
-
-
-          },
-          error: (e) => {
-              alert('가계부 필수알림 목록 전송 실패');
-          }
-        });
-      }
 
     </script>
   </head>
@@ -308,7 +129,6 @@
     <div class="layout-wrapper layout-content-navbar">
       <div class="layout-container">
         <!-- Menu -->
-
         <aside
           id="layout-menu"
           class="layout-menu menu-vertical menu bg-menu-theme"
@@ -317,7 +137,7 @@
             <a th:href="@{/}" class="app-brand-link">
               <span class="app-brand-logo demo">
                 <img
-                  th:src="@{/assets/img/favicon/favicon.ico}"
+                  th:src="@{/images/12124889.png}"
                   alt="logo"
                   style="width: 3rem"
                 />
@@ -353,90 +173,81 @@
 
             <!-- 알림 -->
             <li class="menu-item">
-              <a href="javascript:void(0);" class="menu-link menu-toggle">
+              <span id="openAlertModalMenu"
+                class="menu-link"
+                style="cursor: pointer;"
+              >
                 <i class="menu-icon tf-icons bx bx-detail"></i>
-                <div data-i18n="Layouts">알림</div>
-              </a>
-
-              <ul class="menu-sub">
-                <li class="menu-item">
-                  <a th:href="@{/main}" class="menu-link">
-                    <div data-i18n="Container">알림</div>
-                  </a>
-                </li>
-              </ul>
+                <div data-i18n="Support">알림</div>
+              </span>
             </li>
 
             <!-- 일정 -->
             <li class="menu-item">
-              <a href="javascript:void(0);" class="menu-link menu-toggle">
+              <a
+                th:href="@{/schedule}"
+                class="menu-link"
+              >
                 <i class="menu-icon tf-icons bx bx-table"></i>
-                <div data-i18n="Layouts">일정</div>
+                <div data-i18n="Support">일정</div>
               </a>
-
-              <ul class="menu-sub">
-                <li class="menu-item">
-                  <a th:href="@{/schedule}" class="menu-link">
-                    <div data-i18n="Without menu">일정 보기</div>
-                  </a>
-                </li>
-              </ul>
             </li>
 
             <!-- 인벤토리 -->
             <li class="menu-header small text-uppercase">
               <span class="menu-header-text">Inventories</span>
             </li>
-                        <!-- 냉장고 -->
-                        <li class="menu-item">
-                          <a class="menu-link menu-toggle" href="javascript:void(0);">
-                              <i class="menu-icon tf-icons bx bx-dock-top"></i>
-                              <div data-i18n="Layouts">냉장고</div>
-                          </a>
-                          <ul class="menu-sub">
-                              <li class="menu-item">
-                                  <a class="menu-link" th:href="@{/fridge}">
-                                      <div data-i18n="Without menu">냉장고 메인</div>
-                                  </a>
-                              </li>
-                              <li class="menu-item">
-                                  <!-- 모달창을 열기 위한 버튼 -->
-                                  <a
-                                      class="menu-link"
-                                      href="#"
-                                      data-bs-toggle="modal"
-                                      data-bs-target="#trackingModal"
-                                  >
-                                      <div data-i18n="Pattern">소비 패턴 등록</div>
-                                  </a>
-                              </li>
-                          </ul>
-                      </li>
-                      <!-- 생활용품 -->
-                      <li class="menu-item">
-                          <a class="menu-link menu-toggle" href="javascript:void(0);">
-                              <i class="menu-icon tf-icons bx bx-box"></i>
-                              <div data-i18n="Account Settings">생활용품</div>
-                          </a>
-                          <ul class="menu-sub">
-                              <li class="menu-item">
-                                  <a class="menu-link" th:href="@{/livingGoods}">
-                                      <div data-i18n="Basic">생활 용품 메인</div>
-                                  </a>
-                              </li>
-                              <li class="menu-item">
-                                  <!-- 모달창을 열기 위한 버튼 -->
-                                  <a
-                                      class="menu-link"
-                                      href="#"
-                                      data-bs-toggle="modal"
-                                      data-bs-target="#trackingModal"
-                                  >
-                                      <div data-i18n="Pattern">소비 패턴 등록</div>
-                                  </a>
-                              </li>
-                          </ul>
-                      </li>
+            <!-- 냉장고 -->
+            <li class="menu-item">
+                <a class="menu-link menu-toggle" href="javascript:void(0);">
+                    <i class="menu-icon tf-icons bx bx-dock-top"></i>
+                    <div data-i18n="Layouts">냉장고</div>
+                </a>
+                <ul class="menu-sub">
+                    <li class="menu-item">
+                        <a class="menu-link" th:href="@{/fridge}">
+                            <div data-i18n="Without menu">냉장고 홈</div>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <!-- 모달창을 열기 위한 버튼 -->
+                        <a
+                            class="menu-link"
+                            href="#"
+                            data-bs-toggle="modal"
+                            data-bs-target="#trackingModal"
+                        >
+                            <div data-i18n="Food-Pattern">소비패턴 등록</div>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <!-- 생활용품 -->
+            <li class="menu-item">
+                <a class="menu-link menu-toggle" href="javascript:void(0);">
+                    <i class="menu-icon tf-icons bx bx-box"></i>
+                    <div data-i18n="Account Settings">생활용품</div>
+                </a>
+                <ul class="menu-sub">
+                    <li class="menu-item">
+                        <a class="menu-link" th:href="@{/livingGoods}">
+                            <div data-i18n="Basic">생활용품 홈</div>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <!-- 모달창을 열기 위한 버튼 -->
+                        <a
+                            class="menu-link"
+                            href="#"
+                            data-bs-toggle="modal"
+                            data-bs-target="#trackingModal"
+                        >
+                            <div data-i18n="Goods-Pattern">소비패턴 등록</div>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
             <!-- 옷장 -->
             <li class="menu-item">
               <a href="javascript:void(0);" class="menu-link menu-toggle">
@@ -446,31 +257,16 @@
               <ul class="menu-sub">
                 <li class="menu-item">
                   <a th:href="@{/closet}" class="menu-link">
-                    <div data-i18n="Error">의류 등록</div>
+                    <div data-i18n="Error">옷장 홈</div>
                   </a>
                 </li>
                 <li class="menu-item">
-                  <a th:href="@{/closet}" class="menu-link">
-                    <div data-i18n="Under Maintenance">의류 검색</div>
+                  <a th:href="@{/closet/laundryPage}" class="menu-link">
+                    <div data-i18n="Under Maintenance">세탁 바구니</div>
                   </a>
                 </li>
                 <li class="menu-item">
-                  <a th:href="@{/closet}" class="menu-link">
-                    <div data-i18n="Under Maintenance">한 눈에 보기</div>
-                  </a>
-                </li>
-                <li class="menu-item">
-                  <a th:href="@{/closet}" class="menu-link">
-                    <div data-i18n="Under Maintenance">의류 관리</div>
-                  </a>
-                </li>
-                <li class="menu-item">
-                  <a th:href="@{/closet}" class="menu-link">
-                    <div data-i18n="Under Maintenance">세탁물 확인하기</div>
-                  </a>
-                </li>
-                <li class="menu-item">
-                  <a th:href="@{/closet}" class="menu-link">
+                  <a th:href="@{/closet/styleDiary}" class="menu-link">
                     <div data-i18n="Under Maintenance">코디 일지</div>
                   </a>
                 </li>
@@ -506,51 +302,37 @@
                 </li>
               </ul>
             </li>
-            
-             <!-- 게시판 -->
-            <li class="menu-header small text-uppercase">
-              <span class="menu-header-text">Board</span>
-            </li>
-            <li class="menu-item">
-             <a th:href="@{/board/frequently/list}" class="menu-link">
-              <div data-i18n="Buttons">자주묻는질문</div>
-             </a> 
-            </li>
-            <li class="menu-item">
-             <a th:href="@{/board/notification/list}" class="menu-link">
-              <div data-i18n="Buttons">공지</div>
-             </a> 
-            </li>
-            <li class="menu-item">
-             <a th:href="@{/board/inquiry/list}" class="menu-link">
-              <div data-i18n="Buttons">문의</div>
-             </a> 
-            </li>
-            
-            <!-- 관리자 -->
-            <li class="menu-header small text-uppercase">
-              <span class="menu-header-text">Admin</span>
-            </li>
-            <li class="menu-item">
-             <a th:href="@{/admin/adminHome}" class="menu-link">
-              <div data-i18n="Buttons">관리자</div>
-             </a> 
-            </li>
 
             <!-- 서포트 -->
             <li class="menu-header small text-uppercase">
               <span class="menu-header-text">Support</span>
             </li>
+
+            <!-- 고객지원 -->
             <li class="menu-item">
-              <a
-                href="https://chat.openai.com/"
-                target="_blank"
-                class="menu-link"
-              >
+              <a href="javascript:void(0)" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-support"></i>
-                <div data-i18n="Support">고객지원</div>
+                <div data-i18n="User interface">고객지원</div>
               </a>
+              <ul class="menu-sub">
+                <li class="menu-item">
+                 <a th:href="@{/board/notification/list}" class="menu-link">
+                  <div data-i18n="Buttons">공지사항</div>
+                 </a> 
+                </li>
+                <li class="menu-item">
+                  <a th:href="@{/board/frequently/list}" class="menu-link">
+                   <div data-i18n="Buttons">자주 묻는 질문</div>
+                  </a> 
+                 </li>
+                 <li class="menu-item">
+                    <a th:href="@{/board/inquiry/list}" class="menu-link">
+                      <div data-i18n="Buttons">문의 게시판</div>
+                    </a> 
+                 </li>
+              </ul>
             </li>
+            
           </ul>
         </aside>
         <!-- / Menu -->
@@ -614,83 +396,10 @@
                   <a
                     class="nav-link dropdown-toggle hide-arrow"
                     href="javascript:void(0);"
-                    data-bs-toggle="dropdown"
                   >
                     <!-- 종 이미지-->
                     <div class="bx bx-bell bx-tada-hover bx-sm"></div>
                   </a>
-
-                  <ul class="dropdown-menu dropdown-menu-end">
-                    <li>
-                      <a
-                        class="dropdown-item"
-                        href=""
-                        style="
-                          background-color: initial; /* 배경색 초기화 */
-                          color: inherit; /* 텍스트 색상 상속 */
-                          text-decoration: none; /* 텍스트 밑줄 제거 */
-                          cursor: auto; /* 기본 마우스 커서 모양 유지 */
-                        "
-                      >
-                        <!-- 종 알림 -->
-                        <div style="width: 30rem">
-                          <div class="nav-align-top mb-4">
-                            <h6 class="text-muted"></h6>
-                            <ul class="nav nav-tabs nav-fill" role="tablist">
-                              <li class="nav-item">
-                                <button
-                                  type="button"
-                                  class="nav-link active"
-                                  role="tab"
-                                  data-bs-toggle="tab"
-                                  data-bs-target="#navs-justified-home"
-                                  aria-controls="navs-justified-home"
-                                  aria-selected="true"
-                                >
-                                  <i class="tf-icons bx bx-home"></i> 필수 알림
-                                  <span
-                                    class="badge rounded-pill badge-center h-px-20 w-px-20 bg-label-danger"
-                                    >3</span
-                                  >
-                                </button>
-                              </li>
-                              <li class="nav-item">
-                                <button
-                                  type="button"
-                                  class="nav-link"
-                                  role="tab"
-                                  data-bs-toggle="tab"
-                                  data-bs-target="#navs-justified-profile"
-                                  aria-controls="navs-justified-profile"
-                                  aria-selected="false"
-                                >
-                                  <i class="tf-icons bx bx-user"></i> 제안 알림
-                                </button>
-                              </li>
-                            </ul>
-                            <div class="tab-content">
-                              <div
-                                class="tab-pane fade active show justify-content-between"
-                                id="navs-justified-home"
-                                role="tabpanel"
-                              >
-                                <p>필수알림1</p>
-                                <p class="mb-0">필수알림2</p>
-                              </div>
-                              <div
-                                class="tab-pane fade"
-                                id="navs-justified-profile"
-                                role="tabpanel"
-                              >
-                                <p>제안알림1</p>
-                                <p class="mb-0">제안알림2</p>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-                  </ul>
                 </li>
 
                 <!-- User 유저 아이콘 -->
@@ -1443,6 +1152,9 @@
 
     <!-- Overlay -->
     <div class="layout-overlay layout-menu-toggle"></div>
+
+    <!-- 공통 알림 모달 -->
+    <div th:include="alert-modal"></div>
 
     <!-- / Layout wrapper -->
 

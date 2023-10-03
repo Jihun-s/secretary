@@ -177,17 +177,19 @@ function initSetBudgetModal() {
             curYear: curYear, curMonth: curMonth, curDate: curDate },
         dataType: 'JSON',
         success: (data) => {
-            // alert("ajax로 가져온 데이터:" + JSON.stringify(data));
-            $('.budgetAvg').html(data.budgetAvg.toLocaleString('en-US'));
-            $('.budgetAmountX').html(data.budgetAmountX.toLocaleString('en-US'));
-            $('.budgetAmountXx').html(data.budgetAmountXx.toLocaleString('en-US'));
-            $('.budgetAmountXxx').html(data.budgetAmountXxx.toLocaleString('en-US'));
+            if (data && typeof data === 'object') {
+                $('.budgetAvg').html(data.budgetAvg ? data.budgetAvg.toLocaleString('en-US') : '0');
+                $('.budgetAmountX').html(data.budgetAmountX ? data.budgetAmountX.toLocaleString('en-US') : '0');
+                $('.budgetAmountXx').html(data.budgetAmountXx ? data.budgetAmountXx.toLocaleString('en-US') : '0');
+                $('.budgetAmountXxx').html(data.budgetAmountXxx ? data.budgetAmountXxx.toLocaleString('en-US') : '0');
+            } else {
+                $('.budgetAvg, .budgetAmountX, .budgetAmountXx, .budgetAmountXxx').html('0');
+            }
             $('.curYear').html(curYear);
             $('.curMonth').html(curMonth);
             $('.curMonthX').html(curMonth - 1);
             $('.curMonthXx').html(curMonth - 2);
             $('.curMonthXxx').html(curMonth - 3);
-
         },
         error: () => {
             alert('예산 설정 모달 init 실패');
@@ -201,26 +203,32 @@ function initSetBudgetModal() {
         dataType: 'JSON',
         success: (data) => {
             let html = '';
-            data.forEach(sch => {
-                let dateParts = sch.schStartYmd.split('-');
-                let dateObj = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]);
-                let days = ['일', '월', '화', '수', '목', '금', '토'];
-                let dayName = days[dateObj.getDay()];
-    
-                html += `
-                        <a href="javascript:void(0);" class="list-group-item list-group-item-action">
-                        ${sch.schStartDate} ${dayName} ${sch.schContent}
-                        </a>`;
-            });
-    
+
+            if (data.length > 0) {
+                data.forEach(sch => {
+                    let dateParts = sch.schStartYmd.split('-');
+                    let dateObj = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]);
+                    let days = ['일', '월', '화', '수', '목', '금', '토'];
+                    let dayName = days[dateObj.getDay()];
+        
+                    html += `
+                            <a href="javascript:void(0);" class="list-group-item list-group-item-action">
+                            ${sch.schStartDate} ${dayName} ${sch.schContent}
+                            </a>`;
+                });
+            } else {
+                html = '<p>등록된 일정이 없습니다.</p>';
+            }
+        
             $('.modalEventList').html(html);
-    
+        
         },
         error: (e) => {
             alert('예산에 필요한 일정 전송 실패');
             console.log(JSON.stringify(e));
         }
     });
+    
     
 }
 
@@ -354,10 +362,14 @@ function initUpdateBudgetModal() {
         dataType: 'JSON',
         success: (data) => {
             toastr.success("ajax로 가져온 데이터:" + JSON.stringify(data));
-            $('.budgetAvg').html(data.budgetAvg.toLocaleString('en-US'));
-            $('.budgetAmountX').html(data.budgetAmountX.toLocaleString('en-US'));
-            $('.budgetAmountXx').html(data.budgetAmountXx.toLocaleString('en-US'));
-            $('.budgetAmountXxx').html(data.budgetAmountXxx.toLocaleString('en-US'));
+            if (data && typeof data === 'object') {
+                $('.budgetAvg').html(data.budgetAvg ? data.budgetAvg.toLocaleString('en-US') : '0');
+                $('.budgetAmountX').html(data.budgetAmountX ? data.budgetAmountX.toLocaleString('en-US') : '0');
+                $('.budgetAmountXx').html(data.budgetAmountXx ? data.budgetAmountXx.toLocaleString('en-US') : '0');
+                $('.budgetAmountXxx').html(data.budgetAmountXxx ? data.budgetAmountXxx.toLocaleString('en-US') : '0');
+            } else {
+                $('.budgetAvg, .budgetAmountX, .budgetAmountXx, .budgetAmountXxx').html('0');
+            }
             $('.curYear').html(curYear);
             $('.curMonth').html(curMonth);
             $('.curMonthX').html(curMonth - 1);
@@ -378,20 +390,25 @@ function initUpdateBudgetModal() {
         dataType: 'JSON',
         success: (data) => {
             let html = '';
-            data.forEach(sch => {
-                let dateParts = sch.schStartYmd.split('-'); 
-                let dateObj = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]);
-                let days = ['일', '월', '화', '수', '목', '금', '토'];
-                let dayName = days[dateObj.getDay()];
-    
-                html += `
-                        <a href="javascript:void(0);" class="list-group-item list-group-item-action">
-                        ${sch.schStartDate} ${dayName} ${sch.schContent}
-                        </a>`;
-            });
-    
+
+            if (data.length > 0) {
+                data.forEach(sch => {
+                    let dateParts = sch.schStartYmd.split('-');
+                    let dateObj = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]);
+                    let days = ['일', '월', '화', '수', '목', '금', '토'];
+                    let dayName = days[dateObj.getDay()];
+        
+                    html += `
+                            <a href="javascript:void(0);" class="list-group-item list-group-item-action">
+                            ${sch.schStartDate} ${dayName} ${sch.schContent}
+                            </a>`;
+                });
+            } else {
+                html = '<p>등록된 일정이 없습니다.</p>';
+            }
+        
             $('.modalEventList').html(html);
-    
+        
         },
         error: (e) => {
             console.log(JSON.stringify(e));

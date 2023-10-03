@@ -32,6 +32,17 @@ $(document).ready(function () {
     selectable: false,
     businessHours: false,
     dayMaxEvents: false,
+    datesSet: function(info) {
+      // FullCalendar의 현재 날짜
+      let currentCalendarDate = calendar.getDate();
+      let schYear = currentCalendarDate.getFullYear();
+      let schMonth = currentCalendarDate.getMonth() + 1;
+      
+      // 라디오 버튼에서 선택된 값
+      let groupByValue = $('input[name="groupBy"]:checked').val();
+      
+      loadSchedule(schYear, schMonth, groupByValue);
+    },
     events: function(info, successCallback, failureCallback) {
       // 현재 달력의 년도와 월을 추출
       let date = new Date(info.start);
@@ -130,6 +141,7 @@ $(document).ready(function () {
       $('#schDetailModal').modal('show');
     },
 
+    
   }); 
 
   /* schType select 변경 */
@@ -206,6 +218,8 @@ $(document).ready(function () {
   // 달력 렌더링
   calendar.render();
 
+  // 일정 목록 불러오기 
+  loadSchedule(curYear, parseInt(curMonth), '일자별');
 }); // ready 함수
 
 
