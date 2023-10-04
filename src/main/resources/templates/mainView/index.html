@@ -489,26 +489,8 @@
                     <!-- 1행 2열 냉장고 -->
                     <div class="col-lg-6 col-md-12 col-6 mb-4">
                       <div class="card">
-                        <a href="http://www.naver.com/">
-                          <div class="card-body">
-                            <div
-                              class="card-title d-flex align-items-start justify-content-between"
-                            >
-                              <!-- 아이콘 -->
-                              <div class="avatar flex-shrink-0">
-                                <img
-                                  th:src="@{/images/ck8.png}"
-                                  alt="chart success"
-                                  class="rounded"
-                                />
-                              </div>
-                            </div>
-                            <span class="fw-semibold d-block mb-1">네이버</span>
-                            <h3 class="card-title mb-2">냉장고</h3>
-                            <small class="text-info fw-semibold"
-                              >냉장실·냉동실</small
-                            >
-                          </div>
+                        <a th:href="@{/fridge}">
+                          <img th:src="@{/images/fridgeimg/노랑냉장고.jpg}" style="height: 190px; width: 190px;">
                         </a>
                       </div>
                     </div>
@@ -516,7 +498,7 @@
                     <!-- 1행 3열 창고 -->
                     <div class="col-lg-6 col-md-12 col-6 mb-4">
                       <div class="card">
-                        <a href="http://www.nate.com/">
+                        <a th:href="@{/livingGoods}">
                           <div class="card-body">
                             <div
                               class="card-title d-flex align-items-start justify-content-between"
@@ -671,7 +653,7 @@
                   <div class="row">
                     <div class="col-6 mb-4">
                       <div class="card">
-                        <a href="http://www.daum.net/">
+                        <a th:href="@{/closet}">
                           <div class="card-body">
                             <div
                               class="card-title d-flex align-items-start justify-content-between"
@@ -698,7 +680,7 @@
                     <!-- 2행 3열 가계부 -->
                     <div class="col-6 mb-4">
                       <div class="card">
-                        <a href="http://www.google.com/">
+                        <a th:href="@{/cashbook}">
                           <div class="card-body">
                             <div
                               class="card-title d-flex align-items-start justify-content-between"
