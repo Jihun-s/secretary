@@ -180,7 +180,7 @@ import { displayFoodItem } from './loadAllFoodsByCategory.js';
                     const fridgeName = fridgeItem.find('.fridgeNameInput').val();
                     const currentName = fridgeItem.find('.fridgeName').data('current-name');
                     $.ajax({
-                        url: 'fridge/updateFridge',
+                        url: '/secretary/fridge/updateFridge',
                         type: 'POST',
                         data: JSON.stringify({
                             fridgeId: fridgeId,
@@ -212,7 +212,7 @@ import { displayFoodItem } from './loadAllFoodsByCategory.js';
                     const fridgeId = $(this).data('fridge-id');
                     const fridgeName = $(this).closest('.fridgeItem').find('.fridgeName').text();
 
-                    $.get(`/secretary/fridgeFood/getFoodCountInFridge/${fridgeId}`, function (foodCount) {
+                    $.get(`/secretary/fridgeFood/getFoodCountIn/Fridge/${fridgeId}`, function (foodCount) {
                         if (foodCount > 0) {
                             const isConfirmed = confirm(`${fridgeName}에 음식이 있습니다. 함께 삭제하시겠습니까?`);
                             if (isConfirmed) {
@@ -228,7 +228,7 @@ import { displayFoodItem } from './loadAllFoodsByCategory.js';
 
                 function deleteFridge(fridgeId, fridgeName) {
                     $.ajax({
-                        url: 'fridge/deleteFridge',
+                        url: '/secretary/fridge/deleteFridge',
                         type: 'POST',
                         data: JSON.stringify({ fridgeId: fridgeId }),
                         contentType: 'application/json',
@@ -435,7 +435,7 @@ import { displayFoodItem } from './loadAllFoodsByCategory.js';
                     const fridgeName = $('#fridgeNameInput').val();
                     if (fridgeName) {
                         $.ajax({
-                            url: 'fridge/addFridge',
+                            url: '/secretary/fridge/addFridge',
                             type: 'POST',
                             data: JSON.stringify({ fridgeName: fridgeName }),
                             contentType: 'application/json',
@@ -549,7 +549,7 @@ import { displayFoodItem } from './loadAllFoodsByCategory.js';
                 });
                 function loadFridgesByCategory(category) {
                     $.ajax({
-                        url: 'fridge/getAllFridges',
+                        url: '/secretary/fridge/getAllFridges',
                         type: 'GET',
                         success: function (data) {
                             const filteredFridges = data.filter((fridge) => fridge.fridgeCategory === category);
@@ -564,7 +564,7 @@ import { displayFoodItem } from './loadAllFoodsByCategory.js';
                                 const fridgeElement = `
                                                                                                                 <div class="fridgeItem">
                                                                                                                 <div style="position: relative;">
-                                                                                                                <a href="/fridge/${
+                                                                                                                <a href="/secretary/fridge/${
                                                                                                                     fridge.fridgeId
                                                                                                                 }">
                                                                                                                 <img src="images/fridgeimg/${
