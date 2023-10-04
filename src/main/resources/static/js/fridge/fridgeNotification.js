@@ -37,7 +37,7 @@ let allFoods = [];
         }
 
         function createEssentialNotifications() {
-          $("#navs-pills-justified-home").empty();
+          $(".navs-pills-justified-home").empty();
           const today = new Date();
           const oneWeekFromNow = new Date(today);
           oneWeekFromNow.setDate(today.getDate() + 7);
@@ -63,7 +63,7 @@ let allFoods = [];
                                   <a href="https://www.google.com/search?q=${item.foodName}을 활용한 요리 레시피" target="_blank" style="margin-top: -5px;"> - 레시피 제안 - </a>
                                   <span class="consume-text-btn consume-btn" data-fridge-id="${item.fridgeId}" data-food-id="${item.foodId}" data-food-quantity="${item.foodQuantity}" data-food-name="${item.foodName}">[소비]</span>
                               </div>`;
-            $("#navs-pills-justified-home").append(notification);
+            $(".navs-pills-justified-home").append(notification);
           });
         }
 
