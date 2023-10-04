@@ -50,7 +50,7 @@ $(document).ready(function () {
     editable: false,
     selectable: false,
     businessHours: false,
-    dayMaxEvents: false,
+    dayMaxEvents: 3,
     datesSet: function(info) {
       // FullCalendar의 현재 날짜
       let currentCalendarDate = calendar.getDate();
