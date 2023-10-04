@@ -14,14 +14,33 @@ $(document).ready(function () {
     // FullCalendar의 현재 날짜 얻기
     let currentCalendarDate = calendar.getDate();
     let schYear = currentCalendarDate.getFullYear();
-    let schMonth = currentCalendarDate.getMonth() + 1;  // JavaScript의 월은 0부터 시작하기 때문에 1을 더합니다.
+    let schMonth = currentCalendarDate.getMonth() + 1; 
     
     // 라디오 버튼에서 선택된 값 얻기
     let groupByValue = $(this).val();
     
-    // 현재 달력의 연/월과 선택된 그룹 방식을 사용하여 loadSchedule 호출
     loadSchedule(schYear, schMonth, groupByValue);
+  });  
+  
+  
+  /////PERFECT SCROLLBAR/////PERFECT SCROLLBAR/////PERFECT SCROLLBAR/////PERFECT SCROLLBAR/////PERFECT SCROLLBAR/////PERFECT SCROLLBAR/////
+  /////스크롤바/////스크롤바/////스크롤바/////스크롤바/////스크롤바/////스크롤바/////스크롤바/////스크롤바/////스크롤바/////스크롤바/////스크롤바/////
+
+
+  // 스크롤바 
+  const containers = [
+    document.querySelector('#schListCardDiv'),
+  ].filter(el => el !== null); 
+
+  const options = {
+      wheelSpeed: 1,
+      wheelPropagation: true,
+  };
+
+  containers.forEach(container => {
+      new PerfectScrollbar(container, options);
   });
+
 
 
   /** 풀캘린더 */

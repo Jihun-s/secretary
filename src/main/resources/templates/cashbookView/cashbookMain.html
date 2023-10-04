@@ -676,7 +676,7 @@
                 <!-- 2열 -->
                 <div class="col-lg-5 mb-4">
                   <h3>달력 보기</h3>
-                  <div class="card" style="height: 40rem">
+                  <div class="card" style="height: 40rem; overflow: hidden;">
                     <div class="d-flex align-items-end"></div>
                     <div
                       class="card-body d-flex justify-content-center align-items-center"
@@ -730,8 +730,9 @@
                               </li>
                             </ul>
                             <div
+                              id="alert-tab-content"
                               class="tab-content flex-fill"
-                              style="height: 100%; padding-top: 0; overflow: auto;"
+                              style="max-height: 35rem; padding-top: 0; overflow: auto;"
                             >
                               <!-- 필수 알림 탭 내용 -->
                               <div
