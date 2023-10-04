@@ -764,7 +764,7 @@ function setTransAjax() {
             $("#transCategoriesDiv").hide();
         },
         error: function() {
-            alert('내역 입력 서버 전송 실패');
+            console.log('내역 입력 서버 전송 실패');
         }
     });
 }
@@ -835,7 +835,7 @@ function openModalUpdate(transId) {
              $('#basicModal').modal('show');
         },
         error: () => {
-            alert('수정하기 위한 정보 전송 실패');
+            console.log('수정하기 위한 정보 전송 실패');
         }
     });
 
@@ -869,9 +869,9 @@ function updateTransAjax() {
     let transAmount = $('#transAmountModal').val().replace(/,/g, '');
     let labelColor = $('#labelColorModal');
 
-    alert("수정할 값들:" + transId.val() + cashbookId.val() + transDate
-     + transType.val() + cate1Name.val() + cate2Name.val() + transPayee.val()
-      + transMemo.val()  + transAmount + labelColor.val());
+    // alert("수정할 값들:" + transId.val() + cashbookId.val() + transDate
+    // + transType.val() + cate1Name.val() + cate2Name.val() + transPayee.val()
+    //  + transMemo.val()  + transAmount + labelColor.val());
 
     $.ajax({
         url: '/secretary/cashbook/trans/updateTrans',
@@ -892,7 +892,7 @@ function updateTransAjax() {
             init();
         },
         error: function() {
-            alert('내역 수정 서버 전송 실패');
+            console.log('내역 수정 서버 전송 실패');
         }
     });
 }
@@ -907,7 +907,7 @@ function updateTransAjax() {
 
 /** 거래내역 삭제하는 함수 */
 function deleteTrans(transId) {
-    alert(transId);
+    // alert(transId);
     $.ajax({
         url: '/secretary/cashbook/trans/deleteTrans',
         type: 'POST',
@@ -916,7 +916,7 @@ function deleteTrans(transId) {
             init();
         },
         error: () => {
-            alert('내역 삭제 전송 실패');
+            console.log('내역 삭제 전송 실패');
         }
     });
 }
@@ -965,7 +965,7 @@ function loadMainCategories(transType) {
             $("#cate1Name").html(options);
         },
         error: function() {
-            alert('대분류 목록 전송 실패');
+            console.log('대분류 목록 전송 실패');
         }
     });
 }
@@ -996,7 +996,7 @@ function loadSubCategories(cate1Name) {
             $("#cate2Name").html(options);
         },
         error: function() {
-            alert('소분류 목록 전송 실패');
+            console.log('소분류 목록 전송 실패');
         }
     });
 }
@@ -1050,7 +1050,7 @@ function loadMainCategoriesModal(transType, cate1Name) {
             $("#cate1NameModal").html(options);
         },
         error: function() {
-            alert('대분류 목록 전송 실패');
+            console.log('대분류 목록 전송 실패');
         }
     });
 }
@@ -1082,7 +1082,7 @@ function loadSubCategoriesModal(cate1Name, cate2Name) {
             $("#cate2NameModal").html(options);
         },
         error: function() {
-            alert('소분류 목록 전송 실패');
+            console.log('소분류 목록 전송 실패');
         }
     });
 }
@@ -1131,7 +1131,7 @@ function loadMainCategoriesSms(transType) {
             $("#cate1NameSms").html(options);
         },
         error: function() {
-            alert('SMS 대분류 목록 전송 실패');
+            console.log('SMS 대분류 목록 전송 실패');
         }
     });
 }
@@ -1159,7 +1159,7 @@ function loadSubCategoriesSms(cate1Name) {
             $("#cate2NameSms").html(options);
         },
         error: function() {
-            alert('SMS 소분류 목록 전송 실패');
+            console.log('SMS 소분류 목록 전송 실패');
         }
     });
 }
@@ -1196,7 +1196,7 @@ function loadMainCategoriesSearch() {
             $("#cate1NameSearch").html(options);
         },
         error: function() {
-            alert('검색 대분류 목록 전송 실패');
+            console.log('검색 대분류 목록 전송 실패');
         }
     });
 }
@@ -1223,7 +1223,7 @@ function loadSubCategoriesSearch(cate1Name) {
             $("#cate2NameSearch").html(options);
         },
         error: function() {
-            alert('소분류 목록 전송 실패');
+            console.log('소분류 목록 전송 실패');
         }
     });
 }
@@ -1301,7 +1301,7 @@ function setCustomCategory1() {
             }
         },
         error: () => {
-            alert('대분류 추가 전송 실패');
+            console.log('대분류 추가 전송 실패');
         }
     });
 
@@ -1374,7 +1374,7 @@ function setCustomCategory2() {
             }
         },
         error: () => {
-            alert('소분류 추가 전송 실패');
+            console.log('소분류 추가 전송 실패');
         }
     });
 
@@ -1386,7 +1386,7 @@ function setCustomCategory2() {
 
 /** 모달 커스텀 대분류 카테고리 추가 */
 function setCustomCategory1Modal() {
-    alert("모달용 대분류 커스텀");
+    // alert("모달용 대분류 커스텀");
     let familyId = $('#familyId').val();
     let transType = $("#transTypeModal input[name='transType']:checked").val();
     let customCate1Name = prompt("새로운 대분류명을 입력하세요:");
@@ -1450,7 +1450,7 @@ function setCustomCategory1Modal() {
             }
         },
         error: () => {
-            alert('대분류 추가 전송 실패');
+            console.log('대분류 추가 전송 실패');
         }
     });
 
@@ -1459,7 +1459,7 @@ function setCustomCategory1Modal() {
 
 /** 모달 커스텀 소분류 카테고리 추가 */
 function setCustomCategory2Modal() {
-    alert("모달용 커스텀 소분류");
+    // alert("모달용 커스텀 소분류");
     let familyId = $('#familyId').val();
     let cate1Name = $('#cate1NameModal').val();
     let customCate2Name = prompt("새로운 소분류명을 입력하세요:");
@@ -1524,7 +1524,7 @@ function setCustomCategory2Modal() {
             }
         },
         error: () => {
-            alert('소분류 추가 전송 실패');
+            console.log('소분류 추가 전송 실패');
         }
     });
 
@@ -1683,7 +1683,7 @@ function selectConditionTrans() {
 
         },
         error: () => {
-            alert("조건&검색 전송 실패");
+            console.log("조건&검색 전송 실패");
         }
     });
 }

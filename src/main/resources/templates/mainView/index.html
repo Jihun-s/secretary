@@ -85,78 +85,6 @@
     <script th:src="@{/js/main/mainCal.js}"></script>
     <script th:src="@{/js/cashbook/cashbookAlert.js}"></script>
     <script th:src="@{/js/cashbook/cashbookChart.js}"></script>
-
-    
-
-    <!-- 종이나 알림 메뉴 누르면 모달 띄우기 -->
-    <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        /** 알림 모달 여는 함수 */
-        function openAlertModal() {
-          var alertModal = new bootstrap.Modal(document.getElementById('alertModal'));
-          alertModal.show();
-        }
-    
-        // 종 아이콘
-        var bellIcon = document.querySelector('.bx-bell');
-        if(bellIcon) {
-          bellIcon.addEventListener('click', openAlertModal);
-        }
-    
-        // 알림 메뉴 
-        var alertMenu = document.getElementById('openAlertModalMenu');
-        if(alertMenu) {
-          alertMenu.addEventListener('click', openAlertModal);
-        }
-      });
-    </script>
-    
-    <!-- 옷장 필수알림 -->
-    <script>
-      function closetPilsuAlert() {
-        let closetNum = 0;
-        let laundryCheck = true;
-        $.ajax({
-          url:'closet/inCloset',
-          type:'get',
-          data:{closetNum : closetNum, clothesLaundry: laundryCheck},
-          dataType:'json',
-          success:function(list){
-            let laundryCnt = 20; //세탁물 갯수
-            $(list).each(function(i,n){
-              laundryCnt += 1;
-            });
-            
-            let proVal = (laundryCnt/30) * 100; 
-            let proStr = '<div class="progress-bar" role="progressbar" style="width:'+proVal+'%; \
-            background-color: rgba(223,132,166,255); border-color: rgba(223,132,166,255);" \
-            aria-valuenow="'+proVal+'" aria-valuemin="0" aria-valuemax="30"></div>';
-            $('#progessDetail').html(proStr);
-            $('#laundryCntDetail').html('<p>세탁바구니에 세탁물이 '+laundryCnt+'개 쌓여있어요</p>')
-            
-            var now = new Date();	// 현재 날짜 및 시간
-            var month = now.getMonth() + 1;
-            var date = now.getDate();
-            let dateStr = month+'월 '+date+'일 알림입니다.</p>';
-            $('#dateAlert').html(dateStr);
-            let laundryCntStr = '';
-            if(laundryCnt>=20){
-            laundryCntStr += '<p> 세탁하러 가시는건 어떠신가요? <br> 세탁물이 <b>'+laundryCnt+'</b>개 쌓여있어요.</p>';
-            $('#alertContent').html(laundryCntStr);
-            $('.alert').show();
-            } 
-          },
-          error:function(e){
-            alert(JSON.stringify(e));
-          }			
-        })	
-      }
-    </script>
-
-    <!-- 냉장고 필수알림 -->
-    <script>
-      
-    </script>
   
 
     <!-- Helpers -->
@@ -435,35 +363,17 @@
               class="navbar-nav-right d-flex align-items-center"
               id="navbar-collapse"
             >
-              <!-- Search -->
-              <div class="navbar-nav align-items-center">
-                <div class="nav-item d-flex align-items-center">
-                  <i class="bx bx-search fs-4 lh-0"></i>
-                  <input
-                    type="text"
-                    class="form-control border-0 shadow-none"
-                    placeholder="검색어를 입력하세요"
-                    aria-label="검색어를 입력하세요"
-                  />
-                </div>
-              </div>
-              <!-- /Search -->
 
               <ul class="navbar-nav flex-row align-items-center ms-auto">
                 </li>
 
                 <!-- 알림 종 -->
                 <li
-                  class="nav-item navbar-dropdown dropdown-user dropdown"
-                  style="margin-right: 1.3rem"
+                  class="nav-item"
+                  style="margin-right: 1.3rem; cursor: pointer;"
                 >
-                  <a
-                    class="nav-link dropdown-toggle hide-arrow"
-                    href="javascript:void(0);"
-                  >
-                    <!-- 종 이미지-->
-                    <div class="bx bx-bell bx-tada-hover bx-sm"></div>
-                  </a>
+                  <!-- 종 이미지-->
+                  <div class="bx bx-bell bx-tada-hover bx-sm"></div>
                 </li>
 
                 <!-- User 유저 아이콘 -->
@@ -668,8 +578,8 @@
                                   class="nav-link"
                                   role="tab"
                                   data-bs-toggle="tab"
-                                  data-bs-target="#alertPillLivinggoods"
-                                  aria-controls="alertPillLivinggoods"
+                                  data-bs-target="#navs-pills-justified-goods"
+                                  aria-controls="navs-pills-justified-goods"
                                   aria-selected="false"
                                 >
                                   <i class="tf-icons bx bx-box"></i> 생활용품
@@ -705,27 +615,26 @@
                               </li>
                             </ul>
                             <div
+                              id="mainAlertDiv"
                               class="tab-content flex-fill"
-                              style="height: 18rem"
+                              style="height: 18rem; overflow: auto;"
                             >
                               <!-- 냉장고 알림 탭 내용 -->
                               <div
-                                class="tab-pane fade show active"
+                                class="tab-pane fade show active navs-pills-justified-home"
                                 id="navs-pills-justified-home"
                                 role="tabpanel"
                               >
-                                냉장고 알림 표시
+                                
                               </div>
 
                               <!-- 생활용품 알림 탭 내용 -->
                               <div
-                                class="tab-pane fade"
-                                id="alertPillLivinggoods"
+                                class="tab-pane fade navs-pills-justified-goods"
+                                id="navs-pills-justified-goods"
                                 role="tabpanel"
                               >
-                                <p>
-                                  생활생활
-                                </p>
+                                
                               </div>
 
                               <!-- 옷장 알림 탭 내용 -->
@@ -734,7 +643,7 @@
                                 id="alertPillCloset"
                                 role="tabpanel"
                               >
-                                <div id="alertContent">옷옷옷옷</div>
+                                <div id="alertContent" class="alertContent">옷옷옷옷</div>
                               </div>
 
                               <!-- 가계부 알림 탭 내용 -->
@@ -743,7 +652,7 @@
                                 id="alertPillCashbook"
                                 role="tabpanel"
                               >
-                                <div id="pilsuAlertListDiv">돈돈돈돈</div>
+                                <div id="pilsuAlertListDiv" class="pilsuAlertListDiv">돈돈돈돈</div>
                                 <script>
                                   
                                 </script>
@@ -1183,26 +1092,6 @@
                   >44기4조</a
                 >
               </div>
-              <!-- 템플릿 기본 링크
-                    <div>
-                      <a href="https://themeselection.com/license/" class="footer-link me-4" target="_blank">License</a>
-                      <a href="https://themeselection.com/" target="_blank" class="footer-link me-4">More Themes</a>
-    
-                      <a
-                        href="https://themeselection.com/demo/sneat-bootstrap-html-admin-template/documentation/"
-                        target="_blank"
-                        class="footer-link me-4"
-                        >Documentation</a
-                      >
-    
-                      <a
-                        href="https://github.com/themeselection/sneat-html-admin-template-free/issues"
-                        target="_blank"
-                        class="footer-link me-4"
-                        >Support</a
-                      >
-                    </div>
-                    -->
             </div>
           </footer>
           <!-- / Footer -->
@@ -1248,8 +1137,8 @@
 
     <!-- 냉장고 옷장 알림 자바스크립트 파일 -->
     <script th:src="@{/js/closet/closetMain.js}" onload="console.log('closetMain 연결됨')"></script>
-    <!-- <script type="module" th:src="@{/js/fridge/fridgeNotification.js}" onload="console.log('fridgeNotification 연결됨')"></script> -->
-    <script type-="module" th:src="@{/js/fridge/livingGoodsModify.js}" onload="console.log('livingGoodsModify 연결됨')"></script>
-
+    <script type="module" th:src="@{/js/fridge/fridgeNotification.js}" onload="console.log('fridgeNotification 연결됨')"></script>
+    <script th:src="@{/js/fridge/livingGoodsModify.js}" onload="console.log('livingGoodsModify 연결됨')"></script>
+    <script th:src="@{/js/main/commonAlert.js}"></script>
   </body>
 </html>

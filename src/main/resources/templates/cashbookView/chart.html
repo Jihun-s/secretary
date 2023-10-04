@@ -143,13 +143,13 @@
 
             <!-- 알림 -->
             <li class="menu-item">
-              <a
-                th:href="@{/main}"
+              <span id="openAlertModalMenu"
                 class="menu-link"
+                style="cursor: pointer;"
               >
                 <i class="menu-icon tf-icons bx bx-detail"></i>
                 <div data-i18n="Support">알림</div>
-              </a>
+              </span>
             </li>
 
             <!-- 일정 -->
@@ -256,7 +256,7 @@
               </a>
               <ul class="menu-sub">
                 <li class="menu-item">
-                  <a th:href="@{/cashbook/}" class="menu-link">
+                  <a th:href="@{/cashbook}" class="menu-link">
                     <div data-i18n="Alerts">가계부 홈</div>
                   </a>
                 </li>
@@ -334,106 +334,19 @@
               id="navbar-collapse"
             >
               <ul class="navbar-nav flex-row align-items-center ms-auto">
-                <!-- 검색 -->
-                <li>
-                  <div class="navbar-nav align-items-center">
-                    <div class="nav-item d-flex align-items-center">
-                      <i class="bx bx-search fs-4 lh-0"></i>
-                      <input
-                        type="text"
-                        class="form-control border-0 shadow-none"
-                        placeholder="검색어를 입력하세요"
-                        aria-label="검색어를 입력하세요"
-                      />
-                    </div>
-                  </div>
-                </li>
 
                 <!-- 알림 종 -->
                 <li
-                  class="nav-item navbar-dropdown dropdown-user dropdown"
+                  class=""
                   style="margin-right: 1.3rem"
                 >
                   <a
-                    class="nav-link dropdown-toggle hide-arrow"
+                    class=""
                     href="javascript:void(0);"
-                    data-bs-toggle="dropdown"
                   >
                     <!-- 종 이미지-->
                     <div class="bx bx-bell bx-tada-hover bx-sm"></div>
                   </a>
-
-                  <ul class="dropdown-menu dropdown-menu-end">
-                    <li>
-                      <a
-                        class="dropdown-item"
-                        href="#"
-                        style="
-                          background-color: initial; /* 배경색 초기화 */
-                          color: inherit; /* 텍스트 색상 상속 */
-                          text-decoration: none; /* 텍스트 밑줄 제거 */
-                          cursor: auto; /* 기본 마우스 커서 모양 유지 */
-                        "
-                      >
-                        <!-- 종 알림 -->
-                        <div style="width: 30rem">
-                          <div class="nav-align-top mb-4">
-                            <h6 class="text-muted"></h6>
-                            <ul class="nav nav-tabs nav-fill" role="tablist">
-                              <li class="nav-item">
-                                <button
-                                  type="button"
-                                  class="nav-link active"
-                                  role="tab"
-                                  data-bs-toggle="tab"
-                                  data-bs-target="#navs-justified-home"
-                                  aria-controls="navs-justified-home"
-                                  aria-selected="true"
-                                >
-                                  <i class="tf-icons bx bx-home"></i> 필수 알림
-                                  <span
-                                    class="badge rounded-pill badge-center h-px-20 w-px-20 bg-label-danger"
-                                    >3</span
-                                  >
-                                </button>
-                              </li>
-                              <li class="nav-item">
-                                <button
-                                  type="button"
-                                  class="nav-link"
-                                  role="tab"
-                                  data-bs-toggle="tab"
-                                  data-bs-target="#navs-justified-profile"
-                                  aria-controls="navs-justified-profile"
-                                  aria-selected="false"
-                                >
-                                  <i class="tf-icons bx bx-user"></i> 제안 알림
-                                </button>
-                              </li>
-                            </ul>
-                            <div class="tab-content">
-                              <div
-                                class="tab-pane fade active show justify-content-between"
-                                id="navs-justified-home"
-                                role="tabpanel"
-                              >
-                                <p>필수알림1</p>
-                                <p class="mb-0">필수알림2</p>
-                              </div>
-                              <div
-                                class="tab-pane fade"
-                                id="navs-justified-profile"
-                                role="tabpanel"
-                              >
-                                <p>제안알림1</p>
-                                <p class="mb-0">제안알림2</p>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-                  </ul>
                 </li>
 
                 <!-- User 유저 아이콘 -->
@@ -814,6 +727,9 @@
     <!-- Overlay -->
     <div class="layout-overlay layout-menu-toggle"></div>
 
+    <!-- 공통 알림 모달 -->
+    <div th:include="alert-modal"></div>
+
     <!-- / Layout wrapper -->
 
     <!-- Core JS -->
@@ -839,5 +755,12 @@
 
     <!-- Place this tag in your head or just before your close body tag. -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+
+    <!-- 냉장고 옷장 알림 자바스크립트 파일 -->
+    <script th:src="@{/js/closet/closetMain.js}" onload="console.log('closetMain 연결됨')"></script>
+    <script type="module" th:src="@{/js/fridge/fridgeNotification.js}" onload="console.log('fridgeNotification 연결됨')"></script>
+    <script th:src="@{/js/fridge/livingGoodsModify.js}" onload="console.log('livingGoodsModify 연결됨')"></script>
+    <script th:src="@{/js/main/commonAlert.js}"></script>
   </body>
 </html>

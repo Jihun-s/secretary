@@ -50,7 +50,7 @@ $(document).ready(function () {
     editable: false,
     selectable: false,
     businessHours: false,
-    dayMaxEvents: false,
+    dayMaxEvents: 3,
     datesSet: function(info) {
       // FullCalendar의 현재 날짜
       let currentCalendarDate = calendar.getDate();
@@ -105,8 +105,8 @@ $(document).ready(function () {
           successCallback(transformedData);
         },
         error: (e) => {
-          alert('일정 가져오기 실패');
-          alert(JSON.stringify(e));
+          console.log('일정 가져오기 실패');
+          // alert(JSON.stringify(e));
         }
       });
     },
@@ -347,8 +347,8 @@ function loadSchedule(schYear, schMonth, groupBy) {
           $("#schListDiv").html(html);
       },
       error: function(e) {
-          alert(JSON.stringify(e));
-          alert('일정 목록 서버 전송 실패');
+          console.log(JSON.stringify(e));
+          console.log('일정 목록 서버 전송 실패');
       }
   });
 }
@@ -406,8 +406,8 @@ function openDetailModal(schId) {
       $('#schDetailModal').modal('show');
     },
     error: (e) => {
-      alert(JSON.stringify(e));
-      alert('일정 하나 불러오기 전송 실패');
+      // alert(JSON.stringify(e));
+      console.log('일정 하나 불러오기 전송 실패');
     }
   });
 }
@@ -439,8 +439,8 @@ function deleteSch1() {
         location.reload();
       },
       error: (e) => {
-        alert('일정 삭제 전송 실패');
-        alert(JSON.stringify(e));
+        console.log('일정 삭제 전송 실패');
+        // alert(JSON.stringify(e));
       }
     });
   }
@@ -466,8 +466,8 @@ function deleteSch(schId) {
         location.reload();
       },
       error: (e) => {
-        alert('일정 삭제 전송 실패');
-        alert(JSON.stringify(e));
+        console.log('일정 삭제 전송 실패');
+        // alert(JSON.stringify(e));
       }
     });
   }
@@ -511,8 +511,8 @@ function updateSch() {
         location.reload();
       },
       error: (e) => {
-        alert('일정 수정 전송 실패');
-        alert(JSON.stringify(e));
+        console.log('일정 수정 전송 실패');
+        // alert(JSON.stringify(e));
       }
     });
   }
@@ -552,7 +552,7 @@ function updateSchCateOptions(schType, schCate, triggerId) {
           options = ['구매예정일', '소비기한'];
           break;
       case '옷장':
-          options = ['미정'];
+          options = ['옷장'];
           break;
       case '가계부':
           options = ['지출', '수입'];

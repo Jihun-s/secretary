@@ -2,12 +2,9 @@
  * chart.js 활용해서 차트 그리는 .js
  */
 
-
 $(document).ready(function() {
   weekExpenseAcc();
 
-  
-    
   /////PERFECT SCROLLBAR/////PERFECT SCROLLBAR/////PERFECT SCROLLBAR/////PERFECT SCROLLBAR/////PERFECT SCROLLBAR/////PERFECT SCROLLBAR/////
   /////스크롤바/////스크롤바/////스크롤바/////스크롤바/////스크롤바/////스크롤바/////스크롤바/////스크롤바/////스크롤바/////스크롤바/////스크롤바/////
 
@@ -430,8 +427,8 @@ function weekExpenseAcc() {
       }
     },
     error: (e) => {
-      alert("주별 요약 전송 실패");
-      console.log(JSON.stringify(e));
+      console.log("주별 요약 전송 실패");
+      // console.log(JSON.stringify(e));
     }
   });
 }
@@ -505,8 +502,8 @@ function inExSixMonth() {
       });
     },
     error: (e) => {
-      alert('6개월 추이 선 그래프 전송 실패');
-      console.log(JSON.stringify(e));
+      console.log('6개월 추이 선 그래프 전송 실패');
+      // console.log(JSON.stringify(e));
     }
     
   });
@@ -579,8 +576,8 @@ function otherUserTotal() {
       });
     },
     error: (e) => {
-      alert('타 유저 비교 막대그래프 전송 실패');
-      console.log(JSON.stringify(e));
+      console.log('타 유저 비교 막대그래프 전송 실패');
+      // console.log(JSON.stringify(e));
     }
   });
 }

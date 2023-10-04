@@ -140,13 +140,13 @@
 
             <!-- 알림 -->
             <li class="menu-item">
-              <a
-                th:href="@{/main}"
+              <span id="openAlertModalMenu"
                 class="menu-link"
+                style="cursor: pointer;"
               >
                 <i class="menu-icon tf-icons bx bx-detail"></i>
                 <div data-i18n="Support">알림</div>
-              </a>
+              </span>
             </li>
 
             <!-- 일정 -->
@@ -331,25 +331,11 @@
               id="navbar-collapse"
             >
               <ul class="navbar-nav flex-row align-items-center ms-auto">
-                <!-- 검색 -->
-                <li>
-                  <div class="navbar-nav align-items-center">
-                    <div class="nav-item d-flex align-items-center">
-                      <i class="bx bx-search fs-4 lh-0"></i>
-                      <input
-                        type="text"
-                        class="form-control border-0 shadow-none"
-                        placeholder="검색어를 입력하세요"
-                        aria-label="검색어를 입력하세요"
-                      />
-                    </div>
-                  </div>
-                </li>
 
                 <!-- 알림 종 -->
                 <li
-                  class="nav-item navbar-dropdown dropdown-user dropdown"
-                  style="margin-right: 1.3rem"
+                class="nav-item navbar-dropdown dropdown-user dropdown"
+                style="margin-right: 1.3rem"
                 >
                   <a
                     class="nav-link dropdown-toggle hide-arrow"
@@ -684,6 +670,9 @@
       </div>
     </div>
 
+    <!-- 공통 알림 모달 -->
+    <div th:include="alert-modal"></div>
+
     <!-- Core JS -->
     <!-- build:js assets/vendor/js/core.js -->
     <script th:src="@{/assets/vendor/libs/jquery/jquery.js}"></script>
@@ -707,5 +696,11 @@
 
     <!-- Place this tag in your head or just before your close body tag. -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+    <!-- 냉장고 옷장 알림 자바스크립트 파일 -->
+    <script th:src="@{/js/closet/closetMain.js}" onload="console.log('closetMain 연결됨')"></script>
+    <script type="module" th:src="@{/js/fridge/fridgeNotification.js}" onload="console.log('fridgeNotification 연결됨')"></script>
+    <script th:src="@{/js/fridge/livingGoodsModify.js}" onload="console.log('livingGoodsModify 연결됨')"></script>
+    <script th:src="@{/js/main/commonAlert.js}"></script>
   </body>
 </html>

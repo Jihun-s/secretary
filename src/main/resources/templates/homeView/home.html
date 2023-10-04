@@ -1,835 +1,733 @@
 <!DOCTYPE html>
 <html
-  class="no-js"
-  lang="ko"
-  th:data-assets-path="@{/assets/}"
-  xmlns:th="http://www.thymeleaf.org"
-  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+    class="no-js"
+    lang="ko"
+    th:data-assets-path="@{/assets/}"
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
 >
-  <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="x-ua-compatible" content="ie=edge" />
-    <title>생비</title>
-    <meta name="description" content="" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link
-      rel="shortcut icon"
-      type="image/x-icon"
-      th:href="@{/assets/img/favicon/favicon.ico}"
-    />
-    <!-- Place favicon.ico in the root directory -->
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="x-ua-compatible" content="ie=edge" />
+        <title>생비</title>
+        <meta name="description" content="" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="shortcut icon" type="image/x-icon" th:href="@{/assets/img/favicon/favicon.ico}" />
+        <!-- Place favicon.ico in the root directory -->
 
-    <!-- ========================= CSS here ========================= -->
-    <link
-      rel="stylesheet"
-      th:href="@{/assets2/css/bootstrap-5.0.0-alpha-2.min.css}"
-    />
-    <link rel="stylesheet" th:href="@{/assets2/css/LineIcons.2.0.css}" />
-    <link rel="stylesheet" th:href="@{/assets2/css/animate.css}" />
-    <link rel="stylesheet" th:href="@{/assets2/css/main.css}" />
+        <!-- ========================= CSS here ========================= -->
+        <link rel="stylesheet" th:href="@{/assets2/css/bootstrap-5.0.0-alpha-2.min.css}" />
+        <link rel="stylesheet" th:href="@{/assets2/css/LineIcons.2.0.css}" />
+        <link rel="stylesheet" th:href="@{/assets2/css/animate.css}" />
+        <link rel="stylesheet" th:href="@{/assets2/css/main.css}" />
 
-    <!-- ========================= Sneat CSS ========================= -->
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
-      rel="stylesheet"
-    />
+        <!-- ========================= Sneat CSS ========================= -->
+        <!-- Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+            rel="stylesheet"
+        />
 
-    <!-- Icons. Uncomment required icon fonts -->
-    <link rel="stylesheet" th:href="@{/assets/vendor/fonts/boxicons.css}" />
+        <!-- Icons. Uncomment required icon fonts -->
+        <link rel="stylesheet" th:href="@{/assets/vendor/fonts/boxicons.css}" />
 
-    <!-- Core CSS -->
-    <link
-      rel="stylesheet"
-      th:href="@{/assets/vendor/css/core.css}"
-      class="template-customizer-core-css"
-    />
-    <link
-      rel="stylesheet"
-      th:href="@{/assets/vendor/css/theme-default.css}"
-      class="template-customizer-theme-css"
-    />
-    <link rel="stylesheet" th:href="@{/assets/css/demo.css}" />
+        <!-- Core CSS -->
+        <link rel="stylesheet" th:href="@{/assets/vendor/css/core.css}" class="template-customizer-core-css" />
+        <link
+            rel="stylesheet"
+            th:href="@{/assets/vendor/css/theme-default.css}"
+            class="template-customizer-theme-css"
+        />
+        <link rel="stylesheet" th:href="@{/assets/css/demo.css}" />
 
-    <!-- Vendors CSS -->
-    <link
-      rel="stylesheet"
-      th:href="@{/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css}"
-    />
+        <!-- Vendors CSS -->
+        <link rel="stylesheet" th:href="@{/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css}" />
 
-    <link
-      rel="stylesheet"
-      th:href="@{/assets/vendor/libs/apex-charts/apex-charts.css}"
-    />
+        <link rel="stylesheet" th:href="@{/assets/vendor/libs/apex-charts/apex-charts.css}" />
 
-    <!-- 소영 추가 CSS -->
-    <style>
-      @font-face {
-        font-family: "NanumSquareNeo-Variable";
-        src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_11-01@1.0/NanumSquareNeo-Variable.woff2")
-          format("woff2");
-        font-weight: normal;
-        font-style: normal;
-      }
+        <!-- 소영 추가 CSS -->
+        <style>
+            @font-face {
+                font-family: 'NanumSquareNeo-Variable';
+                src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_11-01@1.0/NanumSquareNeo-Variable.woff2')
+                    format('woff2');
+                font-weight: normal;
+                font-style: normal;
+            }
 
-      body {
-        font-family: "NanumSquareNeo-Variable", sans-serif;
-      }
-    </style>
-  </head>
-  <body
-    style="
-      @font-face {
-        font-family: 'NanumSquareNeo-Variable';
-        src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_11-01@1.0/NanumSquareNeo-Variable.woff2')
-          format('woff2');
-        font-weight: normal;
-        font-style: normal;
-      }
+            body {
+                font-family: 'NanumSquareNeo-Variable', sans-serif;
+            }
+        </style>
+    </head>
+    <body
+        style="
+            @font-face {
+                font-family: 'NanumSquareNeo-Variable';
+                src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_11-01@1.0/NanumSquareNeo-Variable.woff2')
+                    format('woff2');
+                font-weight: normal;
+                font-style: normal;
+            }
 
-      body {
-        font-family: 'NanumSquareNeo-Variable', sans-serif;
-      }
-    "
-  >
-    <!-- ========================= preloader start ========================= -->
-    <div class="preloader">
-      <div class="loader">
-        <div class="ytp-spinner">
-          <div class="ytp-spinner-container">
-            <div class="ytp-spinner-rotator">
-              <div class="ytp-spinner-left">
-                <div class="ytp-spinner-circle"></div>
-              </div>
-              <div class="ytp-spinner-right">
-                <div class="ytp-spinner-circle"></div>
-              </div>
+            body {
+                font-family: 'NanumSquareNeo-Variable', sans-serif;
+            }
+        "
+    >
+        <!-- ========================= preloader start ========================= -->
+        <div class="preloader">
+            <div class="loader">
+                <div class="ytp-spinner">
+                    <div class="ytp-spinner-container">
+                        <div class="ytp-spinner-rotator">
+                            <div class="ytp-spinner-left">
+                                <div class="ytp-spinner-circle"></div>
+                            </div>
+                            <div class="ytp-spinner-right">
+                                <div class="ytp-spinner-circle"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
-    </div>
-    <!-- preloader end -->
+        <!-- preloader end -->
 
-    <!-- ========================= header start ========================= -->
-    <header class="header">
-      <div class="navbar-area">
-        <div class="container">
-          <div class="row align-items-center">
-            <div class="col-lg-12">
-              <nav class="navbar navbar-expand-lg">
-                <a class="navbar-brand" th:href="@{/}">
-                  <img
-                    th:src="@{/assets2/img/logo/logo.png}"
-                    style="width: 60%"
-                    alt="Logo"
-                  />
-                </a>
-                <button
-                  class="navbar-toggler"
-                  type="button"
-                  data-toggle="collapse"
-                  data-target="#navbarSupportedContent"
-                  aria-controls="navbarSupportedContent"
-                  aria-expanded="false"
-                  aria-label="Toggle navigation"
-                >
-                  <span class="toggler-icon"></span>
-                  <span class="toggler-icon"></span>
-                  <span class="toggler-icon"></span>
-                </button>
+        <!-- ========================= header start ========================= -->
+        <header class="header">
+            <div class="navbar-area">
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-lg-12">
+                            <nav class="navbar navbar-expand-lg">
+                                <a class="navbar-brand" th:href="@{/}">
+                                    <img th:src="@{/assets2/img/logo/logo.png}" style="width: 60%" alt="Logo" />
+                                </a>
+                                <button
+                                    class="navbar-toggler"
+                                    type="button"
+                                    data-toggle="collapse"
+                                    data-target="#navbarSupportedContent"
+                                    aria-controls="navbarSupportedContent"
+                                    aria-expanded="false"
+                                    aria-label="Toggle navigation"
+                                >
+                                    <span class="toggler-icon"></span>
+                                    <span class="toggler-icon"></span>
+                                    <span class="toggler-icon"></span>
+                                </button>
 
-                <div
-                  class="collapse navbar-collapse sub-menu-bar"
-                  id="navbarSupportedContent"
-                >
-                  <ul id="nav" class="navbar-nav ml-auto">
-                    <li class="nav-item">
-                      <a class="page-scroll" href="#home">맨 위로</a>
-                    </li>
-                    <li class="nav-item">
-                      <a th:href="@{/board/notification/list}">공지사항</a>
-                    </li>
-                    <li class="nav-item">
-                      <a th:href="@{/board/frequently/list}">자주 묻는 질문</a>
-                    </li>
-                    <li class="nav-item">
-                      <a th:href="@{/board/inquiry/list}">문의게시판</a>
-                    </li>
-                    <li class="nav-item">
-                      <a
-                        sec:authorize="!isAuthenticated()"
-                        th:href="@{/user/signup}"
-                        >가입</a
-                      >
-                    </li>
-                    <li class="nav-item">
-                      <a
-                        sec:authorize="!isAuthenticated()"
-                        th:href="@{/user/login}"
-                        >로그인</a
-                      >
-                      <a
-                        sec:authorize="isAuthenticated()"
-                        th:href="@{/user/logout}"
-                        >로그아웃</a
-                      >
-                    </li>
-                  </ul>
+                                <div class="collapse navbar-collapse sub-menu-bar" id="navbarSupportedContent">
+                                    <ul id="nav" class="navbar-nav ml-auto">
+                                        <li class="nav-item">
+                                            <a class="page-scroll" href="#home">맨 위로</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a th:href="@{/board/list}">공지사항</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a th:href="@{/board/list}">자주 묻는 질문</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a th:href="@{/board/list}">문의게시판</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a sec:authorize="!isAuthenticated()" th:href="@{/user/signup}">가입</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a sec:authorize="!isAuthenticated()" th:href="@{/user/login}">로그인</a>
+                                            <a sec:authorize="isAuthenticated()" th:href="@{/user/logout}">로그아웃</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <!-- navbar collapse -->
+                            </nav>
+                            <!-- navbar -->
+                        </div>
+                    </div>
+                    <!-- row -->
                 </div>
-                <!-- navbar collapse -->
-              </nav>
-              <!-- navbar -->
+                <!-- container -->
             </div>
-          </div>
-          <!-- row -->
-        </div>
-        <!-- container -->
-      </div>
-      <!-- navbar area -->
-    </header>
-    <!-- ========================= header end ========================= -->
+            <!-- navbar area -->
+        </header>
+        <!-- ========================= header end ========================= -->
 
-    <!-- ========================= hero-section start ========================= -->
-    <section id="home" class="hero-section">
-      <div class="hero-shape">
-        <img th:src="@{/assets2/img/hero/8669382.png}" alt="" class="sanho" />
-      </div>
-      <div class="container">
-        <div class="row align-items-center">
-          <div class="col-lg-6">
-            <div class="hero-content">
-              <h1 class="wow fadeInUp" data-wow-delay=".2s">
-                <span>나만을 위한</span><br />
-                <span>생활 비서 서비스</span>
-              </h1>
-              <p class="wow fadeInUp" data-wow-delay=".4s">
-                바쁜 일상 속 놓치기 쉬운 살림살이, 생비가 도와드릴게요.
-              </p>
-              <a th:href="@{/main}"
-                ><button type="button" class="btn btn-xl btn-primary">
-                  시작하기
-                </button></a
-              >
+        <!-- ========================= hero-section start ========================= -->
+        <section id="home" class="hero-section">
+            <div class="hero-shape">
+                <img th:src="@{/assets2/img/hero/8669382.png}" alt="" class="sanho" />
             </div>
-          </div>
-          <div class="col-lg-6">
-            <div class="hero-img wow fadeInUp" data-wow-delay=".5s">
-              <img th:src="@{/assets2/img/hero/8669322.png}" alt="whale" />
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-6">
+                        <div class="hero-content">
+                            <h1 class="wow fadeInUp" data-wow-delay=".2s">
+                                <span>나만을 위한</span><br />
+                                <span>생활 비서 서비스</span>
+                            </h1>
+                            <p class="wow fadeInUp" data-wow-delay=".4s">
+                                바쁜 일상 속 놓치기 쉬운 살림살이, 생비가 도와드릴게요.
+                            </p>
+                            <a th:href="@{/main}"
+                                ><button type="button" class="btn btn-xl btn-primary">시작하기</button></a
+                            >
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="hero-img wow fadeInUp" data-wow-delay=".5s">
+                            <img th:src="@{/assets2/img/hero/8669322.png}" alt="whale" />
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-        </div>
-      </div>
-    </section>
-    <!-- ========================= hero-section end ========================= -->
+        </section>
+        <!-- ========================= hero-section end ========================= -->
 
-    <!-- ========================= about-section start ========================= -->
-    <section id="introduction" class="about-section pt-150">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-12 text-center">
-            <div class="about-img wow fadeInUp" data-wow-delay=".5s">
-              <h3>우리 가족의 살림살이를 한 눈에.</h3>
-              <h5>
-                언제부터 있었는지 모를 냉장고 속 미지의 음식, 동시에 똑 떨어져
-                곤란한 생활용품.<br />
-                사소해보이지만 바쁜 일상을 살다 보면 자칫 놓치기 쉬운 것이
-                살림살이입니다. <br />
-                살림에 필요한 데이터를 모아 알려드릴게요. <br />
-                생비와 함께라면 당신의 일상이 훨씬 편리해질 거예요.
-              </h5>
+        <!-- ========================= about-section start ========================= -->
+        <section id="introduction" class="about-section pt-150">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12 text-center">
+                        <div class="about-img wow fadeInUp" data-wow-delay=".5s">
+                            <h3>우리 가족의 살림살이를 한 눈에.</h3>
+                            <h5>
+                                언제부터 있었는지 모를 냉장고 속 미지의 음식, 동시에 똑 떨어져 곤란한 생활용품.<br />
+                                사소해보이지만 바쁜 일상을 살다 보면 자칫 놓치기 쉬운 것이 살림살이입니다. <br />
+                                살림에 필요한 데이터를 모아 알려드릴게요. <br />
+                                생비와 함께라면 당신의 일상이 훨씬 편리해질 거예요.
+                            </h5>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-        </div>
-      </div>
-    </section>
-    <!-- ========================= about-section end ========================= -->
+        </section>
+        <!-- ========================= about-section end ========================= -->
 
-    <!-- ========================= about-section start ========================= -->
-    <section id="about" class="about-section pt-150">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-6">
-            <div class="about-img wow fadeInUp" data-wow-delay=".5s">
-              <img
-                th:src="@{/assets2/img/about/9919889.png}"
-                style="width: 20rem"
-                alt=""
-              />
-              <img
-                th:src="@{/assets2/img/about/9648040.png}"
-                style="width: 20rem"
-                alt=""
-              />
+        <!-- ========================= about-section start ========================= -->
+        <section id="about" class="about-section pt-150">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="about-img wow fadeInUp" data-wow-delay=".5s">
+                            <img th:src="@{/assets2/img/about/9919889.png}" style="width: 20rem" alt="" />
+                            <img th:src="@{/assets2/img/about/9648040.png}" style="width: 20rem" alt="" />
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="about-content">
+                            <div class="section-title">
+                                <span class="wow fadeInUp" data-wow-delay=".2s">알림과 일정</span>
+                                <h1 class="wow fadeInUp" data-wow-delay=".4s"></h1>
+                                <p class="wow fadeInUp" data-wow-delay=".6s">
+                                    놓치기 쉬운 약속이나 중요한 일정, 그리고 살림에 필요한 알림까지! 생비가 당신의
+                                    살림살이를 위해 신속하고 정확하게 알려드립니다. 이제 무엇을 언제 해야 하는지 고민할
+                                    필요가 없어요.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-          <div class="col-lg-6">
-            <div class="about-content">
-              <div class="section-title">
-                <span class="wow fadeInUp" data-wow-delay=".2s"
-                  >알림과 일정</span
-                >
-                <h1 class="wow fadeInUp" data-wow-delay=".4s"></h1>
-                <p class="wow fadeInUp" data-wow-delay=".6s">
-                  일정 관리! 알림 기능!
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-    <!-- ========================= about-section end ========================= -->
+        </section>
+        <!-- ========================= about-section end ========================= -->
 
-    <!-- ========================= delivery-section start ========================= -->
-    <section id="how" class="delivery-section pt-150">
-      <div class="container">
-        <div class="row align-items-center">
-          <div class="col-lg-5">
-            <div class="delivery-content">
-              <div class="section-title">
-                <span class="wow fadeInUp" data-wow-delay=".2s"
-                  >냉장고 & 생활용품
-                </span>
-                <h1 class="mb-35 wow fadeInUp" data-wow-delay=".4s">
-                  재고관리 소비제안
-                </h1>
-                <p class="mb-35 wow fadeInUp" data-wow-delay=".6s">편리하다!</p>
-                <a
-                  href="javscript:void(0)"
-                  class="main-btn btn-hover wow fadeInUp"
-                  data-wow-delay=".8s"
-                  >Download App</a
-                >
-              </div>
+        <!-- ========================= delivery-section start ========================= -->
+        <section id="how" class="delivery-section pt-150">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-5">
+                        <div class="delivery-content">
+                            <div class="section-title">
+                                <span class="wow fadeInUp" data-wow-delay=".2s">냉장고 & 생활용품 </span>
+                                <h1 class="mb-35 wow fadeInUp" data-wow-delay=".4s">재고관리 소비제안</h1>
+                                <p class="mb-35 wow fadeInUp" data-wow-delay=".6s">
+                                    냉장고 속의 재료와 생활용품의 재고를 한눈에 확인하고, 필요한 것들의 구매 제안까지
+                                    받아보세요. 더 이상 냉장고를 여는 매 순간 '이거 언제 샀지?'라는 생각은 잊어버리세요!
+                                </p>
+                                <a href="javscript:void(0)" class="main-btn btn-hover wow fadeInUp" data-wow-delay=".8s"
+                                    >Download App</a
+                                >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-7 order-first order-lg-last">
+                        <div class="delivery-img wow fadeInUp" data-wow-delay=".5s">
+                            <img th:src="@{/assets2/img/delivery/fridge01.png}" style="width: 20rem" alt="" />
+                            <img th:src="@{/assets2/img/delivery/goods.png}" style="width: 20rem" alt="" />
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-          <div class="col-lg-7 order-first order-lg-last">
-            <div class="delivery-img wow fadeInUp" data-wow-delay=".5s">
-              <img
-                th:src="@{/assets2/img/delivery/fridge01.png}"
-                style="width: 20rem"
-                alt=""
-              />
-              <img
-                th:src="@{/assets2/img/delivery/9648830.png}"
-                style="width: 20rem"
-                alt=""
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-    <!-- ========================= delivery-section end ========================= -->
+        </section>
+        <!-- ========================= delivery-section end ========================= -->
 
-    <!-- ========================= about-section start ========================= -->
-    <section id="received" class="about-section received-section pt-150">
-      <div class="container">
-        <div class="row align-items-center">
-          <div class="col-lg-6">
-            <div
-              class="about-img received-img wow fadeInUp"
-              data-wow-delay=".5s"
-            >
-              <img
-                th:src="@{/assets2/img/received/9913991.png}"
-                style="width: 20rem"
-                alt=""
-              />
-              <img
-                th:src="@{/assets2/img/received/11892988.png}"
-                style="width: 20rem"
-                alt=""
-              />
+        <!-- ========================= about-section start ========================= -->
+        <section id="received" class="about-section received-section pt-150">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-6">
+                        <div class="about-img received-img wow fadeInUp" data-wow-delay=".5s">
+                            <img th:src="@{/images/closetImg/wardrobe.png}" style="width: 20rem" alt="" />
+                            <img th:src="@{/assets2/img/delivery/9648830.png}" style="width: 20rem" alt="" />
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="about-content received-content">
+                            <div class="section-title">
+                                <span class="wow fadeInUp" data-wow-delay=".2s">옷장</span>
+                                <h1 class="mb-25 wow fadeInUp" data-wow-delay=".4s">
+                                    나의 옷을 한눈에 파악하고 코디 일지를 기록할 수 있어요
+                                </h1>
+                                <p class="wow fadeInUp" data-wow-delay=".6s">
+                                    당신의 옷장 속 아이템들을 쉽게 관리하고, 매일의 코디를 기록하세요. 사진을
+                                    업로드하거나 웹에서 찾아와서 나만의 스타일 일지를 만들어보세요. 또한, 생비의 제안
+                                    기능을 통해 어떤 아이템과 잘 어울리는지도 확인할 수 있어요!
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-          <div class="col-lg-6">
-            <div class="about-content received-content">
-              <div class="section-title">
-                <span class="wow fadeInUp" data-wow-delay=".2s">옷장</span>
-                <h1 class="mb-25 wow fadeInUp" data-wow-delay=".4s">
-                  나의 옷을 한눈에 파악하고 코디 일지를 기록할 수 있어요
-                </h1>
-                <p class="wow fadeInUp" data-wow-delay=".6s">
-                  직접 찍어서 올리든 있던 사진 활용하든 웹에서 찾아오든
-                  어떻게저떻게
-                </p>
-              </div>
+        </section>
+        <!-- ========================= about-section end ========================= -->
+        <!-- ========================= delivery-section start ========================= -->
+        <section id="how" class="delivery-section pt-150">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-5">
+                        <div class="delivery-content">
+                            <div class="section-title">
+                                <span class="wow fadeInUp" data-wow-delay=".2s">가계부</span>
+                                <h1 class="mb-35 wow fadeInUp" data-wow-delay=".4s">
+                                    지출을 한눈에, 똑똑한 경제 관리의 시작
+                                </h1>
+                                <p class="mb-35 wow fadeInUp" data-wow-delay=".6s">
+                                    생활의 소소한 지출부터 큰 지출까지, 모든 것을 기록하고 관리하세요. 생비의 가계부
+                                    기능을 통해 어디에 얼마나 지출하고 있는지 쉽게 파악할 수 있습니다. 그리고 우리
+                                    가족의 소비 습관과 경제 상황에 맞는 조언까지 제공받으세요. 이제 무계획적인
+                                    지출로부터 벗어나, 미래를 위한 현명한 경제 관리를 시작하세요!
+                                </p>
+                                <a href="javscript:void(0)" class="main-btn btn-hover wow fadeInUp" data-wow-delay=".8s"
+                                    >Download App</a
+                                >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-7 order-first order-lg-last">
+                        <div class="delivery-img wow fadeInUp" data-wow-delay=".5s">
+                            <img th:src="@{/assets2/img/received/9913991.png}" style="width: 20rem" alt="" />
+                            <img th:src="@{/assets2/img/received/11892988.png}" style="width: 20rem" alt="" />
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-        </div>
-      </div>
-    </section>
-    <!-- ========================= about-section end ========================= -->
+        </section>
+        <!-- ========================= delivery-section end ========================= -->
 
-    <!-- ========================= testimonial-section start ========================= -->
-    <section id="testimonial" class="testimonial-section img-bg pt-150 pb-40">
-      <div class="container">
-        <div class="row justify-content-center">
-          <div class="col-lg-6">
-            <div class="section-title mb-60 text-center">
-              <span class="wow fadeInUp" data-wow-delay=".2s"
-                >Testimonials</span
-              >
-              <h1 class="wow fadeInUp" data-wow-delay=".4s">
-                What Our Users Says
-              </h1>
-            </div>
-          </div>
-        </div>
+        <!-- ========================= testimonial-section start ========================= -->
+        <section id="testimonial" class="testimonial-section img-bg pt-150 pb-40">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-6">
+                        <div class="section-title mb-60 text-center">
+                            <span class="wow fadeInUp" data-wow-delay=".2s">Testimonials</span>
+                            <h1 class="wow fadeInUp" data-wow-delay=".4s">What Our Users Says</h1>
+                        </div>
+                    </div>
+                </div>
 
-        <div class="row testimonial-wrapper">
-          <div class="col-lg-4 col-md-6 -mt-30">
-            <div class="single-testimonial wow fadeInUp" data-wow-delay=".2s">
-              <div class="rating">
-                <i class="lni lni-star-filled"></i>
-                <i class="lni lni-star-filled"></i>
-                <i class="lni lni-star-filled"></i>
-                <i class="lni lni-star-filled"></i>
-                <i class="lni lni-star-filled"></i>
-              </div>
-              <div class="content">
-                <p>
-                  Lorem ipsum dolor sit amet onsetetur sadipscing elitr, sed
-                  diam non eirmod tempor invidunt ut labore etdo magna aliquyam
-                  erat, sed diam vero eos et accusam et justo duo dolores et ea
-                  rebum clita kasd gubergren.
-                </p>
-              </div>
-              <div class="info">
-                <div class="image">
-                  <img
-                    th:src="@{/assets2/img/testimonial/testimonial-1.png}"
-                    alt=""
-                  />
+                <div class="row testimonial-wrapper">
+                    <div class="col-lg-4 col-md-6 -mt-30">
+                        <div class="single-testimonial wow fadeInUp" data-wow-delay=".2s">
+                            <div class="rating">
+                                <i class="lni lni-star-filled"></i>
+                                <i class="lni lni-star-filled"></i>
+                                <i class="lni lni-star-filled"></i>
+                                <i class="lni lni-star-filled"></i>
+                                <i class="lni lni-star-filled"></i>
+                            </div>
+                            <div class="content">
+                                <p>
+                                    "생활비서는 제 살림살이를 완전히 바꿔놓았어요. 더 이상 냉장고에 어떤 재료가 있는지
+                                    몰라서 음식을 낭비하는 일이 없게 되었어요!"
+                                </p>
+                            </div>
+                            <div class="info">
+                                <div class="image">
+                                    <img th:src="@{/assets2/img/testimonial/testimonial-1.png}" alt="" />
+                                </div>
+                                <div class="text">
+                                    <h5>김지훈</h5>
+                                    <p>SCIT마스터 44기</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 -mt-60">
+                        <div class="single-testimonial wow fadeInUp" data-wow-delay=".4s">
+                            <div class="rating">
+                                <i class="lni lni-star-filled"></i>
+                                <i class="lni lni-star-filled"></i>
+                                <i class="lni lni-star-filled"></i>
+                                <i class="lni lni-star-filled"></i>
+                                <i class="lni lni-star-filled"></i>
+                            </div>
+                            <div class="content">
+                                <p>
+                                    "일정 관리부터 가계부까지, 생활비서가 제 생활의 모든 부분을 도와주는 느낌이에요.
+                                    이제 어떻게 이렇게 편리한 서비스 없이 지냈는지 모르겠어요."
+                                </p>
+                            </div>
+                            <div class="info">
+                                <div class="image">
+                                    <img th:src="@{/assets2/img/testimonial/testimonial-2.png}" alt="" />
+                                </div>
+                                <div class="text">
+                                    <h5>이소영</h5>
+                                    <p>SCIT마스터 44기</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        <div class="single-testimonial wow fadeInUp" data-wow-delay=".6s">
+                            <div class="rating">
+                                <i class="lni lni-star-filled"></i>
+                                <i class="lni lni-star-filled"></i>
+                                <i class="lni lni-star-filled"></i>
+                                <i class="lni lni-star-filled"></i>
+                                <i class="lni lni-star-filled"></i>
+                            </div>
+                            <div class="content">
+                                <p>
+                                    "옷장 관리 기능이 정말 좋아요. 매일 아침 무엇을 입을지 고민하는 시간이 확 줄었어요.
+                                    코디 일지도 정말 재미있게 기록하고 있어요!"
+                                </p>
+                            </div>
+                            <div class="info">
+                                <div class="image">
+                                    <img th:src="@{/assets2/img/testimonial/testimonial-3.png}" alt="" />
+                                </div>
+                                <div class="text">
+                                    <h5>이혜린</h5>
+                                    <p>SCIT마스터 44기</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 -mt-30">
+                        <div class="single-testimonial wow fadeInUp" data-wow-delay=".2s">
+                            <div class="rating">
+                                <i class="lni lni-star-filled"></i>
+                                <i class="lni lni-star-filled"></i>
+                                <i class="lni lni-star-filled"></i>
+                                <i class="lni lni-star-filled"></i>
+                                <i class="lni lni-star-filled"></i>
+                            </div>
+                            <div class="content">
+                                <p>
+                                    "생활비서의 가계부 기능으로 지출을 훨씬 더 체계적으로 관리하게 되었어요. 또한,
+                                    생활용품 재고 추적 기능 덕분에 생활용품 구매가 훨씬 간편해졌습니다."
+                                </p>
+                            </div>
+                            <div class="info">
+                                <div class="image">
+                                    <img th:src="@{/assets2/img/testimonial/testimonial-4.png}" alt="" />
+                                </div>
+                                <div class="text">
+                                    <h5>황인찬</h5>
+                                    <p>SCIT마스터 44기</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 -mt-60">
+                        <div class="single-testimonial wow fadeInUp" data-wow-delay=".4s">
+                            <div class="rating">
+                                <i class="lni lni-star-filled"></i>
+                                <i class="lni lni-star-filled"></i>
+                                <i class="lni lni-star-filled"></i>
+                                <i class="lni lni-star-filled"></i>
+                                <i class="lni lni-star-filled"></i>
+                            </div>
+                            <div class="content">
+                                <p>
+                                    "일상의 작은 일들을 잊어버리는 일이 많았는데, 생활비서의 알림 기능 덕분에 그런
+                                    문제가 확 줄었어요. 일정관리가 이렇게 쉬울 줄 몰랐어요!"
+                                </p>
+                            </div>
+                            <div class="info">
+                                <div class="image">
+                                    <img th:src="@{/assets2/img/testimonial/testimonial-5.png}" alt="" />
+                                </div>
+                                <div class="text">
+                                    <h5>김철수</h5>
+                                    <p>슬기로운생활 II</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        <div class="single-testimonial wow fadeInUp" data-wow-delay=".6s">
+                            <div class="rating">
+                                <i class="lni lni-star-filled"></i>
+                                <i class="lni lni-star-filled"></i>
+                                <i class="lni lni-star-filled"></i>
+                                <i class="lni lni-star-filled"></i>
+                                <i class="lni lni-star-filled"></i>
+                            </div>
+                            <div class="content">
+                                <p>
+                                    "가족 모두가 생활비서를 사용하게 되면서 집안의 커뮤니케이션이 확 좋아졌어요. 누가
+                                    어떤 일정이 있고, 무엇을 구매해야 하는지 한눈에 알 수 있어서 정말 편리해요."
+                                </p>
+                            </div>
+                            <div class="info">
+                                <div class="image">
+                                    <img th:src="@{/assets2/img/testimonial/testimonial-6.png}" alt="" />
+                                </div>
+                                <div class="text">
+                                    <h5>이영희</h5>
+                                    <p>슬기로운생활 I</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="text">
-                  <h5>Ena Shah</h5>
-                  <p>Teacher at Abc School</p>
-                </div>
-              </div>
             </div>
-          </div>
-          <div class="col-lg-4 col-md-6 -mt-60">
-            <div class="single-testimonial wow fadeInUp" data-wow-delay=".4s">
-              <div class="rating">
-                <i class="lni lni-star-filled"></i>
-                <i class="lni lni-star-filled"></i>
-                <i class="lni lni-star-filled"></i>
-                <i class="lni lni-star-filled"></i>
-                <i class="lni lni-star-filled"></i>
-              </div>
-              <div class="content">
-                <p>
-                  Lorem ipsum dolor sit amet onsetetur sadipscing elitr, sed
-                  diam non eirmod tempor invidunt ut labore etdo magna aliquyam
-                  erat, sed diam vero eos et accusam et justo duo dolores et ea
-                  rebum clita kasd gubergren.
-                </p>
-              </div>
-              <div class="info">
-                <div class="image">
-                  <img
-                    th:src="@{/assets2/img/testimonial/testimonial-2.png}"
-                    alt=""
-                  />
-                </div>
-                <div class="text">
-                  <h5>Mrs. Gosh</h5>
-                  <p>Actor</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-4 col-md-6">
-            <div class="single-testimonial wow fadeInUp" data-wow-delay=".6s">
-              <div class="rating">
-                <i class="lni lni-star-filled"></i>
-                <i class="lni lni-star-filled"></i>
-                <i class="lni lni-star-filled"></i>
-                <i class="lni lni-star-filled"></i>
-                <i class="lni lni-star-filled"></i>
-              </div>
-              <div class="content">
-                <p>
-                  Lorem ipsum dolor sit amet onsetetur sadipscing elitr, sed
-                  diam non eirmod tempor invidunt ut labore etdo magna aliquyam
-                  erat, sed diam vero eos et accusam et justo duo dolores et ea
-                  rebum clita kasd gubergren.
-                </p>
-              </div>
-              <div class="info">
-                <div class="image">
-                  <img
-                    th:src="@{/assets2/img/testimonial/testimonial-3.png}"
-                    alt=""
-                  />
-                </div>
-                <div class="text">
-                  <h5>John Doe</h5>
-                  <p>Model</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-4 col-md-6 -mt-30">
-            <div class="single-testimonial wow fadeInUp" data-wow-delay=".2s">
-              <div class="rating">
-                <i class="lni lni-star-filled"></i>
-                <i class="lni lni-star-filled"></i>
-                <i class="lni lni-star-filled"></i>
-                <i class="lni lni-star-filled"></i>
-                <i class="lni lni-star-filled"></i>
-              </div>
-              <div class="content">
-                <p>
-                  Lorem ipsum dolor sit amet onsetetur sadipscing elitr, sed
-                  diam non eirmod tempor invidunt ut labore etdo magna aliquyam
-                  erat, sed diam vero eos et accusam et justo duo dolores et ea
-                  rebum clita kasd gubergren.
-                </p>
-              </div>
-              <div class="info">
-                <div class="image">
-                  <img
-                    th:src="@{/assets2/img/testimonial/testimonial-4.png}"
-                    alt=""
-                  />
-                </div>
-                <div class="text">
-                  <h5>Jonathan Smith</h5>
-                  <p>Creative Designer</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-4 col-md-6 -mt-60">
-            <div class="single-testimonial wow fadeInUp" data-wow-delay=".4s">
-              <div class="rating">
-                <i class="lni lni-star-filled"></i>
-                <i class="lni lni-star-filled"></i>
-                <i class="lni lni-star-filled"></i>
-                <i class="lni lni-star-filled"></i>
-                <i class="lni lni-star-filled"></i>
-              </div>
-              <div class="content">
-                <p>
-                  Lorem ipsum dolor sit amet onsetetur sadipscing elitr, sed
-                  diam non eirmod tempor invidunt ut labore etdo magna aliquyam
-                  erat, sed diam vero eos et accusam et justo duo dolores et ea
-                  rebum clita kasd gubergren.
-                </p>
-              </div>
-              <div class="info">
-                <div class="image">
-                  <img
-                    th:src="@{/assets2/img/testimonial/testimonial-5.png}"
-                    alt=""
-                  />
-                </div>
-                <div class="text">
-                  <h5>Sara A. K.</h5>
-                  <p>Heroine</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-4 col-md-6">
-            <div class="single-testimonial wow fadeInUp" data-wow-delay=".6s">
-              <div class="rating">
-                <i class="lni lni-star-filled"></i>
-                <i class="lni lni-star-filled"></i>
-                <i class="lni lni-star-filled"></i>
-                <i class="lni lni-star-filled"></i>
-                <i class="lni lni-star-filled"></i>
-              </div>
-              <div class="content">
-                <p>
-                  Lorem ipsum dolor sit amet onsetetur sadipscing elitr, sed
-                  diam non eirmod tempor invidunt ut labore etdo magna aliquyam
-                  erat, sed diam vero eos et accusam et justo duo dolores et ea
-                  rebum clita kasd gubergren.
-                </p>
-              </div>
-              <div class="info">
-                <div class="image">
-                  <img
-                    th:src="@{/assets2/img/testimonial/testimonial-6.png}"
-                    alt=""
-                  />
-                </div>
-                <div class="text">
-                  <h5>David Smith</h5>
-                  <p>Businessman</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-    <!-- ========================= testimonial-section end ========================= -->
+        </section>
+        <!-- ========================= testimonial-section end ========================= -->
 
-    <!-- ========================= service-section start ========================= -->
-    <section id="services" class="service-section pt-150">
-      <div class="container">
-        <div class="row justify-content-center">
-          <div class="col-xl-6 col-lg-8">
-            <div class="section-title text-center mb-70">
-              <span class="wow fadeInUp" data-wow-delay=".2s"
-                >Delivery Services</span
-              >
-              <h1 class="wow fadeInUp" data-wow-delay=".4s">
-                All Essentials You Need
-              </h1>
+        <!-- ========================= service-section start ========================= -->
+        <section id="services" class="service-section pt-150">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-xl-6 col-lg-8">
+                        <div class="section-title text-center mb-70">
+                            <span class="wow fadeInUp" data-wow-delay=".2s">Secretary Service</span>
+                            <h1 class="wow fadeInUp" data-wow-delay=".4s">All Essentials You Need</h1>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4 col-md-6">
+                        <div class="single-service wow fadeInUp" data-wow-delay=".2s">
+                            <div class="icon">
+                                <img th:src="@{assets2/img/service/service-icon-1.svg}" alt="" />
+                            </div>
+                            <div class="content">
+                                <h3>Food</h3>
+                                <p>
+                                    "냉장고 속 재료를 체크하고, 무엇을 요리할지 계획하세요. 생활비서가 당신의 식재료
+                                    관리를 도와줍니다."
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        <div class="single-service wow fadeInUp" data-wow-delay=".4s">
+                            <div class="icon">
+                                <img th:src="@{/assets2/img/service/service-icon-2.svg}" alt="" />
+                            </div>
+                            <div class="content">
+                                <h3>Grocery</h3>
+                                <p>
+                                    "생활 필수품 재고가 얼마나 남았는지 한 눈에 파악하세요. 생활비서와 함께라면 더 이상
+                                    부족한 필수품에 당황하지 않아도 돼요."
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        <div class="single-service wow fadeInUp" data-wow-delay=".6s">
+                            <div class="icon">
+                                <img th:src="@{/assets2/img/service/service-icon-3.svg}" alt="" />
+                            </div>
+                            <div class="content">
+                                <h3>Furniture</h3>
+                                <p>
+                                    "가구의 구입 일자나 수명을 기록하고, 언제 교체해야 할지 계획하세요. 생활비서가
+                                    당신의 가구 관리를 도와줍니다."
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        <div class="single-service wow fadeInUp" data-wow-delay=".2s">
+                            <div class="icon">
+                                <img th:src="@{/assets2/img/service/service-icon-4.svg}" alt="" />
+                            </div>
+                            <div class="content">
+                                <h3>Medicine</h3>
+                                <p>
+                                    "약의 유효기간이나 얼마나 남았는지 쉽게 확인하세요. 생활비서가 당신과 가족의 건강
+                                    관리를 위해 필요한 약 정보를 제공합니다."
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        <div class="single-service wow fadeInUp" data-wow-delay=".4s">
+                            <div class="icon">
+                                <img th:src="@{/assets2/img/service/service-icon-5.svg}" alt="" />
+                            </div>
+                            <div class="content">
+                                <h3>Electronics</h3>
+                                <p>
+                                    "전자제품의 보증기간이나 사용 기간을 트래킹하세요. 생활비서를 통해 언제 제품을
+                                    점검하거나 교체해야 할지 알 수 있습니다."
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        <div class="single-service wow fadeInUp" data-wow-delay=".6s">
+                            <div class="icon">
+                                <img th:src="@{/assets2/img/service/service-icon-6.svg}" alt="" />
+                            </div>
+                            <div class="content">
+                                <h3>Clothes</h3>
+                                <p>
+                                    "옷장 속 옷들의 구입 일자, 사용 빈도, 그리고 코디 일지를 관리하세요. 생활비서와
+                                    함께라면 더 이상 '입을 옷이 없다'는 생각은 잊어버리세요."
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-lg-4 col-md-6">
-            <div class="single-service wow fadeInUp" data-wow-delay=".2s">
-              <div class="icon">
-                <img
-                  th:src="@{assets2/img/service/service-icon-1.svg}"
-                  alt=""
-                />
-              </div>
-              <div class="content">
-                <h3>Food</h3>
-                <p>
-                  Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
-                  diam nonumy eirmod tempor invidunt.
-                </p>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-4 col-md-6">
-            <div class="single-service wow fadeInUp" data-wow-delay=".4s">
-              <div class="icon">
-                <img
-                  th:src="@{/assets2/img/service/service-icon-2.svg}"
-                  alt=""
-                />
-              </div>
-              <div class="content">
-                <h3>Grocery</h3>
-                <p>
-                  Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
-                  diam nonumy eirmod tempor invidunt.
-                </p>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-4 col-md-6">
-            <div class="single-service wow fadeInUp" data-wow-delay=".6s">
-              <div class="icon">
-                <img
-                  th:src="@{/assets2/img/service/service-icon-3.svg}"
-                  alt=""
-                />
-              </div>
-              <div class="content">
-                <h3>Furniture</h3>
-                <p>
-                  Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
-                  diam nonumy eirmod tempor invidunt.
-                </p>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-4 col-md-6">
-            <div class="single-service wow fadeInUp" data-wow-delay=".2s">
-              <div class="icon">
-                <img
-                  th:src="@{/assets2/img/service/service-icon-4.svg}"
-                  alt=""
-                />
-              </div>
-              <div class="content">
-                <h3>Medicine</h3>
-                <p>
-                  Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
-                  diam nonumy eirmod tempor invidunt.
-                </p>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-4 col-md-6">
-            <div class="single-service wow fadeInUp" data-wow-delay=".4s">
-              <div class="icon">
-                <img
-                  th:src="@{/assets2/img/service/service-icon-5.svg}"
-                  alt=""
-                />
-              </div>
-              <div class="content">
-                <h3>Electronics</h3>
-                <p>
-                  Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
-                  diam nonumy eirmod tempor invidunt.
-                </p>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-4 col-md-6">
-            <div class="single-service wow fadeInUp" data-wow-delay=".6s">
-              <div class="icon">
-                <img
-                  th:src="@{/assets2/img/service/service-icon-6.svg}"
-                  alt=""
-                />
-              </div>
-              <div class="content">
-                <h3>Clothes</h3>
-                <p>
-                  Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
-                  diam nonumy eirmod tempor invidunt.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-    <!-- ========================= service-section end ========================= -->
+        </section>
+        <!-- ========================= service-section end ========================= -->
 
-    <!-- ========================= partners-section start ========================= -->
-    <section id="partner" class="partner-section pb-60">
-      <div class="container">
-        <div class="row">
-          <a sec:authorize="!isAuthenticated()" th:href="@{/user/signup}"
-            ><button type="button" class="btn btn-xl btn-outline-primary">
-              가입하고 시작하기
-            </button></a
-          >
-          <a sec:authorize="!isAuthenticated()" th:href="@{/user/login}"
-            ><button type="button" class="btn btn-xl btn-primary">
-              로그인하기
-            </button></a
-          >
-        </div>
-      </div>
-    </section>
-    <!-- ========================= partners-section end =========================
+        <!-- ========================= partners-section start ========================= -->
+        <section id="partner" class="partner-section pb-60">
+            <div class="container">
+                <div class="row">
+                    <a sec:authorize="!isAuthenticated()" th:href="@{/user/signup}"
+                        ><button type="button" class="btn btn-xl btn-outline-primary">가입하고 시작하기</button></a
+                    >
+                    <a sec:authorize="!isAuthenticated()" th:href="@{/user/login}"
+                        ><button type="button" class="btn btn-xl btn-primary">로그인하기</button></a
+                    >
+                </div>
+            </div>
+        </section>
+        <!-- ========================= partners-section end =========================
 
     <!-- ========================= footer start ========================= -->
-    <footer id="footer" class="footer pt-100 pb-70">
-      <div class="footer-shape">
-        <img
-          th:src="@{/assets2/img/footer/footer-left.svg}"
-          alt=""
-          class="shape shape-1"
-        />
-        <img
-          th:src="@{/assets2/img/footer/footer-right.svg}"
-          alt=""
-          class="shape shape-2"
-        />
-      </div>
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-3 col-md-6">
-            <div class="footer-widget wow fadeInUp" data-wow-delay=".2s">
-              <div class="logo">
-                <a th:href="@{/}"
-                  ><img th:src="@{/assets2/img/logo/logo-2.svg}" alt="logo"
-                /></a>
-              </div>
-              <div class="download-btns">
-                <a href="javascript:void(0)">
-                  <span class="icon"><i class="lni lni-apple"></i></span>
-                  <span class="text">Download on the <b>App Store</b> </span>
-                </a>
-                <a href="javascript:void(0)">
-                  <span class="icon"><i class="lni lni-play-store"></i></span>
-                  <span class="text">GET IT ON <b>Play Store</b> </span>
-                </a>
-              </div>
+        <footer id="footer" class="footer pt-100 pb-70">
+            <div class="footer-shape">
+                <img th:src="@{/assets2/img/footer/footer-left.svg}" alt="" class="shape shape-1" />
+                <img th:src="@{/assets2/img/footer/footer-right.svg}" alt="" class="shape shape-2" />
             </div>
-          </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-3 col-md-6">
+                        <div class="footer-widget wow fadeInUp" data-wow-delay=".2s">
+                            <div class="logo">
+                                <a th:href="@{/}"
+                                    ><img
+                                        th:src="@{/images/12124889.png}"
+                                        alt="logo"
+                                        style="width: 70px; height: 70px"
+                                    />
+                                    <p>생활비서 서비스</p></a
+                                >
+                            </div>
+                            <div class="download-btns">
+                                <a href="javascript:void(0)">
+                                    <span class="icon"><i class="lni lni-apple"></i></span>
+                                    <span class="text">Download on the <b>App Store</b> </span>
+                                </a>
+                                <a href="javascript:void(0)">
+                                    <span class="icon"><i class="lni lni-play-store"></i></span>
+                                    <span class="text">GET IT ON <b>Play Store</b> </span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
 
-          <div class="col-lg-3 col-md-6">
-            <div class="footer-widget wow fadeInUp" data-wow-delay=".4s">
-              <h3>About Us</h3>
-              <ul class="links">
-                <li>
-                  <a href="javascript:void(0)">Home</a>
-                </li>
-                <li>
-                  <a href="javascript:void(0)">Services</a>
-                </li>
-                <li>
-                  <a href="javascript:void(0)">About Us</a>
-                </li>
-                <li>
-                  <a href="javascript:void(0)">Contact</a>
-                </li>
-              </ul>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="footer-widget wow fadeInUp" data-wow-delay=".4s">
+                            <h3>About Us</h3>
+                            <ul class="links">
+                                <li>
+                                    <a href="javascript:void(0)">Home</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Services</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">About Us</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Contact</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-6">
+                        <div class="footer-widget wow fadeInUp" data-wow-delay=".6s">
+                            <h3>About</h3>
+                            <ul class="links">
+                                <li>
+                                    <a href="javascript:void(0)">Partners</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Terms of Service</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Privacy Policy</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Refund Policy</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-6">
+                        <div class="footer-widget wow fadeInUp" data-wow-delay=".8s">
+                            <h3>Support</h3>
+                            <ul class="links">
+                                <li>
+                                    <a href="javascript:void(0)">Open Ticket</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Community</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Return Policy</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">Accessibility</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <p>
+                        Designed and Developed by
+                        <a href="https://uideck.com" style="color: #fff" rel="nofollow">UIdeck</a>
+                    </p>
+                </div>
             </div>
-          </div>
+        </footer>
+        <!-- ========================= footer end ========================= -->
 
-          <div class="col-lg-3 col-md-6">
-            <div class="footer-widget wow fadeInUp" data-wow-delay=".6s">
-              <h3>About</h3>
-              <ul class="links">
-                <li>
-                  <a href="javascript:void(0)">Partners</a>
-                </li>
-                <li>
-                  <a href="javascript:void(0)">Terms of Service</a>
-                </li>
-                <li>
-                  <a href="javascript:void(0)">Privacy Policy</a>
-                </li>
-                <li>
-                  <a href="javascript:void(0)">Refund Policy</a>
-                </li>
-              </ul>
-            </div>
-          </div>
+        <!-- ========================= scroll-top ========================= -->
+        <a href="#" class="scroll-top btn-hover">
+            <i class="lni lni-chevron-up"></i>
+        </a>
 
-          <div class="col-lg-3 col-md-6">
-            <div class="footer-widget wow fadeInUp" data-wow-delay=".8s">
-              <h3>Support</h3>
-              <ul class="links">
-                <li>
-                  <a href="javascript:void(0)">Open Ticket</a>
-                </li>
-                <li>
-                  <a href="javascript:void(0)">Community</a>
-                </li>
-                <li>
-                  <a href="javascript:void(0)">Return Policy</a>
-                </li>
-                <li>
-                  <a href="javascript:void(0)">Accessibility</a>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <p>
-            Designed and Developed by
-            <a href="https://uideck.com" style="color: #fff" rel="nofollow"
-              >UIdeck</a
-            >
-          </p>
-        </div>
-      </div>
-    </footer>
-    <!-- ========================= footer end ========================= -->
-
-    <!-- ========================= scroll-top ========================= -->
-    <a href="#" class="scroll-top btn-hover">
-      <i class="lni lni-chevron-up"></i>
-    </a>
-
-    <!-- ========================= JS here ========================= -->
-    <script th:src="@{/assets2/js/bootstrap.5.0.0.alpha-2-min.js}"></script>
-    <script th:src="@{/assets2/js/count-up.min.js}"></script>
-    <script th:src="@{/assets2/js/wow.min.js}"></script>
-    <script th:src="@{/assets2/js/main.js}"></script>
-  </body>
+        <!-- ========================= JS here ========================= -->
+        <script th:src="@{/assets2/js/bootstrap.5.0.0.alpha-2-min.js}"></script>
+        <script th:src="@{/assets2/js/count-up.min.js}"></script>
+        <script th:src="@{/assets2/js/wow.min.js}"></script>
+        <script th:src="@{/assets2/js/main.js}"></script>
+    </body>
 </html>

@@ -387,24 +387,18 @@
                                 alt
                                 class="w-px-40 h-auto rounded-circle"
                               />
-                    </div>
-                  </a>
-                  <ul class="dropdown-menu dropdown-menu-end">
-                    <li>
-                      <a class="dropdown-item" href="#">
-                        <div class="d-flex">
-                          <div class="flex-shrink-0 me-3">
-                            <div class="avatar avatar-online">
-                              <img
-                                th:src="@{/assets/img/avatars/1.png}"
-                                alt
-                                class="w-px-40 h-auto rounded-circle"
-                              />
                             </div>
                           </div>
                           <div class="flex-grow-1">
-                            <span class="fw-semibold d-block">사용자명</span>
-                            <small class="text-muted">권한명</small>
+                            <span
+                              th:text="${loginUser.userNickname}"
+                              class="fw-semibold d-block"
+                              >별명</span
+                            >
+                            <small
+                              th:text="${loginUser.userId}"
+                              class="text-muted"
+                            ></small>
                           </div>
                         </div>
                       </a>
@@ -891,6 +885,7 @@
         </div>
       </div>
     </div>
+    
 
     <!-- / Layout wrapper -->
 
