@@ -2,12 +2,9 @@
  * chart.js 활용해서 차트 그리는 .js
  */
 
-
 $(document).ready(function() {
   weekExpenseAcc();
 
-  
-    
   /////PERFECT SCROLLBAR/////PERFECT SCROLLBAR/////PERFECT SCROLLBAR/////PERFECT SCROLLBAR/////PERFECT SCROLLBAR/////PERFECT SCROLLBAR/////
   /////스크롤바/////스크롤바/////스크롤바/////스크롤바/////스크롤바/////스크롤바/////스크롤바/////스크롤바/////스크롤바/////스크롤바/////스크롤바/////
 

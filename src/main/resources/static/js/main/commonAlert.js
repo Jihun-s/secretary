@@ -3,28 +3,25 @@
  */
 
 /** 종이나 알림 메뉴 누르면 모달 띄우기  */
-document.addEventListener('DOMContentLoaded', function() {
+$(document).ready(function() {
+    /** 알림 모달 여는 함수 */
+    function openAlertModal() {
+      $('#alertModal').modal('show');
+    }
 
-  // 충돌 방지
-  var $j = jQuery.noConflict();
+    // 종 아이콘
+    var bellIcon = $('.bx-bell');
+    if(bellIcon) {
+      bellIcon.click(openAlertModal);
+    }
 
-  /** 알림 모달 여는 함수 */
-  function openAlertModal() {
-    var alertModal = new bootstrap.Modal(document.getElementById('alertModal'));
-    alertModal.show();
-  }
 
-  // 종 아이콘
-  var bellIcon = document.querySelector('.bx-bell');
-  if(bellIcon) {
-    bellIcon.addEventListener('click', openAlertModal);
-  }
+    // 알림 메뉴 
+    var alertMenu = $('#openAlertModalMenu');
+    if(alertMenu) {
+      alertMenu.click(openAlertModal);
+    }
 
-  // 알림 메뉴 
-  var alertMenu = document.getElementById('openAlertModalMenu');
-  if(alertMenu) {
-    alertMenu.addEventListener('click', openAlertModal);
-  }
 });
 
 /** 세탁물 필수알림 */
