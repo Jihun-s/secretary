@@ -381,7 +381,7 @@ function initUpdateBudgetModal() {
             curYear: curYear, curMonth: curMonth, curDate: curDate },
         dataType: 'JSON',
         success: (data) => {
-            toastr.success("ajax로 가져온 데이터:" + JSON.stringify(data));
+            // toastr.success("ajax로 가져온 데이터:" + JSON.stringify(data));
             if (data && typeof data === 'object') {
                 $('.budgetAvg').html(data.budgetAvg ? data.budgetAvg.toLocaleString('en-US') : '0');
                 $('.budgetAmountX').html(data.budgetAmountX ? data.budgetAmountX.toLocaleString('en-US') : '0');

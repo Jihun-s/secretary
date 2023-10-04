@@ -94,7 +94,7 @@ function getPilsuAlert() {
     let html = "";
 
     if (!data || data.length === 0) {
-      html = `<br>&nbsp;&nbsp;&nbsp;&nbsp;<p>표시할 필수 알림이 없습니다.</p>`;
+      html = `<br>&nbsp;&nbsp;&nbsp;&nbsp;<p>표시할 가계부 필수 알림이 없습니다.</p>`;
       $('#pilsuAlertListDiv').html(html);
       return;
     }
@@ -270,7 +270,7 @@ function getJeahnAlert() {
     let html = "";
 
     if (!data || data.length === 0) {
-      html = `<br>&nbsp;&nbsp;&nbsp;&nbsp;<p>표시할 제안 알림이 없습니다.</p>`;
+      html = `<br>&nbsp;&nbsp;&nbsp;&nbsp;<p>표시할 가계부 제안 알림이 없습니다.</p>`;
       $('#jeahnAlertListDiv').html(html);
       return;
     }
@@ -358,6 +358,12 @@ function getJeahnAlert() {
             html += `
             ${alert.alertDateMonth}월 ${alert.alertDateDay}일 받은 ${alert.alertContent}! 비상금으로 모아두는 건 어떨까요? 
           `;
+          }
+          // 기타
+          else {
+            html += `
+            ${alert.alertDateMonth}월 ${alert.alertDateDay}일은 ${alert.alertContent}입니다.
+            `;
           }
 
           html += `

@@ -22,6 +22,24 @@ $(document).ready(function() {
       alertMenu.click(openAlertModal);
     }
 
+    // 모달 열릴 때
+    $('#alertModal').on('show.bs.modal', function () {
+      // 외부 드롭다운 비활성화
+      $('.dropdown').prop('disabled', true);
+    });
+
+    // 모달 닫힐 때
+    $('#alertModal').on('hidden.bs.modal', function () {
+      // 외부 드롭다운 다시 활성화
+      $('.dropdown').prop('disabled', false);
+    });
+
+    // 자동 Popper.js 적용 비활성화
+    var dropdownElement = document.querySelector('.dropdown');
+    dropdownElement.setAttribute('data-bs-no-auto', '');
+
+
+
 });
 
 /** 세탁물 필수알림 */
