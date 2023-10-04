@@ -50,7 +50,7 @@ INSERT INTO
 
 <!-- 내역 전체 조회 -->
 <select id="selectAllTrans" parameterType="map" resultType="Transaction">
-	SELECT
+    SELECT
         st.trans_id AS trans_id,
         st.cashbook_id AS cashbook_id,
         st.user_id AS user_id,
@@ -65,13 +65,16 @@ INSERT INTO
         st.trans_payee AS trans_payee,
         st.trans_memo AS trans_memo,
         st.trans_amount AS trans_amount,
-        stc1.label_color AS label_color
+        stc1.label_color AS label_color,
+        su.user_nickname AS user_nickname 
     FROM
         Secretary_Transaction st
     LEFT JOIN
         Secretary_Trans_Category1 stc1 ON st.cate1_id = stc1.cate1_id
     LEFT JOIN
         Secretary_Trans_Category2 stc2 ON st.cate2_id = stc2.cate2_id
+    LEFT JOIN
+        Secretary_User su ON st.user_id = su.user_id 
     WHERE
         st.family_id = #{familyId}
         AND EXTRACT(MONTH FROM trans_date) = #{nowMonth}

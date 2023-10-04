@@ -503,7 +503,7 @@ function init() {
                                 <td><i class="fab fa-react fa-lg text-info me-3"></i> <strong>${ta.transPayee}</strong></td>
                                 <td>${ta.transMemo || ''}</td>
                                 <td style="width: 5rem;">${parseInt(ta.transAmount).toLocaleString('en-US')}</td>
-                                <td>${ta.userId || ''}</td>
+                                <td>${ta.userNickname || ta.userId}</td>
                                 <td>
                                 <div class="dropdown">
                                     <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></button>
@@ -1668,7 +1668,7 @@ function selectConditionTrans() {
                                 <td><i class="fab fa-react fa-lg text-info me-3"></i> <strong>${ta.transPayee}</strong></td>
                                 <td>${ta.transMemo || ''}</td>
                                 <td style="width: 5rem;">${parseInt(ta.transAmount).toLocaleString('en-US')}</td>
-                                <td>${ta.userId || ''}</td>
+                                <td>${ta.userNickname || ta.userId}</td>
                                 <td>
                                 <div class="dropdown">
                                     <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></button>

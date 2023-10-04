@@ -344,7 +344,7 @@ function showCalendar() {
                             <td><i class="fab fa-react fa-lg text-info me-3"></i> <strong>${ta.transPayee}</strong></td>
                             <td>${ta.transMemo || ''}</td>
                             <td>${parseInt(ta.transAmount).toLocaleString('en-US')}</td>
-                            <td>${ta.userId || ''}</td>
+                            <td>${ta.userNickname || ta.userId}</td>
                         </tr>`;
             });
 
