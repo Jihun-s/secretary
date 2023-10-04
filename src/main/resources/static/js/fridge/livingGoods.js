@@ -352,11 +352,5 @@ document.addEventListener('DOMContentLoaded', function () {
         var purchaseDateInput = document.getElementById('itemPurchaseDate');
         var today = new Date().toISOString().slice(0, 10); // 현재 날짜를 YYYY-MM-DD 형식으로 변환
         purchaseDateInput.value = today;
-
-        // 유통기한의 기본값 설정
-        var expiryDateInput = document.getElementById('itemExpiryDate');
-        var expiryDate = new Date();
-        expiryDate.setDate(expiryDate.getDate() + 14);
-        expiryDateInput.value = expiryDate.toISOString().slice(0, 10); // 현재 날짜 + 14일을 YYYY-MM-DD 형식으로 변환
     });
 });
