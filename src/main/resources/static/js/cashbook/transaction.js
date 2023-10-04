@@ -33,6 +33,13 @@ $(document).ready(function() {
     $("#transCategoriesDiv").hide();
     $("#transSearchCategory2Div").hide();
 
+
+    /////PERFECT SCROLLBAR/////PERFECT SCROLLBAR/////PERFECT SCROLLBAR/////PERFECT SCROLLBAR/////PERFECT SCROLLBAR/////PERFECT SCROLLBAR/////
+    /////스크롤바/////스크롤바/////스크롤바/////스크롤바/////스크롤바/////스크롤바/////스크롤바/////스크롤바/////스크롤바/////스크롤바/////스크롤바/////
+
+
+    const ps = new PerfectScrollbar('#transListDiv');
+
     
     /////입력폼 비동기 이벤트////입력폼 비동기 이벤트////입력폼 비동기 이벤트////입력폼 비동기 이벤트////입력폼 비동기 이벤트////
     /////입력폼 비동기 이벤트////입력폼 비동기 이벤트////입력폼 비동기 이벤트////입력폼 비동기 이벤트////입력폼 비동기 이벤트////

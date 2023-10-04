@@ -19,6 +19,14 @@ $(document).ready(function() {
     $('#updateBudgetBtModal').click(updateBudgetModal);
     $('#deleteBudgetBtModal').click(deleteBudgetModal);
 
+
+    /////PERFECT SCROLLBAR/////PERFECT SCROLLBAR/////PERFECT SCROLLBAR/////PERFECT SCROLLBAR/////PERFECT SCROLLBAR/////PERFECT SCROLLBAR/////
+    /////스크롤바/////스크롤바/////스크롤바/////스크롤바/////스크롤바/////스크롤바/////스크롤바/////스크롤바/////스크롤바/////스크롤바/////스크롤바/////
+
+
+    const ps1 = new PerfectScrollbar('#pilsuAlertListDiv');
+    const ps2 = new PerfectScrollbar('#jeahnAlertListDiv');
+
 });
 
 
