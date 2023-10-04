@@ -230,7 +230,7 @@ function getPilsuAlert() {
       }
 
       $('#pilsuAlertListDiv').html(html);
-
+      $('.pilsuAlertListDiv').html(html);
 
     },
     error: (e) => {

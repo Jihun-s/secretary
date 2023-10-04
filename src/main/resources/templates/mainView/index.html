@@ -116,7 +116,7 @@
       function closetPilsuAlert() {
         let closetNum = 0;
         let laundryCheck = true;
-        
+
         $.ajax({
           url:'closet/inCloset',
           type:'get',
@@ -144,9 +144,11 @@
             if(laundryCnt>=20){
             laundryCntStr += '<p> 세탁하러 가시는건 어떠신가요? <br> 세탁물이 <b>'+laundryCnt+'</b>개 쌓여있어요.</p>';
             $('#alertContent').html(laundryCntStr);
+            $('.alertContent').html(laundryCntStr);
             }else{
               laundryCntStr += '<p>세탁물이 20개 미만입니다. <br> 알림이 없습니다. <p>';
               $('#alertContent').html(laundryCntStr);
+              $('.alertContent').html(laundryCntStr);
             } 
           },
           error:function(e){
@@ -679,7 +681,7 @@
                             >
                               <!-- 냉장고 알림 탭 내용 -->
                               <div
-                                class="tab-pane fade show active"
+                                class="tab-pane fade show active navs-pills-justified-home"
                                 id="navs-pills-justified-home"
                                 role="tabpanel"
                               >
@@ -688,7 +690,7 @@
 
                               <!-- 생활용품 알림 탭 내용 -->
                               <div
-                                class="tab-pane fade"
+                                class="tab-pane fade navs-pills-justified-goods"
                                 id="navs-pills-justified-goods"
                                 role="tabpanel"
                               >
@@ -701,7 +703,7 @@
                                 id="alertPillCloset"
                                 role="tabpanel"
                               >
-                                <div id="alertContent">옷옷옷옷</div>
+                                <div id="alertContent" class="alertContent">옷옷옷옷</div>
                               </div>
 
                               <!-- 가계부 알림 탭 내용 -->
@@ -710,7 +712,7 @@
                                 id="alertPillCashbook"
                                 role="tabpanel"
                               >
-                                <div id="pilsuAlertListDiv">돈돈돈돈</div>
+                                <div id="pilsuAlertListDiv" class="pilsuAlertListDiv">돈돈돈돈</div>
                                 <script>
                                   
                                 </script>

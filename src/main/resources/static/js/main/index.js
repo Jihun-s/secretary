@@ -87,6 +87,7 @@ $.ajax({
     if (!data || data.length === 0) {
     html = `<p>표시할 필수 알림이 없습니다.</p>`;
     $('#pilsuAlertListDiv').html(html);
+    $('.pilsuAlertListDiv').html(html);
     return;
     }
 
@@ -221,6 +222,7 @@ $.ajax({
     }
 
     $('#pilsuAlertListDiv').html(html);
+    $('.pilsuAlertListDiv').html(html);
 
 
     },
