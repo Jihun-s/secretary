@@ -545,7 +545,7 @@
                 <!-- 1열 -->
                 <div class="col-lg-6 mb-4">
                   <h3>나의 옷장</h3>
-                  <div class="card mb-4" id="scrollCss">
+                  <div class="card mb-4">
                     <div class="d-flex align-items-end"></div>
                     <div class="card-body" style="padding:0;">
         	 			<div id="accordionIcon" class="accordion mt-3 accordion-without-arrow">
@@ -715,12 +715,12 @@
                 <!-- 2열 -->
                 <div class="col-lg-6 mb-4">
                 	<h3 style="display:inline-block;">의류 상세정보</h3>      
-                	<a th:href="@{/closet/laundryPage}">
-                		<button class="btn btn-primary" id="TolaundryPageBtn">세탁바구니 보기</button>
-                	</a>  
                 	<button type="button" class="btn btn-primary" id="insertClothesBtn" data-bs-toggle="modal" data-bs-target="#basicModal">
             		의류 등록
           			</button>
+                	<a th:href="@{/closet/laundryPage}">
+                		<button class="btn btn-primary" id="TolaundryPageBtn">세탁바구니 보기</button>
+                	</a>  
     
       
 
@@ -769,7 +769,7 @@
                       		<td>
                       		<select id="clothesCategory" class="form-control">
                       			<optgroup label="상의">
-                      				<option value="Tshirt">티셔츠</option>
+                      				<option value="Tshirt" selected>티셔츠</option>
                       				<option value="blouse">블라우스/셔츠</option>
                       				<option value="sweatshirt">맨투맨/후디</option>
                       				<option value="knitwear">니트</option>
@@ -823,7 +823,7 @@
                       		<td colspan="2"><label for="materialList">소재</label></td>
                       		<td>
 								<select id=materialList class="form-control">
-									<option value="none">해당 없음</option>
+									<option value="none" selected>해당없음</option>
 									<option value="cotton">면</option>
 									<option value="linen">린넨</option>
 									<option value="polyester">폴리에스테르</option>
@@ -855,7 +855,7 @@
                       		<td colspan="2"><label for="clothesSize">사이즈</label></td>
                       		<td>
                       			<select name="clothesSize" class="form-control">
-                      					<option value="none">해당없음</option>
+                      					<option value="해당없음" selected>해당없음</option>
                       					<option value="free">FREE</option>
                       					<option value="XS">XS</option>
                       					<option value="S">S</option>
@@ -914,7 +914,7 @@
                       		<td>
                       		<select id="updateclothesCategory" class="form-control">
                       			<optgroup label="상의">
-                      				<option value="Tshirt">티셔츠</option>
+                      				<option value="Tshirt" selected>티셔츠</option>
                       				<option value="blouse">블라우스/셔츠</option>
                       				<option value="sweatshirt">맨투맨/후디</option>
                       				<option value="knitwear">니트</option>
@@ -968,7 +968,7 @@
                       		<td colspan="2"><label for="updateMaterialList">소재</label></td>
                       		<td>
 								<select id=updateMaterialList class="form-control">
-									<option value="none">해당 없음</option>
+									<option value="none" selected>해당없음</option>
 									<option value="cotton">면</option>
 									<option value="linen">린넨</option>
 									<option value="polyester">폴리에스테르</option>
@@ -1001,7 +1001,7 @@
                       		<td colspan="2"><label for="updateClothesSize">사이즈</label></td>
                       		<td>
                       			<select name="updateClothesSize" class="form-control">
-                      					<option value="none">해당없음</option>
+                      					<option value="해당없음">해당없음</option>
                       					<option value="free">FREE</option>
                       					<option value="XS">XS</option>
                       					<option value="S">S</option>

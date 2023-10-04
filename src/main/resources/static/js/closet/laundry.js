@@ -2,7 +2,7 @@
  * 옷장 페이지
  */
 $(document).ready(function(){
-		const ps = new PerfectScrollbar('#scrollCss');
+		const ps = new PerfectScrollbar('#whatsInCloset');
 		$('#laundryAllOut').on('click',laundryAllOut);
 //!!!!!!!!!!!!!!!!!!!!!! 옷 찾기  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!	
 		//옷찾기 분류에서 소분류 숨겨놓기
@@ -63,10 +63,13 @@ $(document).ready(function(){
 				let laundryCnt = 0; //세탁물 갯수
 				$(list).each(function(i,n){
 					let clothesNum = parseInt(n.clothesNum);
-					str += '<div><a onclick="readClothes('+n.closetNum+','+clothesNum+')"><img src="../closet/clothesDownload?closetNum='+n.closetNum+'&clothesNum='+clothesNum+'"></div>';
+					str += '<div class="clothesList">\
+					<a onclick="readClothes('+n.closetNum+','+clothesNum+')">\
+					<img src="../closet/clothesDownload?closetNum='+n.closetNum+'&clothesNum='+clothesNum+'">\
+					</div>';
 					laundryCnt += 1;
 				});
-				if(str != ''){
+				if(str){
 					$('#whatsInCloset').html(str); 
 				}
 				
@@ -84,32 +87,6 @@ $(document).ready(function(){
 			}			
 		})				
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!옷장안에 의류목록 출력!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	
-// !!!!!!!!!!!!!!!!!!! 상세 정보: 세탁물 게이지 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
-		$.ajax({
-			url:'inCloset',
-			type:'get',
-			data:{closetNum : closetNum, clothesLaundry: laundryCheck},
-			dataType:'json',
-			success:function(list){
-				let str ='';
-				$(list).each(function(i,n){
-					let clothesNum = parseInt(n.clothesNum);
-					str += '<div><a onclick="readClothes('+n.closetNum+','+clothesNum+')"><img src="../closet/clothesDownload?closetNum='+n.closetNum+'&clothesNum='+clothesNum+'"></div>';
-				});
-				if(str != ''){
-					$('#whatsInCloset').html(str); 
-				}
-			},
-			error:function(e){
-				alert(JSON.stringify(e));
-			}			
-		})	  
-	
-	
-	
-	
-	
 	
 });//document.ready 끝
 
@@ -483,7 +460,7 @@ function chartDraw(dataValue){
 	};
 	
 	const materialMapping = {
-    'none': '해당 없음',
+    'none': '해당없음',
     'cotton': '면',
     'linen': '린넨',
     'polyester': '폴리에스테르',

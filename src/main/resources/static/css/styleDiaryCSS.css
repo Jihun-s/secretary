@@ -18,24 +18,18 @@ body {
 }
 
 /* 의류리스트 이미지*/
-/* #whatsInStyleDiary{
-	text-align:center;
-	max-height: 40em; 스크롤 가능한 최대 높이를 지정 (필요에 따라 조정)
- 	overflow-y: auto; 세로 스크롤을 활성화	
- 	height:34rem;
-} */
-#scrollCss{
+#whatsInStyleDiary{
 	position:relative;
 	text-align:center;
-	/* max-height: 40em; 스크롤 가능한 최대 높이를 지정 (필요에 따라 조정) */
  	overflow-y: auto; /* 세로 스크롤을 활성화 */
- 	height:40.3rem;	
+ 	height:36.3rem;
 }
+
 #accordionIcon{
 	margin-left:1em;
 	width:95%
 }
-#whatsInStyleDiary > div{
+div.styleList{
 	margin-right:1em;
 	margin-bottom:1em;
 	border-color: pink; 
@@ -49,7 +43,7 @@ body {
 	width:14.5em;
 	height:10em;
 }
-#whatsInStyleDiary div:hover{
+div.styleList:hover{
 	transform: translate3d(1px,1px,1px);
 	cursor:pointer;
 }
@@ -71,7 +65,7 @@ body {
  	overflow-y: auto; /* 세로 스크롤을 활성화 */
 	text-align:center;
 }
-#whatsInCloset > div, #whatsInClosetForUpdateDiary > div{
+div.clothesList{
 	margin-right:1em;
 	margin-bottom:1em;
 	border-color: pink; 
@@ -85,20 +79,16 @@ body {
 	width:13em;
 	height:10em;
 }
-#whatsInCloset div:hover{
+div.clothesList:hover{
 	transform: translate3d(1px,1px,1px);
 	cursor:pointer;	
 }
-#whatsInClosetForUpdateDiary div:hover{
-	transform: translate3d(1px,1px,1px);
-	cursor:pointer;	
-}
-
 
 /*세탁바구니 보기 버튼*/
 #TolaundryPageBtn {
-	display:inline-block; position:relative; right:-11.4rem; 
+	display:inline-block; float:right;
 	background-color: rgba(223,132,166,255); border-color: rgba(223,132,166,255);
+	margin-right:0.4rem;
 }
 /*코디등록 버튼*/
 #insertStyleBtn{

@@ -3,7 +3,10 @@
  */
 $(document).ready(function(){
 	
-	const ps = new PerfectScrollbar('#scrollCss');
+	const ps = new PerfectScrollbar('#whatsInStyleDiary');
+	const psForInsert = new PerfectScrollbar('#whatsInCloset');
+	const psForUpdate = new PerfectScrollbar('#whatsInClosetForUpdateDiary');
+	
 	let closetNum = 0; //  전체 옷장에서 찾기
 
 // !!!!!!!!!!!!!!!!!!			차트 그리기			!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!	
@@ -79,7 +82,7 @@ $(document).ready(function(){
 			let str ='';
 			$(list).each(function(i,n){
 				let styleNum = parseInt(n.styleNum);
-				str +='<div><a onclick="readDiary('+styleNum+')">\
+				str +='<div class="styleList"><a onclick="readDiary('+styleNum+')">\
 					<img src="../closet/styleDiary/styleDiaryDownload?styleNum='+styleNum+'&userId='+n.userId+'">\
 						</a></div>';
 			});
@@ -101,10 +104,10 @@ $(document).ready(function(){
 				let updateStr = '';
 				$(list).each(function(i,n){
 					let clothesNum = parseInt(n.clothesNum);
-					str +='<div><a onclick="deliverImg('+n.closetNum+','+clothesNum+')">\
+					str +='<div class="clothesList"><a onclick="deliverImg('+n.closetNum+','+clothesNum+')">\
 					<img src="../closet/clothesDownload?closetNum='+n.closetNum+'&clothesNum='+clothesNum+'">\
 						   </a></div>';
-					updateStr += '<div><a onclick="deliverImgForUpdateDiary('+n.closetNum+','+clothesNum+')">\
+					updateStr += '<div class="clothesList"><a onclick="deliverImgForUpdateDiary('+n.closetNum+','+clothesNum+')">\
 					<img src="../closet/clothesDownload?closetNum='+n.closetNum+'&clothesNum='+clothesNum+'">\
 						   </a></div>';	 
 				});
@@ -171,7 +174,10 @@ function styleCreate(){
 	var seasonChecked = $("input:checkbox[name='seasons']:checked");
 	$(seasonChecked).each(function(){
 		seasonArr.push($(this).val());
-	}); 
+	});
+	if(seasonArr.length == 0){
+		seasonArr.push("해당없음");
+	}
 	console.log(seasonArr);
 	
 	//TPO 변수
@@ -457,6 +463,9 @@ function openUpdateModal(styleNum){
 	$(seasonChecked).each(function(){
 		seasonArr.push($(this).val());
 	}); 
+	if(seasonArr.length == 0){
+		seasonArr.push("해당없음");
+	}
 	console.log('계절: '+seasonArr);
 	
 	//TPO 변수
