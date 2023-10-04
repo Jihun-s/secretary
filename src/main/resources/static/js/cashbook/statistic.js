@@ -165,7 +165,8 @@ function mostCate2() {
                                     style="width: 10rem; height: 10rem; margin: 0 auto;"
                                 />
                                 <h4 class="d-flex justify-content-center align-items-center">${mostFreqCate2.cate2Name}</h4>
-                                <span class="d-flex justify-content-center align-items-center mb-4">이번 달 <mark>${mostFreqCate2.cate2Name}</mark>에 가장 자주 지출했어요.</span>
+                                <span class="d-flex justify-content-center align-items-center">이번 달 <mark>${mostFreqCate2.cate2Name}</mark>에 가장 자주 지출했어요.</span>
+                                <span class="d-flex justify-content-center align-items-center mb-4">총 <b>${mostFreqCate2.transCount}</b>회</span>
                             </div>
                         <table style="width:100%; text-align: center;">
                     <tr>
@@ -187,6 +188,7 @@ function mostCate2() {
                                 />
                                 <h4 class="d-flex justify-content-center align-items-center mb-4">${mostLgCate2.cate2Name}</h4>
                                 <span class="d-flex justify-content-center align-items-center">이번 달 <mark>${mostLgCate2.cate2Name}</mark>에 가장 많이 썼어요.</span>
+                                <span class="d-flex justify-content-center align-items-center mb-4">총 <b>${mostLgCate2.totalAmount.toLocaleString('en-US')}</b>원</span>
                             </div>
                         <table style="width:100%; text-align: center;">
                     <tr>
