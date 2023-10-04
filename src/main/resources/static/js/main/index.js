@@ -1,3 +1,14 @@
+
+
+
+$(document).ready(function() {
+  $('#fridgeNotificationBt').click(loadData);
+});
+
+
+
+
+
 /** 예산 설정 여부 확인하는 전역변수 */
 let budgetExist = 0;
 /** (예산-지출) > 0인지 확인하는 전역변수 */
@@ -70,7 +81,7 @@ $.ajax({
         <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" style="border: none;">
             <a href="/secretary/cashbook">
                 <div>
-                ${curMonth}월 예산이 설정되지 않았습니다. 여기를 클릭하면 예산을 설정할 수 있어요.
+                ${curMonth}월 예산이 설정되지 않았습니다. 예산을 설정하고 돈을 효율적으로 관리해보세요.
                 </div>
             </a>
         </div>
@@ -85,7 +96,7 @@ $.ajax({
         <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" style="border: none;">
             <a href="javascript:openUpdateBudgetModal()">
             <div>
-            ${curMonth}월 예산을 초과했어요! 과소비를 계속하면 길바닥에 나앉을 수 있어요. 여기를 눌러 예산을 다시 설정할 수 있어요.
+            ${curMonth}월 예산을 초과했어요!  현실적인 예산을 다시 설정하거나 반성하는 시간을 가져요.
             </div>
             </a>
         </div>
