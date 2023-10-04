@@ -162,30 +162,30 @@ let listHtml = `
         </div>
         <!-- 검색 -->
         <div class="row">
-          <label class="form-label" for="search">검색</label>
-          <div class="input-group input-group-merge">
-            <select id="searchBy" name="searchBy" class="form-select">
-              <option value="all" selected>전체</option>
-              <option value="transPayee">거래내용</option>
-              <option value="transMemo">거래메모</option>
-              <option value="transAmount">거래금액</option>
-            </select>
-            <span class="input-group-text"><i class="bx bx-search"></i></span>
-            <input type="text" id="searchWord" name="searchWord" style="width: 35%" class="form-control" placeholder="검색" aria-label="검색" aria-describedby="검색">
-            <button class="btn btn-outline-success" id="searchSubmitBt">검색</button>
-          </div>
+        <label class="form-label" for="search">검색</label>
+        <div class="input-group input-group-merge">
+          <select id="searchBy" name="searchBy" class="form-select">
+            <option value="all" selected>전체</option>
+            <option value="transPayee">거래내용</option>
+            <option value="transMemo">거래메모</option>
+            <option value="transAmount">거래금액</option>
+          </select>
+          <span class="input-group-text"><i class="bx bx-search"></i></span>
+          <input type="text" id="searchWord" name="searchWord" style="width: 35%" class="form-control" placeholder="검색" aria-label="검색" aria-describedby="검색">
+          <button class="btn btn-outline-success" id="searchSubmitBt">검색</button>
         </div>
       </div>
     </div>
-    <!-- 내역 테이블 -->
-    <div class="row mt-5">
-      <div class="table-responsive text-nowrap">
-        <div id="transListDiv" class="ps ps--active-x ps--active-y" style="overflow-y: auto; max-height: 40rem;">
-          <!-- 반복문 들어가는 자리 -->
-        </div>
+  </div>
+  <!-- 내역 테이블 -->
+  <div class="row mt-5">
+    <div class="table-responsive text-nowrap">
+      <div id="transListDiv" class="ps ps--active-x ps--active-y transListDiv" style="overflow-y: auto; height: 50rem;">
+        <!-- 반복문 들어가는 자리 -->
+      </div>
 
-      </div>
     </div>
+  </div>
 `;
 
 
@@ -329,6 +329,7 @@ function showCalendar() {
                             <th>내용</th>
                             <th>메모</th>
                             <th>거래금액</th>
+                            <th>작성자</th>
                         </tr>
                     </thead>
                     <tbody class="table-border-bottom-0">`;
@@ -343,6 +344,7 @@ function showCalendar() {
                             <td><i class="fab fa-react fa-lg text-info me-3"></i> <strong>${ta.transPayee}</strong></td>
                             <td>${ta.transMemo || ''}</td>
                             <td>${parseInt(ta.transAmount).toLocaleString('en-US')}</td>
+                            <td>${ta.userNickname || ta.userId}</td>
                         </tr>`;
             });
 
@@ -381,6 +383,8 @@ function showList() {
   if(calendar) {
     calendar.destroy(); // 만들었던 달력 객체 폐기
   }
+
+
     
   // 오늘 날짜로 초기화
   $('#dateReset').click(function() {
@@ -419,4 +423,19 @@ function showList() {
   $("#transCategoriesDiv").hide();
   $("#transSearchCategory2Div").hide();
 
+  // 스크롤바 
+  const containers = [
+      document.querySelector('#transListDiv'),
+      document.querySelector('.transListDiv'),
+      document.querySelector('.card-body')
+  ].filter(el => el !== null); 
+
+  const options = {
+      wheelSpeed: 1,
+      wheelPropagation: true,
+  };
+
+  containers.forEach(container => {
+      new PerfectScrollbar(container, options);
+  });
 }
