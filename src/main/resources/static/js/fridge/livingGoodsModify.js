@@ -432,7 +432,7 @@ function loadLivingGoodsForNotification(callback) {
 }
 
 function createEssentialNotifications() {
-    $('#navs-pills-justified-home').empty();
+    $('#navs-pills-justified-goods').empty();
     const today = new Date();
     const oneWeekFromNow = new Date(today);
     oneWeekFromNow.setDate(today.getDate() + 7);
@@ -457,12 +457,12 @@ function createEssentialNotifications() {
                                   <p style="margin-bottom: 0;">[${item.itemCategory}]${item.itemName}의 유통기한이 <span style="color:${color}">${diffDays}일</span> 남았습니다! - </p>
                                   <span class="consume-text consume-btn" data-item-id="${item.itemId}" data-item-quantity="${item.itemQuantity}" data-item-name="${item.itemName}" data-item-category="${item.itemCategory}"> [소비]</span></p>
                               </div>`;
-        $('#navs-pills-justified-home').append(notification);
+        $('#navs-pills-justified-goods').append(notification);
     });
 }
 
 function createSuggestedNotifications() {
-    $('#navs-pills-justified-profile').empty();
+    $('#navs-pills-justified-suggested').empty();
     // 이 부분은 서버에서 15일, 30일 사용하지 않은 제품 정보를 가져와야 함
     // 아래는 예시 코드
     $.ajax({
@@ -487,7 +487,7 @@ function displaySuggestedNotifications(goods, days) {
                 <span class="consume-text consume-btn" data-item-id="${item.itemId}" data-item-quantity="${item.itemQuantity}" data-item-name="${item.itemName}" data-item-category="${item.itemCategory}"> [소비]</span></p>
             </div>
         `;
-        $('#navs-pills-justified-profile').append(notification);
+        $('#navs-pills-justified-suggested').append(notification);
     });
 }
 

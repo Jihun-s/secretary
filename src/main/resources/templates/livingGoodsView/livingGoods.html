@@ -60,6 +60,8 @@
         <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
         <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
         <script th:src="@{/assets/js/config.js}"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/perfect-scrollbar@latest/css/perfect-scrollbar.css" />
+        <script src="https://cdn.jsdelivr.net/npm/perfect-scrollbar@latest/dist/perfect-scrollbar.min.js"></script>
         <script th:src="@{/assets/vendor/libs/jquery/jquery.js}"></script>
         <script th:src="@{/js/fridge/livingGoodsSpeechscript.js}"></script>
         <script th:src="@{/js/fridge/livingGoods.js}"></script>
@@ -165,7 +167,6 @@
                 display: grid;
                 grid-template-columns: repeat(4, 1fr);
                 gap: 1%;
-                overflow-y: auto;
                 max-height: calc(125px * 4); /* 또는 적절한 값으로 설정 */
             }
 
@@ -186,7 +187,6 @@
 
             #consumptionHistoryContainer {
                 height: 510px; /* 4개의 아이템이 약 300px에 해당될 것으로 예상됩니다. 조절이 필요하면 값을 변경해 주세요. */
-                overflow-y: auto; /* 세로 스크롤 */
                 font-size: 10px;
             }
 
@@ -508,10 +508,10 @@
                                                         <ul class="nav nav-tabs nav-fill" role="tablist">
                                                             <li class="nav-item">
                                                                 <button
-                                                                    aria-controls="navs-justified-home"
+                                                                    aria-controls="navs-justified-goods"
                                                                     aria-selected="true"
                                                                     class="nav-link active"
-                                                                    data-bs-target="#navs-justified-home"
+                                                                    data-bs-target="#navs-justified-goods"
                                                                     data-bs-toggle="tab"
                                                                     role="tab"
                                                                     type="button"
@@ -525,10 +525,10 @@
                                                             </li>
                                                             <li class="nav-item">
                                                                 <button
-                                                                    aria-controls="navs-justified-profile"
+                                                                    aria-controls="navs-justified-suggested"
                                                                     aria-selected="false"
                                                                     class="nav-link"
-                                                                    data-bs-target="#navs-justified-profile"
+                                                                    data-bs-target="#navs-justified-suggested"
                                                                     data-bs-toggle="tab"
                                                                     role="tab"
                                                                     type="button"
@@ -540,7 +540,7 @@
                                                         <div class="tab-content">
                                                             <div
                                                                 class="tab-pane fade active show justify-content-between"
-                                                                id="navs-justified-home"
+                                                                id="navs-justified-goods"
                                                                 role="tabpanel"
                                                             >
                                                                 <p>필수알림1</p>
@@ -548,7 +548,7 @@
                                                             </div>
                                                             <div
                                                                 class="tab-pane fade"
-                                                                id="navs-justified-profile"
+                                                                id="navs-justified-suggested"
                                                                 role="tabpanel"
                                                             >
                                                                 <p>제안알림1</p>
@@ -1157,10 +1157,10 @@
                                                     <ul class="nav nav-pills mb-3 nav-fill" role="tablist">
                                                         <li class="nav-item">
                                                             <button
-                                                                aria-controls="navs-pills-justified-home"
+                                                                aria-controls="navs-pills-justified-goods"
                                                                 aria-selected="true"
                                                                 class="nav-link active"
-                                                                data-bs-target="#navs-pills-justified-home"
+                                                                data-bs-target="#navs-pills-justified-goods"
                                                                 data-bs-toggle="tab"
                                                                 role="tab"
                                                                 type="button"
@@ -1170,10 +1170,10 @@
                                                         </li>
                                                         <li class="nav-item">
                                                             <button
-                                                                aria-controls="navs-pills-justified-profile"
+                                                                aria-controls="navs-pills-justified-suggested"
                                                                 aria-selected="false"
                                                                 class="nav-link"
-                                                                data-bs-target="#navs-pills-justified-profile"
+                                                                data-bs-target="#navs-pills-justified-suggested"
                                                                 data-bs-toggle="tab"
                                                                 role="tab"
                                                                 type="button"
@@ -1185,12 +1185,12 @@
                                                     <div
                                                         class="tab-content flex-fill"
                                                         id="fridge-notification"
-                                                        style="height: 33rem; overflow-y: auto"
+                                                        style="height: 33rem"
                                                     >
                                                         <!-- 필수 알림 탭 내용 -->
                                                         <div
                                                             class="tab-pane fade show active"
-                                                            id="navs-pills-justified-home"
+                                                            id="navs-pills-justified-goods"
                                                             role="tabpanel"
                                                         >
                                                             <!-- 필수 알림 내용이 여기에 동적으로 추가됩니다 -->
@@ -1198,7 +1198,7 @@
                                                         <!-- 제안 알림 탭 내용 -->
                                                         <div
                                                             class="tab-pane fade"
-                                                            id="navs-pills-justified-profile"
+                                                            id="navs-pills-justified-suggested"
                                                             role="tabpanel"
                                                         >
                                                             <!-- 제안 알림 내용이 여기에 동적으로 추가됩니다 -->

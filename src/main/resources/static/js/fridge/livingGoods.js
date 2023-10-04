@@ -1,3 +1,21 @@
+document.addEventListener('DOMContentLoaded', function () {
+    const containers = [
+        document.querySelector('#livingItemsContainer'),
+        document.querySelector('#consumptionHistoryContainer'),
+        document.querySelector('#fridge-notification')
+    ].filter(el => el !== null); // 존재하지 않는 요소를 배열에서 제거합니다.
+
+    const options = {
+        wheelSpeed: 1,
+        wheelPropagation: true,
+        // 여기에 추가 옵션을 넣을 수 있습니다.
+    };
+
+    containers.forEach(container => {
+        new PerfectScrollbar(container, options);
+    });
+});
+
 $(document).ready(function () {
     $('#itemCategory').change(function () {
         if ($(this).val() === 'custom') {
