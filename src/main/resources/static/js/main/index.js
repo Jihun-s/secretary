@@ -2,7 +2,23 @@
 
 
 $(document).ready(function() {
-  $('#fridgeNotificationBt').click(loadData);
+  /////스크롤바/////
+  const containers = [
+    document.querySelector('#mainAlertDiv'),
+    document.querySelector('.tab-content'),
+    document.querySelector('#navs-pills-justified-home'),
+    document.querySelector('#navs-pills-justified-goods')
+  ].filter(el => el !== null); 
+
+  const options = {
+      wheelSpeed: 1,
+      wheelPropagation: true,
+  };
+
+  containers.forEach(container => {
+      new PerfectScrollbar(container, options);
+  });
+
 });
 
 
