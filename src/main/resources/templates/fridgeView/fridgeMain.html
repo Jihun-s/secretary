@@ -64,6 +64,9 @@
         <script th:src="@{/assets/vendor/libs/jquery/jquery.js}"></script>
         <script type="module" th:src="@{/js/fridge/loadAllFoodsByCategory.js}"></script>
         <script type="module" th:src="@{/js/fridge/fridgeNotification.js}"></script>
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/perfect-scrollbar@latest/css/perfect-scrollbar.css" />
+        <script src="https://cdn.jsdelivr.net/npm/perfect-scrollbar@latest/dist/perfect-scrollbar.min.js"></script>
         <script type="module" th:src="@{/js/fridge/fridgeScript.js}"></script>
 
         <style>
@@ -168,7 +171,7 @@
                 display: grid;
                 grid-template-columns: repeat(4, 1fr); /* 4개의 칼럼을 일정한 비율로 생성 */
                 gap: 1%; /* 상자 사이의 간격을 조절합니다. */
-                overflow-y: auto;
+                /*overflow-y: auto;*/
                 max-height: calc(125px * 4);
             }
 
@@ -288,7 +291,6 @@
 
             #consumptionHistoryContainer {
                 height: 300px; /* 4개의 아이템이 약 300px에 해당될 것으로 예상됩니다. 조절이 필요하면 값을 변경해 주세요. */
-                overflow-y: auto; /* 세로 스크롤 */
                 font-size: 10px;
             }
 
@@ -1308,7 +1310,7 @@
                                                     <div
                                                         class="tab-content flex-fill"
                                                         id="fridge-notification"
-                                                        style="height: 33rem; overflow-y: auto"
+                                                        style="height: 33rem"
                                                     >
                                                         <!-- 필수 알림 탭 내용 -->
                                                         <div
