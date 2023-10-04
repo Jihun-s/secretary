@@ -378,7 +378,9 @@ function showList() {
   isCal = false;
   $('#transViewDiv').html(listHtml);
   
-  calendar.destroy(); // 만들었던 달력 객체 폐기
+  if(calendar) {
+    calendar.destroy(); // 만들었던 달력 객체 폐기
+  }
     
   // 오늘 날짜로 초기화
   $('#dateReset').click(function() {
