@@ -98,7 +98,7 @@ public class CashbookTransRestController {
 	
 	/** 내역 수정 */
 	@PostMapping("updateTrans")
-	public void updateTrans(Transaction trans
+	public int updateTrans(Transaction trans
 			, Model model) {
 		log.debug("컨트롤러에 넘어온 수정할 거래내역:{}", trans);
 		
@@ -110,11 +110,12 @@ public class CashbookTransRestController {
 		
 		int n = service.updateTrans(trans);
 		
+		return n;
 	}
 	
 	/** 내역 삭제 */
 	@PostMapping("deleteTrans")
-	public void deleteTrans(int transId, Model model) {
+	public int deleteTrans(int transId, Model model) {
 		log.debug("삭제할 거래번호:{}", transId);
 		
 		User loginUser = (User) model.getAttribute("loginUser");
@@ -126,6 +127,8 @@ public class CashbookTransRestController {
 		log.debug("삭제할 거래내역:{}", trans);
 		
 		int n = service.deleteTrans(trans);	
+		
+		return n;
 	}
 	
 	/** 대분류 불러오기 */

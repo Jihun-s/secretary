@@ -142,7 +142,7 @@ INSERT INTO
 <!-- 내역 삭제 -->
 <delete id="deleteTrans" parameterType="Transaction">
 	DELETE FROM Secretary_Transaction
-	WHERE trans_id = #{transId} AND family_id = #{familyId}
+	WHERE trans_id = #{transId} AND family_id = #{familyId} AND user_id = #{userId}
 </delete>
 
 <!-- 대분류 불러오기 -->
@@ -284,6 +284,7 @@ INSERT INTO
         , trans_memo = #{transMemo}
         , trans_amount = #{transAmount}
     WHERE trans_id = #{transId}
+    	AND user_id = #{userId}
         AND family_id = #{familyId}
 </update>
 
