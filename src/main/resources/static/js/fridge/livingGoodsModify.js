@@ -432,7 +432,7 @@ function loadLivingGoodsForNotification(callback) {
 }
 
 function createEssentialNotifications() {
-    $('#navs-pills-justified-goods').empty();
+    $('.navs-pills-justified-goods').empty();
     const today = new Date();
     const oneWeekFromNow = new Date(today);
     oneWeekFromNow.setDate(today.getDate() + 7);
@@ -457,7 +457,7 @@ function createEssentialNotifications() {
                                   <p style="margin-bottom: 0;">[${item.itemCategory}]${item.itemName}의 유통기한이 <span style="color:${color}">${diffDays}일</span> 남았습니다! - </p>
                                   <span class="consume-text consume-btn" data-item-id="${item.itemId}" data-item-quantity="${item.itemQuantity}" data-item-name="${item.itemName}" data-item-category="${item.itemCategory}"> [소비]</span></p>
                               </div>`;
-        $('#navs-pills-justified-goods').append(notification);
+        $('.navs-pills-justified-goods').append(notification);
     });
 }
 
