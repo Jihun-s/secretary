@@ -86,8 +86,9 @@ div.clothesList:hover{
 
 /*세탁바구니 보기 버튼*/
 #TolaundryPageBtn {
-	display:inline-block; position:relative; right:-11.4rem; 
+	display:inline-block; float:right;
 	background-color: rgba(223,132,166,255); border-color: rgba(223,132,166,255);
+	margin-right:0.4rem;
 }
 /*코디등록 버튼*/
 #insertStyleBtn{
