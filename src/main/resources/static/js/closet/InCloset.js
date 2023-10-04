@@ -2,7 +2,7 @@
  * 옷장 페이지
  */
 $(document).ready(function(){
-	const ps = new PerfectScrollbar('#scrollCss');
+	const ps = new PerfectScrollbar('#whatsInCloset');
 	closetNum = parseInt(closetNum); // 스트링에서 정수형으로 변환
 	let laundryCheck = false;
 	$('#webSearchbtn').on('click',webSearch);
@@ -73,7 +73,7 @@ $(document).ready(function(){
 				let str ='';
 				$(list).each(function(i,n){
 					let clothesNum = parseInt(n.clothesNum);
-					str +='<div>\
+					str +='<div class="clothesList">\
 							<a onclick="readClothes('+n.closetNum+','+clothesNum+')">\
 							<img src="../closet/clothesDownload?closetNum='+n.closetNum+'&clothesNum='+clothesNum+'">\
 							</a></div>';

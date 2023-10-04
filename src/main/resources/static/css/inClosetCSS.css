@@ -10,13 +10,6 @@
 body {
   font-family: "NanumSquareNeo-Variable", sans-serif;
 }
-#scrollCss{
-	position:relative;
-	text-align:center;
-	/* max-height: 40em; 스크롤 가능한 최대 높이를 지정 (필요에 따라 조정) */
- 	overflow-y: auto; /* 세로 스크롤을 활성화 */
- 	height:42.8rem;	
-}
 
 /*옷찾기 Search 버튼*/
 #clothesSearchbtn{
@@ -28,8 +21,15 @@ body {
 	margin-left:1em;
 	width:95%
 }
-
-#whatsInCloset > div{
+#whatsInCloset {
+	margin-top:1rem;
+	padding:0;
+	position:relative;
+	text-align:center;
+	overflow-y: auto; /* 세로 스크롤을 활성화 */
+	height:37.75rem;	
+}
+div.clothesList{
 	width:15.2em;
 	margin-right:1em;
 	margin-bottom:1em;
@@ -44,7 +44,7 @@ body {
 	width:15.1em;
 	height:10em;
 }
-#whatsInCloset div:hover{
+div.clothesList:hover{
 	transform: translate3d(1px,1px,1px);
 	cursor:pointer;
 }

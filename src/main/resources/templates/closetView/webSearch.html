@@ -629,10 +629,10 @@
 				<th:block th:if="${counter == navi.currentPage}"></b></th:block>
               </span>
               <li class="page-item next">
-                <a class="page-link" href="javascript:void(0);"><i class="tf-icon bx bx-chevron-right"></i></a>
+                <a class="page-link" th:href="|javascript:pagingFormSubmit(${navi.currentPage + 1})|"><i class="tf-icon bx bx-chevron-right"></i></a>
               </li>
               <li class="page-item last">
-                <a class="page-link" href="javascript:void(0);"><i class="tf-icon bx bx-chevrons-right"></i></a>
+                <a class="page-link" th:href="|javascript:pagingFormSubmit(${navi.currentPage + navi.pagePerGroup})|"><i class="tf-icon bx bx-chevrons-right"></i></a>
               </li>
             </ul>
          </nav>
