@@ -1,3 +1,7 @@
+window.showFoodsByCategory = showFoodsByCategory;
+window.updateSortOrder = updateSortOrder;
+
+
 const DEFAULT_CATEGORIES = ['일반', '야채', '해산물', '육류', '과일'];
 let currentCategory = '냉장실'; // 초기값은 냉장실
 
@@ -27,8 +31,53 @@ export function getCurrentCategory() {
 export function setCurrentCategory(category) {
     currentCategory = category;
 }
+
+export function showFoodsByCategory(selectedCategory) {
+    // 모든 음식 목록에서 선택된 카테고리에 해당하는 음식만 화면에 표시
+    $('.food-item').each(function () {
+        const foodCategory = $(this).data('category');
+        if (foodCategory === selectedCategory) {
+            $(this).show();
+        } else {
+            $(this).hide();
+        }
+    });
+
+    // 선택된 카테고리로 버튼 텍스트 업데이트
+    $('#categoryDisplayButton').text(selectedCategory);
+}
+
+export function updateSortOrder(sortOrder) {
+    $('#sortOrderButton').text(sortOrder);
+
+    let $foodItems = $('.food-item');
+    let sortedItems = [];
+
+    if (sortOrder === '유효기간 순') {
+        sortedItems = $foodItems.sort((a, b) => {
+            return parseInt($(a).find('.d-day').text()) - parseInt($(b).find('.d-day').text());
+        });
+    } else if (sortOrder === '유효기간 역순') {
+        sortedItems = $foodItems.sort((a, b) => {
+            return parseInt($(b).find('.d-day').text()) - parseInt($(a).find('.d-day').text());
+        });
+    } else if (sortOrder === '입력 날짜 순') {
+        sortedItems = $foodItems.sort((a, b) => {
+            return new Date($(a).data('food-input-date')) - new Date($(b).data('food-input-date'));
+        });
+    } else if (sortOrder === '입력 날짜 역순') {
+        sortedItems = $foodItems.sort((a, b) => {
+            return new Date($(b).data('food-input-date')) - new Date($(a).data('food-input-date'));
+        });
+    }
+
+    $('#foodItemsContainer').empty().append(sortedItems);
+}
+
 import { loadAllFoodsByCategory } from './loadAllFoodsByCategory.js';
 import { displayFoodItem } from './loadAllFoodsByCategory.js';
+
+
             $(document).ready(function () {
                 loadFridgesByCategory('냉장실');
                 loadAllFoodsByCategory('냉장실');
@@ -513,7 +562,7 @@ import { displayFoodItem } from './loadAllFoodsByCategory.js';
                             $('#foodModal .modal-body').html(`
                 <div class="row">
                     <div class="col-md-6">
-                        <img src="${imagePath}" alt="${data.foodName}" class="img-fluid">
+                        <img src="${imagePath}" alt="${data.foodName}" class="img-fluid" style="width: 300px; height: 243px;">
                     </div>
                     <div class="col-md-6">
                         <p><strong>음식의 이름:</strong> ${data.foodName}</p>
@@ -862,46 +911,6 @@ import { displayFoodItem } from './loadAllFoodsByCategory.js';
             });
             //ready_End;
 
-            function showFoodsByCategory(selectedCategory) {
-                // 모든 음식 목록에서 선택된 카테고리에 해당하는 음식만 화면에 표시
-                $('.food-item').each(function () {
-                    const foodCategory = $(this).data('category');
-                    if (foodCategory === selectedCategory) {
-                        $(this).show();
-                    } else {
-                        $(this).hide();
-                    }
-                });
-
-                // 선택된 카테고리로 버튼 텍스트 업데이트
-                $('#categoryDisplayButton').text(selectedCategory);
-            }
-            function updateSortOrder(sortOrder) {
-                $('#sortOrderButton').text(sortOrder);
-
-                let $foodItems = $('.food-item');
-                let sortedItems = [];
-
-                if (sortOrder === '유효기간 순') {
-                    sortedItems = $foodItems.sort((a, b) => {
-                        return parseInt($(a).find('.d-day').text()) - parseInt($(b).find('.d-day').text());
-                    });
-                } else if (sortOrder === '유효기간 역순') {
-                    sortedItems = $foodItems.sort((a, b) => {
-                        return parseInt($(b).find('.d-day').text()) - parseInt($(a).find('.d-day').text());
-                    });
-                } else if (sortOrder === '입력 날짜 순') {
-                    sortedItems = $foodItems.sort((a, b) => {
-                        return new Date($(a).data('food-input-date')) - new Date($(b).data('food-input-date'));
-                    });
-                } else if (sortOrder === '입력 날짜 역순') {
-                    sortedItems = $foodItems.sort((a, b) => {
-                        return new Date($(b).data('food-input-date')) - new Date($(a).data('food-input-date'));
-                    });
-                }
-
-                $('#foodItemsContainer').empty().append(sortedItems);
-            }
             document.addEventListener('DOMContentLoaded', function () {
                 var manualInputModal = document.getElementById('manualInputModal');
 
