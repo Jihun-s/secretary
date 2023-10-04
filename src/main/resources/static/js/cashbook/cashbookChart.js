@@ -452,18 +452,16 @@ function inExSixMonth() {
     data: { chYear: curYear, chMonth: curMonth },
     dataType: 'JSON',
     success: (data) => {
-      // 연월 기준 오름차순 정렬
+      // 날짜 기준 오름차순 정렬 
       data.sort((a, b) => {
-        if (a.curYear === b.curYear) {
-          return a.curMonth - b.curMonth;
+        if(a.chYear === b.chYear) {
+          return a.chMonth - b.chMonth; 
         }
-        return a.curYear - b.curYear;
+        return a.chYear - b.chYear;
       });
-    
-      // console.log(JSON.stringify(data));
-    
+      
       // 라벨과 데이터 배열 생성
-      const labels = data.map(item => `${item.curYear}년 ${item.curMonth}월`);
+      const labels = data.map(item => `${item.chYear}년 ${item.chMonth}월`);
       const expenseData = data.map(item => item.totalMonthExpense);
       const incomeData = data.map(item => item.totalMonthIncome);
     
@@ -502,8 +500,7 @@ function inExSixMonth() {
       });
     },
     error: (e) => {
-      console.log('6개월 추이 선 그래프 전송 실패');
-      // console.log(JSON.stringify(e));
+      console.log('6개월 추이 선 그래프 전송 실패' + JSON.stringify(e));
     }
     
   });
