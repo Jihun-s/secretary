@@ -25,13 +25,32 @@ $(document).ready(function() {
     /////화면초기화/////화면초기화/////화면초기화/////화면초기화/////화면초기화/////화면초기화/////화면초기화/////화면초기화/////
     /////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////INIT/////
     
-    
     // 목록 불러오기
     init();
     $('body').on('click', '#prevYear, #prevMonth, #nextYear, #nextMonth', init);
 
     $("#transCategoriesDiv").hide();
     $("#transSearchCategory2Div").hide();
+
+
+    /////PERFECT SCROLLBAR/////PERFECT SCROLLBAR/////PERFECT SCROLLBAR/////PERFECT SCROLLBAR/////PERFECT SCROLLBAR/////PERFECT SCROLLBAR/////
+    /////스크롤바/////스크롤바/////스크롤바/////스크롤바/////스크롤바/////스크롤바/////스크롤바/////스크롤바/////스크롤바/////스크롤바/////스크롤바/////
+
+
+      // 스크롤바 
+      const containers = [
+        document.querySelector('#transListDiv'),
+        document.querySelector('.card-body')
+    ].filter(el => el !== null); 
+
+    const options = {
+        wheelSpeed: 1,
+        wheelPropagation: true,
+    };
+
+    containers.forEach(container => {
+        new PerfectScrollbar(container, options);
+    });
 
     
     /////입력폼 비동기 이벤트////입력폼 비동기 이벤트////입력폼 비동기 이벤트////입력폼 비동기 이벤트////입력폼 비동기 이벤트////

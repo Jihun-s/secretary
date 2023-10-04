@@ -6,6 +6,7 @@
 	<!-- 생활용품 추가 -->
 	<insert id="insertLivingGood" parameterType="LivingGoods">
 	    INSERT INTO SECRETARY_LIVING_GOODS (
+	    	FAMILY_ID,
 	        ITEM_ID, ITEM_NAME,
 	        ITEM_CATEGORY, ITEM_QUANTITY
 	        <if test="itemPrice != null">
@@ -28,6 +29,7 @@
 	        </if>
 	    )
 	    VALUES (
+	    	#{familyId},
 	        LIVING_GOODS_SEQ.NEXTVAL,
 	        #{itemName},
 	        #{itemCategory},

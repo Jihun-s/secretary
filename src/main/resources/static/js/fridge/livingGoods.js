@@ -1,3 +1,21 @@
+document.addEventListener('DOMContentLoaded', function () {
+    const containers = [
+        document.querySelector('#livingItemsContainer'),
+        document.querySelector('#consumptionHistoryContainer'),
+        document.querySelector('#fridge-notification')
+    ].filter(el => el !== null); // 존재하지 않는 요소를 배열에서 제거합니다.
+
+    const options = {
+        wheelSpeed: 1,
+        wheelPropagation: true,
+        // 여기에 추가 옵션을 넣을 수 있습니다.
+    };
+
+    containers.forEach(container => {
+        new PerfectScrollbar(container, options);
+    });
+});
+
 $(document).ready(function () {
     $('#itemCategory').change(function () {
         if ($(this).val() === 'custom') {
@@ -334,11 +352,5 @@ document.addEventListener('DOMContentLoaded', function () {
         var purchaseDateInput = document.getElementById('itemPurchaseDate');
         var today = new Date().toISOString().slice(0, 10); // 현재 날짜를 YYYY-MM-DD 형식으로 변환
         purchaseDateInput.value = today;
-
-        // 유통기한의 기본값 설정
-        var expiryDateInput = document.getElementById('itemExpiryDate');
-        var expiryDate = new Date();
-        expiryDate.setDate(expiryDate.getDate() + 14);
-        expiryDateInput.value = expiryDate.toISOString().slice(0, 10); // 현재 날짜 + 14일을 YYYY-MM-DD 형식으로 변환
     });
 });

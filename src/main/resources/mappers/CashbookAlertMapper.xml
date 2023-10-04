@@ -97,7 +97,6 @@
 		VALUES
 		    (Secretary_Cashbook_Alert_SEQ.nextval
 		    , #{familyId}
-		    , #{userId}
 		    , #{alertType}
 		    , '지출'
 		    , '지난달총수입총지출'
@@ -129,7 +128,6 @@
 	FROM Secretary_Cashbook_Alert
 	WHERE 
 	    family_id = #{familyId}
-   	    AND user_id = #{userId}
         AND EXTRACT(YEAR FROM alert_date) = #{curYear}
         AND EXTRACT(MONTH FROM alert_date) >= #{curMonth}
         AND alert_type = '필수'

@@ -119,9 +119,9 @@
                     event.preventDefault(); // 폼의 제출을 막음
 
                     var userId = $('#userId').val();
-                    
+
                     if (userId.length == 0) {
-                    	allValid = false;
+                        allValid = false;
                         $('#userIdErrorMessage').text('아이디를 입력하세요.').css('color', 'red');
                         return;
                     }
@@ -148,8 +148,8 @@
                         },
                     });
                 });
-                
-                $('#emailDomainSelect').change(function() {
+
+                $('#emailDomainSelect').change(function () {
                     handleEmailDomainChange();
                     checkEmailValidityAndDuplication();
                 });
@@ -169,10 +169,10 @@
                         success: function (response) {
                             if (response == 1) {
                                 $('#userEmailErrorMessage').text('이미 사용중인 이메일입니다.').css('color', 'red');
-                                $('#registerButton').attr('disabled', true);  // 가입하기 버튼을 비활성화
+                                $('#registerButton').attr('disabled', true); // 가입하기 버튼을 비활성화
                             } else {
                                 $('#userEmailErrorMessage').text('사용 가능한 이메일입니다.').css('color', 'blue');
-                                updateRegisterButtonStatus();  // "가입하기" 버튼의 상태 업데이트
+                                updateRegisterButtonStatus(); // "가입하기" 버튼의 상태 업데이트
                             }
                         },
                         error: function () {
@@ -182,41 +182,40 @@
                 }
 
                 $('#userEmailPrefix, #userEmailDomain').blur(checkEmailValidityAndDuplication);
-                
+
                 function handleEmailDomainChange() {
                     const domainSelect = $('#emailDomainSelect');
                     const selectedDomain = domainSelect.val();
                     const emailDomainInput = $('#userEmailDomain');
 
                     if (selectedDomain === 'custom') {
-                        emailDomainInput.val('');  // 입력 필드를 비웁니다.
-                        emailDomainInput.removeAttr('readonly');  // 수정 가능한 상태로 변경합니다.
-                        emailDomainInput.focus();  // 사용자의 주의를 도메인 입력 필드로 이동시킵니다.
+                        emailDomainInput.val(''); // 입력 필드를 비웁니다.
+                        emailDomainInput.removeAttr('readonly'); // 수정 가능한 상태로 변경합니다.
+                        emailDomainInput.focus(); // 사용자의 주의를 도메인 입력 필드로 이동시킵니다.
                     } else {
-                        emailDomainInput.val(selectedDomain);  // 선택한 도메인으로 입력 필드를 채웁니다.
-                        emailDomainInput.attr('readonly', true);  // 도메인 입력 필드를 수정 불가능한 상태로 변경합니다.
+                        emailDomainInput.val(selectedDomain); // 선택한 도메인으로 입력 필드를 채웁니다.
+                        emailDomainInput.attr('readonly', true); // 도메인 입력 필드를 수정 불가능한 상태로 변경합니다.
                     }
                 }
-                
-                
+
                 $('#userEmailPrefix, #userEmailDomain').focus(function () {
                     $('#userEmailErrorMessage').text(''); // 이메일 입력창에 다시 포커스되면 에러 메시지를 초기화
                 });
-                
+
                 // 비밀번호 필드에서 포커스가 사라질 때 유효성 검사 실행
-                $('#userPw').on('blur', function() {
+                $('#userPw').on('blur', function () {
                     validatePassword();
                 });
-                
-                $('#userName').on('blur', function() {
+
+                $('#userName').on('blur', function () {
                     validateUserName();
                 });
 
-                $('#birthday').on('blur', function() {
+                $('#birthday').on('blur', function () {
                     validateBirthday();
                 });
 
-                $('input[name="sex"]').on('blur', function() {
+                $('input[name="sex"]').on('blur', function () {
                     validateSex();
                 });
 
@@ -286,7 +285,7 @@
                     return true;
                 }
             }
-            
+
             function validateUserName() {
                 let userName = $('#userName').val();
                 if (userName.length < 2 || userName.length > 10) {
@@ -319,7 +318,7 @@
                     return true;
                 }
             }
-            
+
             function validateEmail(email) {
                 var emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
                 return emailRegex.test(email);
@@ -478,6 +477,9 @@
                                 method="POST"
                                 onsubmit="return validateForm()"
                             >
+                                <!-- 임시 가족 아이디!! -->
+                                <input type="hidden" name="familyId" value="1" />
+
                                 <!-- User ID -->
                                 <div class="mb-3">
                                     <label for="userId" class="form-label">사용자 ID</label>
@@ -516,10 +518,7 @@
                                             placeholder="도메인"
                                             maxlength="128"
                                         />
-										<select
-										    id="emailDomainSelect"
-										    class="form-control"
-										>
+                                        <select id="emailDomainSelect" class="form-control">
                                             <option value="custom">직접 입력</option>
                                             <option value="naver.com">naver.com</option>
                                             <option value="gmail.com">gmail.com</option>

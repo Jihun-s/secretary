@@ -88,7 +88,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
     //영수증
     document.getElementById('submitDataButton').addEventListener('click', function(event) {
-        alert("Fridge ID before submitting: " + $('.fridgeSelect').val());
         let selectedFridgeId = Number($('.fridgeSelect').val());  // 선택된 냉장고의 ID 값을 가져옵니다.
         
         if (!selectedFridgeId || isNaN(parseInt(selectedFridgeId))) {
@@ -162,28 +161,59 @@ document.addEventListener("DOMContentLoaded", function() {
     
         return productNames;
     }
+
+    $('#addFromReceipt').on('submit', function(e) {
+        if ($('#productsContainer .product-item').length === 0) {
+            alert('항목을 추가해주세요.');
+            e.preventDefault();  // 폼 제출 중지
+            return false;
+        }
+    });
     
+    $('#submitDataButton').on('click', function(e) {
+        let hasEmptyFields = false;
+        
+        // 상품명 유효성 검사
+        $('#productsContainer .product-item input[name^="fridgeFoods"]').each(function() {
+            if ($(this).val().trim() === '') {
+                alert('모든 상품의 이름을 입력해주세요.');
+                hasEmptyFields = true;
+                return false;  // jQuery .each loop를 종료
+            }
+        });
+
+        // 수량 유효성 검사
+        $('#productsContainer .product-item input[name$=".foodQuantity"]').each(function() {
+            if ($(this).val().trim() === '' || $(this).val().trim() === '0') {
+                alert('모든 상품의 수량을 정확히 입력해주세요.');
+                hasEmptyFields = true;
+                return false;
+            }
+        });
+
+        // 카테고리 유효성 검사
+        $('#productsContainer .product-item select[name^="fridgeFoods"]').each(function() {
+            if (!$(this).val() || $(this).val().trim() === '') {
+                alert('모든 상품의 카테고리를 선택해주세요.');
+                hasEmptyFields = true;
+                return false;
+            }
+        });
+
+        if (hasEmptyFields) {
+            e.preventDefault();  // 폼 제출 방지
+        }
+    });
+
     // 추출된 상품명을 HTML에 추가하는 함수
     const DEFAULT_CATEGORIES = ['일반', '야채', '생선', '육류', '과일'];
 
     function appendProductNamesToHTML(productNames) {
         let productsContainer = document.getElementById('productsContainer');
 
-        // 헤더 생성
-        let headerDiv = document.createElement('div');
-        headerDiv.classList.add('d-flex', 'mb-2', 'bg-light', 'p-2');
-        headerDiv.innerHTML = `
-            <div style="width: 25%;" class="text-center"><strong>카테고리</strong></div>
-            <div style="width: 55%;" class="text-center"><strong>상품명</strong></div>
-            <div style="width: 13%;" class="text-center"><strong>수량</strong></div>
-            <div style="width: 7%;" class="text-center"><strong>삭제</strong></div>
-        `;
-    
-        productsContainer.appendChild(headerDiv);
-
         productNames.forEach((product, index) => {
             let productDiv = document.createElement('div');
-            productDiv.classList.add('d-flex', 'mb-2');
+            productDiv.classList.add('d-flex', 'mb-2','product-item');
             productDiv.style.height = '40px';  // 높이 추가
 
             // 카테고리 입력
@@ -230,6 +260,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
             deleteText.addEventListener('click', function(event) {
                 productsContainer.removeChild(productDiv);
+                reassignIndices();
             });
     
             productsContainer.appendChild(productDiv);
@@ -242,10 +273,10 @@ document.addEventListener("DOMContentLoaded", function() {
         addButton.addEventListener('click', function(event) {
             event.preventDefault();
 
-            let index = productsContainer.children.length - 2;  // Adjust index for added products
+            let index = productsContainer.querySelectorAll('.product-item').length;
 
             let newProductDiv = document.createElement('div');
-            newProductDiv.classList.add('d-flex', 'mb-2');
+            newProductDiv.classList.add('d-flex', 'mb-2','product-item');
             newProductDiv.style.height = '40px';  // 높이 추가
 
             let categorySelect = document.createElement('select');
@@ -273,6 +304,12 @@ document.addEventListener("DOMContentLoaded", function() {
             quantityInput.classList.add('form-control');
             quantityInput.style.width = '60px';
             newProductDiv.appendChild(quantityInput);
+
+            // 냉장고 ID의 hidden input 생성 (값은 아직 설정하지 않음)
+            let fridgeIdInput = document.createElement('input');
+            fridgeIdInput.setAttribute('type', 'hidden');
+            fridgeIdInput.setAttribute('name', `fridgeFoods[${index}].fridgeId`);
+            newProductDiv.appendChild(fridgeIdInput);
             
             // 삭제 텍스트 추가
             let newDeleteText = document.createElement('span');
@@ -285,7 +322,29 @@ document.addEventListener("DOMContentLoaded", function() {
             });
     
             productsContainer.insertBefore(newProductDiv, addButton);
+            reassignIndices();
         });
         productsContainer.appendChild(addButton);
     }
+
+    function reassignIndices() {
+        // productsContainer 내의 모든 항목들을 선택
+        const items = document.querySelectorAll('#productsContainer > .product-item');
+      
+        // 각 항목에 대해 반복
+        items.forEach((item, index) => {
+          // 항목 내의 모든 input 및 select 요소를 선택
+          const inputs = item.querySelectorAll('input, select');
+          
+          // 각 input 및 select 요소에 대해 name 속성의 인덱스를 업데이트
+          inputs.forEach(input => {
+            const name = input.getAttribute('name');
+            if (name) {
+              // 현재 인덱스 값을 새 인덱스 값으로 교체
+              const updatedName = name.replace(/\[\d+\]/, `[${index}]`);
+              input.setAttribute('name', updatedName);
+            }
+          });
+        });
+      }
 });

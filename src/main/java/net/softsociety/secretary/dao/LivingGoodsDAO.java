@@ -11,7 +11,7 @@ import net.softsociety.secretary.domain.LivingGoods;
 @Mapper
 public interface LivingGoodsDAO {
 
-	void insertLivingGood(LivingGoods livingGood);
+	void insertLivingGood(LivingGoods livingGoods);
 
 	List<LivingGoods> getLivingGoods();
 

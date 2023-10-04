@@ -134,22 +134,26 @@ public class CashbookMainRestController {
 		
 		int budgetExist = dao.budgetExist(map);
 		
-		if(budgetExist == 0) {
-			HashMap<String, Object> bax = dao.selectBudgetAvgXXX(map);
-			BigDecimal budgetAvg = (BigDecimal) bax.get("BUDGETAVG");
-			BigDecimal budgetAmountX = (BigDecimal) bax.get("BUDGETAMOUNTX");
-			BigDecimal budgetAmountXx = (BigDecimal) bax.get("BUDGETAMOUNTXX");
-			BigDecimal budgetAmountXxx = (BigDecimal) bax.get("BUDGETAMOUNTXXX");
-				
-			log.debug("직전 3개월 예산 평균?:{}", budgetAvg);
-			log.debug("직전 3개월 예산:{}->{}->{}", budgetAmountX, budgetAmountXx, budgetAmountXxx);
+		// 예산 있음
+		if(budgetExist == 1) {
+		    HashMap<String, Object> bax = dao.selectBudgetAvgXXX(map);
+		    
+		    if (bax != null) {
+		        BigDecimal budgetAvg = (bax.get("BUDGETAVG") != null) ? (BigDecimal) bax.get("BUDGETAVG") : BigDecimal.ZERO;
+		        BigDecimal budgetAmountX = (bax.get("BUDGETAMOUNTX") != null) ? (BigDecimal) bax.get("BUDGETAMOUNTX") : BigDecimal.ZERO;
+		        BigDecimal budgetAmountXx = (bax.get("BUDGETAMOUNTXX") != null) ? (BigDecimal) bax.get("BUDGETAMOUNTXX") : BigDecimal.ZERO;
+		        BigDecimal budgetAmountXxx = (bax.get("BUDGETAMOUNTXXX") != null) ? (BigDecimal) bax.get("BUDGETAMOUNTXXX") : BigDecimal.ZERO;
+		        
+		        log.debug("직전 3개월 예산 평균?:{}", budgetAvg);
+		        log.debug("직전 3개월 예산:{}->{}->{}", budgetAmountX, budgetAmountXx, budgetAmountXxx);
 
-			result.put("budgetAvg", budgetAvg);
-			result.put("budgetAmountX", budgetAmountX);
-			result.put("budgetAmountXx", budgetAmountXx);
-			result.put("budgetAmountXxx", budgetAmountXxx);
-
-			return result;
+		        result.put("budgetAvg", budgetAvg);
+		        result.put("budgetAmountX", budgetAmountX);
+		        result.put("budgetAmountXx", budgetAmountXx);
+		        result.put("budgetAmountXxx", budgetAmountXxx);
+		        
+		    }
+		    return result;
 		}
 		else {
 			return result;
@@ -165,7 +169,6 @@ public class CashbookMainRestController {
 			, int curMonth
 			, int curDate
 			, Model model) {
-		log.debug("예산 수정할때 쓰는 이닛!!!!!!!!!!!!!");
 		User loginUser = (User) model.getAttribute("loginUser");
 		HashMap<String, Object> result = new HashMap<>();	
 		
@@ -178,22 +181,26 @@ public class CashbookMainRestController {
 		
 		int budgetExist = dao.budgetExist(map);
 		
+		// 예산 있음
 		if(budgetExist == 1) {
-			HashMap<String, Object> bax = dao.selectBudgetAvgXXX(map);
-			BigDecimal budgetAvg = (BigDecimal) bax.get("BUDGETAVG");
-			BigDecimal budgetAmountX = (BigDecimal) bax.get("BUDGETAMOUNTX");
-			BigDecimal budgetAmountXx = (BigDecimal) bax.get("BUDGETAMOUNTXX");
-			BigDecimal budgetAmountXxx = (BigDecimal) bax.get("BUDGETAMOUNTXXX");
-				
-			log.debug("직전 3개월 예산 평균?:{}", budgetAvg);
-			log.debug("직전 3개월 예산:{}->{}->{}", budgetAmountX, budgetAmountXx, budgetAmountXxx);
+		    HashMap<String, Object> bax = dao.selectBudgetAvgXXX(map);
+		    
+		    if (bax != null) {
+		        BigDecimal budgetAvg = (bax.get("BUDGETAVG") != null) ? (BigDecimal) bax.get("BUDGETAVG") : BigDecimal.ZERO;
+		        BigDecimal budgetAmountX = (bax.get("BUDGETAMOUNTX") != null) ? (BigDecimal) bax.get("BUDGETAMOUNTX") : BigDecimal.ZERO;
+		        BigDecimal budgetAmountXx = (bax.get("BUDGETAMOUNTXX") != null) ? (BigDecimal) bax.get("BUDGETAMOUNTXX") : BigDecimal.ZERO;
+		        BigDecimal budgetAmountXxx = (bax.get("BUDGETAMOUNTXXX") != null) ? (BigDecimal) bax.get("BUDGETAMOUNTXXX") : BigDecimal.ZERO;
+		        
+		        log.debug("직전 3개월 예산 평균?:{}", budgetAvg);
+		        log.debug("직전 3개월 예산:{}->{}->{}", budgetAmountX, budgetAmountXx, budgetAmountXxx);
 
-			result.put("budgetAvg", budgetAvg);
-			result.put("budgetAmountX", budgetAmountX);
-			result.put("budgetAmountXx", budgetAmountXx);
-			result.put("budgetAmountXxx", budgetAmountXxx);
-
-			return result;
+		        result.put("budgetAvg", budgetAvg);
+		        result.put("budgetAmountX", budgetAmountX);
+		        result.put("budgetAmountXx", budgetAmountXx);
+		        result.put("budgetAmountXxx", budgetAmountXxx);
+		        
+		    }
+		    return result;
 		}
 		else {
 			return result;
