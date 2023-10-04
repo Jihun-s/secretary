@@ -597,7 +597,9 @@ function clothesSearch(){
 			let str ='';
 			$(list).each(function(i,n){
 				let clothesNum = parseInt(n.clothesNum);
-				str += '<img src="../closet/clothesDownload?closetNum='+n.closetNum+'&clothesNum='+clothesNum+'">';
+				str += '<div class="clothesList"><a onclick="deliverImg('+n.closetNum+','+clothesNum+')">\
+				<img src="../closet/clothesDownload?closetNum='+n.closetNum+'&clothesNum='+clothesNum+'">\
+				</a></div>';
 			});
 			$('#whatsInCloset').html(str); 
 		},
@@ -666,7 +668,7 @@ function clothesSearchForUpdateDiary(){
 			let updateStr ='';
 			$(list).each(function(i,n){
 				let clothesNum = parseInt(n.clothesNum);
-				updateStr += '<div><a onclick="deliverImgForUpdateDiary('+n.closetNum+','+clothesNum+')">\
+				updateStr += '<div class="clothesList"><a onclick="deliverImgForUpdateDiary('+n.closetNum+','+clothesNum+')">\
 					<img src="../closet/clothesDownload?closetNum='+n.closetNum+'&clothesNum='+clothesNum+'">\
 						   </a></div>';	 				
 			});
