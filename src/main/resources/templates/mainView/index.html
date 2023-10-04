@@ -116,13 +116,14 @@
       function closetPilsuAlert() {
         let closetNum = 0;
         let laundryCheck = true;
+        
         $.ajax({
           url:'closet/inCloset',
           type:'get',
           data:{closetNum : closetNum, clothesLaundry: laundryCheck},
           dataType:'json',
           success:function(list){
-            let laundryCnt = 20; //세탁물 갯수
+            let laundryCnt = 0; //세탁물 갯수
             $(list).each(function(i,n){
               laundryCnt += 1;
             });
@@ -143,7 +144,9 @@
             if(laundryCnt>=20){
             laundryCntStr += '<p> 세탁하러 가시는건 어떠신가요? <br> 세탁물이 <b>'+laundryCnt+'</b>개 쌓여있어요.</p>';
             $('#alertContent').html(laundryCntStr);
-            $('.alert').show();
+            }else{
+              laundryCntStr += '<p>세탁물이 20개 미만입니다. <br> 알림이 없습니다. <p>';
+              $('#alertContent').html(laundryCntStr);
             } 
           },
           error:function(e){
