@@ -37,9 +37,11 @@ $(document).ready(function() {
     /////스크롤바/////스크롤바/////스크롤바/////스크롤바/////스크롤바/////스크롤바/////스크롤바/////스크롤바/////스크롤바/////스크롤바/////스크롤바/////
 
 
-      // 스크롤바 
-      const containers = [
+    // 스크롤바 
+    const containers = [
         document.querySelector('#transListDiv'),
+        document.querySelector('#transListDiv2'),
+        document.querySelector('.transListDiv'),
         document.querySelector('.card-body')
     ].filter(el => el !== null); 
 
