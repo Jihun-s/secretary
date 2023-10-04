@@ -278,6 +278,10 @@ function chartDraw(dataValue){
 		$(seasonChecked).each(function(){
 			seasonArr.push($(this).val());
 		}); 
+		if(seasonArr.length == 0){
+			seasonArr.push("해당없음");
+		}
+		
 		//옷이면 옷사이즈, 신발이면 신발사이즈 가져오기
 		let size;
 		var result = $('#clothesCategory option:selected').val();
@@ -581,7 +585,11 @@ function chartDraw(dataValue){
 		var seasonChecked = $("input:checkbox[name='updateSeasons']:checked");
 		$(seasonChecked).each(function(){
 			updateSeasonArr.push($(this).val());
-		}); 
+		});
+		if(updateSeasonArr.length == 0){
+			updateSeasonArr.push("해당없음");
+		}
+		
 		
 		//옷이면 옷사이즈, 신발이면 신발사이즈 가져오기
 		let size;
@@ -719,7 +727,7 @@ function chartDraw(dataValue){
 	};
 	
 	const materialMapping = {
-    'none': '해당 없음', 'cotton': '면', 'linen': '린넨',
+    'none': '해당없음', 'cotton': '면', 'linen': '린넨',
     'polyester': '폴리에스테르', 'denim': '데님', 'knit': '니트',
     'wool': '울', 'acryl': '아크릴', 'corduroy': '코듀로이',
     'silk': '실크', 'woolen': '모직', 'nylon': '나일론', 'suede': '스웨이드',

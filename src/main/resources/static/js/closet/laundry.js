@@ -483,7 +483,7 @@ function chartDraw(dataValue){
 	};
 	
 	const materialMapping = {
-    'none': '해당 없음',
+    'none': '해당없음',
     'cotton': '면',
     'linen': '린넨',
     'polyester': '폴리에스테르',

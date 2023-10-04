@@ -171,7 +171,10 @@ function styleCreate(){
 	var seasonChecked = $("input:checkbox[name='seasons']:checked");
 	$(seasonChecked).each(function(){
 		seasonArr.push($(this).val());
-	}); 
+	});
+	if(seasonArr.length == 0){
+		seasonArr.push("해당없음");
+	}
 	console.log(seasonArr);
 	
 	//TPO 변수
@@ -457,6 +460,9 @@ function openUpdateModal(styleNum){
 	$(seasonChecked).each(function(){
 		seasonArr.push($(this).val());
 	}); 
+	if(seasonArr.length == 0){
+		seasonArr.push("해당없음");
+	}
 	console.log('계절: '+seasonArr);
 	
 	//TPO 변수
