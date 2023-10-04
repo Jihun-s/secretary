@@ -552,7 +552,7 @@ function updateSchCateOptions(schType, schCate, triggerId) {
           options = ['구매예정일', '소비기한'];
           break;
       case '옷장':
-          options = ['옷장'];
+          options = ['옷장', '쇼핑'];
           break;
       case '가계부':
           options = ['지출', '수입'];
