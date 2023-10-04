@@ -7,6 +7,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import net.softsociety.secretary.domain.AllLog;
 import net.softsociety.secretary.domain.Log;
 import net.softsociety.secretary.domain.User;
 
@@ -33,5 +34,9 @@ public interface UserMapper {
 	List<Log> getHourlyLoginData();
 	//관리자 기능 일일 회원가입 정보
 	List<User> getDailyJoinData();
+	//관리자기능 로그보드
+	List<AllLog> getLogData();
+	//관리자 기능 로그인보드
+	List<Log> getLoginData();
 	
 }

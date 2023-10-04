@@ -3,10 +3,13 @@ package net.softsociety.secretary.domain;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import lombok.AllArgsConstructor;
@@ -35,10 +38,12 @@ public class User implements UserDetails{
 	String joinDate;
 	int joinCount;
 	
+    
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+       return null;
     }
+
 
     @Override
     public String getPassword() {

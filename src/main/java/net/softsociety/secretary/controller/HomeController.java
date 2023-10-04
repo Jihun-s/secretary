@@ -28,7 +28,7 @@ public class HomeController {
             if (authentication.getPrincipal() instanceof CustomUserDetails) {
                 CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
 
-                if ("ADMIN".equals(userDetails.getUser().getRolename())) {
+                if ("ROLE_ADMIN".equals(userDetails.getUser().getRolename())) {
                     // Redirect to the admin page
                     return "redirect:/adminView/adminHome";
                 }

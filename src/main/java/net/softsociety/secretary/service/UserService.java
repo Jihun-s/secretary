@@ -3,6 +3,7 @@ package net.softsociety.secretary.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.softsociety.secretary.domain.AllLog;
 import net.softsociety.secretary.domain.Log;
 import net.softsociety.secretary.domain.User;
 
@@ -33,6 +34,10 @@ public interface UserService {
 	List<Log> getHourlyLoginData();
 	//일별 회원가입 수 출력
 	List<User> getDailyJoinData();
+	//로그보드 
+	List<AllLog> getLogData();
+	//로그인 보드
+	List<Log> getLoginData();
 
 
 	

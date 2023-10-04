@@ -7,6 +7,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,8 +17,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import io.grpc.xds.shaded.io.envoyproxy.envoy.config.rbac.v2.Principal;
 import lombok.extern.slf4j.Slf4j;
 import net.softsociety.secretary.dao.UserMapper;
+import net.softsociety.secretary.domain.AllLog;
 import net.softsociety.secretary.domain.Board;
 import net.softsociety.secretary.domain.Log;
 import net.softsociety.secretary.domain.User;
@@ -117,6 +121,22 @@ public class AdminController {
 	   List<User> result = userservice.getDailyJoinData();
 		    
 	   return ResponseEntity.ok(result);
+	}
+	//로그보드
+	@GetMapping("logBoard")
+	@ResponseBody
+	public ResponseEntity<List<AllLog>> logBoard() {
+		List<AllLog> result = userservice.getLogData();
+		
+		return ResponseEntity.ok(result);
+	}
+	//로그인보드
+	@GetMapping("loginBoard")
+	@ResponseBody
+	public ResponseEntity<List<Log>> loginBoard(){
+		List<Log> result = userservice.getLoginData();
+		
+		return ResponseEntity.ok(result);
 	}
 
 	

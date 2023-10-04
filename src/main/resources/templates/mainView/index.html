@@ -528,7 +528,8 @@
             </li>
             
             <!-- 관리자 -->
-            <li class="menu-header small text-uppercase">
+            <div th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
+            <li class="menu-header small text-uppercase" >
               <span class="menu-header-text">Admin</span>
             </li>
             <li class="menu-item">
@@ -536,6 +537,7 @@
               <div data-i18n="Buttons">관리자</div>
              </a> 
             </li>
+            </div>
 
             <!-- 서포트 -->
             <li class="menu-header small text-uppercase">

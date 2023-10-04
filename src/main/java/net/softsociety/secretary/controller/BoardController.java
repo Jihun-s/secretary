@@ -122,7 +122,7 @@ public class BoardController {
 	    m.addAttribute("list", list);
 	    m.addAttribute("navi", navi);
 	    m.addAttribute("boardCategory1", boardCategory1);
-	    m.addAttribute("boardCategory2", boardCategory2);
+	    //m.addAttribute("boardCategory2", boardCategory2);
 
 	    return "boardView/list";
 	}
