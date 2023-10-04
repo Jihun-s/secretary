@@ -1,6 +1,6 @@
 export function loadAllFoodsByCategory(category) {
     $.ajax({
-        url: `fridgeFood/getAllFoodsByCategory/${category}`,
+        url: `/secretary/fridgeFood/getAllFoodsByCategory/${category}`,
         type: 'GET',
         dataType: 'json',
         success: function (data) {
@@ -15,7 +15,7 @@ export function loadAllFoodsByCategory(category) {
 
 export function displayFoodItem(foodItem) {
     var imagePath = foodItem.foodSavedFile
-        ? 'fridgeFood/image/' + foodItem.foodSavedFile // Serve image from C:/secretaryfile/
+        ? '/secretary/fridgeFood/image/' + foodItem.foodSavedFile // Serve image from C:/secretaryfile/
         : 'images/fridgeimg/DefaultFood.png';
 
     var today = new Date();
