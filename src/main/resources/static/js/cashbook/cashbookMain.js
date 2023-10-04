@@ -24,8 +24,20 @@ $(document).ready(function() {
     /////스크롤바/////스크롤바/////스크롤바/////스크롤바/////스크롤바/////스크롤바/////스크롤바/////스크롤바/////스크롤바/////스크롤바/////스크롤바/////
 
 
-    const ps1 = new PerfectScrollbar('#pilsuAlertListDiv');
-    const ps2 = new PerfectScrollbar('#jeahnAlertListDiv');
+      // 스크롤바 
+      const containers = [
+        document.querySelector('#alert-tab-content'),
+        document.querySelector('.card-body')
+    ].filter(el => el !== null); 
+
+    const options = {
+        wheelSpeed: 1,
+        wheelPropagation: true,
+    };
+
+    containers.forEach(container => {
+        new PerfectScrollbar(container, options);
+    });
 
 });
 

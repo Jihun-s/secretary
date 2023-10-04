@@ -6,6 +6,29 @@
 $(document).ready(function() {
   weekExpenseAcc();
 
+  
+    
+  /////PERFECT SCROLLBAR/////PERFECT SCROLLBAR/////PERFECT SCROLLBAR/////PERFECT SCROLLBAR/////PERFECT SCROLLBAR/////PERFECT SCROLLBAR/////
+  /////스크롤바/////스크롤바/////스크롤바/////스크롤바/////스크롤바/////스크롤바/////스크롤바/////스크롤바/////스크롤바/////스크롤바/////스크롤바/////
+
+
+  // 스크롤바 
+  const containers = [
+    document.querySelector('.card-body'),
+    document.querySelector('#donutMonthExpenseContent'),
+    document.querySelector('#donutIncomeDiv'),
+    document.querySelector('#donutExpenseDiv')
+  ].filter(el => el !== null); 
+
+  const options = {
+      wheelSpeed: 1,
+      wheelPropagation: true,
+  };
+
+  containers.forEach(container => {
+      new PerfectScrollbar(container, options);
+  });
+
   /* 도넛 차트 그리기 */
   $('#donutMonthIncome-tab').on('shown.bs.tab', function (e) {
     totalMonthIncome();
@@ -13,6 +36,7 @@ $(document).ready(function() {
   $('#donutMonthExpense-tab').on('shown.bs.tab', function (e) {
     totalMonthExpense();
   });
+
 });
 
 
