@@ -60,16 +60,16 @@ $.ajax({
                 }
                 },
                 error: (e) => {
-                alert('남은 예산 서버 전송 실패');
-                console.log(JSON.stringify(e));
+                  console.log('남은 예산 서버 전송 실패');
+                // console.log(JSON.stringify(e));
                 }
             });
 
         }
     },
     error: (e) => {
-        alert('알림 출력 직전 예산 있없 조회 실패');
-        console.log(JSON.stringify(e));
+      console.log('알림 출력 직전 예산 있없 조회 실패');
+        // console.log(JSON.stringify(e));
     }
 });
 
@@ -227,7 +227,7 @@ $.ajax({
 
     },
     error: (e) => {
-        alert('가계부 필수알림 목록 전송 실패');
+      console.log('가계부 필수알림 목록 전송 실패');
     }
 });
 }
@@ -262,15 +262,15 @@ function getPilsuAlertModal() {
             }
           },
           error: (e) => {
-            alert("남은 예산 서버 전송 실패");
-            console.log(JSON.stringify(e));
+            console.log("남은 예산 서버 전송 실패");
+            // console.log(JSON.stringify(e));
           },
         });
       }
     },
     error: (e) => {
-      alert("알림 출력 직전 예산 있없 조회 실패");
-      console.log(JSON.stringify(e));
+      console.log("알림 출력 직전 예산 있없 조회 실패");
+      // console.log(JSON.stringify(e));
     },
   });
 
@@ -445,7 +445,7 @@ function getPilsuAlertModal() {
       $("#pilsuAlertListDivModal").html(html);
     },
     error: (e) => {
-      alert("가계부 필수알림 목록 전송 실패");
+      console.log("가계부 필수알림 목록 전송 실패");
     },
   });
 }

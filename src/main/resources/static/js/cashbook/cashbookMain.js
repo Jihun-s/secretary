@@ -155,7 +155,7 @@ function init() {
             }
         },
         error: () => {
-            alert('init 실행 실패');
+            console.log('init 실행 실패');
         }
     });
 }
@@ -212,7 +212,7 @@ function initSetBudgetModal() {
             $('.curMonthXxx').html(curMonth - 3);
         },
         error: () => {
-            alert('예산 설정 모달 init 실패');
+            console.log('예산 설정 모달 init 실패');
         }
     });
 
@@ -244,8 +244,8 @@ function initSetBudgetModal() {
         
         },
         error: (e) => {
-            alert('예산에 필요한 일정 전송 실패');
-            console.log(JSON.stringify(e));
+            console.log('예산에 필요한 일정 전송 실패');
+            // console.log(JSON.stringify(e));
         }
     });
     
@@ -315,7 +315,7 @@ function setBudgetAjax() {
             location.reload();
         },
         error: () => {
-            alert('예산 서버 전송 실패');
+            console.log('예산 서버 전송 실패');
         }
     });
 }
@@ -398,8 +398,8 @@ function initUpdateBudgetModal() {
 
         },
         error: (e) => {
-            alert('예산 수정 모달 전송 실패');
-            console.log(JSON.stringify(e));
+            console.log('예산 수정 모달 전송 실패');
+            // console.log(JSON.stringify(e));
         }
     });
 
@@ -459,7 +459,7 @@ function updateBudgetAjax() {
             location.reload();
         },
         error: () => {
-            alert('예산 수정 서버 전송 실패');
+            console.log('예산 수정 서버 전송 실패');
         }
     });
 }
@@ -496,7 +496,7 @@ function deleteBudgetAjax() {
             location.reload();
         },
         error: () => {
-            alert('예산 삭제 서버 전송 실패');
+            console.log('예산 삭제 서버 전송 실패');
         }
     });
 }
@@ -523,8 +523,8 @@ function deleteSch() {
           location.reload();
         },
         error: (e) => {
-          alert('일정 삭제 전송 실패');
-          alert(JSON.stringify(e));
+            console.log('일정 삭제 전송 실패');
+        //   alert(JSON.stringify(e));
         }
       });
     }
@@ -551,8 +551,8 @@ function deleteSch() {
           location.reload();
         },
         error: (e) => {
-          alert('일정 삭제 전송 실패');
-          alert(JSON.stringify(e));
+            console.log('일정 삭제 전송 실패');
+        //   alert(JSON.stringify(e));
         }
       });
     }
@@ -634,8 +634,8 @@ function curPreInExSum() {
 
         },
         error: (e) => {
-            alert("이번달 저번달 전송 실패");
-            console.log(JSON.stringify(e));
+            console.log("이번달 저번달 전송 실패");
+            // console.log(JSON.stringify(e));
         }
     });
 }

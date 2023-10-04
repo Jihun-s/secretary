@@ -69,7 +69,7 @@ function getPilsuAlert() {
                   }
                 },
                 error: (e) => {
-                  alert('남은 예산 서버 전송 실패');
+                  console.log('남은 예산 서버 전송 실패');
                   console.log(JSON.stringify(e));
                 }
               });
@@ -77,7 +77,7 @@ function getPilsuAlert() {
           }
       },
       error: (e) => {
-          alert('알림 출력 직전 예산 있없 조회 실패');
+          console.log('알림 출력 직전 예산 있없 조회 실패');
           console.log(JSON.stringify(e));
       }
   });
@@ -234,7 +234,7 @@ function getPilsuAlert() {
 
     },
     error: (e) => {
-        alert('가계부 필수알림 목록 전송 실패');
+        console.log('가계부 필수알림 목록 전송 실패');
     }
   });
 }
@@ -382,7 +382,7 @@ function getJeahnAlert() {
 
     },
     error: (e) => {
-        alert('가계부 제안알림 목록 전송 실패');
+        console.log('가계부 제안알림 목록 전송 실패');
     }
   });
 }
@@ -410,7 +410,7 @@ function deleteAlert(alertId) {
       getPilsuAlert();
     },
     error: (e) => {
-      alert("알림 삭제 서버 전송 실패");
+      console.log("알림 삭제 서버 전송 실패");
       console.log(JSON.stringify(e));
     }
   });
@@ -431,7 +431,7 @@ function deleteAllCashbookAlert() {
         getJeahnAlert();
       },
       error: (e) => {
-        alert("가계부 알림 모두 삭제 서버 전송 실패");
+        console.log("가계부 알림 모두 삭제 서버 전송 실패");
         console.log(JSON.stringify(e));
       }
     });
@@ -449,7 +449,7 @@ function deleteAllJeahnAlert() {
         getJeahnAlert();
       },
       error: (e) => {
-        alert("제안알림 모두 삭제 서버 전송 실패");
+        console.log("제안알림 모두 삭제 서버 전송 실패");
         console.log(JSON.stringify(e));
       }
     });

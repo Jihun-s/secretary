@@ -203,8 +203,8 @@ function mostCate2() {
                 }
         },
         error: (e) => {
-            alert("최대최다 카테고리 전송 실패");
-            console.log(JSON.stringify(e));
+            console.log("최대최다 카테고리 전송 실패");
+            // console.log(JSON.stringify(e));
         }
     });
 }
