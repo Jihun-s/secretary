@@ -234,7 +234,7 @@ function setExistingImageInEditMode(existingImageSrc) {
         const itemId = $(this).data('item-id');
         if (confirm('정말로 이 물품 아이템을 삭제하시겠습니까?')) {
             $.ajax({
-                url: 'livingGoods/delete/' + itemId,
+                url: '/secretary/livingGoods/delete/' + itemId,
                 type: 'POST',
                 success: function (response) {
                     if (response === 'success') {
@@ -255,7 +255,7 @@ function setExistingImageInEditMode(existingImageSrc) {
     $(document).on('click', '.item-editIcon', function (e) {
         const itemId = $(this).data('item-id');
         $.ajax({
-            url: 'livingGoods/item/' + itemId,
+            url: '/secretary/livingGoods/item/' + itemId,
             type: 'GET',
             success: function (item) {
                 $('#itemName').val(item.itemName);
@@ -272,7 +272,7 @@ function setExistingImageInEditMode(existingImageSrc) {
                 const submitBtn = $('#manualInputModal .addsubmitBtn');
                 submitBtn.text('수정');
                 submitBtn.removeClass('btn-primary').addClass('btn-warning');
-                $('#manualInputModal form').attr('action', 'livingGoods/modify/' + itemId);
+                $('#manualInputModal form').attr('action', '/secretary/livingGoods/modify/' + itemId);
                 $('#manualInputModal').modal('show');
             },
             error: function (error) {
@@ -287,7 +287,7 @@ function setExistingImageInEditMode(existingImageSrc) {
         const submitBtn = $('#manualInputModal .btn-warning');
         submitBtn.text('입력');
         submitBtn.removeClass('btn-warning').addClass('btn-primary');
-        $('#manualInputModal form').attr('action', 'livingGoods/add');
+        $('#manualInputModal form').attr('action', '/secretary/livingGoods/add');
     });
 
 // 아이템 소비 후에 호출되는 함수
@@ -320,7 +320,7 @@ $(document).on('click', '.consume-btn', function () {
 
     if (quantityToConsume > 0 && quantityToConsume <= maxQuantity) {
         $.ajax({
-            url: 'livingUsed/consumeItem',
+            url: '/secretary/livingUsed/consumeItem',
             type: 'POST',
             data: JSON.stringify({
                 itemId: itemId,
@@ -353,7 +353,7 @@ $(document).on('click', '.consume-btn', function () {
 function refreshConsumptionHistory() {
     $.ajax({
         type: 'GET',
-        url: 'livingUsed/consumptionHistory',
+        url: '/secretary/livingUsed/consumptionHistory',
         success: function (data) {
             let content = '';
             data.forEach((item) => {
@@ -376,7 +376,7 @@ $(document).on('click', '.delete-consumption-text', function () {
     if (confirm('정말 이 소비 이력을 삭제하시겠습니까?')) {
         // 서버에 소비 이력 삭제 요청
         $.ajax({
-            url: 'livingUsed/deleteConsumptionHistory',
+            url: '/secretary/livingUsed/deleteConsumptionHistory',
             type: 'POST',
             data: { livingUsedId: consumptionId },
             success: function (response) {
@@ -396,7 +396,7 @@ $(document).on('click', '.delete-all-consumption-text', function () {
     if (confirm('정말 모든 소비 이력을 삭제하시겠습니까?')) {
         // 서버에 전체 소비 이력 삭제 요청
         $.ajax({
-            url: 'livingUsed/deleteAllConsumptionHistory',
+            url: '/secretary/livingUsed/deleteAllConsumptionHistory',
             type: 'POST',
             success: function (response) {
                 alert('모든 소비 이력이 삭제되었습니다.');
@@ -418,7 +418,7 @@ let allLivingGoods = [];
 
 function loadLivingGoodsForNotification(callback) {
     $.ajax({
-        url: `livingGoods/getLivingGoods`,
+        url: `/secretary/livingGoods/getLivingGoods`,
         type: 'GET',
         dataType: 'json',
         success: function (data) {
@@ -466,7 +466,7 @@ function createSuggestedNotifications() {
     // 이 부분은 서버에서 15일, 30일 사용하지 않은 제품 정보를 가져와야 함
     // 아래는 예시 코드
     $.ajax({
-        url: `livingUsed/getLivingGoodsNotAccessedForDays`,
+        url: `/secretary/livingUsed/getLivingGoodsNotAccessedForDays`,
         type: 'GET',
         dataType: 'json',
         success: function (data) {
