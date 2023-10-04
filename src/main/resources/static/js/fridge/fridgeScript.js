@@ -268,7 +268,7 @@ import { displayFoodItem } from './loadAllFoodsByCategory.js';
                     if (!isDuplicate) {
                         // 서버에 카테고리 추가 요청
                         $.ajax({
-                            url: 'foodCategories',
+                            url: '/secretary/foodCategories',
                             method: 'POST',
                             data: JSON.stringify({ foodCategory: newCategory }),
                             contentType: 'application/json',
@@ -297,7 +297,7 @@ import { displayFoodItem } from './loadAllFoodsByCategory.js';
                 });
 
                 $.ajax({
-                    url: 'foodCategories',
+                    url: '/secretary/foodCategories',
                     method: 'GET',
                     success: function (categories) {
                         categories.forEach(function (category) {
@@ -313,7 +313,7 @@ import { displayFoodItem } from './loadAllFoodsByCategory.js';
 
                 // 카테고리 목록 가져오기
                 $.ajax({
-                    url: 'foodCategories',
+                    url: '/secretary/foodCategories',
                     method: 'GET',
                     success: function (categories) {
                         // 드롭다운에 카테고리 목록 추가
@@ -624,7 +624,7 @@ import { displayFoodItem } from './loadAllFoodsByCategory.js';
                 });
                 function populateCategoryModal() {
                     $.ajax({
-                        url: 'foodCategories',
+                        url: '/secretary/foodCategories',
                         type: 'GET',
                         dataType: 'json',
                         success: function (categories) {
@@ -710,7 +710,7 @@ import { displayFoodItem } from './loadAllFoodsByCategory.js';
 
                     // 데이터베이스 중복 확인
                     $.ajax({
-                        url: 'foodCategories/checkCategoryDuplication',
+                        url: '/secretary/foodCategories/checkCategoryDuplication',
                         type: 'POST',
                         dataType: 'json',
                         data: JSON.stringify({
@@ -725,7 +725,7 @@ import { displayFoodItem } from './loadAllFoodsByCategory.js';
 
                             // 해당 카테고리를 사용하는 음식의 수 확인
                             $.ajax({
-                                url: 'foodCategories/countFoodsUsingCategory',
+                                url: '/secretary/foodCategories/countFoodsUsingCategory',
                                 type: 'POST',
                                 dataType: 'json',
                                 data: JSON.stringify({
@@ -747,7 +747,7 @@ import { displayFoodItem } from './loadAllFoodsByCategory.js';
 
                 function updateCategory(originalName, newName) {
                     $.ajax({
-                        url: 'foodCategories/updateCategory',
+                        url: '/secretary/foodCategories/updateCategory',
                         type: 'POST',
                         data: {
                             originalName: originalName,
@@ -767,7 +767,7 @@ import { displayFoodItem } from './loadAllFoodsByCategory.js';
 
                     // 해당 카테고리를 사용하는 음식의 수 확인
                     $.ajax({
-                        url: 'foodCategories/countFoodsUsingCategory',
+                        url: '/secretary/foodCategories/countFoodsUsingCategory',
                         type: 'POST',
                         dataType: 'json',
                         data: JSON.stringify({
@@ -788,7 +788,7 @@ import { displayFoodItem } from './loadAllFoodsByCategory.js';
 
                 function deleteCategory(categoryName) {
                     $.ajax({
-                        url: 'foodCategories/deleteCategory',
+                        url: '/secretary/foodCategories/deleteCategory',
                         type: 'POST',
                         data: {
                             foodCategory: categoryName,
