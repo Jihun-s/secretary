@@ -93,6 +93,7 @@
     <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
     <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
     <script th:src="@{/assets/js/config.js}"></script>
+    
   </head>
 
   <body>
@@ -144,13 +145,13 @@
 
             <!-- 알림 -->
             <li class="menu-item">
-              <a
-                th:href="@{/main}"
+              <span id="openAlertModalMenu"
                 class="menu-link"
+                style="cursor: pointer;"
               >
                 <i class="menu-icon tf-icons bx bx-detail"></i>
                 <div data-i18n="Support">알림</div>
-              </a>
+              </span>
             </li>
 
             <!-- 일정 -->
@@ -257,12 +258,12 @@
               </a>
               <ul class="menu-sub">
                 <li class="menu-item">
-                  <a th:href="@{/cashbook/}" class="menu-link">
+                  <a th:href="@{/cashbook}" class="menu-link">
                     <div data-i18n="Alerts">가계부 홈</div>
                   </a>
                 </li>
                 <li class="menu-item">
-                  <a th:href="@{/cashbook/trans}" class="menu-link">
+                  <a th:href="@{/cashbook/trans/}" class="menu-link">
                     <div data-i18n="Alerts">내역 보기</div>
                   </a>
                 </li>
@@ -330,115 +331,95 @@
               class="navbar-nav-right d-flex align-items-center"
               id="navbar-collapse"
             >
-              <!-- Search -->
-              <div class="navbar-nav align-items-center">
-                <div class="nav-item d-flex align-items-center">
-                  <i class="bx bx-search fs-4 lh-0"></i>
-                  <input
-                    type="text"
-                    class="form-control border-0 shadow-none"
-                    placeholder="검색어를 입력하세요"
-                    aria-label="검색어를 입력하세요"
-                  />
-                </div>
-              </div>
-              <!-- /Search -->
 
               <ul class="navbar-nav flex-row align-items-center ms-auto">
 
                 <!-- 알림 종 -->
                 <li
-                  class="nav-item navbar-dropdown dropdown-user dropdown"
-                  style="margin-right: 1.3rem"
+                class="nav-item navbar-dropdown dropdown-user dropdown"
+                style="margin-right: 1.3rem"
                 >
-                  <a
-                    class="nav-link dropdown-toggle hide-arrow"
-                    href="javascript:void(0);"
-                    
-                  >
-                    <!-- 종 이미지-->
-                    <div class="bx bx-bell bx-tada-hover bx-sm"></div>
-                  </a>
-                </li>
+                <a
+                  class="nav-link dropdown-toggle hide-arrow"
+                  href="javascript:void(0);"
+                >
+                  <!-- 종 이미지-->
+                  <div class="bx bx-bell bx-tada-hover bx-sm"></div>
+                </a>
+              </li>
 
-                <!-- User 유저 아이콘 -->
-                <li class="nav-item navbar-dropdown dropdown-user dropdown">
-                  <a
-                    class="nav-link dropdown-toggle hide-arrow"
-                    href="javascript:void(0);"
-                    data-bs-toggle="dropdown"
-                  >
-                    <div class="avatar avatar-online">
-                      <img
-                        th:src="@{/images/profileimg/10228364.png}"
-                        alt
-                        class="w-px-40 h-auto rounded-circle"
-                      />
-                    </div>
-                  </a>
-                  <ul class="dropdown-menu dropdown-menu-end">
-                    <li>
-                      <a class="dropdown-item" href="#">
-                        <div class="d-flex">
-                          <div class="flex-shrink-0 me-3">
-                            <div class="avatar avatar-online">
-                              <img
-                                th:src="@{/images/profileimg/10228364.png}"
-                                alt
-                                class="w-px-40 h-auto rounded-circle"
-                              />
-                    </div>
-                  </a>
-                  <ul class="dropdown-menu dropdown-menu-end">
-                    <li>
-                      <a class="dropdown-item" href="#">
-                        <div class="d-flex">
-                          <div class="flex-shrink-0 me-3">
-                            <div class="avatar avatar-online">
-                              <img
-                                th:src="@{/assets/img/avatars/1.png}"
-                                alt
-                                class="w-px-40 h-auto rounded-circle"
-                              />
-                            </div>
-                          </div>
-                          <div class="flex-grow-1">
-                            <span class="fw-semibold d-block">사용자명</span>
-                            <small class="text-muted">권한명</small>
+              <!-- User 유저 아이콘 -->
+              <li class="nav-item navbar-dropdown dropdown-user dropdown">
+                <a
+                  class="nav-link dropdown-toggle hide-arrow"
+                  href="javascript:void(0);"
+                  data-bs-toggle="dropdown"
+                >
+                  <div class="avatar avatar-online">
+                    <img
+                      th:src="@{/images/profileimg/10228364.png}"
+                      alt
+                      class="w-px-40 h-auto rounded-circle"
+                    />
+                  </div>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end">
+                  <li>
+                    <a class="dropdown-item" href="#">
+                      <div class="d-flex">
+                        <div class="flex-shrink-0 me-3">
+                          <div class="avatar avatar-online">
+                            <img
+                              th:src="@{/images/profileimg/10228364.png}"
+                              alt
+                              class="w-px-40 h-auto rounded-circle"
+                            />
                           </div>
                         </div>
-                      </a>
-                    </li>
-                    <li>
-                      <div class="dropdown-divider"></div>
-                    </li>
-                    <li>
-                      <a class="dropdown-item" th:href="@{/member/profile}">
-                        <i class="bx bx-user me-2"></i>
-                        <span class="align-middle">내 프로필</span>
-                      </a>
-                    </li>
-                    <li>
-                      <a class="dropdown-item" th:href="@{/member/settings}">
-                        <i class="bx bx-cog me-2"></i>
-                        <span class="align-middle">설정</span>
-                      </a>
-                    </li>
-                    <li>
-                      <div class="dropdown-divider"></div>
-                    </li>
-                    <li>
-                      <a class="dropdown-item" th:href="@{/user/logout}">
-                        <i class="bx bx-power-off me-2"></i>
-                        <span class="align-middle">로그아웃</span>
-                      </a>
-                    </li>
-                  </ul>
-                </li>
-                <!--/ User -->
-              </ul>
-            </div>
-          </nav>
+                        <div class="flex-grow-1">
+                          <span
+                            th:text="${loginUser.userNickname}"
+                            class="fw-semibold d-block"
+                            >별명</span
+                          >
+                          <small
+                            th:text="${loginUser.userId}"
+                            class="text-muted"
+                          ></small>
+                        </div>
+                      </div>
+                    </a>
+                  </li>
+                  <li>
+                    <div class="dropdown-divider"></div>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" th:href="@{/member/profile}">
+                      <i class="bx bx-user me-2"></i>
+                      <span class="align-middle">내 프로필</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" th:href="@{/member/settings}">
+                      <i class="bx bx-cog me-2"></i>
+                      <span class="align-middle">설정</span>
+                    </a>
+                  </li>
+                  <li>
+                    <div class="dropdown-divider"></div>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" th:href="@{/user/logout}">
+                      <i class="bx bx-power-off me-2"></i>
+                      <span class="align-middle">로그아웃</span>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <!--/ User -->
+            </ul>
+          </div>
+        </nav>
 
           <!-- / Navbar -->
 
@@ -460,7 +441,7 @@
               
               <!-- 메뉴 행 -->
               <div class="row mb-4">
-                <a th:href="@{/cashbook/trans}">
+                <a th:href="@{/cashbook/trans/}">
                   <span style="display: inline-block">
                     <!-- 메뉴 앞 이미지 src 수정해주세요 -->
                     <img
@@ -892,6 +873,10 @@
       </div>
     </div>
 
+    
+    <!-- 공통 알림 모달 -->
+    <div th:include="alert-modal"></div>
+
     <!-- / Layout wrapper -->
 
     <!-- Core JS -->
@@ -923,5 +908,12 @@
 
     <!-- Place this tag in your head or just before your close body tag. -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+    
+    <!-- 냉장고 옷장 알림 자바스크립트 파일 -->
+    <script th:src="@{/js/closet/closetMain.js}" onload="console.log('closetMain 연결됨')"></script>
+    <script type="module" th:src="@{/js/fridge/fridgeNotification.js}" onload="console.log('fridgeNotification 연결됨')"></script>
+    <script th:src="@{/js/fridge/livingGoodsModify.js}" onload="console.log('livingGoodsModify 연결됨')"></script>
+    <script th:src="@{/js/main/commonAlert.js}"></script>
   </body>
 </html>

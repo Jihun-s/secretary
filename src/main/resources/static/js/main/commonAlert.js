@@ -4,23 +4,27 @@
 
 /** 종이나 알림 메뉴 누르면 모달 띄우기  */
 document.addEventListener('DOMContentLoaded', function() {
-    /** 알림 모달 여는 함수 */
-    function openAlertModal() {
-      var alertModal = new bootstrap.Modal(document.getElementById('alertModal'));
-      alertModal.show();
-    }
 
-    // 종 아이콘
-    var bellIcon = document.querySelector('.bx-bell');
-    if(bellIcon) {
-      bellIcon.addEventListener('click', openAlertModal);
-    }
+  // 충돌 방지
+  var $j = jQuery.noConflict();
 
-    // 알림 메뉴 
-    var alertMenu = document.getElementById('openAlertModalMenu');
-    if(alertMenu) {
-      alertMenu.addEventListener('click', openAlertModal);
-    }
+  /** 알림 모달 여는 함수 */
+  function openAlertModal() {
+    var alertModal = new bootstrap.Modal(document.getElementById('alertModal'));
+    alertModal.show();
+  }
+
+  // 종 아이콘
+  var bellIcon = document.querySelector('.bx-bell');
+  if(bellIcon) {
+    bellIcon.addEventListener('click', openAlertModal);
+  }
+
+  // 알림 메뉴 
+  var alertMenu = document.getElementById('openAlertModalMenu');
+  if(alertMenu) {
+    alertMenu.addEventListener('click', openAlertModal);
+  }
 });
 
 /** 세탁물 필수알림 */
@@ -29,7 +33,7 @@ function closetPilsuAlert() {
     let laundryCheck = true;
 
     $.ajax({
-      url:'closet/inCloset',
+      url:'/secretary/closet/inCloset',
       type:'get',
       data:{closetNum : closetNum, clothesLaundry: laundryCheck},
       dataType:'json',
