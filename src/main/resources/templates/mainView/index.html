@@ -77,6 +77,11 @@
       body {
         font-family: 'NanumSquareNeo-Variable', sans-serif;
       }
+      
+	  #progessDetail{
+      	width:41rem;
+      	height:1.7rem;
+      }
     </style>
 
     <!-- Page CSS -->
@@ -585,7 +590,6 @@
                                   data-bs-target="#alertPillCloset"
                                   aria-controls="alertPillCloset"
                                   aria-selected="false"
-                                  onclick="closetPilsuAlert();"
                                 >
                                   <i class="tf-icons bx bx-closet"></i> 세탁물
                                 </button>
@@ -634,7 +638,17 @@
                                 id="alertPillCloset"
                                 role="tabpanel"
                               >
-                                <div id="alertContent" class="alertContent">옷옷옷옷</div>
+                                <div><span id="curDate"></span>
+                                	<div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" style="border: none; flex-wrap : wrap;">
+                                		<figure>
+				                        <figcapton>&nbsp;&nbsp;<strong>세탁물 게이지</strong></figcapton>
+				                            <a th:href="@{/closet/laundryPage}">
+				                           <div id="progessDetail" class="progress" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true" title="" data-bs-original-title="<i class='bx bx-bell bx-xs' ></i> <span>세탁바구니 보러가기</span>"></div>
+				                        	</a>
+				                        </figure>
+				                        <div id="laundryCntDetail"></div>
+                                	</div>
+                                </div>
                               </div>
 
                               <!-- 가계부 알림 탭 내용 -->

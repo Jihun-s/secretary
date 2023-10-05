@@ -39,72 +39,52 @@ $(document).ready(function() {
     dropdownElement.setAttribute('data-bs-no-auto', '');
 
 
-
+	/* !!!!!!!!!!!!!!!    세탁물 필수알림   !!!!!!!!!!!!!!!!!!*/
+	let closetNum = 0;
+	let laundryCheck = true;
+	
+	$.ajax({
+	  url:'/secretary/closet/inCloset',
+	  type:'get',
+	  data:{closetNum : closetNum, clothesLaundry: laundryCheck},
+	  dataType:'json',
+	  success:function(list){
+	     let laundryCnt = 0; //세탁물 갯수
+	     $(list).each(function(i,n){
+	      laundryCnt += 1;
+	     });
+	    
+	    //날짜 정보 출력
+	    var now = new Date();
+	    var year = now.getFullYear();
+	    var month = now.getMonth() + 1;
+	    var date = now.getDate();
+	    let dateStr = '<small class="text-light fw-semibold mb-2">'+year+'-'+month+'-'+date+'</small>';
+	    $('#curDate').html(dateStr);
+	    
+	    //세탁 게이지
+	    let proVal = (laundryCnt/30) * 100; 
+	    let proStr = '<div class="progress-bar" role="progressbar" style="width:'+proVal+'%; \
+	    background-color: rgba(223,132,166,255); border-color: rgba(223,132,166,255);" \
+	    aria-valuenow="'+proVal+'" aria-valuemin="0" aria-valuemax="30"></div>';
+	    $('#progessDetail').html(proStr);
+	    
+	    //세탁물 개수
+	    let laundryCntStr = '';
+	    if(laundryCnt>=20){
+	    	laundryCntStr += `<p>세탁하러 가시는 건 어떠신가요? 세탁물이 <b>${laundryCnt}</b>개 쌓여있어요.</p>`;      
+	    }else{
+	       laundryCntStr += `<p>세탁물이 20개 미만입니다. 아직 세탁하지 않아도 됩니다.</p>`;            
+	    }
+	    $('#laundryCntDetail').html(laundryCntStr);
+	    
+	},error:function(e){
+	        // console.log(JSON.stringify(e));
+	  }			
+	})	
+	/* !!!!!!!!!!!!!!!    세탁물 필수알림 끝  !!!!!!!!!!!!!!!!!!*/
 });
 
-/** 세탁물 필수알림 */
-function closetPilsuAlert() {
-    let closetNum = 0;
-    let laundryCheck = true;
-
-    $.ajax({
-      url:'/secretary/closet/inCloset',
-      type:'get',
-      data:{closetNum : closetNum, clothesLaundry: laundryCheck},
-      dataType:'json',
-      success:function(list){
-        let laundryCnt = 0; //세탁물 갯수
-        $(list).each(function(i,n){
-          laundryCnt += 1;
-        });
-        
-        let proVal = (laundryCnt/30) * 100; 
-        let proStr = '<div class="progress-bar" role="progressbar" style="width:'+proVal+'%; \
-        background-color: rgba(223,132,166,255); border-color: rgba(223,132,166,255);" \
-        aria-valuenow="'+proVal+'" aria-valuemin="0" aria-valuemax="30"></div>';
-        $('#progessDetail').html(proStr);
-        $('#laundryCntDetail').html('<p>세탁바구니에 세탁물이 '+laundryCnt+'개 쌓여있어요</p>')
-        
-        var now = new Date();	// 현재 날짜 및 시간
-        var month = now.getMonth() + 1;
-        var date = now.getDate();
-        let dateStr = month+'월 '+date+'일 알림입니다.</p>';
-        $('#dateAlert').html(dateStr);
-        let laundryCntStr = '';
-        if(laundryCnt>=20){
-        laundryCntStr += `
-        <small class="text-light fw-semibold mb-2">${dateStr}</small>
-        <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" style="border: none;">
-          <a href="javascript:openDetailModal(0);">
-            <div>
-              세탁하러 가시는 건 어떠신가요? 세탁물이 <b>${laundryCnt}</b>개 쌓여있어요.
-            </div>
-          </a>
-        </div>
-        `;      
-
-        }else{
-          laundryCntStr += `
-          <small class="text-light fw-semibold mb-2">${dateStr}</small>
-          <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" style="border: none;">
-            <a href="javascript:openDetailModal(0);">
-              <div>
-              세탁물이 20개 미만입니다. 알림이 없습니다.
-              </div>
-            </a>
-          </div>
-          `;            
-        } 
-
-        $('#alertContent').html(laundryCntStr);
-        $('.alertContent').html(laundryCntStr);
-        
-      },
-      error:function(e){
-        // console.log(JSON.stringify(e));
-      }			
-    })	
-}
 
 
 /** 퍼펙트 스크롤바 */
