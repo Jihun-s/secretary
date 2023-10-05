@@ -178,6 +178,7 @@
 
 function delCloset(closetNum){
 	console.log(closetNum);
+	
 	let res = confirm('옷장을 삭제하시겠어요? \n옷장 안에 저장된 옷들도 전부 삭제됩니다.');
 	if(res){
 		$.ajax({
@@ -211,8 +212,16 @@ function modifyCloset(closetNum){
 			type:'post',
 			data:{closetNum:closetNum, familyId: familyId, userId: userid, closetName:n},
 			success:function(){
-				alert('옷장수정 성공');
-				location.reload(true);
+				Swal.fire({
+ 				text: '옷장 수정 성공',
+  				icon: 'success',
+  				confirmButtonText: '닫기',
+  				confirmButtonColor: 'rgba(223,132,166,255)',
+  				iconColor: 'rgba(223,132,166,255)',
+  				closeOnClickOutside : false
+				}).then(function(){
+				location.reload();
+				});
 			},
 			error:function(e){
 				alert(JSON.stringify(e));
@@ -240,8 +249,16 @@ function insertCloset(){
 			type:'post',
 			data:{closetNum:closetnum, familyId: familyId, userId: userid, closetName:n},
 			success:function(){
-				alert('옷장추가 성공');
-				location.reload(true);
+				Swal.fire({
+ 				text: '옷장 추가 성공',
+  				icon: 'success',
+  				confirmButtonText: '닫기',
+  				confirmButtonColor: 'rgba(223,132,166,255)',
+  				iconColor: 'rgba(223,132,166,255)',
+  				closeOnClickOutside : false
+				}).then(function(){
+				location.reload();
+				});
 			},
 			error:function(e){
 				alert(JSON.stringify(e));
