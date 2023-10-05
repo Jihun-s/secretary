@@ -16,7 +16,7 @@
       content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
     />
 
-    <title>생비 :: 회원가입 실패</title>
+    <title>생비 :: 초대장 전송 완료</title>
 
     <meta name="description" content="" />
 
@@ -96,7 +96,7 @@
 
           if (countdownValue < 0) {
             clearInterval(countdownTimer);
-            window.location.href = "/secretary/";
+            window.location.href = "/secretary/main";
           }
         }, 1000);
       }
@@ -125,15 +125,13 @@
                     />
                   </span>
                   <span class="app-brand-text demo text-body fw-bolder"
-                    >회원 가입 실패</span
+                    >초대장 전송 완료</span
                   >
                 </a>
               </div>
               <!-- /Logo -->
-              <h5 class="mb-2">죄송합니다.</h5>
-              <p>
-                회원가입 중에 문제가 발생했습니다. 나중에 다시 시도해주세요.
-              </p>
+              <h5 class="mb-2">초대장을 보냈습니다.</h5>
+              <p>입력하신 메일 주소로 회원 가입 URL을 보내드렸어요.</p>
               <p>
                 <span id="timeCount">5</span>초 후 메인 페이지로 이동할게요.
               </p>
