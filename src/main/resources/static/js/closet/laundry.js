@@ -184,20 +184,31 @@ function chartDraw(dataValue){
 	}
 	
 	function laundryAllOut(){
-		let res = confirm('세탁바구니를 비우시겠어요?');
-		if(res){
-			$.ajax({
-				url:'laundryOut',
-				type:'get',
-				data:{closetNum:0, clothesNum:0},
-				success:function(){
-					location.reload(true);
-				},
-				error:function(e){
-					alert(JSON.stringify(e));
-				}			
-			});	
-		}//if문
+		Swal.fire({
+	   		title: '세탁바구니를 비우시겠어요?',
+	   		//text: '옷장 안에 저장된 옷들도 전부 삭제됩니다.',
+	  		icon: 'warning',
+	   		showCancelButton: true, // cancel버튼 보이기. 기본은 원래 없음
+	   		iconColor: 'rgba(223,132,166,255)',
+	   		confirmButtonColor: 'rgba(223,132,166,255)',
+	   		cancelButtonColor: 'rgba(223,132,166,255)', 
+	   		confirmButtonText: '비우기', 
+	   		cancelButtonText: '닫기',
+		}).then(result => {
+	   		if (result.isConfirmed) { // 만약 모달창에서 confirm 버튼을 눌렀다면
+				$.ajax({
+					url:'laundryOut',
+					type:'get',
+					data:{closetNum:0, clothesNum:0},
+					success:function(){
+						location.reload(true);
+					},
+					error:function(e){
+						alert(JSON.stringify(e));
+					}			
+				});	
+	   		}
+		});		
 	}
 	
 	function laundryOut(closetNum,clothesNum){

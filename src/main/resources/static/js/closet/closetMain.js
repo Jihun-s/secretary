@@ -178,21 +178,33 @@
 
 function delCloset(closetNum){
 	console.log(closetNum);
-	
-	let res = confirm('옷장을 삭제하시겠어요? \n옷장 안에 저장된 옷들도 전부 삭제됩니다.');
-	if(res){
-		$.ajax({
-			url:'closet/delCloset',
-			type:'post',
-			data:{closetNum: closetNum, familyId: familyId, userId: userid},
-			success:function(){
-				location.reload(true);
-			},
-			error:function(e){
-				alert(JSON.stringify(e));
-			}			
-		});			
-	}//if문
+	Swal.fire({
+   		title: '옷장을 삭제하시겠어요?',
+   		text: '옷장 안에 저장된 옷들도 전부 삭제됩니다.',
+  		icon: 'warning',
+   		showCancelButton: true, // cancel버튼 보이기. 기본은 원래 없음
+   		iconColor: 'rgba(223,132,166,255)',
+   		confirmButtonColor: 'rgba(223,132,166,255)',
+   		cancelButtonColor: 'rgba(223,132,166,255)', 
+   		confirmButtonText: '삭제', 
+   		cancelButtonText: '닫기',
+	}).then(result => {
+   		if (result.isConfirmed) { // 만약 모달창에서 confirm 버튼을 눌렀다면
+			$.ajax({
+				url:'closet/delCloset',
+				type:'post',
+				data:{closetNum: closetNum, familyId: familyId, userId: userid},
+				success:function(){
+					location.reload(true);
+				},
+				error:function(e){
+					alert(JSON.stringify(e));
+				}			
+			});			
+   		}
+	});
+
+
 }
 
 function modifyCloset(closetNum){
