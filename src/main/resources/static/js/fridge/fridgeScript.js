@@ -103,7 +103,16 @@ import { displayFoodItem } from './loadAllFoodsByCategory.js';
                 });
 
                 function handleFoodAddSuccess(response) {
-                    alert('음식 정보가 성공적으로 추가되었습니다.');
+                    Swal.fire({
+                        title: '성공',
+                        text: '음식 정보가 성공적으로 추가되었습니다.',
+                        icon: 'success',
+                        confirmButtonText: '확인',
+                        customClass: {
+                            confirmButton: 'btn btn-primary', // 부트스트랩 'btn-primary' 스타일 적용
+                        }
+                    });
+                    
                     $('#manualInputModal').modal('hide');
 
                     const selectedFridgeId = $('.fridgeSelect').val();
@@ -120,7 +129,15 @@ import { displayFoodItem } from './loadAllFoodsByCategory.js';
 
                 function handleFoodAddError(jqXHR, textStatus, errorThrown) {
                     console.error('Error:', errorThrown); // 개발자를 위한 오류 로그
-                    alert(`음식 정보를 추가하는 데 실패했습니다. 오류: ${errorThrown}`);
+                    Swal.fire({
+                        title: '오류',
+                        text: `음식 정보를 추가하는 데 실패했습니다. 오류: ${errorThrown}`,
+                        icon: 'error',
+                        confirmButtonText: '확인',
+                        customClass: {
+                            confirmButton: 'btn btn-primary', // 부트스트랩 'btn-primary' 스타일 적용
+                        }
+                    });                    
                 }
                 $(document).on('click', '.fridgeItem', function () {
                     event.preventDefault(); // <a> 태그의 기본 동작 중단
@@ -193,7 +210,9 @@ import { displayFoodItem } from './loadAllFoodsByCategory.js';
                         title: '확인',
                         text: "정말로 이 음식 아이템을 삭제하시겠습니까?",
                         icon: 'warning',
+                        iconColor: '#696cff',
                         showCancelButton: true,
+                        iconColor: '#696cff',
                         confirmButtonText: '예, 삭제합니다!',
                         cancelButtonText: '취소',
                         customClass: {
@@ -260,7 +279,16 @@ import { displayFoodItem } from './loadAllFoodsByCategory.js';
                             isItemEditMode = false;
                         },
                         error: function (jqXHR, textStatus, errorThrown) {
-                            alert('냉장고 이름을 수정하는 데 실패했습니다.');
+                            Swal.fire({
+                                title: '오류',
+                                text: '냉장고 이름을 수정하는 데 실패했습니다.',
+                                icon: 'error',
+                                confirmButtonText: '확인',
+                                customClass: {
+                                    confirmButton: 'btn btn-primary', // 부트스트랩 'btn-primary' 스타일 적용
+                                }
+                            });
+                            
                         },
                     });
                 });
@@ -283,6 +311,7 @@ import { displayFoodItem } from './loadAllFoodsByCategory.js';
                                 text: `${fridgeName}에 음식이 있습니다. 함께 삭제하시겠습니까?`,
                                 icon: 'warning',
                                 showCancelButton: true,
+                                iconColor: '#696cff',
                                 confirmButtonText: '예, 삭제합니다!',
                                 cancelButtonText: '취소',
                                 customClass: {
@@ -300,6 +329,7 @@ import { displayFoodItem } from './loadAllFoodsByCategory.js';
                                 text: `${fridgeName}를 삭제하시겠습니까?`,
                                 icon: 'warning',
                                 showCancelButton: true,
+                                iconColor: '#696cff',
                                 confirmButtonText: '예, 삭제합니다!',
                                 cancelButtonText: '취소',
                                 customClass: {
@@ -323,11 +353,28 @@ import { displayFoodItem } from './loadAllFoodsByCategory.js';
                         data: JSON.stringify({ fridgeId: fridgeId }),
                         contentType: 'application/json',
                         success: function () {
-                            alert(`${fridgeName}가 성공적으로 삭제되었습니다.`);
+                            Swal.fire({
+                                title: '성공',
+                                text: `${fridgeName}가 성공적으로 삭제되었습니다.`,
+                                icon: 'success',
+                                confirmButtonText: '확인',
+                                customClass: {
+                                    confirmButton: 'btn btn-primary', // 부트스트랩 'btn-primary' 스타일 적용
+                                }
+                            });
+                            
                             location.reload();
                         },
                         error: function (jqXHR, textStatus, errorThrown) {
-                            alert('냉장고를 삭제하는 데 실패했습니다.');
+                            Swal.fire({
+                                title: '오류',
+                                text: '냉장고를 삭제하는 데 실패했습니다.',
+                                icon: 'error',
+                                confirmButtonText: '확인',
+                                customClass: {
+                                    confirmButton: 'btn btn-primary', // 부트스트랩 'btn-primary' 스타일 적용
+                                }
+                            });
                         },
                     });
                 }
@@ -364,7 +411,15 @@ import { displayFoodItem } from './loadAllFoodsByCategory.js';
                             contentType: 'application/json',
                             success: function (response) {
                                 if (response === -1) {
-                                    alert('미리 지정된 카테고리는 추가할 수 없습니다.');
+                                    Swal.fire({
+                                        title: '오류',
+                                        text: '미리 지정된 카테고리는 추가할 수 없습니다.',
+                                        icon: 'error',
+                                        confirmButtonText: '확인',
+                                        customClass: {
+                                            confirmButton: 'btn btn-primary', // 부트스트랩 'btn-primary' 스타일 적용
+                                        }
+                                    });
                                 } else if (response > 0) {
                                     // 예를 들어, 서버에서 추가된 카테고리의 ID를 반환한다고 가정
                                     $('#foodCategory').append(
@@ -374,7 +429,15 @@ import { displayFoodItem } from './loadAllFoodsByCategory.js';
                                     $('#addCategoryBtn').hide();
                                     $('button[type="submit"]').prop('disabled', false); // Submit 버튼 활성화
                                 } else {
-                                    alert('카테고리 추가에 실패했습니다.');
+                                    Swal.fire({
+                                        title: '오류',
+                                        text: '카테고리 추가에 실패했습니다.',
+                                        icon: 'error',
+                                        confirmButtonText: '확인',
+                                        customClass: {
+                                            confirmButton: 'btn btn-primary', // 부트스트랩 'btn-primary' 스타일 적용
+                                        }
+                                    });
                                 }
                             },
                             error: function (error) {
@@ -382,7 +445,15 @@ import { displayFoodItem } from './loadAllFoodsByCategory.js';
                             },
                         });
                     } else {
-                        alert('이미 존재하는 카테고리입니다.');
+                        Swal.fire({
+                            title: '오류',
+                            text: '이미 존재하는 카테고리입니다.',
+                            icon: 'error',
+                            confirmButtonText: '확인',
+                            customClass: {
+                                confirmButton: 'btn btn-primary', // 부트스트랩 'btn-primary' 스타일 적용
+                            }
+                        });
                     }
                 });
 
@@ -519,7 +590,15 @@ import { displayFoodItem } from './loadAllFoodsByCategory.js';
 
                 $(document).on('click', '#addConfirmButton', function () {
                     if ($('#fridgeNameInput').val().length < 2) {
-                        alert(`냉장고 이름은 2자 이상이어야 합니다.`);
+                        Swal.fire({
+                            title: '오류',
+                            text: `냉장고 이름은 2자 이상이어야 합니다.`,
+                            icon: 'error',
+                            confirmButtonText: '확인',
+                            customClass: {
+                                confirmButton: 'btn btn-primary', // 부트스트랩 'btn-primary' 스타일 적용
+                            }
+                        });
                         return;
                     }
                     const fridgeName = $('#fridgeNameInput').val();
@@ -543,7 +622,15 @@ import { displayFoodItem } from './loadAllFoodsByCategory.js';
                             },
                         });
                     } else {
-                        alert('냉장고 이름을 입력하세요!');
+                        Swal.fire({
+                            title: '오류',
+                            text: '냉장고 이름을 입력하세요!',
+                            icon: 'error',
+                            confirmButtonText: '확인',
+                            customClass: {
+                                confirmButton: 'btn btn-primary', // 부트스트랩 'btn-primary' 스타일 적용
+                            }
+                        });
                     }
                 });
 
@@ -561,7 +648,15 @@ import { displayFoodItem } from './loadAllFoodsByCategory.js';
                 $(document).on('input', '#fridgeNameInput', function () {
                     if ($(this).val().length > MAX_NAME_LENGTH) {
                         $(this).val($(this).val().substr(0, MAX_NAME_LENGTH));
-                        alert(`냉장고 이름은 ${MAX_NAME_LENGTH}자 이하여야 합니다.`);
+                        Swal.fire({
+                            title: '오류',
+                            text: `냉장고 이름은 ${MAX_NAME_LENGTH}자 이하여야 합니다.`,
+                            icon: 'error',
+                            confirmButtonText: '확인',
+                            customClass: {
+                                confirmButton: 'btn btn-primary', // 부트스트랩 'btn-primary' 스타일 적용
+                            }
+                        });
                     }
                 });
 
@@ -794,7 +889,15 @@ import { displayFoodItem } from './loadAllFoodsByCategory.js';
 
                     // 기본 카테고리 중복 확인
                     if (DEFAULT_CATEGORIES.includes(newCategoryName)) {
-                        alert('기본 카테고리명과 중복됩니다. 다른 이름을 선택해주세요.');
+                        Swal.fire({
+                            title: '오류',
+                            text: '기본 카테고리명과 중복됩니다. 다른 이름을 선택해주세요.',
+                            icon: 'error',
+                            confirmButtonText: '확인',
+                            customClass: {
+                                confirmButton: 'btn btn-primary', // 부트스트랩 'btn-primary' 스타일 적용
+                            }
+                        });
                         return;
                     }
 
@@ -813,6 +916,7 @@ import { displayFoodItem } from './loadAllFoodsByCategory.js';
                                     title: '경고',
                                     text: '이미 존재하는 카테고리 이름입니다.',
                                     icon: 'warning',
+                                    iconColor: '#696cff',
                                     confirmButtonText: '확인',
                                     customClass: {
                                         confirmButton: 'btn btn-primary', // 부트스트랩 'btn-primary' 스타일 적용
@@ -835,6 +939,7 @@ import { displayFoodItem } from './loadAllFoodsByCategory.js';
                                         text: `총 ${count}개의 음식이 해당 카테고리 명을 사용중입니다. 일괄 변경하시겠습니까?`,
                                         icon: 'warning',
                                         showCancelButton: true,
+                                        iconColor: '#696cff',
                                         confirmButtonText: '예, 변경합니다!',
                                         cancelButtonText: '취소',
                                         customClass: {
@@ -861,7 +966,15 @@ import { displayFoodItem } from './loadAllFoodsByCategory.js';
                             newName: newName,
                         },
                         success: function () {
-                            alert('카테고리가 성공적으로 수정되었습니다.');
+                            Swal.fire({
+                                title: '성공',
+                                text: '카테고리가 성공적으로 수정되었습니다.',
+                                icon: 'success',
+                                confirmButtonText: '확인',
+                                customClass: {
+                                    confirmButton: 'btn btn-primary', // 부트스트랩 'btn-primary' 스타일 적용
+                                }
+                            });
                             location.reload(); // 페이지 새로고침
                         },
                     });
@@ -887,6 +1000,7 @@ import { displayFoodItem } from './loadAllFoodsByCategory.js';
                                 text: `총 ${count}개의 음식이 '${categoryToDelete}' 카테고리 명을 사용중입니다. 모든 음식을 '일반' 카테고리로 일괄 변경하시겠습니까?`,
                                 icon: 'warning',
                                 showCancelButton: true,
+                                iconColor: '#696cff',
                                 confirmButtonText: '예, 변경합니다!',
                                 cancelButtonText: '취소',
                                 customClass: {
@@ -911,11 +1025,27 @@ import { displayFoodItem } from './loadAllFoodsByCategory.js';
                             foodCategory: categoryName,
                         },
                         success: function () {
-                            alert('카테고리가 성공적으로 삭제되었습니다.');
+                            Swal.fire({
+                                title: '성공',
+                                text: '카테고리가 성공적으로 삭제되었습니다.',
+                                icon: 'success',
+                                confirmButtonText: '확인',
+                                customClass: {
+                                    confirmButton: 'btn btn-primary', // 부트스트랩 'btn-primary' 스타일 적용
+                                }
+                            });
                             location.reload(); // 페이지 새로고침
                         },
                         error: function () {
-                            alert('카테고리 삭제에 실패하였습니다.');
+                            Swal.fire({
+                                title: '오류',
+                                text: '카테고리 삭제에 실패하였습니다.',
+                                icon: 'error',
+                                confirmButtonText: '확인',
+                                customClass: {
+                                    confirmButton: 'btn btn-primary', // 부트스트랩 'btn-primary' 스타일 적용
+                                }
+                            });
                         },
                     });
                 }

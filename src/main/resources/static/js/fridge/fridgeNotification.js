@@ -99,48 +99,87 @@ let allFoods = [];
         loadData();
 
                         //소비 버튼
-                        $(document).on('click', '.consume-btn', function () {
-                            const foodId = $(this).data('food-id');
-                            const maxQuantity = $(this).data('food-quantity');
-                            const fridgeId = $(this).data('fridge-id');
-                            const responseFromPrompt = prompt(`소비할 수량을 입력하세요 (재고: ${maxQuantity})`);
-                            const foodName = $(this).data('food-name');
-        
-                            if (responseFromPrompt === null) {
-                                // 프롬프트에서 취소 버튼을 누름
-                                return; // 아무 것도 하지 않고 종료
-                            }
-                            const quantityToConsume = parseInt(responseFromPrompt);
-        
-                            if (quantityToConsume > 0 && quantityToConsume <= maxQuantity) {
-                                // 서버에 소비 처리 요청
-                                $.ajax({
-                                    url: '/secretary/fridgeUsed/consumeFood',
-                                    type: 'POST',
-                                    data: JSON.stringify({
-                                        foodId: foodId,
-                                        foodQuantity: quantityToConsume,
-                                        fridgeId: fridgeId,
-                                        foodName: foodName,
-                                    }),
-        
-                                    contentType: 'application/json',
-                                    success: function (response) {
-                                        alert('소비 처리가 완료되었습니다.');
-                                        $('#foodModal').modal('hide');
-                                        loadAllFoodsByCategory(getCurrentCategory());
-                                        refreshConsumptionHistory();
-                                        loadData();
-                                    },
-                                    error: function (error) {
-                                        console.log('Error consuming food:', error);
-                                        alert('소비 처리에 실패하였습니다.');
-                                    },
-                                });
-                            } else {
-                                alert('올바른 수량을 입력하세요.');
-                            }
-                        });
+$(document).on('click', '.consume-btn', function () {
+  const foodId = $(this).data('food-id');
+  const maxQuantity = $(this).data('food-quantity');
+  const fridgeId = $(this).data('fridge-id');
+  const foodName = $(this).data('food-name');
+
+  Swal.fire({
+      title: '수량 입력',
+      text: `소비할 수량을 입력하세요 (재고: ${maxQuantity})`,
+      input: 'number',
+      inputAttributes: {
+          min: 1,
+          max: maxQuantity
+      },
+      icon: 'info',
+      showCancelButton: true,
+      confirmButtonText: '확인',
+      cancelButtonText: '취소',
+      customClass: {
+          confirmButton: 'btn btn-primary',
+          cancelButton: 'btn btn-secondary'
+      }
+  }).then((result) => {
+      if (result.isConfirmed) {
+          const quantityToConsume = parseInt(result.value);
+
+          if (quantityToConsume > 0 && quantityToConsume <= maxQuantity) {
+              // 서버에 소비 처리 요청
+              $.ajax({
+                  url: '/secretary/fridgeUsed/consumeFood',
+                  type: 'POST',
+                  data: JSON.stringify({
+                      foodId: foodId,
+                      foodQuantity: quantityToConsume,
+                      fridgeId: fridgeId,
+                      foodName: foodName,
+                  }),
+                  contentType: 'application/json',
+                  success: function (response) {
+                      Swal.fire({
+                          title: '성공',
+                          text: '소비 처리가 완료되었습니다.',
+                          icon: 'success',
+                          confirmButtonText: '확인',
+                          customClass: {
+                              confirmButton: 'btn btn-primary',
+                          }
+                      });
+                      $('#foodModal').modal('hide');
+                      loadAllFoodsByCategory(getCurrentCategory());
+                      refreshConsumptionHistory();
+                      loadData();
+                  },
+                  error: function (error) {
+                      console.log('Error consuming food:', error);
+                      Swal.fire({
+                          title: '오류',
+                          text: '소비 처리에 실패하였습니다.',
+                          icon: 'error',
+                          confirmButtonText: '확인',
+                          customClass: {
+                              confirmButton: 'btn btn-primary',
+                          }
+                      });
+                  },
+              });
+          } else {
+              Swal.fire({
+                  title: '오류',
+                  text: '올바른 수량을 입력하세요.',
+                  icon: 'error',
+                  confirmButtonText: '확인',
+                  customClass: {
+                      confirmButton: 'btn btn-primary',
+                  }
+              });
+          }
+      }
+  });
+});
+
         
                         function refreshConsumptionHistory() {
                             $.ajax({
@@ -164,40 +203,103 @@ let allFoods = [];
         
                         $(document).on('click', '.delete-consumption-text', function () {
                             const consumptionId = $(this).data('consumption-id');
-                            if (confirm('정말 이 소비 이력을 삭제하시겠습니까?')) {
-                                // 서버에 소비 이력 삭제 요청
-                                $.ajax({
-                                    url: '/secretary/fridgeUsed/deleteConsumptionHistory',
-                                    type: 'POST',
-                                    data: { fridgeUsedId: consumptionId },
-                                    success: function (response) {
-                                        alert('소비 이력이 삭제되었습니다.');
-                                        refreshConsumptionHistory();
-                                    },
-                                    error: function (error) {
-                                        console.log('Error deleting consumption:', error);
-                                        alert('소비 이력 삭제에 실패하였습니다.');
-                                    },
-                                });
-                            }
+                            Swal.fire({
+                              title: '확인',
+                              text: '정말 이 소비 이력을 삭제하시겠습니까?',
+                              icon: 'warning',
+                              showCancelButton: true,
+                              iconColor: '#696cff',
+                              confirmButtonText: '예, 삭제합니다!',
+                              cancelButtonText: '취소',
+                              customClass: {
+                                  confirmButton: 'btn btn-primary', // 부트스트랩 'btn-primary' 스타일 적용
+                                  cancelButton: 'btn btn-secondary'  // 부트스트랩 'btn-secondary' 스타일 적용
+                              }
+                          }).then((result) => {
+                              if (result.isConfirmed) {
+                                  // 서버에 소비 이력 삭제 요청
+                                  $.ajax({
+                                      url: '/secretary/fridgeUsed/deleteConsumptionHistory',
+                                      type: 'POST',
+                                      data: { fridgeUsedId: consumptionId },
+                                      success: function (response) {
+                                          Swal.fire({
+                                              title: '성공',
+                                              text: '소비 이력이 삭제되었습니다.',
+                                              icon: 'success',
+                                              confirmButtonText: '확인',
+                                              customClass: {
+                                                  
+                                                  confirmButton: 'btn btn-primary', // 부트스트랩 'btn-primary' 스타일 적용
+                                              }
+                                          });
+                                          refreshConsumptionHistory();
+                                      },
+                                      error: function (error) {
+                                          console.log('Error deleting consumption:', error);
+                                          Swal.fire({
+                                              title: '오류',
+                                              text: '소비 이력 삭제에 실패하였습니다.',
+                                              icon: 'error',
+                                              confirmButtonText: '확인',
+                                              customClass: {
+                                                  confirmButton: 'btn btn-primary', // 부트스트랩 'btn-primary' 스타일 적용
+                                              }
+                                          });
+                                      },
+                                  });
+                              }
+                          });
+                          
                         });
         
                         $(document).on('click', '.delete-all-consumption-text', function () {
                             const totalItems = $('.consumption-item').length;
-                            if (confirm(`총 ${totalItems}개의 소비 이력을 전부 삭제하시겠습니까?`)) {
-                                $.ajax({
-                                    url: '/secretary/fridgeUsed/deleteAllConsumptionHistory',
-                                    type: 'POST',
-                                    success: function (response) {
-                                        alert('모든 소비 이력이 삭제되었습니다.');
-                                        $('#consumptionHistoryContainer').empty(); // UI에서 모든 항목 제거
-                                    },
-                                    error: function (error) {
-                                        console.log('Error deleting all consumptions:', error);
-                                        alert('소비 이력 전체 삭제에 실패하였습니다.');
-                                    },
-                                });
-                            }
+                            Swal.fire({
+                              title: '확인',
+                              text: `총 ${totalItems}개의 소비 이력을 전부 삭제하시겠습니까?`,
+                              icon: 'warning',
+                              showCancelButton: true,
+                              iconColor: '#696cff',
+                              confirmButtonText: '예, 삭제합니다!',
+                              cancelButtonText: '취소',
+                              customClass: {
+                                  confirmButton: 'btn btn-primary', // 부트스트랩 'btn-primary' 스타일 적용
+                                  cancelButton: 'btn btn-secondary'  // 부트스트랩 'btn-secondary' 스타일 적용
+                              }
+                          }).then((result) => {
+                              if (result.isConfirmed) {
+                                  $.ajax({
+                                      url: '/secretary/fridgeUsed/deleteAllConsumptionHistory',
+                                      type: 'POST',
+                                      success: function (response) {
+                                          Swal.fire({
+                                              title: '성공',
+                                              text: '모든 소비 이력이 삭제되었습니다.',
+                                              icon: 'success',
+                                              confirmButtonText: '확인',
+                                              customClass: {
+                                                  confirmButton: 'btn btn-primary', // 부트스트랩 'btn-primary' 스타일 적용
+                                              }
+                                          });
+                                          $('#consumptionHistoryContainer').empty(); // UI에서 모든 항목 제거
+                                      },
+                                      error: function (error) {
+                                          console.log('Error deleting all consumptions:', error);
+                                          Swal.fire({
+                                              title: '오류',
+                                              text: '소비 이력 전체 삭제에 실패하였습니다.',
+                                              icon: 'error',
+                                              confirmButtonText: '확인',
+                                              customClass: {
+                                                  confirmButton: 'btn btn-primary', // 부트스트랩 'btn-primary' 스타일 적용
+                                              }
+                                          });
+                                      },
+                                  });
+                              }
+                          });
+                          
                         });
         
                         // 사용자가 소비를 할 때 해당 함수를 호출
