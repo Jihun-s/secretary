@@ -1,33 +1,54 @@
 package net.softsociety.secretary.service;
 
-import org.springframework.beans.factory.annotation.Autowired; // Spring Framework에서 의존성 주입을 위한 어노테이션
-import org.springframework.mail.javamail.JavaMailSender; // 이메일을 전송하기 위한 인터페이스
-import org.springframework.mail.javamail.MimeMessageHelper; // MIME 메시지를 구성하기 위한 헬퍼 클래스
-import org.springframework.stereotype.Service; // 이 클래스가 서비스 레이어의 컴포넌트임을 나타내는 어노테이션
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.stereotype.Service;
 
-import javax.mail.MessagingException; // 메시지 생성 시 발생 가능한 예외
-import javax.mail.internet.MimeMessage; // MIME 형식의 이메일 메시지를 나타내는 클래스
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.util.stream.Collectors;
 
-@Service // 서비스 클래스로 등록
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+
+import lombok.extern.slf4j.Slf4j; // SLF4J 로깅 프레임워크 import
+
+@Service
+@Slf4j // 로깅 프레임워크 어노테이션
 public class EmailService {
 
-    @Autowired // JavaMailSender 의존성 자동 주입
+    @Autowired
     private JavaMailSender emailSender;
 
-    // 이메일을 전송하는 메서드
-    public void sendSimpleMessage(String to, String subject, String text) {
+    // HTML 이메일을 전송하는 메서드
+    public void sendHtmlMessage(String to, String subject, String htmlContent) {
         try {
-            MimeMessage message = emailSender.createMimeMessage(); // 빈 MIME 메시지 생성
-            MimeMessageHelper helper = new MimeMessageHelper(message, true); // 메시지 헬퍼 인스턴스 생성
+            MimeMessage message = emailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
 
-            helper.setFrom("your-email@gmail.com"); // 보내는 사람 설정
-            helper.setTo(to); // 받는 사람 설정
-            helper.setSubject(subject); // 제목 설정
-            helper.setText(text, true); // 본문 설정. true는 HTML 형식임을 의미
+            helper.setFrom("nejo.secretary@gmail.com");
+            helper.setTo(to);
+            helper.setSubject(subject);
+            helper.setText(htmlContent, true); // HTML 본문 설정
 
-            emailSender.send(message); // 이메일 전송
+            emailSender.send(message);
         } catch (MessagingException e) {
-            e.printStackTrace(); // 예외 발생 시 스택 트레이스 출력
+            log.error("이메일 발송 중 오류 발생", e); // 예외를 로깅
+        }
+    }
+    
+    public String loadHtmlContent(String filename) {
+        try {
+            ClassPathResource resource = new ClassPathResource(filename);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8));
+            return reader.lines().collect(Collectors.joining("\n"));
+        } catch (IOException e) {
+            log.error("이메일 전용 HTML 로딩 중 오류 발생", e);
+            return "";
         }
     }
 }
