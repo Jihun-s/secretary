@@ -4,6 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Transient;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -30,10 +31,26 @@ public class AllLog {
 	@Column(name = "log_ip", nullable = false)
 	private String logIp;
 
-	@Column(name = "log_message", length = 255)
+	@Column(name = "log_message", length = 500)
 	private String logMessage;
 
 	@Column(name = "log_data")
 	private String logData;	
+	
+	@Column(name = "log_type")
+	private String logType;
+	
+	@Transient
 	String loginData;
+	
+	public String getLoginData() {
+		return loginData;
+	}
+	
+	@Transient
+	int actionCount;
+	
+	public int getActionCount() {
+		return actionCount;
+	}
 }
