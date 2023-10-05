@@ -37,9 +37,11 @@ $(document).ready(function() {
     /////스크롤바/////스크롤바/////스크롤바/////스크롤바/////스크롤바/////스크롤바/////스크롤바/////스크롤바/////스크롤바/////스크롤바/////스크롤바/////
 
 
-      // 스크롤바 
-      const containers = [
+    // 스크롤바 
+    const containers = [
         document.querySelector('#transListDiv'),
+        document.querySelector('#transListDiv2'),
+        document.querySelector('.transListDiv'),
         document.querySelector('.card-body')
     ].filter(el => el !== null); 
 
@@ -478,6 +480,7 @@ function init() {
                                 <th>내용</th>
                                 <th>메모</th>
                                 <th>거래금액</th>
+                                <th>작성자</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -502,6 +505,7 @@ function init() {
                                 <td><i class="fab fa-react fa-lg text-info me-3"></i> <strong>${ta.transPayee}</strong></td>
                                 <td>${ta.transMemo || ''}</td>
                                 <td style="width: 5rem;">${parseInt(ta.transAmount).toLocaleString('en-US')}</td>
+                                <td>${ta.userNickname || ta.userId}</td>
                                 <td>
                                 <div class="dropdown">
                                     <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></button>
@@ -764,7 +768,7 @@ function setTransAjax() {
             $("#transCategoriesDiv").hide();
         },
         error: function() {
-            alert('내역 입력 서버 전송 실패');
+            console.log('내역 입력 서버 전송 실패');
         }
     });
 }
@@ -835,7 +839,7 @@ function openModalUpdate(transId) {
              $('#basicModal').modal('show');
         },
         error: () => {
-            alert('수정하기 위한 정보 전송 실패');
+            console.log('수정하기 위한 정보 전송 실패');
         }
     });
 
@@ -869,9 +873,9 @@ function updateTransAjax() {
     let transAmount = $('#transAmountModal').val().replace(/,/g, '');
     let labelColor = $('#labelColorModal');
 
-    alert("수정할 값들:" + transId.val() + cashbookId.val() + transDate
-     + transType.val() + cate1Name.val() + cate2Name.val() + transPayee.val()
-      + transMemo.val()  + transAmount + labelColor.val());
+    // alert("수정할 값들:" + transId.val() + cashbookId.val() + transDate
+    // + transType.val() + cate1Name.val() + cate2Name.val() + transPayee.val()
+    //  + transMemo.val()  + transAmount + labelColor.val());
 
     $.ajax({
         url: '/secretary/cashbook/trans/updateTrans',
@@ -888,11 +892,16 @@ function updateTransAjax() {
             transAmount: transAmount,
             labelColor: labelColor.val()
         },
-        success: function() {
+        dataType: 'text',
+        success: function(result) {
+            if(result == 0) {
+                alert('다른 가족이 작성한 내역은 수정할 수 없습니다.');
+                return;
+            }
             init();
         },
         error: function() {
-            alert('내역 수정 서버 전송 실패');
+            console.log('내역 수정 서버 전송 실패');
         }
     });
 }
@@ -907,16 +916,21 @@ function updateTransAjax() {
 
 /** 거래내역 삭제하는 함수 */
 function deleteTrans(transId) {
-    alert(transId);
+    // alert(transId);
     $.ajax({
         url: '/secretary/cashbook/trans/deleteTrans',
         type: 'POST',
         data: { transId: transId },
-        success: () => {
+        dataType: 'text',
+        success: (result) => {
+            if(result == 0) {
+                alert('다른 가족이 작성한 내역은 삭제할 수 없습니다.');
+                return;
+            }
             init();
         },
         error: () => {
-            alert('내역 삭제 전송 실패');
+            console.log('내역 삭제 전송 실패');
         }
     });
 }
@@ -965,7 +979,7 @@ function loadMainCategories(transType) {
             $("#cate1Name").html(options);
         },
         error: function() {
-            alert('대분류 목록 전송 실패');
+            console.log('대분류 목록 전송 실패');
         }
     });
 }
@@ -996,7 +1010,7 @@ function loadSubCategories(cate1Name) {
             $("#cate2Name").html(options);
         },
         error: function() {
-            alert('소분류 목록 전송 실패');
+            console.log('소분류 목록 전송 실패');
         }
     });
 }
@@ -1050,7 +1064,7 @@ function loadMainCategoriesModal(transType, cate1Name) {
             $("#cate1NameModal").html(options);
         },
         error: function() {
-            alert('대분류 목록 전송 실패');
+            console.log('대분류 목록 전송 실패');
         }
     });
 }
@@ -1082,7 +1096,7 @@ function loadSubCategoriesModal(cate1Name, cate2Name) {
             $("#cate2NameModal").html(options);
         },
         error: function() {
-            alert('소분류 목록 전송 실패');
+            console.log('소분류 목록 전송 실패');
         }
     });
 }
@@ -1131,7 +1145,7 @@ function loadMainCategoriesSms(transType) {
             $("#cate1NameSms").html(options);
         },
         error: function() {
-            alert('SMS 대분류 목록 전송 실패');
+            console.log('SMS 대분류 목록 전송 실패');
         }
     });
 }
@@ -1159,7 +1173,7 @@ function loadSubCategoriesSms(cate1Name) {
             $("#cate2NameSms").html(options);
         },
         error: function() {
-            alert('SMS 소분류 목록 전송 실패');
+            console.log('SMS 소분류 목록 전송 실패');
         }
     });
 }
@@ -1196,7 +1210,7 @@ function loadMainCategoriesSearch() {
             $("#cate1NameSearch").html(options);
         },
         error: function() {
-            alert('검색 대분류 목록 전송 실패');
+            console.log('검색 대분류 목록 전송 실패');
         }
     });
 }
@@ -1223,7 +1237,7 @@ function loadSubCategoriesSearch(cate1Name) {
             $("#cate2NameSearch").html(options);
         },
         error: function() {
-            alert('소분류 목록 전송 실패');
+            console.log('소분류 목록 전송 실패');
         }
     });
 }
@@ -1301,7 +1315,7 @@ function setCustomCategory1() {
             }
         },
         error: () => {
-            alert('대분류 추가 전송 실패');
+            console.log('대분류 추가 전송 실패');
         }
     });
 
@@ -1374,7 +1388,7 @@ function setCustomCategory2() {
             }
         },
         error: () => {
-            alert('소분류 추가 전송 실패');
+            console.log('소분류 추가 전송 실패');
         }
     });
 
@@ -1386,7 +1400,7 @@ function setCustomCategory2() {
 
 /** 모달 커스텀 대분류 카테고리 추가 */
 function setCustomCategory1Modal() {
-    alert("모달용 대분류 커스텀");
+    // alert("모달용 대분류 커스텀");
     let familyId = $('#familyId').val();
     let transType = $("#transTypeModal input[name='transType']:checked").val();
     let customCate1Name = prompt("새로운 대분류명을 입력하세요:");
@@ -1450,7 +1464,7 @@ function setCustomCategory1Modal() {
             }
         },
         error: () => {
-            alert('대분류 추가 전송 실패');
+            console.log('대분류 추가 전송 실패');
         }
     });
 
@@ -1459,7 +1473,7 @@ function setCustomCategory1Modal() {
 
 /** 모달 커스텀 소분류 카테고리 추가 */
 function setCustomCategory2Modal() {
-    alert("모달용 커스텀 소분류");
+    // alert("모달용 커스텀 소분류");
     let familyId = $('#familyId').val();
     let cate1Name = $('#cate1NameModal').val();
     let customCate2Name = prompt("새로운 소분류명을 입력하세요:");
@@ -1524,7 +1538,7 @@ function setCustomCategory2Modal() {
             }
         },
         error: () => {
-            alert('소분류 추가 전송 실패');
+            console.log('소분류 추가 전송 실패');
         }
     });
 
@@ -1631,41 +1645,43 @@ function selectConditionTrans() {
                                 <th>내용</th>
                                 <th>메모</th>
                                 <th>거래금액</th>
+                                <th>작성자</th>
                                 <th></th>
                             </tr>
                         </thead>
                         <tbody class="table-border-bottom-0">`;
 
-                        $(groupedData[date]).each(function(idx, ta) {
-                            // 수입 대분류 없으면 초록색
-                            if (ta.transType === '수입') {
-                                ta.labelColor = 'success';
-                            } 
-                            // 지출 대분류 없으면 회색
-                            else if (ta.transType === '지출' && ta.labelColor == null) {
-                                ta.labelColor = 'dark';
-                            }
-        
-                            table += `<tr>
-                                        <td style="width: 5rem;">
-                                            <span class="badge bg-label-${ta.labelColor} me-1">${ta.cate2Name || ta.cate1Name || '미분류'}</span>
-                                            <input type="hidden" value="${ta.transId}">
-                                        </td>
-                                        <td style="width: 5rem;">${ta.transTime}</td>
-                                        <td><i class="fab fa-react fa-lg text-info me-3"></i> <strong>${ta.transPayee}</strong></td>
-                                        <td>${ta.transMemo || ''}</td>
-                                        <td style="width: 5rem;">${parseInt(ta.transAmount).toLocaleString('en-US')}</td>
-                                        <td>
-                                        <div class="dropdown">
-                                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></button>
-                                            <div class="dropdown-menu">
-                                            <a class="dropdown-item" href="javascript:openModalUpdate(${ta.transId});"><i class="bx bx-edit-alt me-2"></i> 수정</a>
-                                            <a class="dropdown-item" href="javascript:deleteTrans(${ta.transId});"><i class="bx bx-trash me-2"></i> 삭제</a>
-                                            </div>
-                                        </div>
-                                        </td>
-                                    </tr>`;
-                        });
+                $(groupedData[date]).each(function(idx, ta) {
+                    // 수입 대분류 없으면 초록색
+                    if (ta.transType === '수입') {
+                        ta.labelColor = 'success';
+                    } 
+                    // 지출 대분류 없으면 회색
+                    else if (ta.transType === '지출' && ta.labelColor == null) {
+                        ta.labelColor = 'dark';
+                    }
+
+                    table += `<tr>
+                                <td style="width: 5rem;">
+                                    <span class="badge bg-label-${ta.labelColor} me-1">${ta.cate2Name || ta.cate1Name || '미분류'}</span>
+                                    <input type="hidden" value="${ta.transId}">
+                                </td>
+                                <td style="width: 5rem;">${ta.transTime}</td>
+                                <td><i class="fab fa-react fa-lg text-info me-3"></i> <strong>${ta.transPayee}</strong></td>
+                                <td>${ta.transMemo || ''}</td>
+                                <td style="width: 5rem;">${parseInt(ta.transAmount).toLocaleString('en-US')}</td>
+                                <td>${ta.userNickname || ta.userId}</td>
+                                <td>
+                                <div class="dropdown">
+                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></button>
+                                    <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="javascript:openModalUpdate(${ta.transId});"><i class="bx bx-edit-alt me-2"></i> 수정</a>
+                                    <a class="dropdown-item" href="javascript:deleteTrans(${ta.transId});"><i class="bx bx-trash me-2"></i> 삭제</a>
+                                    </div>
+                                </div>
+                                </td>
+                            </tr>`;
+                });
 
                 table += `</tbody>`;
             }
@@ -1683,7 +1699,7 @@ function selectConditionTrans() {
 
         },
         error: () => {
-            alert("조건&검색 전송 실패");
+            console.log("조건&검색 전송 실패");
         }
     });
 }

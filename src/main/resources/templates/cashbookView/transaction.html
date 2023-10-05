@@ -330,20 +330,6 @@
               class="navbar-nav-right d-flex align-items-center"
               id="navbar-collapse"
             >
-              <!-- Search -->
-              <div class="navbar-nav align-items-center">
-                <div class="nav-item d-flex align-items-center">
-                  <i class="bx bx-search fs-4 lh-0"></i>
-                  <input
-                    type="text"
-                    class="form-control border-0 shadow-none"
-                    placeholder="검색어를 입력하세요"
-                    aria-label="검색어를 입력하세요"
-                  />
-                </div>
-              </div>
-              <!-- /Search -->
-
               <ul class="navbar-nav flex-row align-items-center ms-auto">
 
                 <!-- 알림 종 -->
@@ -370,23 +356,10 @@
                   >
                     <div class="avatar avatar-online">
                       <img
-                        th:src="@{/images/profileimg/10228364.png}"
+                        th:src="@{/assets/img/avatars/1.png}"
                         alt
                         class="w-px-40 h-auto rounded-circle"
                       />
-                    </div>
-                  </a>
-                  <ul class="dropdown-menu dropdown-menu-end">
-                    <li>
-                      <a class="dropdown-item" href="#">
-                        <div class="d-flex">
-                          <div class="flex-shrink-0 me-3">
-                            <div class="avatar avatar-online">
-                              <img
-                                th:src="@{/images/profileimg/10228364.png}"
-                                alt
-                                class="w-px-40 h-auto rounded-circle"
-                              />
                     </div>
                   </a>
                   <ul class="dropdown-menu dropdown-menu-end">
@@ -403,8 +376,15 @@
                             </div>
                           </div>
                           <div class="flex-grow-1">
-                            <span class="fw-semibold d-block">사용자명</span>
-                            <small class="text-muted">권한명</small>
+                            <span
+                              th:text="${loginUser.userNickname}"
+                              class="fw-semibold d-block"
+                              >별명</span
+                            >
+                            <small
+                              th:text="${loginUser.userId}"
+                              class="text-muted"
+                            ></small>
                           </div>
                         </div>
                       </a>
@@ -610,7 +590,7 @@
                                 <div class="form-check form-check-inline">
                                   <input class="form-check-input" type="checkbox" id="transSearchCheckExpense" value="지출" checked="true">
                                   <label class="form-check-label" for="transSearchCheckExpense">지출</label> 총 <b id="transSumExpenseMonth"></b>원
-                                </div>
+                                </div><br>
                                 <div class="form-check form-check-inline form-switch mb-2 mt-2">
                                   <input class="form-check-input" type="checkbox" id="transSearchCheckUserId">
                                   <label class="form-check-label" for="transSearchCheckUserId">나의 내역만 보기</label>
@@ -678,7 +658,7 @@
                       <!-- 내역 테이블 -->
                       <div class="row mt-5">
                         <div class="table-responsive text-nowrap">
-                          <div id="transListDiv" class="ps ps--active-x ps--active-y" style="overflow-y: auto; max-height: 40rem;">
+                          <div id="transListDiv" class="ps ps--active-x ps--active-y" style="overflow-y: auto; height: 50rem;">
                             <!-- 반복문 들어가는 자리 -->
                           </div>
  
@@ -891,6 +871,7 @@
         </div>
       </div>
     </div>
+    
 
     <!-- / Layout wrapper -->
 

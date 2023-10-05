@@ -39,6 +39,11 @@
 	 let userId = '[[${loginUser.userId}]]';
 	</script>
 	<script th:src="@{/js/closet/styleDiary.js}"></script>
+	
+    <!-- sweetAlert -->
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.31/dist/sweetalert2.all.min.js"></script>
+	<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.31/dist/sweetalert2.min.css" rel="stylesheet">
+	
 	<!-- 스크롤바 -->
     <script th:src="@{/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js}"></script>
     
@@ -510,7 +515,7 @@
                       <div class="dropdown-divider"></div>
                     </li>
                     <li>
-                      <a class="dropdown-item" th:href="@{/member/logout}">
+                      <a class="dropdown-item" th:href="@{/user/logout}">
                         <i class="bx bx-power-off me-2"></i>
                         <span class="align-middle">로그아웃</span>
                       </a>
@@ -536,7 +541,7 @@
                 <span style="display: inline-block">
                   <!-- 메뉴 앞 이미지 src 수정해주세요 -->
                   <img
-                    th:src="@{/images/ck8.png}"
+                    th:src="@{/images/closetImg/11154990.png}"
                     style="height: 4rem; width: 4rem; vertical-align: middle"
                   />
                   <!-- 메뉴이름 -->
@@ -1129,10 +1134,10 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body" id="snsBody">
-              	<div id="btnNaver"><img th:src="@{/images/icon-naver.png}"><p>네이버</p></div>
-              	<div id="btnKakao"><img th:src="@{/images/icon-kakao.png}"><p>카카오</p></div>
-              	<div id="btnTwitter"><img th:src="@{/images/icon-twitter.png}"><p>메타</p></div>
-              	<div id="btnFacebook"><img th:src="@{/images/icon-facebook.png}"><p>페이스북</p></div>
+              	<div id="btnNaver" class="snsIcon"><img th:src="@{/images/icon-naver.png}"><p>네이버</p></div>
+              	<div id="btnKakao" class="snsIcon"><img th:src="@{/images/icon-kakao.png}"><p>카카오</p></div>
+              	<div id="btnTwitter" class="snsIcon"><img th:src="@{/images/icon-twitter.png}"><p>메타</p></div>
+              	<div id="btnFacebook" class="snsIcon"><img th:src="@{/images/icon-facebook.png}"><p>페이스북</p></div>
               </div> <!-- modal-body -->
             </div>
           </div>

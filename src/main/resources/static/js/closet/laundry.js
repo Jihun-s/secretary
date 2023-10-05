@@ -184,20 +184,30 @@ function chartDraw(dataValue){
 	}
 	
 	function laundryAllOut(){
-		let res = confirm('세탁바구니를 비우시겠어요?');
-		if(res){
-			$.ajax({
-				url:'laundryOut',
-				type:'get',
-				data:{closetNum:0, clothesNum:0},
-				success:function(){
-					location.reload(true);
-				},
-				error:function(e){
-					alert(JSON.stringify(e));
-				}			
-			});	
-		}//if문
+		Swal.fire({
+	   		title: '세탁바구니를 비우시겠어요?',
+	  		icon: 'warning',
+	   		showCancelButton: true, // cancel버튼 보이기. 기본은 원래 없음
+	   		iconColor: 'rgba(223,132,166,255)',
+	   		confirmButtonColor: 'rgba(223,132,166,255)',
+	   		cancelButtonColor: 'rgba(223,132,166,255)', 
+	   		confirmButtonText: '비우기', 
+	   		cancelButtonText: '닫기',
+		}).then(result => {
+	   		if (result.isConfirmed) { // 만약 모달창에서 confirm 버튼을 눌렀다면
+				$.ajax({
+					url:'laundryOut',
+					type:'get',
+					data:{closetNum:0, clothesNum:0},
+					success:function(){
+						location.reload(true);
+					},
+					error:function(e){
+						alert(JSON.stringify(e));
+					}			
+				});	
+	   		}
+		});		
 	}
 	
 	function laundryOut(closetNum,clothesNum){
@@ -206,7 +216,17 @@ function chartDraw(dataValue){
 			type:'get',
 			data:{closetNum:closetNum, clothesNum:clothesNum},
 			success:function(){
-				location.reload(true);
+				Swal.fire({
+				title:'세탁 완료',
+ 				text: '옷장으로 보냈습니다',
+  				icon: 'success',
+  				confirmButtonText: '닫기',
+  				confirmButtonColor: 'rgba(223,132,166,255)',
+  				iconColor: 'rgba(223,132,166,255)',
+  				closeOnClickOutside : false
+				}).then(function(){
+				location.reload();
+				});
 			},
 			error:function(e){
 				alert(JSON.stringify(e));
@@ -278,7 +298,7 @@ function chartDraw(dataValue){
 				let str ='';
 				$(list).each(function(i,n){
 					let clothesNum = parseInt(n.clothesNum);
-					str +='<div><a onclick="readClothes('+n.closetNum+','+clothesNum+')"><img src="../closet/clothesDownload?closetNum='+n.closetNum+'&clothesNum='+clothesNum+'"></a></div>';					
+					str +='<div class="clothesList"><a onclick="readClothes('+n.closetNum+','+clothesNum+')"><img src="../closet/clothesDownload?closetNum='+n.closetNum+'&clothesNum='+clothesNum+'"></a></div>';					
 				});
 				$('#whatsInCloset').html(str); 
 			},

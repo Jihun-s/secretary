@@ -393,7 +393,7 @@ function chartDraw(dataValue){
 				let str ='';
 				$(list).each(function(i,n){
 					let clothesNum = parseInt(n.clothesNum);
-					str += '<div><a onclick="readClothes('+n.closetNum+','+clothesNum+')"><img src="../closet/clothesDownload?closetNum='+n.closetNum+'&clothesNum='+clothesNum+'"></div>';
+					str += '<div class="clothesList"><a onclick="readClothes('+n.closetNum+','+clothesNum+')"><img src="../closet/clothesDownload?closetNum='+n.closetNum+'&clothesNum='+clothesNum+'"></div>';
 				});
 				$('#whatsInCloset').html(str); 
 			},
@@ -646,23 +646,34 @@ function chartDraw(dataValue){
 	
 	}
 	
-	
 	function deleteClothes(clothesNum){
 		closetNum = parseInt(closetNum);
-		let res = confirm('정말로 삭제하시겠어요?');
-		if(res){
-			$.ajax({
-				url:'deleteClothes',
-				type:'get',
-				data:{closetNum: closetNum, clothesNum:clothesNum},
-				success:function(){
-					location.reload(true); //새로고침					
-				},
-				error:function(e){
-					alert(JSON.stringify(e));
-				}						
-			})
-		}//if문
+		Swal.fire({
+	   		title: '삭제하시겠어요?',
+	  		icon: 'warning',
+	   		showCancelButton: true, // cancel버튼 보이기. 기본은 원래 없음
+	   		iconColor: 'rgba(223,132,166,255)',
+	   		confirmButtonColor: 'rgba(223,132,166,255)',
+	   		cancelButtonColor: 'rgba(223,132,166,255)', 
+	   		confirmButtonText: '삭제', 
+	   		cancelButtonText: '닫기',
+		}).then(result => {
+	   		if (result.isConfirmed) { // 만약 모달창에서 confirm 버튼을 눌렀다면
+				$.ajax({
+					url:'deleteClothes',
+					type:'get',
+					data:{closetNum: closetNum, clothesNum:clothesNum},
+					success:function(){
+						location.reload(true); //새로고침					
+					},
+					error:function(e){
+						alert(JSON.stringify(e));
+					}						
+				})
+	   		}
+		});		
+
+
 	}
 	
 	//의류 세탁물 체크
@@ -672,7 +683,16 @@ function chartDraw(dataValue){
 			type:'get',
 			data:{closetNum: closetNum, clothesNum:clothesNum},
 			success:function(){
-				location.reload(true);				
+				Swal.fire({
+	 				text: '세탁바구니에 넣었습니다',
+	  				icon: 'success',
+	  				confirmButtonText: '확인',
+	  				confirmButtonColor: 'rgba(223,132,166,255)',
+	  				iconColor: 'rgba(223,132,166,255)',
+	  				closeOnClickOutside : false
+				}).then(function(){
+					location.reload();
+				});				
 			},
 			error:function(e){
 				alert(JSON.stringify(e));

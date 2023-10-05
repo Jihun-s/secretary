@@ -122,8 +122,8 @@ function loadSchedule(curYear, curMonth, groupBy) {
           $("#schListDiv").html(html);
       },
       error: function(e) {
-          alert(JSON.stringify(e));
-          alert('일정 목록 서버 전송 실패');
+          // alert(JSON.stringify(e));
+          console.log('일정 목록 서버 전송 실패');
       }
   });
 }
@@ -181,8 +181,8 @@ function openDetailModal(schId) {
       $('#schDetailModal').modal('show');
     },
     error: (e) => {
-      alert(JSON.stringify(e));
-      alert('일정 하나 불러오기 전송 실패');
+      // alert(JSON.stringify(e));
+      console.log('일정 하나 불러오기 전송 실패');
     }
   });
 }
@@ -212,8 +212,8 @@ function deleteSch() {
         location.reload();
       },
       error: (e) => {
-        alert('일정 삭제 전송 실패');
-        alert(JSON.stringify(e));
+        console.log('일정 삭제 전송 실패');
+        // alert(JSON.stringify(e));
       }
     });
   }
@@ -239,8 +239,8 @@ function deleteSch(schId) {
         location.reload();
       },
       error: (e) => {
-        alert('일정 삭제 전송 실패');
-        alert(JSON.stringify(e));
+        console.log('일정 삭제 전송 실패');
+        // alert(JSON.stringify(e));
       }
     });
   }
@@ -284,8 +284,8 @@ function updateSch() {
         location.reload();
       },
       error: (e) => {
-        alert('일정 수정 전송 실패');
-        alert(JSON.stringify(e));
+        console.log('일정 수정 전송 실패');
+        // alert(JSON.stringify(e));
       }
     });
   }

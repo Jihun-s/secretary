@@ -50,7 +50,7 @@ INSERT INTO
 
 <!-- 내역 전체 조회 -->
 <select id="selectAllTrans" parameterType="map" resultType="Transaction">
-	SELECT
+    SELECT
         st.trans_id AS trans_id,
         st.cashbook_id AS cashbook_id,
         st.user_id AS user_id,
@@ -65,13 +65,16 @@ INSERT INTO
         st.trans_payee AS trans_payee,
         st.trans_memo AS trans_memo,
         st.trans_amount AS trans_amount,
-        stc1.label_color AS label_color
+        stc1.label_color AS label_color,
+        su.user_nickname AS user_nickname 
     FROM
         Secretary_Transaction st
     LEFT JOIN
         Secretary_Trans_Category1 stc1 ON st.cate1_id = stc1.cate1_id
     LEFT JOIN
         Secretary_Trans_Category2 stc2 ON st.cate2_id = stc2.cate2_id
+    LEFT JOIN
+        Secretary_User su ON st.user_id = su.user_id 
     WHERE
         st.family_id = #{familyId}
         AND EXTRACT(MONTH FROM trans_date) = #{nowMonth}
@@ -142,7 +145,7 @@ INSERT INTO
 <!-- 내역 삭제 -->
 <delete id="deleteTrans" parameterType="Transaction">
 	DELETE FROM Secretary_Transaction
-	WHERE trans_id = #{transId} AND family_id = #{familyId}
+	WHERE trans_id = #{transId} AND family_id = #{familyId} AND user_id = #{userId}
 </delete>
 
 <!-- 대분류 불러오기 -->
@@ -284,6 +287,7 @@ INSERT INTO
         , trans_memo = #{transMemo}
         , trans_amount = #{transAmount}
     WHERE trans_id = #{transId}
+    	AND user_id = #{userId}
         AND family_id = #{familyId}
 </update>
 
@@ -544,80 +548,53 @@ ORDER BY
 
 <!-- 6개월 추이 -->
 <select id="getInExSixMonth" parameterType="hashmap" resultType="CashbookChart">
-  WITH BudgetInfo AS (
-    SELECT 
-      family_id,
-      budget_year,
-      budget_month,
-      SUM(budget_amount) AS budget_amount
-    FROM 
-      Secretary_Budget
-    WHERE 
-      family_id = #{familyId} 
-      AND ((budget_year = #{chYear} 
-      		AND budget_month BETWEEN #{chMonth}-5 AND #{chMonth}) 
-       OR (budget_year = #{chYear}-1 AND budget_month = 12))
-    GROUP BY 
-      family_id, budget_year, budget_month
-  ),
-  IncomeInfo AS (
-	  SELECT 
-	    family_id,
-	    EXTRACT(YEAR FROM trans_date) AS trans_year,
-	    EXTRACT(MONTH FROM trans_date) AS trans_month,
-	    SUM(trans_amount) AS total_month_income
-	  FROM 
-	    Secretary_Transaction
-	  WHERE 
-	    family_id = #{familyId} 
-	    AND trans_type = '수입' 
-	    AND trans_date BETWEEN ADD_MONTHS(TO_DATE(#{chYear} || '-' || #{chMonth} || '-01', 'YYYY-MM-DD'), -5) 
-	    				AND LAST_DAY(TO_DATE(#{chYear} || '-' || #{chMonth} || '-01', 'YYYY-MM-DD'))
-	  GROUP BY 
-	    family_id, EXTRACT(YEAR FROM trans_date), EXTRACT(MONTH FROM trans_date)
+	WITH IncomeInfo AS (
+	    SELECT 
+	        family_id,
+	        EXTRACT(YEAR FROM trans_date) AS chYear,
+	        EXTRACT(MONTH FROM trans_date) AS chMonth,
+	        SUM(trans_amount) AS total_month_income
+	    FROM 
+	        Secretary_Transaction
+	    WHERE 
+	        family_id = #{familyId}
+	        AND trans_type = '수입' 
+	        AND trans_date BETWEEN ADD_MONTHS(TO_DATE(TO_CHAR(#{chYear}) || '-' || LPAD(TO_CHAR(#{chMonth}), 2, '0') || '-01', 'YYYY-MM-DD'), -5) 
+	                         AND LAST_DAY(TO_DATE(TO_CHAR(#{chYear}) || '-' || LPAD(TO_CHAR(#{chMonth}), 2, '0') || '-01', 'YYYY-MM-DD'))
+	    GROUP BY 
+	        family_id, EXTRACT(YEAR FROM trans_date), EXTRACT(MONTH FROM trans_date)
 	),
 	ExpenseInfo AS (
-	  SELECT 
-	    family_id,
-	    EXTRACT(YEAR FROM trans_date) AS trans_year,
-	    EXTRACT(MONTH FROM trans_date) AS trans_month,
-	    SUM(trans_amount) AS total_month_expense
-	  FROM 
-	    Secretary_Transaction
-	  WHERE 
-	    family_id = #{familyId} 
-	    AND trans_type = '지출' 
-	    AND trans_date BETWEEN ADD_MONTHS(TO_DATE(#{chYear} || '-' || #{chMonth} || '-01', 'YYYY-MM-DD'), -5) 
-	    				AND LAST_DAY(TO_DATE(#{chYear} || '-' || #{chMonth} || '-01', 'YYYY-MM-DD'))
-	  GROUP BY 
-	    family_id, EXTRACT(YEAR FROM trans_date), EXTRACT(MONTH FROM trans_date)
+	    SELECT 
+	        family_id,
+	        EXTRACT(YEAR FROM trans_date) AS chYear,
+	        EXTRACT(MONTH FROM trans_date) AS chMonth,
+	        SUM(trans_amount) AS total_month_expense
+	    FROM 
+	        Secretary_Transaction
+	    WHERE 
+	        family_id = #{familyId}
+	        AND trans_type = '지출' 
+	        AND trans_date BETWEEN ADD_MONTHS(TO_DATE(TO_CHAR(#{chYear}) || '-' || LPAD(TO_CHAR(#{chMonth}), 2, '0') || '-01', 'YYYY-MM-DD'), -5) 
+	                         AND LAST_DAY(TO_DATE(TO_CHAR(#{chYear}) || '-' || LPAD(TO_CHAR(#{chMonth}), 2, '0') || '-01', 'YYYY-MM-DD'))
+	    GROUP BY 
+	        family_id, EXTRACT(YEAR FROM trans_date), EXTRACT(MONTH FROM trans_date)
 	)
-  SELECT 
-    b.family_id,
-    b.budget_year AS curYear,
-    b.budget_month AS curMonth,
-    b.budget_amount,
-    COALESCE(i.total_month_income, 0) AS total_month_income,
-    COALESCE(e.total_month_expense, 0) AS total_month_expense,
-    (b.budget_amount - COALESCE(e.total_month_expense, 0)) AS budget_vs_expense,
-    CASE 
-      WHEN (b.budget_amount - COALESCE(e.total_month_expense, 0)) >= 0 THEN 1
-      ELSE 0
-    END AS budget_success,
-    (COALESCE(i.total_month_income, 0) - COALESCE(e.total_month_expense, 0)) AS income_vs_expense,
-    CASE
-      WHEN (COALESCE(i.total_month_income, 0) - COALESCE(e.total_month_expense, 0)) >= 0 THEN 1
-      ELSE 0
-    END AS in_ex_success
-  FROM 
-    BudgetInfo b
-  LEFT JOIN 
-    IncomeInfo i ON b.family_id = i.family_id AND b.budget_year = i.trans_year AND b.budget_month = i.trans_month
-  LEFT JOIN 
-    ExpenseInfo e ON b.family_id = e.family_id AND b.budget_year = e.trans_year AND b.budget_month = e.trans_month
-  ORDER BY 
-    b.budget_year DESC, b.budget_month DESC
+	SELECT 
+	    COALESCE(i.family_id, e.family_id) AS family_id,
+	    COALESCE(i.chYear, e.chYear) AS chYear,
+	    COALESCE(i.chMonth, e.chMonth) AS chMonth,
+	    COALESCE(i.total_month_income, 0) AS total_month_income,
+	    COALESCE(e.total_month_expense, 0) AS total_month_expense
+	FROM 
+	    IncomeInfo i
+	FULL OUTER JOIN 
+	    ExpenseInfo e ON i.family_id = e.family_id AND i.chYear = e.chYear AND i.chMonth = e.chMonth
+	ORDER BY 
+	    chYear DESC, chMonth DESC
+
 </select>
+
 
 <!-- 나의 3개월간 평균 -->
 <select id="getMyTotal" parameterType="hashmap" resultType="CashbookChart">

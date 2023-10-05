@@ -7,7 +7,7 @@ let allFoods = [];
 
         function loadFoodsForNotification(category, callback) {
           $.ajax({
-            url: `fridgeFood/getAllFoodsByCategory/${category}`,
+            url: `/secretary/fridgeFood/getAllFoodsByCategory/${category}`,
             type: "GET",
             dataType: "json",
             success: function (data) {
@@ -37,7 +37,7 @@ let allFoods = [];
         }
 
         function createEssentialNotifications() {
-          $("#navs-pills-justified-home").empty();
+          $(".navs-pills-justified-home").empty();
           const today = new Date();
           const oneWeekFromNow = new Date(today);
           oneWeekFromNow.setDate(today.getDate() + 7);
@@ -63,14 +63,14 @@ let allFoods = [];
                                   <a href="https://www.google.com/search?q=${item.foodName}을 활용한 요리 레시피" target="_blank" style="margin-top: -5px;"> - 레시피 제안 - </a>
                                   <span class="consume-text-btn consume-btn" data-fridge-id="${item.fridgeId}" data-food-id="${item.foodId}" data-food-quantity="${item.foodQuantity}" data-food-name="${item.foodName}">[소비]</span>
                               </div>`;
-            $("#navs-pills-justified-home").append(notification);
+            $(".navs-pills-justified-home").append(notification);
           });
         }
 
         function createSuggestedNotifications() {
           $("#navs-pills-justified-profile").empty();
           $.ajax({
-            url: `fridgeUsed/getFoodsNotAccessedForDays`,
+            url: `/secretary/fridgeUsed/getFoodsNotAccessedForDays`,
             type: "GET",
             dataType: "json",
             success: function (data) {
@@ -115,7 +115,7 @@ let allFoods = [];
                             if (quantityToConsume > 0 && quantityToConsume <= maxQuantity) {
                                 // 서버에 소비 처리 요청
                                 $.ajax({
-                                    url: 'fridgeUsed/consumeFood',
+                                    url: '/secretary/fridgeUsed/consumeFood',
                                     type: 'POST',
                                     data: JSON.stringify({
                                         foodId: foodId,
@@ -145,7 +145,7 @@ let allFoods = [];
                         function refreshConsumptionHistory() {
                             $.ajax({
                                 type: 'GET',
-                                url: 'fridgeUsed/consumptionHistory',
+                                url: '/secretary/fridgeUsed/consumptionHistory',
                                 success: function (data) {
                                     let content = '';
                                     data.forEach((item) => {
@@ -167,7 +167,7 @@ let allFoods = [];
                             if (confirm('정말 이 소비 이력을 삭제하시겠습니까?')) {
                                 // 서버에 소비 이력 삭제 요청
                                 $.ajax({
-                                    url: 'fridgeUsed/deleteConsumptionHistory',
+                                    url: '/secretary/fridgeUsed/deleteConsumptionHistory',
                                     type: 'POST',
                                     data: { fridgeUsedId: consumptionId },
                                     success: function (response) {
@@ -186,7 +186,7 @@ let allFoods = [];
                             const totalItems = $('.consumption-item').length;
                             if (confirm(`총 ${totalItems}개의 소비 이력을 전부 삭제하시겠습니까?`)) {
                                 $.ajax({
-                                    url: 'fridgeUsed/deleteAllConsumptionHistory',
+                                    url: '/secretary/fridgeUsed/deleteAllConsumptionHistory',
                                     type: 'POST',
                                     success: function (response) {
                                         alert('모든 소비 이력이 삭제되었습니다.');

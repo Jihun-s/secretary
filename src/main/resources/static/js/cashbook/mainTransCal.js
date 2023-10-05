@@ -81,8 +81,8 @@ $(document).ready(function() {
             successCallback(transformedData);
           },
           error: (e) => {
-              alert('달력 수입지출 가져오기 실패');
-              alert(JSON.stringify(e));
+            console.log('달력 수입지출 가져오기 실패');
+              // alert(JSON.stringify(e));
           }
       });
     },
@@ -163,8 +163,8 @@ $(document).ready(function() {
           $('#ModalDetailList').modal('show'); 
       },
         error: (e) => {
-          alert(JSON.stringify(e));
-          alert("달력 내역 상세 목록 전송 실패");
+          // console.log(JSON.stringify(e));
+          console.log("달력 내역 상세 목록 전송 실패");
         }
       });
     }

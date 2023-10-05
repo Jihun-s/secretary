@@ -119,17 +119,18 @@
           </div>
           <div class="modal-body">
             <div class="notification">
-              <div style="width: 100%">
+              <div class="col-xl-6" style="width: 100%">
                 <div class="nav-align-top mb-4">
                   <ul class="nav nav-pills mb-3 nav-fill" role="tablist">
                     <li class="nav-item">
                       <button
+                        id="fridgeNotificationBt"
                         type="button"
                         class="nav-link active"
                         role="tab"
                         data-bs-toggle="tab"
-                        data-bs-target="#alertPillFridgeModal"
-                        aria-controls="alertPillFridgeModal"
+                        data-bs-target="#navs-pills-justified-home-modal"
+                        aria-controls="navs-pills-justified-home-modal"
                         aria-selected="true"
                       >
                         <i class="tf-icons bx bx-fridge"></i> 냉장고
@@ -141,8 +142,8 @@
                         class="nav-link"
                         role="tab"
                         data-bs-toggle="tab"
-                        data-bs-target="#alertPillLivinggoodsModal"
-                        aria-controls="alertPillLivinggoodsModal"
+                        data-bs-target="#navs-pills-justified-goods-modal"
+                        aria-controls="navs-pills-justified-goods-modal"
                         aria-selected="false"
                       >
                         <i class="tf-icons bx bx-box"></i> 생활용품
@@ -154,9 +155,10 @@
                         class="nav-link"
                         role="tab"
                         data-bs-toggle="tab"
-                        data-bs-target="#alertPillClosetModal"
-                        aria-controls="alertPillClosetModal"
+                        data-bs-target="#alertPillCloset-modal"
+                        aria-controls="alertPillCloset-modal"
                         aria-selected="false"
+                        onclick="closetPilsuAlert();"
                       >
                         <i class="tf-icons bx bx-closet"></i> 세탁물
                       </button>
@@ -167,50 +169,59 @@
                         class="nav-link"
                         role="tab"
                         data-bs-toggle="tab"
-                        data-bs-target="#alertPillCashbookModal"
-                        aria-controls="alertPillCashbookModal"
+                        data-bs-target="#alertPillCashbook-modal"
+                        aria-controls="alertPillCashbook-modal"
                         aria-selected="false"
-                        onclick="getPilsuAlertModal();"
+                        onclick="getPilsuAlert();"
                       >
                         <i class="tf-icons bx bx-wallet"></i> 가계부
                       </button>
                     </li>
                   </ul>
-                  <div class="tab-content flex-fill" style="height: 18rem">
+                  <div
+                    id="mainAlertDiv-modal"
+                    class="tab-content flex-fill"
+                    style="height: 18rem; overflow: auto"
+                  >
                     <!-- 냉장고 알림 탭 내용 -->
                     <div
-                      class="tab-pane fade show active"
-                      id="alertPillFridgeModal"
+                      class="tab-pane fade show active navs-pills-justified-home"
+                      id="navs-pills-justified-home-modal"
                       role="tabpanel"
                     >
-                      <p>냉장냉장</p>
+                      표시할 냉장고 알림이 없습니다.
                     </div>
 
                     <!-- 생활용품 알림 탭 내용 -->
                     <div
-                      class="tab-pane fade"
-                      id="alertPillLivinggoodsModal"
+                      class="tab-pane fade navs-pills-justified-goods"
+                      id="navs-pills-justified-goods-modal"
                       role="tabpanel"
                     >
-                      <p>생활생활</p>
+                      표시할 생활용품 알림이 없습니다.
                     </div>
 
-                    <!-- 세탁물 알림 탭 내용 -->
+                    <!-- 옷장 알림 탭 내용 -->
                     <div
                       class="tab-pane fade"
-                      id="alertPillClosetModal"
+                      id="alertPillCloset-modal"
                       role="tabpanel"
                     >
-                      <p>옷옷옷옷</p>
+                      <div id="alertContent" class="alertContent">
+                        표시할 세탁물 알림이 없습니다.
+                      </div>
                     </div>
 
                     <!-- 가계부 알림 탭 내용 -->
                     <div
                       class="tab-pane fade"
-                      id="alertPillCashbookModal"
+                      id="alertPillCashbook-modal"
                       role="tabpanel"
                     >
-                      <div id="pilsuAlertListDivModal">돈돈돈돈</div>
+                      <div id="pilsuAlertListDiv" class="pilsuAlertListDiv">
+                        표시할 가계부 알림이 없습니다.
+                      </div>
+                      <script></script>
                     </div>
                   </div>
                 </div>

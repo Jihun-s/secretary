@@ -178,27 +178,40 @@
 
 function delCloset(closetNum){
 	console.log(closetNum);
-	let res = confirm('옷장을 삭제하시겠어요? \n옷장 안에 저장된 옷들도 전부 삭제됩니다.');
-	if(res){
-		$.ajax({
-			url:'closet/delCloset',
-			type:'post',
-			data:{closetNum: closetNum, familyId: familyId, userId: userid},
-			success:function(){
-				location.reload(true);
-			},
-			error:function(e){
-				alert(JSON.stringify(e));
-			}			
-		});			
-	}//if문
+	Swal.fire({
+   		title: '옷장을 삭제하시겠어요?',
+   		text: '옷장 안에 저장된 옷들도 전부 삭제됩니다.',
+  		icon: 'warning',
+   		showCancelButton: true, // cancel버튼 보이기. 기본은 원래 없음
+   		iconColor: 'rgba(223,132,166,255)',
+   		confirmButtonColor: 'rgba(223,132,166,255)',
+   		cancelButtonColor: 'rgba(223,132,166,255)', 
+   		confirmButtonText: '삭제', 
+   		cancelButtonText: '닫기',
+	}).then(result => {
+   		if (result.isConfirmed) { // 만약 모달창에서 confirm 버튼을 눌렀다면
+			$.ajax({
+				url:'closet/delCloset',
+				type:'post',
+				data:{closetNum: closetNum, familyId: familyId, userId: userid},
+				success:function(){
+					location.reload(true);
+				},
+				error:function(e){
+					alert(JSON.stringify(e));
+				}			
+			});			
+   		}
+	});
+
+
 }
 
 function modifyCloset(closetNum){
 	console.log(closetNum);
 	let modifyStr = '<table><tr><td><input class="form-control" style="display:inline-block; width:72%;" type="text" placeholder="이름 (3자 이상)" id="closetNameForModify">\
 								<button class="btn-pink" id="closetNameForModifyBtn">수정</button></td></tr>\
-					<tr><td><img src="images/closetImg/wardrobe.png"></td></tr></table>'
+					<tr><td><img src="images/closetImg/wardrobe.png" class="wardrobeImg"></td></tr></table>'
 	$('#ManageCloset').html(modifyStr);
 	$('#closetNameForModifyBtn').on('click',function(){
 		let n = $('#closetNameForModify').val();
@@ -211,8 +224,16 @@ function modifyCloset(closetNum){
 			type:'post',
 			data:{closetNum:closetNum, familyId: familyId, userId: userid, closetName:n},
 			success:function(){
-				alert('옷장수정 성공');
-				location.reload(true);
+				Swal.fire({
+ 				text: '옷장 수정 성공',
+  				icon: 'success',
+  				confirmButtonText: '닫기',
+  				confirmButtonColor: 'rgba(223,132,166,255)',
+  				iconColor: 'rgba(223,132,166,255)',
+  				closeOnClickOutside : false
+				}).then(function(){
+				location.reload();
+				});
 			},
 			error:function(e){
 				alert(JSON.stringify(e));
@@ -240,8 +261,16 @@ function insertCloset(){
 			type:'post',
 			data:{closetNum:closetnum, familyId: familyId, userId: userid, closetName:n},
 			success:function(){
-				alert('옷장추가 성공');
-				location.reload(true);
+				Swal.fire({
+ 				text: '옷장 추가 성공',
+  				icon: 'success',
+  				confirmButtonText: '닫기',
+  				confirmButtonColor: 'rgba(223,132,166,255)',
+  				iconColor: 'rgba(223,132,166,255)',
+  				closeOnClickOutside : false
+				}).then(function(){
+				location.reload();
+				});
 			},
 			error:function(e){
 				alert(JSON.stringify(e));

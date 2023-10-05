@@ -2,7 +2,23 @@
 
 
 $(document).ready(function() {
-  $('#fridgeNotificationBt').click(loadData);
+  /////스크롤바/////
+  const containers = [
+    document.querySelector('#mainAlertDiv'),
+    document.querySelector('.tab-content'),
+    document.querySelector('#navs-pills-justified-home'),
+    document.querySelector('#navs-pills-justified-goods')
+  ].filter(el => el !== null); 
+
+  const options = {
+      wheelSpeed: 1,
+      wheelPropagation: true,
+  };
+
+  containers.forEach(container => {
+      new PerfectScrollbar(container, options);
+  });
+
 });
 
 
@@ -44,16 +60,16 @@ $.ajax({
                 }
                 },
                 error: (e) => {
-                alert('남은 예산 서버 전송 실패');
-                console.log(JSON.stringify(e));
+                  console.log('남은 예산 서버 전송 실패');
+                // console.log(JSON.stringify(e));
                 }
             });
 
         }
     },
     error: (e) => {
-        alert('알림 출력 직전 예산 있없 조회 실패');
-        console.log(JSON.stringify(e));
+      console.log('알림 출력 직전 예산 있없 조회 실패');
+        // console.log(JSON.stringify(e));
     }
 });
 
@@ -71,6 +87,7 @@ $.ajax({
     if (!data || data.length === 0) {
     html = `<p>표시할 필수 알림이 없습니다.</p>`;
     $('#pilsuAlertListDiv').html(html);
+    $('.pilsuAlertListDiv').html(html);
     return;
     }
 
@@ -205,11 +222,12 @@ $.ajax({
     }
 
     $('#pilsuAlertListDiv').html(html);
+    $('.pilsuAlertListDiv').html(html);
 
 
     },
     error: (e) => {
-        alert('가계부 필수알림 목록 전송 실패');
+      console.log('가계부 필수알림 목록 전송 실패');
     }
 });
 }
@@ -244,15 +262,15 @@ function getPilsuAlertModal() {
             }
           },
           error: (e) => {
-            alert("남은 예산 서버 전송 실패");
-            console.log(JSON.stringify(e));
+            console.log("남은 예산 서버 전송 실패");
+            // console.log(JSON.stringify(e));
           },
         });
       }
     },
     error: (e) => {
-      alert("알림 출력 직전 예산 있없 조회 실패");
-      console.log(JSON.stringify(e));
+      console.log("알림 출력 직전 예산 있없 조회 실패");
+      // console.log(JSON.stringify(e));
     },
   });
 
@@ -427,7 +445,7 @@ function getPilsuAlertModal() {
       $("#pilsuAlertListDivModal").html(html);
     },
     error: (e) => {
-      alert("가계부 필수알림 목록 전송 실패");
+      console.log("가계부 필수알림 목록 전송 실패");
     },
   });
 }

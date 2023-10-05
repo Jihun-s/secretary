@@ -214,7 +214,7 @@ $(document).ready(function(){
 				let str ='';
 				$(list).each(function(i,n){
 					let clothesNum = parseInt(n.clothesNum);
-					str += '<div><a onclick="readClothes('+n.closetNum+','+clothesNum+')"><img src="../closet/clothesDownload?closetNum='+n.closetNum+'&clothesNum='+clothesNum+'"></div>';
+					str += '<div class="clothesList"><a onclick="readClothes('+n.closetNum+','+clothesNum+')"><img src="../closet/clothesDownload?closetNum='+n.closetNum+'&clothesNum='+clothesNum+'"></div>';
 				});
 				$('#whatsInCloset').html(str); 
 			},
@@ -292,7 +292,16 @@ $(document).ready(function(){
 			type:'get',
 			data:{closetNum: closetNum, clothesNum:clothesNum},
 			success:function(){
-				location.reload(true);				
+				Swal.fire({
+	 				text: '세탁바구니에 넣었습니다',
+	  				icon: 'success',
+	  				confirmButtonText: '확인',
+	  				confirmButtonColor: 'rgba(223,132,166,255)',
+	  				iconColor: 'rgba(223,132,166,255)',
+	  				closeOnClickOutside : false
+				}).then(function(){
+					location.reload();
+				});				
 			},
 			error:function(e){
 				alert(JSON.stringify(e));

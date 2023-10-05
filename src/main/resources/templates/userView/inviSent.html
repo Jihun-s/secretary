@@ -16,7 +16,7 @@
       content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
     />
 
-    <title>생비 :: 회원 가입 완료</title>
+    <title>생비 :: 초대장 전송 완료</title>
 
     <meta name="description" content="" />
 
@@ -96,7 +96,7 @@
 
           if (countdownValue < 0) {
             clearInterval(countdownTimer);
-            window.location.href = "/secretary/";
+            window.location.href = "/secretary/main";
           }
         }, 1000);
       }
@@ -116,21 +116,22 @@
             <div class="card-body">
               <!-- Logo -->
               <div class="app-brand justify-content-center">
-                <a href="/secretary/" class="app-brand-link gap-2">
+                <a th:href="@{/}" class="app-brand-link gap-2">
                   <span class="app-brand-logo demo">
                     <img
-                      src="/secretary/images/12124889.png"
+                      th:src="@{/images/12124889.png}"
                       style="width: 3rem; height: 3rem"
                       alt="logo-whale"
                     />
                   </span>
                   <span class="app-brand-text demo text-body fw-bolder"
-                    >회원 가입 완료</span
+                    >초대장 전송 완료</span
                   >
                 </a>
               </div>
               <!-- /Logo -->
-              <h5 class="mb-2">생비의 가족이 되신 것을 환영합니다!</h5>
+              <h5 class="mb-2">초대장을 보냈습니다.</h5>
+              <p>입력하신 메일 주소로 회원 가입 URL을 보내드렸어요.</p>
               <p>
                 <span id="timeCount">5</span>초 후 메인 페이지로 이동할게요.
               </p>
