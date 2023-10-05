@@ -38,6 +38,10 @@ public interface UserService {
 	List<AllLog> getLogData();
 	//로그인 보드
 	List<Log> getLoginData();
+	//특정 회원 활동량 조회
+	List<Log> getUserLoginData(String userId);
+	//특정 회원 컨텐츠별 이용률
+	List<AllLog> getActRateData(String userId);
 
 
 	

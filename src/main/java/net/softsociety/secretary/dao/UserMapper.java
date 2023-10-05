@@ -38,5 +38,9 @@ public interface UserMapper {
 	List<AllLog> getLogData();
 	//관리자 기능 로그인보드
 	List<Log> getLoginData();
+	//관리자기능 특정유저 활동량 조회
+	List<Log> getUserLoginData(String userId);
+	//관리자기능 특정유저 컨텐츠별 이용률 
+	List<AllLog> getActRateData(String userId);
 	
 }

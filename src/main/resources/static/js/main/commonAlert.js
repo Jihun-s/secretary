@@ -72,14 +72,33 @@ function closetPilsuAlert() {
         $('#dateAlert').html(dateStr);
         let laundryCntStr = '';
         if(laundryCnt>=20){
-        laundryCntStr += '<p> 세탁하러 가시는건 어떠신가요? <br> 세탁물이 <b>'+laundryCnt+'</b>개 쌓여있어요.</p>';
+        laundryCntStr += `
+        <small class="text-light fw-semibold mb-2">${dateStr}</small>
+        <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" style="border: none;">
+          <a href="javascript:openDetailModal(0);">
+            <div>
+              세탁하러 가시는 건 어떠신가요? 세탁물이 <b>${laundryCnt}</b>개 쌓여있어요.
+            </div>
+          </a>
+        </div>
+        `;      
+
+        }else{
+          laundryCntStr += `
+          <small class="text-light fw-semibold mb-2">${dateStr}</small>
+          <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" style="border: none;">
+            <a href="javascript:openDetailModal(0);">
+              <div>
+              세탁물이 20개 미만입니다. 알림이 없습니다.
+              </div>
+            </a>
+          </div>
+          `;            
+        } 
+
         $('#alertContent').html(laundryCntStr);
         $('.alertContent').html(laundryCntStr);
-        }else{
-          laundryCntStr += '<p>세탁물이 20개 미만입니다. <br> 알림이 없습니다. <p>';
-          $('#alertContent').html(laundryCntStr);
-          $('.alertContent').html(laundryCntStr);
-        } 
+        
       },
       error:function(e){
         // console.log(JSON.stringify(e));

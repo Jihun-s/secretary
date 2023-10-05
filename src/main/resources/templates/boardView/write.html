@@ -1,10 +1,70 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
+<html lang="en"
+      class="light-style layout-menu-fixed"
+      dir="ltr"
+      data-theme="theme-default"
+      th:data-assets-path="@{/assets/}"
+      data-template="vertical-menu-template-free"
+      xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
+    />
+<meta name="description" content="" />
 <title>write</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.1/dist/chart.min.js"></script>
 <script th:src="@{/js/jquery-3.7.0.js}"></script>
+
+<!-- Favicon -->
+<link
+  rel="icon"
+  type="image/x-icon"
+  th:href="@{/assets/img/favicon/favicon.ico}"
+/>
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+  rel="stylesheet"
+/>
+
+<!-- Icons. Uncomment required icon fonts -->
+<link rel="stylesheet" th:href="@{/assets/vendor/fonts/boxicons.css}" />
+
+<!-- Core CSS -->
+<link
+  rel="stylesheet"
+  th:href="@{/assets/vendor/css/core.css}"
+  class="template-customizer-core-css"
+/>
+<link
+  rel="stylesheet"
+  th:href="@{/assets/vendor/css/theme-default.css}"
+  class="template-customizer-theme-css"
+/>
+<link rel="stylesheet" th:href="@{/assets/css/demo.css}" />
+
+<!-- Vendors CSS -->
+<link
+  rel="stylesheet"
+  th:href="@{/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css}"
+/>
+
+<link
+  rel="stylesheet"
+  th:href="@{/assets/vendor/libs/apex-charts/apex-charts.css}"
+/>
+
+<!-- Helpers -->
+<script th:src="@{/assets/vendor/js/helpers.js}"></script>
+<script th:src="@{/assets/js/config.js}"></script>
+
+
 <script>
 	//문의글 유효한지 확인
 	function check() {
@@ -70,54 +130,267 @@
     </script>
 </head>
 <body>
-<h1>[글 등록]</h1>
-<form th:action="@{/board/write}" method="post" onsubmit="return check();">
-    <!-- 역할에 따라 선택 가능한 카테고리 옵션 설정 -->
-    <select name="boardCategory1" id="boardCategory1">
-        <option value="frequently" th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">자주 묻는 질문</option>
-        <option value="notification" th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">공지사항</option>
-        <option value="inquiry" >1:1 문의</option>
-    </select><br>
 
-    <!-- 선택한 카테고리에 따라 하위 카테고리 설정 -->
-    <select name="boardCategory2" id="boardCategory2">
-        <option value="">카테고리 선택</option>
-        <option value="account" th:if="${boardCategory1 == 'inquiry'}">계정</option>
-        <option value="service" th:if="${boardCategory1 == 'inquiry'}">서비스</option>
-        <option value="error" th:if="${boardCategory1 == 'inquiry' }">오류신고</option>
-        <option value="other" th:if="${boardCategory1 == 'inquiry'}">기타</option>
-    </select><br>
+<div class="layout-wrapper layout-content-navbar">
+    <div class="layout-container">
+      <!-- Menu -->
+      <aside
+        id="layout-menu"
+        class="layout-menu menu-vertical menu bg-menu-theme"
+      >
+      
+      <div class="app-brand demo">
+          <a th:href="@{/admin/adminHome}" class="app-brand-link">
+            <span class="app-brand-logo demo">
+              <img
+                th:src="@{/images/12124889.png}"
+                alt="logo"
+                style="width: 3rem"
+              />
+            </span>
+            <span class="app-brand-text demo menu-text fw-bolder ms-2">관리자</span>
+          </a>
 
-    제목<input type="text" name="boardTitle" id="boardTitle" placeholder="제목을 입력하세요(2자 이상)"><br>
-    내용<textarea name="boardContent" id="boardContent" placeholder="내용을 입력하세요(10자 이상)"></textarea><br>
-    비밀글<input type="checkbox" name="boardIsPublic" id="boardIsPublic" value="1" onchange="checkboxChange()"><br>
-    <input type="submit" value="저장">
-</form>
-<form th:action="@{/board/list2}" method="get">
-    <input type="submit" value="취소">
-</form>
+          <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
+            <i class="bx bx-chevron-left bx-sm align-middle"></i>
+          </a>
+      </div>
 
-<!--  
-<form th:action="@{/board/write}" method="post" onsubmit="return check();">
-    카테고리<select name="boardCategory2" id="boardCategory2">
-        <option value="">카테고리 선택</option>
-        <option value="account">계정</option>
-        <option value="service">서비스</option>
-        <option value="error">오류신고</option>
-        <option value="other">기타</option>
-    </select><br>
-    
-    제목<input type="text" name="boardTitle" id="boardTitle" placeholder="제목을 입력하세요(2자 이상)"><br>
-    
-    내용<textarea name="boardContent" id="boardContent" placeholder="내용을 입력하세요(10자 이상)"></textarea><br>
-    
-    비밀글<input type="checkbox" name="boardIsPublic" id="boardIsPublic" value="1" onchange="checkboxChange()"><br>
-    <input type="submit" value="저장">   
-</form>
-<form th:action="@{/board/list2}" method="get">
-	 <input type="submit" value="취소">
-</form>
--->
+      <div class="menu-inner-shadow"></div>
+
+        <ul class="menu-inner py-1">
+          <!-- 홈 -->
+          <li class="menu-item active">
+            <a href="@{/main}" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-home-circle"></i>
+              <div data-i18n="Analytics">홈</div>
+            </a>
+          </li>
+
+          <!-- 회원목록 -->
+  <li class="menu-item">
+    <a th:href="@{/admin/list}" class="menu-link">
+      <i class="menu-icon tf-icons bx bx-user"></i>
+      <div>유저 조회</div>
+    </a>
+  </li>
+
+  <!-- 게시판 -->
+  <li class="menu-header small text-uppercase">
+    <span class="menu-header-text">Board</span>
+  </li>
+  <li class="menu-item">
+     <a th:href="@{/board/frequently/list}" class="menu-link">
+       <div data-i18n="Buttons">자주묻는질문</div>
+     </a> 
+  </li>
+  <li class="menu-item">
+     <a th:href="@{/board/notification/list}" class="menu-link">
+        <div data-i18n="Buttons">공지</div>
+     </a> 
+  </li>
+  <li class="menu-item">
+     <a th:href="@{/board/inquiry/list}" class="menu-link">
+        <div data-i18n="Buttons">문의</div>
+     </a> 
+  </li>
+  
+  <li class="menu-header small text-uppercase">
+              <span class="menu-header-text">Support</span>
+            </li>
+            <li class="menu-item">
+              <a
+                href="https://chat.openai.com/"
+                target="_blank"
+                class="menu-link"
+              >
+                <i class="menu-icon tf-icons bx bx-support"></i>
+                <div data-i18n="Support">고객지원</div>
+              </a>
+  </li>
+  </ul>
+</aside>
+
+<!-- Layout container -->
+        <div class="layout-page">
+          <!-- Navbar 상단바 -->
+          <nav
+            class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
+            id="layout-navbar"
+          >
+            <div
+              class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none"
+            >
+              <a
+                class="nav-item nav-link px-0 me-xl-4"
+                href="javascript:void(0)"
+              >
+                <i class="bx bx-menu bx-sm"></i>
+              </a>
+            </div>
+			<!-- 상단바 오른쪽 -->
+            <div
+              class="navbar-nav-right d-flex align-items-center"
+              id="navbar-collapse"
+            >
+              <ul class="navbar-nav flex-row align-items-center ms-auto">
+                <!-- 검색 -->
+                <li>
+                  <div class="navbar-nav align-items-center">
+                    <div class="nav-item d-flex align-items-center">
+                      <i class="bx bx-search fs-4 lh-0"></i>
+                      <input
+                        type="text"
+                        class="form-control border-0 shadow-none"
+                        placeholder="검색어를 입력하세요"
+                        aria-label="검색어를 입력하세요"
+                      />
+                    </div>
+                  </div>
+                </li>
+              <!-- /Search -->
+
+              <!-- 알림 종 -->
+                <li
+                  class="nav-item navbar-dropdown dropdown-user dropdown"
+                  style="margin-right: 1.3rem"
+                >
+                  <a
+                    class="nav-link dropdown-toggle hide-arrow"
+                    href="javascript:void(0);"
+                  >
+                    <!-- 종 이미지-->
+                    <div class="bx bx-bell bx-tada-hover bx-sm"></div>
+                  </a>
+                </li>
+				
+				 <!-- User 유저 아이콘 -->
+                <li class="nav-item navbar-dropdown dropdown-user dropdown">
+                  <a
+                    class="nav-link dropdown-toggle hide-arrow"
+                    href="javascript:void(0);"
+                    data-bs-toggle="dropdown"
+                  >
+                    <div class="avatar avatar-online">
+                      <img
+                        th:src="@{/images/profileimg/10228364.png}"
+                        alt
+                        class="w-px-40 h-auto rounded-circle"
+                      />
+                    </div>
+                  </a>
+                  <ul class="dropdown-menu dropdown-menu-end">
+                    <li>
+                      <a class="dropdown-item" href="#">
+                        <div class="d-flex">
+                          <div class="flex-shrink-0 me-3">
+                            <div class="avatar avatar-online">
+                              <img
+                                th:src="@{/assets/img/avatars/1.png}"
+                                alt
+                                class="w-px-40 h-auto rounded-circle"
+                              />
+                            </div>
+                          </div>
+                          <div class="flex-grow-1">
+                            <span th:text="${loginUser.userNickname}" class="fw-semibold d-block">별명</span>
+                            <small th:text="${loginUser.userId}" class="text-muted"></small>
+                          </div>
+                        </div>
+                      </a>
+                    </li>
+                    <li>
+                      <div class="dropdown-divider"></div>
+                    </li>
+                    <li>
+                      <a class="dropdown-item" th:href="@{/member/profile}">
+                        <i class="bx bx-user me-2"></i>
+                        <span class="align-middle">내 프로필</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a class="dropdown-item" th:href="@{/member/settings}">
+                        <i class="bx bx-cog me-2"></i>
+                        <span class="align-middle">설정</span>
+                      </a>
+                    </li>
+                    <li>
+                      <div class="dropdown-divider"></div>
+                    </li>
+                    <li>
+                      <a class="dropdown-item" th:href="@{/user/logout}">
+                        <i class="bx bx-power-off me-2"></i>
+                        <span class="align-middle">로그아웃</span>
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+                <!--/ User -->
+              </ul>
+            </div>
+          </nav>
+
+          <!-- / Navbar -->
+<div class="content-wrapper">
+	<div class="container-xxl flex-grow-1 container-p-y">
+		<div class="row justify-content-center">
+			<div class="col-lg-10 mb-4">
+                <div class="card">
+                	<div class="card-body" style="position: relative; padding-top: 40px">
+								<h1>[글 등록]</h1>
+								<form th:action="@{/board/write}" method="post" onsubmit="return check();">
+								    
+								    <!-- 역할에 따라 선택 가능한 카테고리 옵션 설정 -->
+									<div class="mb-3">
+									    <label for="boardCategory1">카테고리</label>
+									    <select name="boardCategory1" id="boardCategory1" class="form-control">
+									        <option value="frequently">자주 묻는 질문</option>
+									        <option value="notification">공지사항</option>
+									        <option value="inquiry">1:1 문의</option>
+									    </select>
+									</div>
+									
+									<!-- 선택한 카테고리에 따라 하위 카테고리 설정 -->
+									<div class="mb-3">
+									    <label for="boardCategory2">하위 카테고리</label>
+									    <select name="boardCategory2" id="boardCategory2" class="form-control">
+									        <option value="">카테고리 선택</option>
+									        <option value="account" th:if="${boardCategory1 == 'inquiry'}">계정</option>
+									        <option value="service" th:if="${boardCategory1 == 'inquiry'}">서비스</option>
+									        <option value="error" th:if="${boardCategory1 == 'inquiry'}">오류신고</option>
+									        <option value="other" th:if="${boardCategory1 == 'inquiry'}">기타</option>
+									    </select>
+									</div>
+								
+								    <div class="mb-3">
+                                	<label for="boardTitle">제목</label>
+                                	   <input type="text" name="boardTitle" id="boardTitle" class="form-control" placeholder="제목을 입력하세요 (2자 이상)">
+                            	    </div>
+
+		                            <div class="mb-3">
+		                                <label for="boardContent">내용</label>
+		                                <textarea name="boardContent" id="boardContent" class="form-control" placeholder="내용을 입력하세요 (10자 이상)"></textarea>
+		                            </div>
+		
+		                            <div class="mb-3 form-check">
+		                                <input type="checkbox" name="boardIsPublic" id="boardIsPublic" class="form-check-input" value="1" onchange="checkboxChange()">
+		                                <label class="form-check-label" for="boardIsPublic">비밀글</label>
+		                            </div>
+		
+		                            <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+    									<button type="submit" class="btn btn-primary me-md-2">저장</button>
+    									
+    									<form th:action="@{/board/list2}" method="get">
+       									  <button type="submit" class="btn btn-secondary">취소</button>
+    									</form>
+									</div>
+								</form>
+							</div>
+		                </div>
+		            </div>
+		        </div>
+		    </div>
+		</div>	
 
 </body>
 </html>
