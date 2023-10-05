@@ -198,7 +198,7 @@ function modifyCloset(closetNum){
 	console.log(closetNum);
 	let modifyStr = '<table><tr><td><input class="form-control" style="display:inline-block; width:72%;" type="text" placeholder="이름 (3자 이상)" id="closetNameForModify">\
 								<button class="btn-pink" id="closetNameForModifyBtn">수정</button></td></tr>\
-					<tr><td><img src="images/closetImg/wardrobe.png"></td></tr></table>'
+					<tr><td><img src="images/closetImg/wardrobe.png" class="wardrobeImg"></td></tr></table>'
 	$('#ManageCloset').html(modifyStr);
 	$('#closetNameForModifyBtn').on('click',function(){
 		let n = $('#closetNameForModify').val();
