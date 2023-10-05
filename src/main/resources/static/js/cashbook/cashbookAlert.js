@@ -13,8 +13,9 @@ $(document).ready(function() {
     getJeahnAlert();
   }, 60000);
 
-  // 한번더불러보기 
-  getPilsuAlert();
+
+
+
 });
 
 
