@@ -160,6 +160,7 @@ function getPilsuAlert() {
                         html += `
                         지난 달에는 ${alert.totalIncomeMonth.toLocaleString('en-US')}원을 벌고 ${alert.totalExpenseMonth.toLocaleString('en-US')}원을 지출했어요.
                     `;
+                    
                         // 수입 < 지출
                         if(alert.totalIncomeMonth < alert.totalExpenseMonth) {
                         html += `배보다 배꼽이 더 큰 한 달이네요. 🤯`;
@@ -169,7 +170,7 @@ function getPilsuAlert() {
                         html += `버는 족족 써버리고 말았네요. 💸`;
                         }
                         // 수입 > 지출
-                        else if (alert.totalIncomeMonth == alert.totalExpenseMonth) {
+                        else if (alert.totalIncomeMonth > alert.totalExpenseMonth) {
                         html += `저축이나 재테크의 비중을 높여도 좋겠어요.`;
                         }
                     }
