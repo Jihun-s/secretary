@@ -56,12 +56,10 @@ $.ajax({
                 success: (result) => {
                 if (result <= 0) {
                     budgetMinus = 1;
-                    // alert("예산초과?:" + budgetMinus);
                 }
                 },
                 error: (e) => {
                   console.log('남은 예산 서버 전송 실패');
-                // console.log(JSON.stringify(e));
                 }
             });
 
@@ -69,7 +67,6 @@ $.ajax({
     },
     error: (e) => {
       console.log('알림 출력 직전 예산 있없 조회 실패');
-        // console.log(JSON.stringify(e));
     }
 });
 
@@ -107,7 +104,6 @@ $.ajax({
         
     // 예산 초과했을 때 알림
     if(budgetMinus == 1) {
-    // alert("알림 추가하자!");
     html += `<br><small class="text-light fw-semibold mb-2">${curYear}-${curMonth}-${curDate}</small>`;
     html += `
         <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" style="border: none;">
@@ -118,7 +114,6 @@ $.ajax({
             </a>
         </div>
     `;
-    // alert("알림 추가 완료!");
     }
 
 
@@ -258,19 +253,16 @@ function getPilsuAlertModal() {
           success: (result) => {
             if (result <= 0) {
               budgetMinus = 1;
-              // alert("예산초과?:" + budgetMinus);
             }
           },
           error: (e) => {
             console.log("남은 예산 서버 전송 실패");
-            // console.log(JSON.stringify(e));
           },
         });
       }
     },
     error: (e) => {
       console.log("알림 출력 직전 예산 있없 조회 실패");
-      // console.log(JSON.stringify(e));
     },
   });
 
@@ -312,7 +304,6 @@ function getPilsuAlertModal() {
 
       // 예산 초과했을 때 알림
       if (budgetMinus == 1) {
-        // alert("알림 추가하자!");
         html += `<br><small class="text-light fw-semibold mb-2">${curYear}-${curMonth}-${curDate}</small>`;
         html += `
           <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" style="border: none;">
@@ -323,7 +314,6 @@ function getPilsuAlertModal() {
             </a>
           </div>
       `;
-        // alert("알림 추가 완료!");
       }
 
       // 알림을 alertDateYmd 기준으로 그룹화

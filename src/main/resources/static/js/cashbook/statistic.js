@@ -27,8 +27,6 @@ function setCurDate() {
 
     let curDateTime = `${curYear}-${curMonth}-${curDate} ${curHour}:${curMin}:00`;
 
-    //  alert(curYear + ' ' + curMonth + ' ' + curDate + ' ' + curDateTime);
-
     $('#curDateTime').val(curDateTime);
     $('#curYear').val(curYear);
     $('#curMonth').val(curMonth);
@@ -137,7 +135,6 @@ function mostCate2() {
                 $('#jireumDiv').html(noDataHTML);
             // 데이터 있음
             } else {
-                // alert("지름의~전당");
                 // 최다(자주) 지출 카테고리
                 let mostFreqCate2 = data.reduce((prev, curr) => 
                     prev.transCount > curr.transCount ? prev : curr

@@ -529,7 +529,7 @@ function deleteBudget() {
 
             Toast.fire({
                 icon: "success",
-                title: "알림을 삭제했습니다.",
+                title: "예산을 삭제했습니다.",
             });
 
             location.reload();
