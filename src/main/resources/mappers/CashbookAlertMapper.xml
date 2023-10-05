@@ -27,8 +27,8 @@
 		    , #{alertTransType}
 		    , #{alertContent}
         	, TO_DATE(#{alertDate}, 'YYYY-MM-DD"T"HH24:MI')
-        	, TO_DATE(#{alertDate}, 'YYYY-MM-DD"T"HH24:MI') - 3
-        	, TO_DATE(#{alertDate}, 'YYYY-MM-DD"T"HH24:MI') + 3
+        	, TO_DATE(#{alertDate}, 'YYYY-MM-DD"T"HH24:MI') - 7
+        	, TO_DATE(#{alertDate}, 'YYYY-MM-DD"T"HH24:MI') + 7
 		    )
 </insert>
 
@@ -131,8 +131,8 @@
         AND EXTRACT(YEAR FROM alert_date) = #{curYear}
         AND EXTRACT(MONTH FROM alert_date) >= #{curMonth}
         AND alert_type = '필수'
-    	AND SYSDATE >= alert_date - 3
-    	AND SYSDATE &lt;= alert_date + 3
+    	AND SYSDATE >= alert_date - 7
+    	AND SYSDATE &lt;= alert_date + 7
 	ORDER BY
 		alert_date
 </select>
@@ -164,8 +164,8 @@
         AND EXTRACT(YEAR FROM alert_date) = #{curYear}
         AND EXTRACT(MONTH FROM alert_date) >= #{curMonth}
         AND alert_type = '제안'
-    	AND SYSDATE >= alert_date - 3
-    	AND SYSDATE &lt;= alert_date + 3
+    	AND SYSDATE >= alert_date - 7
+    	AND SYSDATE &lt;= alert_date + 7
 	ORDER BY
 		alert_date DESC
 </select>
