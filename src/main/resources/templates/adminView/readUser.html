@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en"
-	  class="light-style layout-menu-fixed"
-	  dir="ltr"
-	  data-theme="theme-default"
-	  th:data-assets-path="@{/assets/}"
-	  data-template="vertical-menu-template-free"
-	  xmlns:th="http://www.thymeleaf.org"
-	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+      class="light-style layout-menu-fixed"
+      dir="ltr"
+      data-theme="theme-default"
+      th:data-assets-path="@{/assets/}"
+      data-template="vertical-menu-template-free"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport"
@@ -21,50 +21,235 @@
 <title>readUser</title>
 
 <!-- Favicon -->
-  <link
-    rel="icon"
-    type="image/x-icon"
-    th:href="@{/assets/img/favicon/favicon.ico}"
-  />
-  
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
-    rel="stylesheet"
-  />
-  
-  <!-- Icons. Uncomment required icon fonts -->
-  <link rel="stylesheet" th:href="@{/assets/vendor/fonts/boxicons.css}" />
-  
-  <!-- Core CSS -->
-  <link
-    rel="stylesheet"
-    th:href="@{/assets/vendor/css/core.css}"
-    class="template-customizer-core-css"
-  />
-  <link
-    rel="stylesheet"
-    th:href="@{/assets/vendor/css/theme-default.css}"
-    class="template-customizer-theme-css"
-  />
-  <link rel="stylesheet" th:href="@{/assets/css/demo.css}" />
-  
-  <!-- Vendors CSS -->
-  <link
-    rel="stylesheet"
-    th:href="@{/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css}"
-  />
+<link
+  rel="icon"
+  type="image/x-icon"
+  th:href="@{/assets/img/favicon/favicon.ico}"
+/>
 
-  <link
-    rel="stylesheet"
-    th:href="@{/assets/vendor/libs/apex-charts/apex-charts.css}"
-  />
-  
-  <!-- Helpers -->
-  <script th:src="@{/assets/vendor/js/helpers.js}"></script>
-  <script th:src="@{/assets/js/config.js}"></script>
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+  rel="stylesheet"
+/>
+
+<!-- Icons. Uncomment required icon fonts -->
+<link rel="stylesheet" th:href="@{/assets/vendor/fonts/boxicons.css}" />
+
+<!-- Core CSS -->
+<link
+  rel="stylesheet"
+  th:href="@{/assets/vendor/css/core.css}"
+  class="template-customizer-core-css"
+/>
+<link
+  rel="stylesheet"
+  th:href="@{/assets/vendor/css/theme-default.css}"
+  class="template-customizer-theme-css"
+/>
+<link rel="stylesheet" th:href="@{/assets/css/demo.css}" />
+
+<!-- Vendors CSS -->
+<link
+  rel="stylesheet"
+  th:href="@{/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css}"
+/>
+
+<link
+  rel="stylesheet"
+  th:href="@{/assets/vendor/libs/apex-charts/apex-charts.css}"
+/>
+
+<!-- Helpers -->
+<script th:src="@{/assets/vendor/js/helpers.js}"></script>
+<script th:src="@{/assets/js/config.js}"></script>
+
+<!--유저 시간별 로그인 그래프----------------------------------------------------------------------------------- -->
+<script>
+  //새 차트를 만들 때 새로운 Chart.js 인스턴스가 할당
+  let userLoginChart = null;
+
+  function fetchUserLoginDataAndDrawChart(userId) {
+    // 현재 날짜를 생성
+    const currentDate = new Date();
+
+    // 날짜를 'YYYY-MM-DD' 형식의 문자열로 변환
+    const formattedDate = currentDate.toISOString().split('T')[0];
+    console.log('formattedDate', formattedDate);
+
+    $.ajax({
+      url: `userLogin?userId=${userId}`,
+      type: 'GET',
+      data: { date: formattedDate },
+      dataType: 'json',
+      success: function (loginData) {
+        //console.log('Login data:', loginData);
+        loginData.sort((a, b) => a.loginHour - b.loginHour);
+        const labels = loginData.slice(-7).map(entry => entry.loginHour);
+        const counts = loginData.slice(-7).map(entry => entry.loginCount);
+        //console.log('Labels:', labels);
+        //console.log('Counts:', counts);
+        drawLoginChart(labels, counts);
+      },
+      error: function (error) {
+        console.error('Error fetching login data:', error);
+      }
+    });
+  }
+
+  function drawLoginChart(labels, counts) {
+    const chartData = {
+      labels: labels,
+      datasets: [{
+        label: '시간별 활동량',
+        data: counts,
+        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+        borderColor: 'rgba(75, 192, 192, 1)',
+        borderWidth: 1
+      }]
+    };
+
+    const canvas = document.getElementById('userLoginChart');
+
+    const config = {
+      type: 'line',
+      data: chartData,
+      options: {
+        scales: {
+          x: {
+            type: 'category',
+            labels: labels,
+            beginAtZero: true
+          },
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    };
+
+    // 차트 재생성 전 기존차트 삭제
+    if (userLoginChart instanceof Chart) {
+      userLoginChart.destroy();
+    }
+
+    // 새로운 값으로 차트 생성
+    userLoginChart = new Chart(canvas, {
+      type: 'line',
+      data: chartData,
+      options: {
+        scales: {
+          x: {
+            type: 'category',
+            labels: labels,
+            beginAtZero: true
+          },
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+}
+ <!--카테고리별 활동비율---------------------------------------------------------------------------------------------->
+ let actRateChart = null;
+
+ function fetchActRateDataAndDrawChart(userId) {
+     $.ajax({
+         url: `actRate`,
+         type: 'GET',
+         data:{ userId: userId},
+         dataType: 'json',
+         success: function (actRateData) {
+             console.log('actRate data:', actRateData);
+             
+             const labels = actRateData.map(entry => entry.logType);
+             const counts = actRateData.map(entry => entry.actionCount);
+             console.log('Labels:', labels);
+             console.log('Counts:', counts);
+             drawActRateChart(labels, counts);
+         },
+         error: function (error) {
+             console.error('Error fetching data:', error);
+         },
+     });
+ }
+
+ //도넛 그래프를 그리기 위한 함수
+ function drawActRateChart(labels, counts) {
+	 
+     const data = {
+         labels: labels,
+         datasets: [
+             {
+                 data: counts,
+                 backgroundColor: ['#36a2eb', '#ff6384', '#ffcd56', '#4bc0c0'],
+             },
+         ],
+     };
+
+     const config = {
+         type: 'doughnut',
+         data: data,
+         options: {
+             responsive: true,
+             plugins: {
+                 legend: {
+                     position: 'top',
+                 },
+                 title: {
+                     display: true,
+                     text: '컨텐츠별 이용률',
+                 },
+             },
+         },
+     };
+
+     const canvas = document.getElementById('actRateChart');
+     
+  // 차트 재생성 전 기존차트 삭제
+     if (actRateChart instanceof Chart) {
+    	 actRateChart.destroy();
+     }
+
+     // 새로운 값으로 차트 생성
+     actRateChart = new Chart(canvas, {
+         type: 'doughnut',  
+         data: data,
+         options: {
+             responsive: true,
+             plugins: {
+                 legend: {
+                     position: 'top',
+                 },
+                 title: {
+                     display: true,
+                     text: '컨텐츠 이용 비율',
+                 },
+             },
+         },
+     });
+
+ } 
+ <!------------------------------------------------------------------------------------------------>
+ <!------------------------------------------------------------------------------------------------>
+ <!------------------------------------------------------------------------------------------------>
+ 
+  //페이지 로드시 그래프함수 호출
+window.onload = function() {  
+	const userId = document.getElementById('userId').value;
+  fetchUserLoginDataAndDrawChart(userId);
+  fetchActRateDataAndDrawChart(userId);
+  //주기적 업데이트
+  setInterval(function() {
+	  fetchUserLoginDataAndDrawChart(userId);
+	  fetchActRateDataAndDrawChart(userId);
+  }, 50000);
+};  
+</script>
+<!-- 코드 추가 완료 -->
 </head>
 
 <body>
@@ -270,16 +455,16 @@
 
           <!-- / Navbar -->
 
-<h1>상세 정보</h1>
+
 <div class="content-wrapper">
    <!-- Content -->
      
       <div class="container-xxl flex-grow-1 container-p-y">
         
-        
+        <h1>상세 정보</h1>
         <div class="row">
         <!-- 1열 1행-->
-           <div class="col-lg-4">
+           <div class="col-lg-4 mb-4">
                <div class="card">
                  <div
                     class="d-flex"
@@ -343,54 +528,65 @@
                  </div>
              </div>
              
-             <!-- 1열 2행-->
-             <div
-                     class="card-body"
-                     style="position: relative; padding-top: 40px"
-                   >
-                    <table>
-					    <tr>
-					        <td>사용자ID</td>
-					        <td th:text="${user.userId}"></td>
-					        <td><input id="userId" type="hidden" th:value="${user.userId}"></td>
-					
-					    </tr>
-					    <tr>
-					        <td>이메일</td>
-					        <td th:text="${user.userEmail}"></td>
-					    </tr>
-					    <tr>
-					        <td>이름</td>
-					        <td th:text="${user.userRealName}"></td>
-					    
-					    <tr>
-					        <td>닉네임</td>
-					        <td th:text="${user.userNickname}"></td>
-					    </tr>
-					    <tr> 
-					        <td>생일</td>
-					        <td th:text="${user.formatBirthday()}"></td>
-					    </tr>
-					    <tr>
-					        <td>성별</td>
-					        <td th:text="${user.sex}"></td>
-					    </tr>
-					    <tr>
-					        <td>권한</td>
-					        <td th:text="${user.rolename}"></td>
-					    </tr> 
-					    <tr>
-					        <td>enabled</td>
-					        <td th:text="${user.enabled}"></td>
-					    </tr>
-					    <tr>
-					        <td>패밀리아이디</td>
-					        <td th:text="${user.familyId}"></td>
-					    </tr>
-                   </table>
-                 </div>
-          
-
+             
+             <div class="card">
+	                   
+	             <div class="card-body" style="position: relative; padding-top: 40px">
+	                <!-- 내용 --> 
+	                 <canvas id="userLoginChart" width="100" height="50"></canvas>   
+	             </div >
+                 
+             </div >
+             
+          </div>
+          <!-- 2열 -->
+          <div class="col-lg-4 mb-4">
+               <div class="card">
+	                   
+	                <div class="card-body" style="position: relative; padding-top: 40px">
+	                     <!-- 내용 --> 
+	                      <canvas id="actRateChart" width="100" height="50"></canvas>
+	                </div >
+                 
+                </div >         
+             
+              
+                <div class="card">
+	                   
+	                 <div class="card-body" style="position: relative; padding-top: 40px">
+	                     <!-- 내용 --> 
+	                      <canvas id="" width="100" height="50"></canvas>
+	                 </div >
+                 
+                </div >
+           </div >  
+             
+           <!-- 3열 -->
+           <div class="col-lg-4 mb-4">
+                <div class="card">
+	                   
+	                <div class="card-body" style="position: relative; padding-top: 40px">
+	                     <!-- 내용 --> 
+	                      <canvas id="" width="100" height="50"></canvas>
+	                </div >
+                 
+                 </div >             
+             
+                 <div class="card">
+	                   
+	                  <div class="card-body" style="position: relative; padding-top: 40px">
+	                     <!-- 내용 --> 
+	                     <canvas id="" width="100" height="50"></canvas>
+	                  </div >
+                 
+                 </div >
+            </div > 
+            
+      </div>
+      <!--  -->
+   </div>
+<!-- Content wrapper -->
+</div>
 
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>

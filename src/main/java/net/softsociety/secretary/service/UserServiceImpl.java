@@ -182,6 +182,20 @@ public class UserServiceImpl implements UserService {
 		
 		return userMapper.getLoginData();
 	}
+	//특정회원 활동량조회
+	@Override
+	public List<Log> getUserLoginData(String userId) {
+		
+		return userMapper.getUserLoginData(userId);
+	}
+	//특정회원 컨텐츠별 이용률
+	@Override
+	public List<AllLog> getActRateData(String userId) {
+		
+		return userMapper.getActRateData(userId);
+	}
+
+	
 
 	
 

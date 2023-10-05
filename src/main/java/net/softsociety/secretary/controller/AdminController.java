@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import io.grpc.xds.shaded.io.envoyproxy.envoy.config.rbac.v2.Principal;
@@ -57,11 +58,21 @@ public class AdminController {
 	//회원정보 열람
 	@GetMapping("readUser")
 	public String readUser(String userId, Model m) {
-		log.debug("userId:  {}" , userId);
-		User u = userservice.findByEmailOrUserId(userId);
-		m.addAttribute("user", u);
-		return "adminView/readUser";
+	    log.debug("userId:  {}", userId);
+	    User u = userservice.findByEmailOrUserId(userId);
+	    m.addAttribute("user", u);
+
+	    // 시간별 활동량 데이터 가져오기
+	    List<Log> userLoginData = userservice.getUserLoginData(userId);
+	    m.addAttribute("userLoginData", userLoginData);
+	    
+	    // 컨텐츠별 이용률
+	    List<AllLog> userLogData = userservice.getActRateData(userId);
+	    m.addAttribute("userLogData", userLogData);
+
+	    return "adminView/readUser";
 	}
+
 	//수정 요청
 	@GetMapping("editUser")
 	public String editUser(String userId, Model m) {
@@ -135,6 +146,22 @@ public class AdminController {
 	@ResponseBody
 	public ResponseEntity<List<Log>> loginBoard(){
 		List<Log> result = userservice.getLoginData();
+		
+		return ResponseEntity.ok(result);
+	}
+	
+	//특정 유저 조회 --시간별 활동량
+	@GetMapping("userLogin")
+	@ResponseBody
+	public ResponseEntity<List<Log>> userLogin(@RequestParam("userId") String userId) {
+		List<Log> result = userservice.getUserLoginData(userId);
+		return ResponseEntity.ok(result);
+	}
+	//특정유저조회 -- 컨텐츠별이용비율
+	@GetMapping("actRate")
+	@ResponseBody
+	public ResponseEntity<List<AllLog>> actRate(@RequestParam("userId") String userId) {
+        List<AllLog> result = userservice.getActRateData(userId);
 		
 		return ResponseEntity.ok(result);
 	}
