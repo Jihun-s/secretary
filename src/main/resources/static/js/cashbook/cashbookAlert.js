@@ -438,6 +438,9 @@ function deleteAlert(alertId) {
       Toast.fire({
         icon: "success",
         title: "알림을 삭제했습니다.",
+        customClass: {
+            container: 'my-swal'
+        }
       });
 
       getPilsuAlert();

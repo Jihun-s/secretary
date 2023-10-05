@@ -557,7 +557,7 @@ function otherUserTotal() {
           labels: labels,
           datasets: [
             {
-              label: '우리 가족',
+              label: '우리 가족 월 지출',
               data: myExpenseData,
               backgroundColor: '#71DD37'
             },

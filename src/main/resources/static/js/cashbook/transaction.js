@@ -110,7 +110,10 @@ $(document).ready(function() {
             Swal.fire({
                 icon: "error",
                 title: "거래 유형을 먼저 선택하세요.",
-                confirmButtonColor: '#71DD37'
+                confirmButtonColor: '#71DD37',
+                customClass: {
+                    container: 'my-swal'
+                }
               });
 
             return;
@@ -119,7 +122,10 @@ $(document).ready(function() {
             Swal.fire({
                 icon: "error",
                 title: "대분류를 먼저 선택하세요.",
-                confirmButtonColor: '#71DD37'
+                confirmButtonColor: '#71DD37',
+                customClass: {
+                    container: 'my-swal'
+                }
               });
         }
     });
@@ -936,7 +942,10 @@ function updateTransAjax() {
                     icon: "error",
                     title: "내역 수정 실패",
                     text: "다른 가족이 작성한 내역은 수정할 수 없습니다.",
-                    confirmButtonColor: '#71DD37'
+                    confirmButtonColor: '#71DD37',
+                    customClass: {
+                        container: 'my-swal'
+                    }
                   });
 
                 return;
@@ -970,7 +979,10 @@ function deleteTrans(transId) {
                     icon: "error",
                     title: "내역 삭제 실패",
                     text: "다른 가족이 작성한 내역은 삭제할 수 없습니다.",
-                    confirmButtonColor: '#71DD37'
+                    confirmButtonColor: '#71DD37',
+                    customClass: {
+                        container: 'my-swal'
+                    }
                   });
 
                 return;
@@ -1313,6 +1325,9 @@ async function setCustomCategory1() {
         showCancelButton: true,
         confirmButtonColor: confirmColor,
         cancelButtonColor: cancelColor,
+        customClass: {
+            container: 'my-swal'
+        }
     });
     
     // 취소 버튼 클릭
@@ -1323,7 +1338,10 @@ async function setCustomCategory1() {
         Swal.fire({
             icon: "error",
             title: "카테고리명을 입력하세요.",
-            confirmButtonColor: alertButtonColor
+            confirmButtonColor: alertButtonColor,
+            customClass: {
+                container: 'my-swal'
+            }
         }).then(() => setCustomCategory1());
         
         return;
@@ -1337,7 +1355,10 @@ async function setCustomCategory1() {
         Swal.fire({
             icon: "error",
             title: "카테고리 이름에 연속된 공백을 포함할 수 없습니다.",
-            confirmButtonColor: alertButtonColor
+            confirmButtonColor: alertButtonColor,
+            customClass: {
+                container: 'my-swal'
+            }
         }).then(() => setCustomCategory1());
         
         return;
@@ -1349,7 +1370,10 @@ async function setCustomCategory1() {
         Swal.fire({
             icon: "error",
             title: "이미 존재하는 카테고리 이름입니다.",
-            confirmButtonColor: alertButtonColor
+            confirmButtonColor: alertButtonColor,
+            customClass: {
+                container: 'my-swal'
+            }
         }).then(() => setCustomCategory1());
         
         return;
@@ -1360,7 +1384,10 @@ async function setCustomCategory1() {
         Swal.fire({
             icon: "error",
             title: "카테고리 이름은 한글, 영문, 숫자만 포함하여 30Byte(한글 10자) 이내로 입력해야 합니다.",
-            confirmButtonColor: alertButtonColor
+            confirmButtonColor: alertButtonColor,
+            customClass: {
+                container: 'my-swal'
+            }
         }).then(() => setCustomCategory1());
         
         return;
@@ -1407,6 +1434,9 @@ async function setCustomCategory2() {
         showCancelButton: true,
         confirmButtonColor: confirmColor,
         cancelButtonColor: cancelColor,
+        customClass: {
+            container: 'my-swal'
+        }
     });
     
     // 취소 버튼 클릭
@@ -1417,7 +1447,10 @@ async function setCustomCategory2() {
         Swal.fire({
             icon: "error",
             title: "카테고리명을 입력하세요.",
-            confirmButtonColor: alertButtonColor
+            confirmButtonColor: alertButtonColor,
+            customClass: {
+                container: 'my-swal'
+            }
         }).then(() => setCustomCategory2());
         
         return;
@@ -1431,7 +1464,10 @@ async function setCustomCategory2() {
         Swal.fire({
             icon: "error",
             title: "카테고리 이름에 연속된 공백을 포함할 수 없습니다.",
-            confirmButtonColor: alertButtonColor
+            confirmButtonColor: alertButtonColor,
+            customClass: {
+                container: 'my-swal'
+            }
         }).then(() => setCustomCategory2());
         
         return;
@@ -1443,7 +1479,10 @@ async function setCustomCategory2() {
         Swal.fire({
             icon: "error",
             title: "이미 존재하는 카테고리 이름입니다.",
-            confirmButtonColor: alertButtonColor
+            confirmButtonColor: alertButtonColor,
+            customClass: {
+                container: 'my-swal'
+            }
         }).then(() => setCustomCategory2());
         
         return;
@@ -1454,7 +1493,10 @@ async function setCustomCategory2() {
         Swal.fire({
             icon: "error",
             title: "카테고리 이름은 한글, 영문, 숫자만 포함하여 30Byte(한글 10자) 이내로 입력해야 합니다.",
-            confirmButtonColor: alertButtonColor
+            confirmButtonColor: alertButtonColor,
+            customClass: {
+                container: 'my-swal'
+            }
         }).then(() => setCustomCategory2());
         
         return;
@@ -1505,6 +1547,9 @@ async function setCustomCategory1Modal() {
         showCancelButton: true,
         confirmButtonColor: confirmColor,
         cancelButtonColor: cancelColor,
+        customClass: {
+            container: 'my-swal'
+        }
     });
     
     // 취소 버튼 클릭
@@ -1515,7 +1560,10 @@ async function setCustomCategory1Modal() {
         Swal.fire({
             icon: "error",
             title: "카테고리명을 입력하세요.",
-            confirmButtonColor: alertButtonColor
+            confirmButtonColor: alertButtonColor,
+            customClass: {
+                container: 'my-swal'
+            }
         }).then(() => setCustomCategory1Modal());
         
         return;
@@ -1529,7 +1577,10 @@ async function setCustomCategory1Modal() {
         Swal.fire({
             icon: "error",
             title: "카테고리 이름에 연속된 공백을 포함할 수 없습니다.",
-            confirmButtonColor: alertButtonColor
+            confirmButtonColor: alertButtonColor,
+            customClass: {
+                container: 'my-swal'
+            }
         }).then(() => setCustomCategory1Modal());
         
         return;
@@ -1541,7 +1592,10 @@ async function setCustomCategory1Modal() {
         Swal.fire({
             icon: "error",
             title: "이미 존재하는 카테고리 이름입니다.",
-            confirmButtonColor: alertButtonColor
+            confirmButtonColor: alertButtonColor,
+            customClass: {
+                container: 'my-swal'
+            }
         }).then(() => setCustomCategory1Modal());
         
         return;
@@ -1552,7 +1606,10 @@ async function setCustomCategory1Modal() {
         Swal.fire({
             icon: "error",
             title: "카테고리 이름은 한글, 영문, 숫자만 포함하여 30Byte(한글 10자) 이내로 입력해야 합니다.",
-            confirmButtonColor: alertButtonColor
+            confirmButtonColor: alertButtonColor,
+            customClass: {
+                container: 'my-swal'
+            }
         }).then(() => setCustomCategory1Modal());
         
         return;
@@ -1599,6 +1656,9 @@ async function setCustomCategory2Modal() {
         showCancelButton: true,
         confirmButtonColor: confirmColor,
         cancelButtonColor: cancelColor,
+        customClass: {
+            container: 'my-swal'
+        }
     });
     
     // 취소 버튼 클릭
@@ -1609,7 +1669,10 @@ async function setCustomCategory2Modal() {
         Swal.fire({
             icon: "error",
             title: "카테고리명을 입력하세요.",
-            confirmButtonColor: alertButtonColor
+            confirmButtonColor: alertButtonColor,
+            customClass: {
+                container: 'my-swal'
+            }
         }).then(() => setCustomCategory2Modal());
         
         return;
@@ -1623,7 +1686,10 @@ async function setCustomCategory2Modal() {
         Swal.fire({
             icon: "error",
             title: "카테고리 이름에 연속된 공백을 포함할 수 없습니다.",
-            confirmButtonColor: alertButtonColor
+            confirmButtonColor: alertButtonColor,
+            customClass: {
+                container: 'my-swal'
+            }
         }).then(() => setCustomCategory2Modal());
         
         return;
@@ -1635,7 +1701,10 @@ async function setCustomCategory2Modal() {
         Swal.fire({
             icon: "error",
             title: "이미 존재하는 카테고리 이름입니다.",
-            confirmButtonColor: alertButtonColor
+            confirmButtonColor: alertButtonColor,
+            customClass: {
+                container: 'my-swal'
+            }
         }).then(() => setCustomCategory2Modal());
         
         return;
@@ -1646,7 +1715,10 @@ async function setCustomCategory2Modal() {
         Swal.fire({
             icon: "error",
             title: "카테고리 이름은 한글, 영문, 숫자만 포함하여 30Byte(한글 10자) 이내로 입력해야 합니다.",
-            confirmButtonColor: alertButtonColor
+            confirmButtonColor: alertButtonColor,
+            customClass: {
+                container: 'my-swal'
+            }
         }).then(() => setCustomCategory2Modal());
         
         return;
