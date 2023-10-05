@@ -6,6 +6,7 @@ $(document).ready(function() {
   const containers = [
     document.querySelector('#mainAlertDiv'),
     document.querySelector('.tab-content'),
+    document.querySelector('#tripleListDiv'),
     document.querySelector('#navs-pills-justified-home'),
     document.querySelector('#navs-pills-justified-goods')
   ].filter(el => el !== null); 

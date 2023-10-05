@@ -479,7 +479,7 @@
                   <div class="card">
                     <div class="d-flex align-items-end row">
                       <div class="col-sm-7">
-                        <div class="card-body">
+                        <div class="card-body" style="height: 200px;">
                           <h5 class="card-title text-primary">
                             환영합니다, <span th:text="${loginUser.userNickname}">닉네임</span>님!
                           </h5>
@@ -489,7 +489,7 @@
 
                           <a
                             th:href="@{/inviteFamily}"
-                            class="btn btn-sm btn-outline-primary"
+                            class="btn btn-md btn-outline-primary"
                             >가족 초대하기</a
                           >
                         </div>
@@ -736,7 +736,7 @@
               <!-- 3행 시작 -->
               <div class="row d-flex">
                 <!-- 통계 -->
-                <div class="col-md-6 col-lg-4 col-xl-4 order-0 mb-4">
+                <div class="col-md-6 col-lg-4 col-xl-4 order-0 mb-4" style="height: 50rem;">
                   <div class="card h-100">
                     <div
                       class="card-header d-flex align-items-center justify-content-between pb-0"
@@ -813,7 +813,7 @@
                 <!--/ 통계  -->
 
                 <!-- 소비 내역 -->
-                <div class="col-md-6 col-lg-4 order-2 mb-4">
+                <div class="col-md-6 col-lg-4 order-2 mb-4" style="height: 50rem;">
                   <div class="card h-100">
                     <div
                       class="card-header d-flex align-items-center justify-content-between"
@@ -990,10 +990,10 @@
                 <!--/ 소비 내역 -->
 
                 <!-- 달력 -->
-                <div class="col-md-6 col-lg-4 order-2 mb-4">
+                <div class="col-md-6 col-lg-4 order-2 mb-4" style="height: 50rem;">
                   <div class="card h-100 mb-4">
                     <div class="d-flex align-items-end"></div>
-                    <div class="card-body">
+                    <div class="card-body" id="tripleListDiv" style="overflow: auto;">
                       <h5 class="m-0 me-2">일정 목록</h5>
                       <!-- 그루핑 라디오 박스 -->
                       <div class="col mb-1">
