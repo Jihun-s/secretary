@@ -75,18 +75,18 @@ public class Log {
     public String getLoginCount() {
     	return loginCount;
     }
-    @Transient
-    public String loginTime;
-    
-    public String getLoginTime() {
-    	return loginTime;
-    }
-    @Transient
-    public String logoutTime;
-    
-    public String getLogoutTime() {
-    	return logoutTime;
-    }
+//    @Transient
+//    public String loginTime;
+//    
+//    public String getLoginTime() {
+//    	return loginTime;
+//    }
+//    @Transient
+//    public String logoutTime;
+//    
+//    public String getLogoutTime() {
+//    	return logoutTime;
+//    }
     
     
 }
