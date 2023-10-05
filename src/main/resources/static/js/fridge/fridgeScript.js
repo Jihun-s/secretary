@@ -261,7 +261,7 @@ import { displayFoodItem } from './loadAllFoodsByCategory.js';
                     const fridgeId = $(this).data('fridge-id');
                     const fridgeName = $(this).closest('.fridgeItem').find('.fridgeName').text();
 
-                    $.get(`/secretary/fridgeFood/getFoodCountIn/Fridge/${fridgeId}`, function (foodCount) {
+                    $.get(`/secretary/fridgeFood/getFoodCountInFridge/${fridgeId}`, function (foodCount) {
                         if (foodCount > 0) {
                             const isConfirmed = confirm(`${fridgeName}에 음식이 있습니다. 함께 삭제하시겠습니까?`);
                             if (isConfirmed) {
