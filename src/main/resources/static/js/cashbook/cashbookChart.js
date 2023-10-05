@@ -86,7 +86,6 @@ function totalMonthExpense() {
         data: { chYear: curYear, chMonth: curMonth },
         dataType: "JSON",
         success: (result) => {
-          // alert(JSON.stringify(result));
           let dataFromServer = result;
     
           const labels = dataFromServer.map(

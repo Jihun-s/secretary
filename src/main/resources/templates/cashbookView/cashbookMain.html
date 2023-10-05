@@ -86,6 +86,12 @@
       }
     </style>
 
+    <style>
+      .my-swal {
+        z-index: 1100 !important;
+      }
+    </style>
+
     <!-- Page CSS -->
 
     <!-- 소영 추가 JS -->
@@ -511,8 +517,7 @@
                           <button
                             type="button"
                             class="btn btn-outline-success"
-                            data-bs-toggle="modal"
-                            data-bs-target="#ModalDeleteBudget"
+                            onclick="deleteBudget()"
                           >
                             삭제하기
                           </button>

@@ -13,6 +13,7 @@ $(document).ready(function() {
     getJeahnAlert();
   }, 60000);
 
+  /////SWEET ALERT2/////SWEET ALERT2/////SWEET ALERT2/////SWEET ALERT2/////SWEET ALERT2/////SWEET ALERT2/////SWEET ALERT2/////
 
 
 
@@ -421,6 +422,24 @@ function deleteAlert(alertId) {
     type: 'POST',
     data: { alertId: alertId },
     success: () => {
+      ///// 토스트 /////
+      const Toast = Swal.mixin({
+        toast: true,
+        position: "center",
+        showConfirmButton: false,
+        timer: 1500,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.addEventListener("mouseenter", Swal.stopTimer);
+          toast.addEventListener("mouseleave", Swal.resumeTimer);
+        },
+      });
+
+      Toast.fire({
+        icon: "success",
+        title: "알림을 삭제했습니다.",
+      });
+
       getPilsuAlert();
     },
     error: (e) => {
@@ -436,21 +455,52 @@ function deleteAlert(alertId) {
 
 /** 필수알림 전체 삭제 */
 function deleteAllCashbookAlert() {
-  if(confirm("가계부 관련 알림을 모두 삭제할까요?")) {
-    $.ajax({
-      url: '/secretary/cashbook/alert/deleteAllCashbookAlert',
-      type: 'POST',
-      success: () => {
-        getPilsuAlert();
-        getJeahnAlert();
-      },
-      error: (e) => {
-        console.log("가계부 알림 모두 삭제 서버 전송 실패");
-        console.log(JSON.stringify(e));
-      }
-    });
-  }
+  ///// 컨펌 ///// 
+  Swal.fire({
+    title: '가계부 알림을 모두 삭제할까요?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: '삭제',
+    cancelButtonText: '취소',
+    confirmButtonColor: '#71DD37',
+    cancelButtonColor: '#8592A3'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      $.ajax({
+        url: '/secretary/cashbook/alert/deleteAllCashbookAlert',
+        type: 'POST',
+        success: () => {
+          const Toast = Swal.mixin({
+            toast: true,
+            position: "center",
+            showConfirmButton: false,
+            timer: 1500,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.addEventListener("mouseenter", Swal.stopTimer);
+              toast.addEventListener("mouseleave", Swal.resumeTimer);
+            },
+          });
+
+          Toast.fire({
+            icon: "success",
+            title: "알림을 모두 삭제했습니다.",
+          });
+
+          getPilsuAlert();
+          getJeahnAlert();
+        },
+        error: (e) => {
+          console.log("가계부 알림 모두 삭제 서버 전송 실패");
+          console.log(JSON.stringify(e));
+        }
+      });
+    } else {
+      console.log('사용자가 취소 버튼을 클릭했습니다');
+    }
+  });
 }
+
 
 /** 제안알림 전체 삭제 */
 function deleteAllJeahnAlert() {
