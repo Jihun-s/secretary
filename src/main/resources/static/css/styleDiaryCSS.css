@@ -217,6 +217,10 @@ div.clothesList:hover{
 	height:3rem;
 	margin:0.5rem;
 }
+
+div.snsIcon:hover{
+	cursor:pointer;
+}
 .btn-pink{
 	align-items: flex-start;
 	appearance: button;

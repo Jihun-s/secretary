@@ -186,7 +186,6 @@ function chartDraw(dataValue){
 	function laundryAllOut(){
 		Swal.fire({
 	   		title: '세탁바구니를 비우시겠어요?',
-	   		//text: '옷장 안에 저장된 옷들도 전부 삭제됩니다.',
 	  		icon: 'warning',
 	   		showCancelButton: true, // cancel버튼 보이기. 기본은 원래 없음
 	   		iconColor: 'rgba(223,132,166,255)',
@@ -217,7 +216,17 @@ function chartDraw(dataValue){
 			type:'get',
 			data:{closetNum:closetNum, clothesNum:clothesNum},
 			success:function(){
-				location.reload(true);
+				Swal.fire({
+				title:'세탁 완료',
+ 				text: '옷장으로 보냈습니다',
+  				icon: 'success',
+  				confirmButtonText: '닫기',
+  				confirmButtonColor: 'rgba(223,132,166,255)',
+  				iconColor: 'rgba(223,132,166,255)',
+  				closeOnClickOutside : false
+				}).then(function(){
+				location.reload();
+				});
 			},
 			error:function(e){
 				alert(JSON.stringify(e));
