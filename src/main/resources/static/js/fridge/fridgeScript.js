@@ -188,22 +188,37 @@ import { displayFoodItem } from './loadAllFoodsByCategory.js';
 
                 $(document).on('click', '.foodDeleteIcon', function (e) {
                     const foodId = $(this).data('food-id');
-                    if (confirm('정말로 이 음식 아이템을 삭제하시겠습니까?')) {
-                        $.ajax({
-                            url: '/secretary/fridgeFood/delete/' + foodId,
-                            type: 'POST',
-                            success: function (response) {
-                                if (response === 'success') {
-                                    $('[data-food-id="' + foodId + '"]').remove();
-                                } else {
-                                    console.error('Failed to delete the food item.');
-                                }
-                            },
-                            error: function (error) {
-                                console.error(error);
-                            },
-                        });
-                    }
+                    // 기본 JavaScript confirm 대신 SweetAlert2 사용
+                    Swal.fire({
+                        title: '확인',
+                        text: "정말로 이 음식 아이템을 삭제하시겠습니까?",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: '예, 삭제합니다!',
+                        cancelButtonText: '취소',
+                        customClass: {
+                            confirmButton: 'btn btn-primary', // 부트스트랩 'btn-primary' 스타일 적용
+                            cancelButton: 'btn btn-secondary'  // 부트스트랩 'btn-secondary' 스타일 적용
+                        }
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $.ajax({
+                                url: '/secretary/fridgeFood/delete/' + foodId,
+                                type: 'POST',
+                                success: function (response) {
+                                    if (response === 'success') {
+                                        $('[data-food-id="' + foodId + '"]').remove();
+                                    } else {
+                                        console.error('Failed to delete the food item.');
+                                    }
+                                },
+                                error: function (error) {
+                                    console.error(error);
+                                },
+                            });
+                        }
+                    });
+
                     e.stopPropagation();
                 });
 
@@ -263,16 +278,42 @@ import { displayFoodItem } from './loadAllFoodsByCategory.js';
 
                     $.get(`/secretary/fridgeFood/getFoodCountInFridge/${fridgeId}`, function (foodCount) {
                         if (foodCount > 0) {
-                            const isConfirmed = confirm(`${fridgeName}에 음식이 있습니다. 함께 삭제하시겠습니까?`);
-                            if (isConfirmed) {
-                                deleteFridge(fridgeId, fridgeName); // 냉장고를 삭제하는 함수 호출
-                            }
+                            Swal.fire({
+                                title: '확인',
+                                text: `${fridgeName}에 음식이 있습니다. 함께 삭제하시겠습니까?`,
+                                icon: 'warning',
+                                showCancelButton: true,
+                                confirmButtonText: '예, 삭제합니다!',
+                                cancelButtonText: '취소',
+                                customClass: {
+                                    confirmButton: 'btn btn-primary',
+                                    cancelButton: 'btn btn-secondary'
+                                }
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    deleteFridge(fridgeId, fridgeName); // 냉장고를 삭제하는 함수 호출
+                                }
+                            });
                         } else {
-                            if (confirm(`${fridgeName}를 삭제하시겠습니까?`)) {
-                                deleteFridge(fridgeId, fridgeName); // 냉장고를 삭제하는 함수 호출
-                            }
+                            Swal.fire({
+                                title: '확인',
+                                text: `${fridgeName}를 삭제하시겠습니까?`,
+                                icon: 'warning',
+                                showCancelButton: true,
+                                confirmButtonText: '예, 삭제합니다!',
+                                cancelButtonText: '취소',
+                                customClass: {
+                                    confirmButton: 'btn btn-primary',
+                                    cancelButton: 'btn btn-secondary'
+                                }
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    deleteFridge(fridgeId, fridgeName); // 냉장고를 삭제하는 함수 호출
+                                }
+                            });
                         }
                     });
+                    
                 });
 
                 function deleteFridge(fridgeId, fridgeName) {
@@ -768,10 +809,17 @@ import { displayFoodItem } from './loadAllFoodsByCategory.js';
                         contentType: 'application/json',
                         success: function (isDuplicated) {
                             if (isDuplicated) {
-                                alert('이미 존재하는 카테고리 이름입니다.');
+                                Swal.fire({
+                                    title: '경고',
+                                    text: '이미 존재하는 카테고리 이름입니다.',
+                                    icon: 'warning',
+                                    confirmButtonText: '확인',
+                                    customClass: {
+                                        confirmButton: 'btn btn-primary', // 부트스트랩 'btn-primary' 스타일 적용
+                                    }
+                                });
                                 return;
                             }
-
                             // 해당 카테고리를 사용하는 음식의 수 확인
                             $.ajax({
                                 url: '/secretary/foodCategories/countFoodsUsingCategory',
@@ -782,12 +830,22 @@ import { displayFoodItem } from './loadAllFoodsByCategory.js';
                                 }),
                                 contentType: 'application/json',
                                 success: function (count) {
-                                    const isConfirmed = confirm(
-                                        `총 ${count}개의 음식이 해당 카테고리 명을 사용중입니다. 일괄 변경하시겠습니까?`
-                                    );
-                                    if (isConfirmed) {
-                                        updateCategory(originalCategoryName, newCategoryName);
-                                    }
+                                    Swal.fire({
+                                        title: '확인',
+                                        text: `총 ${count}개의 음식이 해당 카테고리 명을 사용중입니다. 일괄 변경하시겠습니까?`,
+                                        icon: 'warning',
+                                        showCancelButton: true,
+                                        confirmButtonText: '예, 변경합니다!',
+                                        cancelButtonText: '취소',
+                                        customClass: {
+                                            confirmButton: 'btn btn-primary', // 부트스트랩 'btn-primary' 스타일 적용
+                                            cancelButton: 'btn btn-secondary'  // 부트스트랩 'btn-secondary' 스타일 적용
+                                        }
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            updateCategory(originalCategoryName, newCategoryName);
+                                        }
+                                    });
                                 },
                             });
                         },
@@ -824,13 +882,23 @@ import { displayFoodItem } from './loadAllFoodsByCategory.js';
                         }),
                         contentType: 'application/json',
                         success: function (count) {
-                            const isConfirmed = confirm(
-                                `총 ${count}개의 음식이 '${categoryToDelete}' 카테고리 명을 사용중입니다. 모든 음식을 '일반' 카테고리로 일괄 변경하시겠습니까?`
-                            );
-
-                            if (isConfirmed) {
-                                deleteCategory(categoryToDelete);
-                            }
+                            Swal.fire({
+                                title: '확인',
+                                text: `총 ${count}개의 음식이 '${categoryToDelete}' 카테고리 명을 사용중입니다. 모든 음식을 '일반' 카테고리로 일괄 변경하시겠습니까?`,
+                                icon: 'warning',
+                                showCancelButton: true,
+                                confirmButtonText: '예, 변경합니다!',
+                                cancelButtonText: '취소',
+                                customClass: {
+                                    popup: 'swal2-popup-custom',
+                                    confirmButton: 'btn btn-primary', // 부트스트랩 'btn-primary' 스타일 적용
+                                    cancelButton: 'btn btn-secondary'  // 부트스트랩 'btn-secondary' 스타일 적용
+                                }
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    deleteCategory(categoryToDelete);
+                                }
+                            });
                         },
                     });
                 });
@@ -926,4 +994,5 @@ import { displayFoodItem } from './loadAllFoodsByCategory.js';
                     expiryDate.setDate(expiryDate.getDate() + 14);
                     expiryDateInput.value = expiryDate.toISOString().slice(0, 10); // 현재 날짜 + 14일을 YYYY-MM-DD 형식으로 변환
                 });
+
             });

@@ -115,12 +115,15 @@
                         allValid = false;
                         $('#userIdErrorMessage').text('아이디는 4~13자 사이여야 합니다.').css('color', 'red');
                     } else {
-                        $('#userIdErrorMessage').text('');
-                    }
-
-                    if (!isUserIdValid) {
-                        allValid = false;
-                        $('#userIdErrorMessage').text('아이디 중복검사를 해주세요.').css('color', 'red');
+                        // 아이디 길이는 유효하지만 중복검사 상태가 false인 경우
+                        if (!isUserIdValid) {
+                            allValid = false;
+                            if ($('#userIdErrorMessage').text() !== '이미 사용 중인 아이디입니다.') {
+                                $('#userIdErrorMessage').text('아이디 중복검사를 해주세요.').css('color', 'red');
+                            }
+                        } else {
+                            $('#userIdErrorMessage').text('');
+                        }
                     }
 
                     // 이메일 유효성 검사
