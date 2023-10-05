@@ -271,27 +271,7 @@
                 </li>
               </ul>
             </li>
-            
-             <!-- 게시판 -->
-            <li class="menu-header small text-uppercase">
-              <span class="menu-header-text">Board</span>
-            </li>
-            <li class="menu-item">
-             <a th:href="@{/board/frequently/list}" class="menu-link">
-              <div data-i18n="Buttons">자주묻는질문</div>
-             </a> 
-            </li>
-            <li class="menu-item">
-             <a th:href="@{/board/notification/list}" class="menu-link">
-              <div data-i18n="Buttons">공지</div>
-             </a> 
-            </li>
-            <li class="menu-item">
-             <a th:href="@{/board/inquiry/list}" class="menu-link">
-              <div data-i18n="Buttons">문의</div>
-             </a> 
-            </li>
-            
+
             <!-- 관리자 -->
             <div th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
             <li class="menu-header small text-uppercase" >
@@ -485,36 +465,18 @@
                   <div class="row">
                     <!-- 1행 2열 냉장고 -->
                     <div class="col-lg-6 col-md-12 col-6 mb-4">
-                      <div class="card">
+                      <div class="card" style="display: flex; justify-content: center; align-items: center; height: 200px;">
                         <a th:href="@{/fridge}">
-                          <img th:src="@{/images/fridgeimg/노랑냉장고.jpg}" style="height: 190px; width: 190px;">
+                            <img th:src="@{/images/fridgeimg/노랑냉장고.jpg}" style="height: 150px; width: 150px;">
                         </a>
                       </div>
                     </div>
 
                     <!-- 1행 3열 창고 -->
                     <div class="col-lg-6 col-md-12 col-6 mb-4">
-                      <div class="card">
+                      <div class="card" style="display: flex; justify-content: center; align-items: center; height: 200px;">
                         <a th:href="@{/livingGoods}">
-                          <div class="card-body">
-                            <div
-                              class="card-title d-flex align-items-start justify-content-between"
-                            >
-                              <!-- 아이콘 -->
-                              <div class="avatar flex-shrink-0">
-                                <img
-                                  th:src="@{/images/ck8.png}"
-                                  alt="Credit Card"
-                                  class="rounded"
-                                />
-                              </div>
-                            </div>
-                            <span>네이트</span>
-                            <h3 class="card-title text-nowrap mb-1">창고</h3>
-                            <small class="text-info fw-semibold"
-                              >생활용품·재고관리</small
-                            >
-                          </div>
+                            <img th:src="@{/images/fridgeimg/생활용품.jpg}" style="height: 150px; width: 150px;">
                         </a>
                       </div>
                     </div>
@@ -649,54 +611,18 @@
                 <div class="col-12 col-md-8 col-lg-4 order-3 order-md-2">
                   <div class="row">
                     <div class="col-6 mb-4">
-                      <div class="card">
-                        <a th:href="@{/closet}">
-                          <div class="card-body">
-                            <div
-                              class="card-title d-flex align-items-start justify-content-between"
-                            >
-                              <!-- 아이콘 -->
-                              <div class="avatar flex-shrink-0">
-                                <img
-                                  th:src="@{/images/ck8.png}"
-                                  alt="Credit Card"
-                                  class="rounded"
-                                />
-                              </div>
-                            </div>
-                            <span class="d-block mb-1">다음</span>
-                            <h3 class="card-title text-nowrap mb-2">옷장</h3>
-                            <small class="text-info fw-semibold"
-                              >의류·코디</small
-                            >
-                          </div>
+                      <div class="card" style="display: flex; justify-content: center; align-items: center; height: 200px;">
+                        <a href="/secretary/closet">
+                            <img src="/secretary/images/fridgeimg/노랑냉장고.jpg" style="height: 150px; width: 150px;">
                         </a>
                       </div>
                     </div>
 
                     <!-- 2행 3열 가계부 -->
                     <div class="col-6 mb-4">
-                      <div class="card">
-                        <a th:href="@{/cashbook}">
-                          <div class="card-body">
-                            <div
-                              class="card-title d-flex align-items-start justify-content-between"
-                            >
-                              <!-- 아이콘 -->
-                              <div class="avatar flex-shrink-0">
-                                <img
-                                  th:src="@{/images/ck8.png}"
-                                  alt="Credit Card"
-                                  class="rounded"
-                                />
-                              </div>
-                            </div>
-                            <span class="fw-semibold d-block mb-1">구글</span>
-                            <h3 class="card-title mb-2">가계부</h3>
-                            <small class="text-info fw-semibold"
-                              >내역·예산</small
-                            >
-                          </div>
+                      <div class="card" style="display: flex; justify-content: center; align-items: center; height: 200px;">
+                        <a href="/secretary/cashbook">
+                            <img src="/secretary/images/fridgeimg/노랑냉장고.jpg" style="height: 150px; width: 150px;">
                         </a>
                       </div>
                     </div>
