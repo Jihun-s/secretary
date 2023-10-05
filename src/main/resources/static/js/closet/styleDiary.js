@@ -530,7 +530,16 @@ function deleteDiary(styleNum){
 		data:{styleNum: styleNum, 
 				userId: userId}, 	
 		success:function(){
-			location.reload(true); // 성공했으면 새로고침
+				Swal.fire({
+	 				text: '일지 삭제 성공',
+	  				icon: 'success',
+	  				confirmButtonText: '확인',
+	  				confirmButtonColor: 'rgba(223,132,166,255)',
+	  				iconColor: 'rgba(223,132,166,255)',
+	  				closeOnClickOutside : false
+				}).then(function(){
+					location.reload(true);
+				});	
 		},
 		error:function(e){
 			console.log(JSON.stringify(e));

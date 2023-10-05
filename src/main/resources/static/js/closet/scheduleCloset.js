@@ -226,28 +226,53 @@ function openDetailModal(schId) {
 /** 일정 삭제 매개변수 있음 */
 function deleteSch(schId) {
   console.log("삭제할 일정의 schId는 " + schId);
+	Swal.fire({
+	   	title: '일정을 삭제하시겠습니까?',
+	   	text:'이 작업은 되돌릴 수 없습니다.',
+	  	icon: 'warning',
+	   	showCancelButton: true, // cancel버튼 보이기. 기본은 원래 없음
+	   	iconColor: 'rgba(223,132,166,255)',
+	   	confirmButtonColor: 'rgba(223,132,166,255)',
+	   	cancelButtonColor: 'rgba(223,132,166,255)', 
+	   	confirmButtonText: '삭제', 
+	   	cancelButtonText: '닫기',
+	}).then(result => {
+	   	if (result.isConfirmed) { // 만약 모달창에서 confirm 버튼을 눌렀다면
+		    $.ajax({
+		      url: '/secretary/schedule/deleteSch',
+		      type: 'POST',
+		      data: { schId: schId },
+		      dataType: 'TEXT',
+		      success: (data) => {
+		        if(data == 1) {
+					Swal.fire({
+		 				text: '일정 삭제 성공',
+		  				icon: 'success',
+		  				confirmButtonText: '확인',
+		  				confirmButtonColor: 'rgba(223,132,166,255)',
+		  				iconColor: 'rgba(223,132,166,255)',
+		  				closeOnClickOutside : false
+					}).then(function(){
+						location.reload();
+					});	
+		        } else {
+					Swal.fire({
+		 				text: '일정 삭제 실패',
+		  				icon: 'error',
+		  				confirmButtonText: '확인',
+		  				confirmButtonColor: 'rgba(223,132,166,255)',
+		  				iconColor: 'rgba(223,132,166,255)',
+					})
+		        }
+		      },
+		      error: (e) => {
+		        alert('일정 삭제 전송 실패');
+		        alert(JSON.stringify(e));
+		      }
+		    });
+	   	}
+	});	  
   
-  if(confirm("일정을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.")) {
-    $.ajax({
-      url: '/secretary/schedule/deleteSch',
-      type: 'POST',
-      data: { schId: schId },
-      dataType: 'TEXT',
-      success: (data) => {
-        if(data == 1) {
-          alert('일정을 삭제했습니다.');
-        } else {
-          alert('일정을 삭제할 수 없습니다.');
-        }
-  
-        location.reload();
-      },
-      error: (e) => {
-        alert('일정 삭제 전송 실패');
-        alert(JSON.stringify(e));
-      }
-    });
-  }
 }
 
 // YYYY-MM-DD' 'HH24:MI:SS -> HH24시
