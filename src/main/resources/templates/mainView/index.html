@@ -93,6 +93,44 @@
 
   </head>
 
+  <!-- 지훈 추가 CSS -->
+  <style>
+    /* Hover Card Effect */
+    .hover-card {
+        position: relative;
+    }
+
+    .hover-card img {
+        transition: opacity 0.5s;
+    }
+
+    .hover-card:hover img {
+        opacity: 0.5;
+    }
+
+    .hover-card .hover-text {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        opacity: 0;
+        font-size: 1rem;
+        transition: opacity 0.5s, font-size 0.5s;
+
+        /* 가시성 향상을 위한 추가 스타일 */
+        background-color: rgba(255, 255, 255, 0.8);  /* 반투명한 흰색 배경 */
+        padding: 5px 10px;  /* 텍스트 주위에 패딩 추가 */
+        border-radius: 5px;  /* 배경에 둥근 모서리 추가 */
+        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);  /* 텍스트 그림자 추가 */
+        white-space: nowrap;  /* 텍스트를 한 줄로 유지 */
+    }
+
+    .hover-card:hover .hover-text {
+        opacity: 1;
+        font-size: 1.5rem;
+    }
+  </style>
+
   <body>
     <!-- Layout wrapper -->
     <div class="layout-wrapper layout-content-navbar">
@@ -271,7 +309,27 @@
                 </li>
               </ul>
             </li>
-
+            
+             <!-- 게시판 -->
+            <li class="menu-header small text-uppercase">
+              <span class="menu-header-text">Board</span>
+            </li>
+            <li class="menu-item">
+             <a th:href="@{/board/frequently/list}" class="menu-link">
+              <div data-i18n="Buttons">자주묻는질문</div>
+             </a> 
+            </li>
+            <li class="menu-item">
+             <a th:href="@{/board/notification/list}" class="menu-link">
+              <div data-i18n="Buttons">공지</div>
+             </a> 
+            </li>
+            <li class="menu-item">
+             <a th:href="@{/board/inquiry/list}" class="menu-link">
+              <div data-i18n="Buttons">문의</div>
+             </a> 
+            </li>
+            
             <!-- 관리자 -->
             <div th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
             <li class="menu-header small text-uppercase" >
@@ -465,19 +523,27 @@
                   <div class="row">
                     <!-- 1행 2열 냉장고 -->
                     <div class="col-lg-6 col-md-12 col-6 mb-4">
-                      <div class="card" style="display: flex; justify-content: center; align-items: center; height: 200px;">
-                        <a th:href="@{/fridge}">
-                            <img th:src="@{/images/fridgeimg/노랑냉장고.jpg}" style="height: 150px; width: 150px;">
-                        </a>
+                      <div class="card">
+                        <div class="card-body hover-card" style="display: flex; flex-direction: column; justify-content: center; height: 200px;">
+                            <h6 style="align-self: flex-start; margin-bottom: 10px;">냉장고</h6>
+                            <a th:href="@{/fridge}" style="align-self: center;">
+                                <img th:src="@{/images/fridgeimg/노랑냉장고.jpg}" style="height: 130px; width: 130px;">
+                                <span class="hover-text">냉장고 바로가기</span>
+                            </a>
+                        </div>
                       </div>
                     </div>
 
                     <!-- 1행 3열 창고 -->
                     <div class="col-lg-6 col-md-12 col-6 mb-4">
-                      <div class="card" style="display: flex; justify-content: center; align-items: center; height: 200px;">
-                        <a th:href="@{/livingGoods}">
-                            <img th:src="@{/images/fridgeimg/생활용품.jpg}" style="height: 150px; width: 150px;">
-                        </a>
+                      <div class="card">
+                        <div class="card-body hover-card" style="display: flex; flex-direction: column; justify-content: center; height: 200px;">
+                            <h6 style="align-self: flex-start; margin-bottom: 10px;">생활용품</h6>
+                            <a th:href="@{/livingGoods}" style="align-self: center;">
+                                <img th:src="@{/images/fridgeimg/생활용품.jpg}" style="height: 130px; width: 130px;">
+                                <span class="hover-text">생활용품 바로가기</span>
+                            </a>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -611,19 +677,27 @@
                 <div class="col-12 col-md-8 col-lg-4 order-3 order-md-2">
                   <div class="row">
                     <div class="col-6 mb-4">
-                      <div class="card" style="display: flex; justify-content: center; align-items: center; height: 200px;">
-                        <a href="/secretary/closet">
-                            <img src="/secretary/images/fridgeimg/노랑냉장고.jpg" style="height: 150px; width: 150px;">
-                        </a>
+                      <div class="card">
+                        <div class="card-body hover-card" style="display: flex; flex-direction: column; justify-content: center; height: 200px;">
+                            <h6 style="align-self: flex-start; margin-bottom: 10px;">옷장</h6>
+                            <a th:href="@{/closet}" style="align-self: center;">
+                                <img th:src="@{/images/closetImg/wardrobe.png}" style="height: 130px; width: 130px;">
+                                <span class="hover-text">옷장 바로가기</span>
+                            </a>
+                        </div>
                       </div>
                     </div>
 
                     <!-- 2행 3열 가계부 -->
                     <div class="col-6 mb-4">
-                      <div class="card" style="display: flex; justify-content: center; align-items: center; height: 200px;">
-                        <a href="/secretary/cashbook">
-                            <img src="/secretary/images/fridgeimg/노랑냉장고.jpg" style="height: 150px; width: 150px;">
-                        </a>
+                      <div class="card">
+                        <div class="card-body hover-card" style="display: flex; flex-direction: column; justify-content: center; height: 200px;">
+                            <h6 style="align-self: flex-start; margin-bottom: 10px;">가계부</h6>
+                            <a th:href="@{/cashbook}" style="align-self: center;">
+                                <img th:src="@{/images/cashbookimg/10475334.png}" style="height: 130px; width: 130px;">
+                                <span class="hover-text">가계부 바로가기</span>
+                            </a>
+                        </div>
                       </div>
                     </div>
                     <!-- 
@@ -789,7 +863,7 @@
                           >
                             <div class="me-2">
                               <small class="text-muted d-block mb-1"
-                                >8월 19일</small
+                                >10월 6일</small
                               >
                               <h6 class="mb-0">
                                 에잇세컨즈 체크셔츠을(를) 빨래통에 넣었어요.
@@ -816,7 +890,7 @@
                           >
                             <div class="me-2">
                               <small class="text-muted d-block mb-1"
-                                >8월 19일</small
+                                >10월 6일</small
                               >
                               <h6 class="mb-0">
                                 북해도 가염버터을(를) 1개 사용했어요.
@@ -843,7 +917,7 @@
                           >
                             <div class="me-2">
                               <small class="text-muted d-block mb-1"
-                                >8월 19일</small
+                                >10월 5일</small
                               >
                               <h6 class="mb-0">
                                 잘풀리는집 두루마리휴지을(를) 24개 구매했어요.
@@ -870,7 +944,7 @@
                           >
                             <div class="me-2">
                               <small class="text-muted d-block mb-1"
-                                >8월 19일</small
+                                >10월 4일</small
                               >
                               <h6 class="mb-0">
                                 오뚜기 참기름을(를) 1개 사용했어요.
@@ -880,33 +954,6 @@
                               class="user-progress d-flex align-items-center gap-1"
                             >
                               <h6 class="mb-0">1개 남음</h6>
-                              <span class="text-muted">주방용품</span>
-                            </div>
-                          </div>
-                        </li>
-                        <li class="d-flex mb-4 pb-1">
-                          <div class="avatar flex-shrink-0 me-3">
-                            <img
-                              th:src="@{/assets/img/icons/unicons/wallet.png}"
-                              alt="User"
-                              class="rounded"
-                            />
-                          </div>
-                          <div
-                            class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2"
-                          >
-                            <div class="me-2">
-                              <small class="text-muted d-block mb-1"
-                                >8월 19일</small
-                              >
-                              <h6 class="mb-0">
-                                키친타올을(를) 1개 사용했어요.
-                              </h6>
-                            </div>
-                            <div
-                              class="user-progress d-flex align-items-center gap-1"
-                            >
-                              <h6 class="mb-0">8개 남음</h6>
                               <span class="text-muted">주방용품</span>
                             </div>
                           </div>
@@ -924,7 +971,7 @@
                           >
                             <div class="me-2">
                               <small class="text-muted d-block mb-1"
-                                >8월 17일</small
+                                >10월 4일</small
                               >
                               <h6 class="mb-0">
                                 아이깨끗해을(를) 1개 사용했어요.
