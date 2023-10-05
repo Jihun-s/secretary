@@ -42,10 +42,17 @@
     <script th:src="@{/js/cashbook/cashbookChart.js}"></script>
     <script th:src="@{/js/cashbook/statistic.js}"></script>
     <script th:src="@{/js/cashbook}"></script>
+    <script>
+      $("#alertStart").click(function () {
+        Swal.fire({
+          icon: "success", // Alert 타입
+          title: "Alert가 실행되었습니다.", // Alert 제목
+          text: "이곳은 내용이 나타나는 곳입니다.", // Alert 내용
+        });
+      });
+    </script>
   </head>
   <body>
-    <a href="javascript:mostCate2();">클릭해보렴</a>
-
     <div
       class="card overflow-hidden mb-4"
       style="
@@ -60,37 +67,7 @@
         <p>1행</p>
         <p>2행</p>
         <p>3행</p>
-        <p>4행</p>
-        <p>5행</p>
-        <p>6행</p>
-        <p>1행</p>
-        <p>2행</p>
-        <p>3행</p>
-        <p>4행</p>
-        <p>5행</p>
-        <p>6행</p>
-        <p>1행</p>
-        <p>2행</p>
-        <p>3행</p>
-        <p>4행</p>
-        <p>5행</p>
-        <p>
-          6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행
-        </p>
-        <div class="ps__rail-x" style="left: 0px; bottom: 0px">
-          <div
-            class="ps__thumb-x"
-            tabindex="0"
-            style="top: 0px; height: 232px; right: 0px"
-          ></div>
-        </div>
-        <div class="ps__rail-y" style="top: 0px; height: 232px; right: 0px">
-          <div
-            class="ps__thumb-y"
-            tabindex="0"
-            style="top: 0px; height: 37px"
-          ></div>
-        </div>
+        <button id="alertStart">눌러봐</button>
       </div>
     </div>
 
