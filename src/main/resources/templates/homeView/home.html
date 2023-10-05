@@ -62,21 +62,7 @@
             }
         </style>
     </head>
-    <body
-        style="
-            @font-face {
-                font-family: 'NanumSquareNeo-Variable';
-                src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_11-01@1.0/NanumSquareNeo-Variable.woff2')
-                    format('woff2');
-                font-weight: normal;
-                font-style: normal;
-            }
-
-            body {
-                font-family: 'NanumSquareNeo-Variable', sans-serif;
-            }
-        "
-    >
+    <body>
         <!-- ========================= preloader start ========================= -->
         <div class="preloader">
             <div class="loader">
@@ -161,11 +147,11 @@
             <div class="hero-shape">
                 <img th:src="@{/assets2/img/hero/8669382.png}" alt="" class="sanho" style="opacity: 0.3" />
             </div>
-            <div class="container">
+            <div class="container" style="display:flex; justify-content:center;">
                 <div class="row align-items-center">
                     <div class="col-lg-6">
                         <div class="hero-content">
-                            <h1 class="wow fadeInUp" data-wow-delay=".2s">
+                            <h1 class="wow fadeInUp" data-wow-delay=".2s" style="font-family:NanumSquareNeo-Variable;">
                                 <span><b>나만을 위한</b></span
                                 ><br />
                                 <span><b>생활 비서 서비스</b></span>
@@ -180,7 +166,7 @@
                     </div>
                     <div class="col-lg-6">
                         <div class="hero-img wow fadeInUp" data-wow-delay=".5s">
-                            <img th:src="@{/assets2/img/hero/8669322.png}" alt="whale" />
+                            <img th:src="@{/assets2/img/hero/8669322.png}" alt="whale"/>
                         </div>
                     </div>
                 </div>
@@ -194,8 +180,8 @@
                 <div class="row">
                     <div class="col-lg-12 text-center">
                         <div class="about-img wow fadeInUp" data-wow-delay=".5s">
-                            <h3>우리 가족의 살림살이를 한 눈에.</h3>
-                            <h5>
+                            <h3 style="font-family:NanumSquareNeo-Variable;">우리 가족의 살림살이를 한 눈에.</h3>
+                            <h5 style="font-family:NanumSquareNeo-Variable;">
                                 언제부터 있었는지 모를 냉장고 속 미지의 음식, 동시에 똑 떨어져 곤란한 생활용품.<br />
                                 사소해보이지만 바쁜 일상을 살다 보면 자칫 놓치기 쉬운 것이 살림살이입니다. <br />
                                 살림에 필요한 데이터를 모아 알려드릴게요. <br />
@@ -244,8 +230,8 @@
                         <div class="delivery-content">
                             <div class="section-title">
                                 <span class="wow fadeInUp" data-wow-delay=".2s">냉장고 & 생활용품 </span>
-                                <h1 class="mb-35 wow fadeInUp" data-wow-delay=".4s">재고관리 소비제안</h1>
-                                <p class="mb-35 wow fadeInUp" data-wow-delay=".6s">
+                                <h1 class="mb-35 wow fadeInUp" data-wow-delay=".4s" style="font-family:NanumSquareNeo-Variable;">재고관리 소비제안</h1>
+                                <p class="mb-35 wow fadeInUp" data-wow-delay=".6s" style="font-family:NanumSquareNeo-Variable;">
                                     냉장고 속의 재료와 생활용품의 재고를 한눈에 확인하고, 필요한 것들의 구매 제안까지
                                     받아보세요. 더 이상 냉장고를 여는 매 순간 '이거 언제 샀지?'라는 생각은 잊어버리세요!
                                 </p>
@@ -277,10 +263,10 @@
                         <div class="about-content received-content">
                             <div class="section-title">
                                 <span class="wow fadeInUp" data-wow-delay=".2s">옷장</span>
-                                <h1 class="mb-25 wow fadeInUp" data-wow-delay=".4s">
+                                <h1 class="mb-25 wow fadeInUp" data-wow-delay=".4s" style="font-family:NanumSquareNeo-Variable;">
                                     옷을 한눈에 파악하고 <br>코디 일지를 기록할 수 있어요
                                 </h1>
-                                <p class="wow fadeInUp" data-wow-delay=".6s">
+                                <p class="wow fadeInUp" data-wow-delay=".6s" style="font-family:NanumSquareNeo-Variable;">
                                     사진을 업로드하거나 웹에서 찾아와서 나만의 옷장을 만들어보세요.<br>
                                     코디일지를 만들어 어떤 아이템과 조합할 지 코디를 기록할 수 있어요.<br>
                                     당신의 옷장 속 아이템들을 쉽게 관리하고, 무슨 옷을 입을 지 고민하지 마세요!
@@ -300,10 +286,10 @@
                         <div class="delivery-content">
                             <div class="section-title">
                                 <span class="wow fadeInUp" data-wow-delay=".2s">가계부</span>
-                                <h1 class="mb-35 wow fadeInUp" data-wow-delay=".4s">
+                                <h1 class="mb-35 wow fadeInUp" data-wow-delay=".4s" style="font-family:NanumSquareNeo-Variable;">
                                     지출을 한눈에, 똑똑한 경제 관리의 시작
                                 </h1>
-                                <p class="mb-35 wow fadeInUp" data-wow-delay=".6s">
+                                <p class="mb-35 wow fadeInUp" data-wow-delay=".6s" style="font-family:NanumSquareNeo-Variable;">
                                     생활의 소소한 지출부터 큰 지출까지, 모든 것을 기록하고 관리하세요. 생비의 가계부
                                     기능을 통해 어디에 얼마나 지출하고 있는지 쉽게 파악할 수 있습니다. 그리고 우리
                                     가족의 소비 습관과 경제 상황에 맞는 조언까지 제공받으세요. 이제 무계획적인
@@ -329,8 +315,8 @@
                 <div class="row justify-content-center">
                     <div class="col-lg-6">
                         <div class="section-title mb-60 text-center">
-                            <span class="wow fadeInUp" data-wow-delay=".2s">Testimonials</span>
-                            <h1 class="wow fadeInUp" data-wow-delay=".4s">What Our Users Says</h1>
+                            <span class="wow fadeInUp" data-wow-delay=".2s" style="font-family:NanumSquareNeo-Variable;">사용 후기</span>
+                            <h1 class="wow fadeInUp" data-wow-delay=".4s" style="font-family:NanumSquareNeo-Variable;">생생한 후기를 들어보세요</h1>
                         </div>
                     </div>
                 </div>
@@ -356,7 +342,7 @@
                                     <img th:src="@{/assets2/img/testimonial/testimonial-1.png}" alt="" />
                                 </div>
                                 <div class="text">
-                                    <h5>김○훈</h5>
+                                    <h5 style="font-family:NanumSquareNeo-Variable;">김○훈</h5>
                                     <p>SCIT마스터 44기</p>
                                 </div>
                             </div>
@@ -382,7 +368,7 @@
                                     <img th:src="@{/assets2/img/testimonial/testimonial-2.png}" alt="" />
                                 </div>
                                 <div class="text">
-                                    <h5>이○영</h5>
+                                    <h5 style="font-family:NanumSquareNeo-Variable;">이○영</h5>
                                     <p>SCIT마스터 44기</p>
                                 </div>
                             </div>
@@ -408,7 +394,7 @@
                                     <img th:src="@{/assets2/img/testimonial/testimonial-3.png}" alt="" />
                                 </div>
                                 <div class="text">
-                                    <h5>이○린</h5>
+                                    <h5 style="font-family:NanumSquareNeo-Variable;">이○린</h5>
                                     <p>SCIT마스터 44기</p>
                                 </div>
                             </div>
@@ -434,7 +420,7 @@
                                     <img th:src="@{/assets2/img/testimonial/testimonial-4.png}" alt="" />
                                 </div>
                                 <div class="text">
-                                    <h5>황○찬</h5>
+                                    <h5 style="font-family:NanumSquareNeo-Variable;">황○찬</h5>
                                     <p>SCIT마스터 44기</p>
                                 </div>
                             </div>
@@ -460,7 +446,7 @@
                                     <img th:src="@{/assets2/img/testimonial/testimonial-5.png}" alt="" />
                                 </div>
                                 <div class="text">
-                                    <h5>김○수</h5>
+                                    <h5 style="font-family:NanumSquareNeo-Variable;">김○수</h5>
                                     <p>슬기로운생활 II</p>
                                 </div>
                             </div>
@@ -486,7 +472,7 @@
                                     <img th:src="@{/assets2/img/testimonial/testimonial-6.png}" alt="" />
                                 </div>
                                 <div class="text">
-                                    <h5>이○희</h5>
+                                    <h5 style="font-family:NanumSquareNeo-Variable;">이○희</h5>
                                     <p>슬기로운생활 I</p>
                                 </div>
                             </div>
@@ -503,8 +489,8 @@
                 <div class="row justify-content-center">
                     <div class="col-xl-6 col-lg-8">
                         <div class="section-title text-center mb-70">
-                            <span class="wow fadeInUp" data-wow-delay=".2s">Secretary Service</span>
-                            <h1 class="wow fadeInUp" data-wow-delay=".4s">All Essentials You Need</h1>
+                            <span class="wow fadeInUp" data-wow-delay=".2s" style="font-family:NanumSquareNeo-Variable;">생활 비서</span>
+                            <h1 class="wow fadeInUp" data-wow-delay=".4s" style="font-family:NanumSquareNeo-Variable;">생활 비서가 필요한 이유</h1>
                         </div>
                     </div>
                 </div>
@@ -515,7 +501,7 @@
                                 <img th:src="@{assets2/img/service/service-icon-1.svg}" alt="" />
                             </div>
                             <div class="content">
-                                <h3>Food</h3>
+                                <h3 style="font-family:NanumSquareNeo-Variable;">Food</h3>
                                 <p>
                                     "냉장고 속 재료를 체크하고, 무엇을 요리할지 계획하세요. 생활비서가 당신의 식재료
                                     관리를 도와줍니다."
@@ -529,7 +515,7 @@
                                 <img th:src="@{/assets2/img/service/service-icon-2.svg}" alt="" />
                             </div>
                             <div class="content">
-                                <h3>Grocery</h3>
+                                <h3 style="font-family:NanumSquareNeo-Variable;">Grocery</h3>
                                 <p>
                                     "생활 필수품 재고가 얼마나 남았는지 한 눈에 파악하세요. 생활비서와 함께라면 더 이상
                                     부족한 필수품에 당황하지 않아도 돼요."
@@ -543,7 +529,7 @@
                                 <img th:src="@{/assets2/img/service/service-icon-3.svg}" alt="" />
                             </div>
                             <div class="content">
-                                <h3>Furniture</h3>
+                                <h3 style="font-family:NanumSquareNeo-Variable;">Furniture</h3>
                                 <p>
                                     "가구의 구입 일자나 수명을 기록하고, 언제 교체해야 할지 계획하세요. 생활비서가
                                     당신의 가구 관리를 도와줍니다."
@@ -557,7 +543,7 @@
                                 <img th:src="@{/assets2/img/service/service-icon-4.svg}" alt="" />
                             </div>
                             <div class="content">
-                                <h3>Medicine</h3>
+                                <h3 style="font-family:NanumSquareNeo-Variable;">Medicine</h3>
                                 <p>
                                     "약의 유효기간이나 얼마나 남았는지 쉽게 확인하세요. 생활비서가 당신과 가족의 건강
                                     관리를 위해 필요한 약 정보를 제공합니다."
@@ -571,7 +557,7 @@
                                 <img th:src="@{/assets2/img/service/service-icon-5.svg}" alt="" />
                             </div>
                             <div class="content">
-                                <h3>Electronics</h3>
+                                <h3 style="font-family:NanumSquareNeo-Variable;">Electronics</h3>
                                 <p>
                                     "전자제품의 보증기간이나 사용 기간을 트래킹하세요. 생활비서를 통해 언제 제품을
                                     점검하거나 교체해야 할지 알 수 있습니다."
@@ -585,7 +571,7 @@
                                 <img th:src="@{/assets2/img/service/service-icon-6.svg}" alt="" />
                             </div>
                             <div class="content">
-                                <h3>Clothes</h3>
+                                <h3 style="font-family:NanumSquareNeo-Variable;">Clothes</h3>
                                 <p>
                                     "옷장 속에 옷이 얼마나 있는지, 어떻게 관리하면 되는 지 확인하세요.
                                     코디 일지를 통해 어떻게 입어야 할지도 고민하지 마세요. 생활비서와
@@ -649,7 +635,7 @@
 
                     <div class="col-lg-3 col-md-6">
                         <div class="footer-widget wow fadeInUp" data-wow-delay=".4s">
-                            <h3>About Us</h3>
+                            <h3 style="font-family:NanumSquareNeo-Variable;">About Us</h3>
                             <ul class="links">
                                 <li>
                                     <a href="javascript:void(0)">Home</a>
@@ -669,7 +655,7 @@
 
                     <div class="col-lg-3 col-md-6">
                         <div class="footer-widget wow fadeInUp" data-wow-delay=".6s">
-                            <h3>About</h3>
+                            <h3 style="font-family:NanumSquareNeo-Variable;">About</h3>
                             <ul class="links">
                                 <li>
                                     <a href="javascript:void(0)">Partners</a>
@@ -689,7 +675,7 @@
 
                     <div class="col-lg-3 col-md-6">
                         <div class="footer-widget wow fadeInUp" data-wow-delay=".8s">
-                            <h3>Support</h3>
+                            <h3 style="font-family:NanumSquareNeo-Variable;">Support</h3>
                             <ul class="links">
                                 <li>
                                     <a href="javascript:void(0)">Open Ticket</a>
