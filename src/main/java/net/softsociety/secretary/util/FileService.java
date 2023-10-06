@@ -2,14 +2,12 @@ package net.softsociety.secretary.util;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.StandardCopyOption;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.google.common.io.Files;
 
 
 /**

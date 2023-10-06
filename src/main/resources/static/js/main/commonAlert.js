@@ -60,14 +60,14 @@ $(document).ready(function() {
 	    var month = now.getMonth() + 1;
 	    var date = now.getDate();
 	    let dateStr = '<small class="text-light fw-semibold mb-2">'+year+'-'+month+'-'+date+'</small>';
-	    $('#curDate').html(dateStr);
+	    $('.curDate').html(dateStr);
 	    
 	    //세탁 게이지
 	    let proVal = (laundryCnt/30) * 100; 
 	    let proStr = '<div class="progress-bar" role="progressbar" style="width:'+proVal+'%; \
 	    background-color: rgba(223,132,166,255); border-color: rgba(223,132,166,255);" \
 	    aria-valuenow="'+proVal+'" aria-valuemin="0" aria-valuemax="30"></div>';
-	    $('#progessDetail').html(proStr);
+	    $('.progress').html(proStr);
 	    
 	    //세탁물 개수
 	    let laundryCntStr = '';
@@ -76,7 +76,7 @@ $(document).ready(function() {
 	    }else{
 	       laundryCntStr += `<p>세탁물이 20개 미만입니다. 아직 세탁하지 않아도 됩니다.</p>`;            
 	    }
-	    $('#laundryCntDetail').html(laundryCntStr);
+	    $('.laundryCntDetail').html(laundryCntStr);
 	    
 	},error:function(e){
 	        // console.log(JSON.stringify(e));
