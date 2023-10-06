@@ -195,7 +195,7 @@ function initSetBudgetModal() {
         dataType: 'JSON',
         success: (data) => {
             if (data && typeof data === 'object') {
-                $('.budgetAvg').html(data.budgetAvg ? data.budgetAvg.toLocaleString('en-US') : '0');
+                $('.budgetAvg').html(data.budgetAvg ? Math.round(data.budgetAvg).toLocaleString('en-US') : '0');
                 $('.budgetAmountX').html(data.budgetAmountX ? data.budgetAmountX.toLocaleString('en-US') : '0');
                 $('.budgetAmountXx').html(data.budgetAmountXx ? data.budgetAmountXx.toLocaleString('en-US') : '0');
                 $('.budgetAmountXxx').html(data.budgetAmountXxx ? data.budgetAmountXxx.toLocaleString('en-US') : '0');
