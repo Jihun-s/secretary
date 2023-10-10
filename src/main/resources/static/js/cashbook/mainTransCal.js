@@ -31,7 +31,6 @@ $(document).ready(function() {
       date.setDate(date.getDate() + 15);  // 중간값 작업
       let calYear = date.getFullYear();
       let calMonth = date.getMonth() + 1;
-      // alert("events 함수에서 읽은 연월:" + calYear + " " + calMonth);
   
       $.ajax({
           url: "/secretary/cashbook/trans/loadCalInEx",
@@ -82,7 +81,6 @@ $(document).ready(function() {
           },
           error: (e) => {
             console.log('달력 수입지출 가져오기 실패');
-              // alert(JSON.stringify(e));
           }
       });
     },
@@ -94,7 +92,6 @@ $(document).ready(function() {
       let calMonth = eventDate.getMonth() + 1;
       let calDate = eventDate.getDate();
       let transType = info.event.extendedProps.type;
-      // alert(calYear + "년 " + calMonth + "월 " + calDate + "일의 " + transType + "을 클릭");
 
       // 해당 날짜의 해당 유형의 거래내역을 가져오는 ajax 함수
       $.ajax({

@@ -86,7 +86,6 @@ function totalMonthExpense() {
         data: { chYear: curYear, chMonth: curMonth },
         dataType: "JSON",
         success: (result) => {
-          // alert(JSON.stringify(result));
           let dataFromServer = result;
     
           const labels = dataFromServer.map(
@@ -558,7 +557,7 @@ function otherUserTotal() {
           labels: labels,
           datasets: [
             {
-              label: '우리 가족',
+              label: '우리 가족 월 지출',
               data: myExpenseData,
               backgroundColor: '#71DD37'
             },

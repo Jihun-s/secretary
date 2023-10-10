@@ -71,7 +71,15 @@ document.addEventListener("DOMContentLoaded", function() {
                 });
                 
                 if (!isCategoryValid) {
-                    alert(`'${data}' 카테고리는 존재하지 않습니다.`);
+                    Swal.fire({
+                        title: '오류',
+                        text: `'${data}' 카테고리는 존재하지 않습니다.`,
+                        icon: 'error',
+                        confirmButtonText: '확인',
+                        customClass: {
+                            confirmButton: 'btn btn-primary', // 부트스트랩 'btn-primary' 스타일 적용
+                        }
+                    });
                     return;
                 }
             }
@@ -116,7 +124,16 @@ document.addEventListener("DOMContentLoaded", function() {
     document.getElementById('uploadReceiptButton').addEventListener('click', function() {
         let fileInput = document.getElementById('receiptUpload');
         if (!fileInput.files.length) {
-            alert('Please select a file to upload.');
+            Swal.fire({
+                title: '확인',
+                text: '업로드 할 파일을 선택해주세요.',
+                icon: 'warning',
+                confirmButtonText: '확인',
+                customClass: {
+                    confirmButton: 'btn btn-primary', // 부트스트랩 'btn-primary' 스타일 적용
+                }
+            });
+            
             return;
         }
     
@@ -164,7 +181,15 @@ document.addEventListener("DOMContentLoaded", function() {
 
     $('#addFromReceipt').on('submit', function(e) {
         if ($('#productsContainer .product-item').length === 0) {
-            alert('항목을 추가해주세요.');
+            Swal.fire({
+                title: '확인',
+                text: '항목을 추가해주세요.',
+                icon: 'warning',
+                confirmButtonText: '확인',
+                customClass: {
+                    confirmButton: 'btn btn-primary', // 부트스트랩 'btn-primary' 스타일 적용
+                }
+            });
             e.preventDefault();  // 폼 제출 중지
             return false;
         }
@@ -176,7 +201,15 @@ document.addEventListener("DOMContentLoaded", function() {
         // 상품명 유효성 검사
         $('#productsContainer .product-item input[name^="fridgeFoods"]').each(function() {
             if ($(this).val().trim() === '') {
-                alert('모든 상품의 이름을 입력해주세요.');
+                Swal.fire({
+                    title: '확인',
+                    text: '모든 상품의 이름을 입력해주세요.',
+                    icon: 'warning',
+                    confirmButtonText: '확인',
+                    customClass: {
+                        confirmButton: 'btn btn-primary', // 부트스트랩 'btn-primary' 스타일 적용
+                    }
+                });
                 hasEmptyFields = true;
                 return false;  // jQuery .each loop를 종료
             }
@@ -185,7 +218,15 @@ document.addEventListener("DOMContentLoaded", function() {
         // 수량 유효성 검사
         $('#productsContainer .product-item input[name$=".foodQuantity"]').each(function() {
             if ($(this).val().trim() === '' || $(this).val().trim() === '0') {
-                alert('모든 상품의 수량을 정확히 입력해주세요.');
+                Swal.fire({
+                    title: '확인',
+                    text: '모든 상품의 수량을 정확히 입력해주세요.',
+                    icon: 'warning',
+                    confirmButtonText: '확인',
+                    customClass: {
+                        confirmButton: 'btn btn-primary', // 부트스트랩 'btn-primary' 스타일 적용
+                    }
+                });
                 hasEmptyFields = true;
                 return false;
             }
@@ -194,7 +235,15 @@ document.addEventListener("DOMContentLoaded", function() {
         // 카테고리 유효성 검사
         $('#productsContainer .product-item select[name^="fridgeFoods"]').each(function() {
             if (!$(this).val() || $(this).val().trim() === '') {
-                alert('모든 상품의 카테고리를 선택해주세요.');
+                Swal.fire({
+                    title: '확인',
+                    text: '모든 상품의 카테고리를 선택해주세요.',
+                    icon: 'warning',
+                    confirmButtonText: '확인',
+                    customClass: {
+                        confirmButton: 'btn btn-primary', // 부트스트랩 'btn-primary' 스타일 적용
+                    }
+                });
                 hasEmptyFields = true;
                 return false;
             }

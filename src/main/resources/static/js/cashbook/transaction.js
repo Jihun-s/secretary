@@ -107,11 +107,26 @@ $(document).ready(function() {
     // 소분류 선택 이벤트 (소분류 먼저 선택할 수 없음)
     $('body').on('click', "#cate2Name", function() {
         if ($("input[name='transType']:checked").length === 0) {
-            alert("거래 유형을 먼저 선택하세요.");
+            Swal.fire({
+                icon: "error",
+                title: "거래 유형을 먼저 선택하세요.",
+                confirmButtonColor: '#71DD37',
+                customClass: {
+                    container: 'my-swal'
+                }
+              });
+
             return;
         }
         if ($("#cate1Name").val() === "대분류를 선택하세요") {
-            alert("대분류를 먼저 선택하세요.");
+            Swal.fire({
+                icon: "error",
+                title: "대분류를 먼저 선택하세요.",
+                confirmButtonColor: '#71DD37',
+                customClass: {
+                    container: 'my-swal'
+                }
+              });
         }
     });
     
@@ -169,11 +184,26 @@ $(document).ready(function() {
     // 모달 소분류 선택 이벤트 (소분류 먼저 선택할 수 없음)
     $('body').on('click', "#cate2NameModal", function() {
         if ($("input[name='transType']:checked").length === 0) {
-            alert("거래 유형을 먼저 선택하세요.");
+            Swal.fire({
+                icon: "error",
+                title: "거래 유형을 먼저 선택하세요.",
+                confirmButtonColor: '#71DD37',
+                customClass: {
+                    container: 'my-swal'
+                }
+              });
+
             return;
         }
         if ($("#cate1NameModal").val() === "대분류를 선택하세요") {
-            alert("대분류를 먼저 선택하세요.");
+                        Swal.fire({
+                icon: "error",
+                title: "대분류를 먼저 선택하세요.",
+                confirmButtonColor: '#71DD37',
+                customClass: {
+                    container: 'my-swal'
+                }
+              });
         }
     });
 
@@ -238,11 +268,26 @@ $(document).ready(function() {
     // SMS 추출 소분류 선택 이벤트 (소분류 먼저 선택할 수 없음)
     $('body').on('click', "#cate2NameSms", function() {
         if ($("input[name='transType']:checked").length === 0) {
-            alert("거래 유형을 먼저 선택하세요.");
+            Swal.fire({
+                icon: "error",
+                title: "거래 유형을 먼저 선택하세요.",
+                confirmButtonColor: '#71DD37',
+                customClass: {
+                    container: 'my-swal'
+                }
+              });
+
             return;
         }
         if ($("#cate1NameSms").val() === "대분류를 선택하세요") {
-            alert("대분류를 먼저 선택하세요.");
+                        Swal.fire({
+                icon: "error",
+                title: "대분류를 먼저 선택하세요.",
+                confirmButtonColor: '#71DD37',
+                customClass: {
+                    container: 'my-swal'
+                }
+              });
         }
     });
 
@@ -256,10 +301,10 @@ $(document).ready(function() {
 
 
     // SMS 모달 닫히면 입력 값 초기화
-    $("#inputBySmsModal").on("hidden.bs.modal", initSmsModal());
+    $("#inputBySmsModal").on("hidden.bs.modal", initSmsModal);
   
     // 영수증 모달 닫히면 입력 값 초기화
-    $("#inputByImgModal").on("hidden.bs.modal", initImgModal());
+    $("#inputByImgModal").on("hidden.bs.modal", initImgModal);
 
 
     /////숫자포맷/////숫자포맷/////숫자포맷/////숫자포맷/////숫자포맷/////숫자포맷/////숫자포맷/////숫자포맷/////숫자포맷/////
@@ -301,6 +346,8 @@ $(document).ready(function() {
         }
     });   
 
+    // 영수증 모달 닫힐 때 모달 초기화 
+    
 
 });
 
@@ -873,10 +920,6 @@ function updateTransAjax() {
     let transAmount = $('#transAmountModal').val().replace(/,/g, '');
     let labelColor = $('#labelColorModal');
 
-    // alert("수정할 값들:" + transId.val() + cashbookId.val() + transDate
-    // + transType.val() + cate1Name.val() + cate2Name.val() + transPayee.val()
-    //  + transMemo.val()  + transAmount + labelColor.val());
-
     $.ajax({
         url: '/secretary/cashbook/trans/updateTrans',
         type: 'POST',
@@ -895,7 +938,16 @@ function updateTransAjax() {
         dataType: 'text',
         success: function(result) {
             if(result == 0) {
-                alert('다른 가족이 작성한 내역은 수정할 수 없습니다.');
+                Swal.fire({
+                    icon: "error",
+                    title: "내역 수정 실패",
+                    text: "다른 가족이 작성한 내역은 수정할 수 없습니다.",
+                    confirmButtonColor: '#71DD37',
+                    customClass: {
+                        container: 'my-swal'
+                    }
+                  });
+
                 return;
             }
             init();
@@ -916,7 +968,6 @@ function updateTransAjax() {
 
 /** 거래내역 삭제하는 함수 */
 function deleteTrans(transId) {
-    // alert(transId);
     $.ajax({
         url: '/secretary/cashbook/trans/deleteTrans',
         type: 'POST',
@@ -924,7 +975,16 @@ function deleteTrans(transId) {
         dataType: 'text',
         success: (result) => {
             if(result == 0) {
-                alert('다른 가족이 작성한 내역은 삭제할 수 없습니다.');
+                Swal.fire({
+                    icon: "error",
+                    title: "내역 삭제 실패",
+                    text: "다른 가족이 작성한 내역은 삭제할 수 없습니다.",
+                    confirmButtonColor: '#71DD37',
+                    customClass: {
+                        container: 'my-swal'
+                    }
+                  });
+
                 return;
             }
             init();
@@ -1249,22 +1309,42 @@ function loadSubCategoriesSearch(cate1Name) {
 /////검색카테고리/////검색카테고리/////검색카테고리/////검색카테고리/////검색카테고리/////검색카테고리/////검색카테고리/////검색카테고리/////검색카테고리/////
 
 
+const confirmColor = "#71DD37";
+const cancelColor = "#8592A3";
+const alertButtonColor = "#71dd37";
 
 /** 커스텀 대분류 카테고리 추가 */
-function setCustomCategory1() {
+async function setCustomCategory1() {
     let familyId = $('#familyId').val();
     let transType = $("input[name='transType']:checked").val();
-    let customCate1Name = prompt("새로운 대분류명을 입력하세요:");
-    
-        // '취소' 버튼 클릭
-        if (customCate1Name === null) {
-            return;
+
+    const { value: customCate1Name } = await Swal.fire({
+        input: 'text',
+        inputLabel: '새로운 대분류명을 입력하세요:',
+        inputPlaceholder: '대분류명',
+        showCancelButton: true,
+        confirmButtonColor: confirmColor,
+        cancelButtonColor: cancelColor,
+        customClass: {
+            container: 'my-swal'
         }
+    });
+    
+    // 취소 버튼 클릭
+    if(!customCate1Name) return;
 
     // 미입력
-    if (customCate1Name === "") {
-        alert("카테고리명을 입력하세요.");
-        return setCustomCategory1();
+    if (customCate1Name == "" || customCate1Name.length == 0) {
+        Swal.fire({
+            icon: "error",
+            title: "카테고리명을 입력하세요.",
+            confirmButtonColor: alertButtonColor,
+            customClass: {
+                container: 'my-swal'
+            }
+        }).then(() => setCustomCategory1());
+        
+        return;
     }
 
     // 한글, 영문, 숫자만 사용
@@ -1272,24 +1352,45 @@ function setCustomCategory1() {
 
     // 연속 공백 제한
     if (/\s{2,}/.test(customCate1Name)) {
-        alert("카테고리 이름에 연속된 공백을 포함할 수 없습니다.");
-
-        return setCustomCategory1();
+        Swal.fire({
+            icon: "error",
+            title: "카테고리 이름에 연속된 공백을 포함할 수 없습니다.",
+            confirmButtonColor: alertButtonColor,
+            customClass: {
+                container: 'my-swal'
+            }
+        }).then(() => setCustomCategory1());
+        
+        return;
     }
 
     // 중복 제한
     const isDuplicate = [...$("#cate1Name option")].some(option => option.textContent === customCate1Name);
     if (isDuplicate) {
-        alert("이미 존재하는 카테고리 이름입니다.");
+        Swal.fire({
+            icon: "error",
+            title: "이미 존재하는 카테고리 이름입니다.",
+            confirmButtonColor: alertButtonColor,
+            customClass: {
+                container: 'my-swal'
+            }
+        }).then(() => setCustomCategory1());
         
-        return setCustomCategory1();
+        return;
     }
 
     // 길이는 한글 기준 10자 이내(30BYTE)
     if (!regex.test(customCate1Name) || new Blob([customCate1Name]).size > 30) {
-        alert("카테고리 이름은 한글, 영문, 숫자만 포함하여 30Byte(한글 10자) 이내로 입력해야 합니다.");
+        Swal.fire({
+            icon: "error",
+            title: "카테고리 이름은 한글, 영문, 숫자만 포함하여 30Byte(한글 10자) 이내로 입력해야 합니다.",
+            confirmButtonColor: alertButtonColor,
+            customClass: {
+                container: 'my-swal'
+            }
+        }).then(() => setCustomCategory1());
         
-        return setCustomCategory1();
+        return;
     }
 
     $.ajax({
@@ -1311,7 +1412,7 @@ function setCustomCategory1() {
                 etcOption.parentNode.insertBefore(newOption, etcOption);
                 newOption.selected = true;  // 새로 추가된 옵션을 선택 상태로 설정
             } else {
-                alert("기존 입력 '직접입력' 옵션이 찾아지지 않습니다.");
+                console.log("기존 입력 '직접입력' 옵션이 찾아지지 않습니다.");
             }
         },
         error: () => {
@@ -1323,20 +1424,36 @@ function setCustomCategory1() {
 
 
 /** 커스텀 소분류 카테고리 추가 */
-function setCustomCategory2() {
+async function setCustomCategory2() {
     let familyId = $('#familyId').val();
     let cate1Name = $('#cate1Name').val();
-    let customCate2Name = prompt("새로운 소분류명을 입력하세요:");
-    
-        // '취소' 버튼 클릭
-        if (customCate2Name === null) {
-            return;
+    const { value: customCate2Name } = await Swal.fire({
+        input: 'text',
+        inputLabel: '새로운 소분류명을 입력하세요:',
+        inputPlaceholder: '소분류명',
+        showCancelButton: true,
+        confirmButtonColor: confirmColor,
+        cancelButtonColor: cancelColor,
+        customClass: {
+            container: 'my-swal'
         }
+    });
+    
+    // 취소 버튼 클릭
+    if(!customCate2Name) return;
 
     // 미입력
-    if (customCate2Name === "") {
-        alert("카테고리명을 입력하세요.");
-        return setCustomCategory2();
+    if (customCate2Name == "" || customCate2Name.length == 0) {
+        Swal.fire({
+            icon: "error",
+            title: "카테고리명을 입력하세요.",
+            confirmButtonColor: alertButtonColor,
+            customClass: {
+                container: 'my-swal'
+            }
+        }).then(() => setCustomCategory2());
+        
+        return;
     }
 
     // 한글, 영문, 숫자만 사용
@@ -1344,24 +1461,45 @@ function setCustomCategory2() {
 
     // 연속 공백 제한
     if (/\s{2,}/.test(customCate2Name)) {
-        alert("카테고리 이름에 연속된 공백을 포함할 수 없습니다.");
-
-        return setCustomCategory2();
+        Swal.fire({
+            icon: "error",
+            title: "카테고리 이름에 연속된 공백을 포함할 수 없습니다.",
+            confirmButtonColor: alertButtonColor,
+            customClass: {
+                container: 'my-swal'
+            }
+        }).then(() => setCustomCategory2());
+        
+        return;
     }
 
     // 중복 제한
     const isDuplicate = [...$("#cate2Name option")].some(option => option.textContent === customCate2Name);
     if (isDuplicate) {
-        alert("이미 존재하는 카테고리 이름입니다.");
+        Swal.fire({
+            icon: "error",
+            title: "이미 존재하는 카테고리 이름입니다.",
+            confirmButtonColor: alertButtonColor,
+            customClass: {
+                container: 'my-swal'
+            }
+        }).then(() => setCustomCategory2());
         
-        return setCustomCategory2();
+        return;
     }
 
     // 길이는 한글 기준 10자 이내(30BYTE)
     if (!regex.test(customCate2Name) || new Blob([customCate2Name]).size > 30) {
-        alert("카테고리 이름은 한글, 영문, 숫자만 포함하여 30Byte(한글 10자) 이내로 입력해야 합니다.");
+        Swal.fire({
+            icon: "error",
+            title: "카테고리 이름은 한글, 영문, 숫자만 포함하여 30Byte(한글 10자) 이내로 입력해야 합니다.",
+            confirmButtonColor: alertButtonColor,
+            customClass: {
+                container: 'my-swal'
+            }
+        }).then(() => setCustomCategory2());
         
-        return setCustomCategory2();
+        return;
     }
 
     $.ajax({
@@ -1384,7 +1522,7 @@ function setCustomCategory2() {
 
                 newOption.selected = true;  // 새로 추가된 옵션을 선택 상태로 설정
             } else {
-                alert("기존 입력 '직접입력' 옵션이 찾아지지 않습니다.");
+                console.log("기존 입력 '직접입력' 옵션이 찾아지지 않습니다.");
             }
         },
         error: () => {
@@ -1399,21 +1537,36 @@ function setCustomCategory2() {
 
 
 /** 모달 커스텀 대분류 카테고리 추가 */
-function setCustomCategory1Modal() {
-    // alert("모달용 대분류 커스텀");
+async function setCustomCategory1Modal() {
     let familyId = $('#familyId').val();
     let transType = $("#transTypeModal input[name='transType']:checked").val();
-    let customCate1Name = prompt("새로운 대분류명을 입력하세요:");
-    
-        // '취소' 버튼 클릭
-        if (customCate1Name === null) {
-            return;
+    const { value: customCate1Name } = await Swal.fire({
+        input: 'text',
+        inputLabel: '새로운 대분류명을 입력하세요:',
+        inputPlaceholder: '대분류명',
+        showCancelButton: true,
+        confirmButtonColor: confirmColor,
+        cancelButtonColor: cancelColor,
+        customClass: {
+            container: 'my-swal'
         }
+    });
+    
+    // 취소 버튼 클릭
+    if(!customCate1Name) return;
 
     // 미입력
-    if (customCate1Name === "") {
-        alert("카테고리명을 입력하세요.");
-        return setCustomCategory1Modal();
+    if (customCate1Name == "" || customCate1Name.length == 0) {
+        Swal.fire({
+            icon: "error",
+            title: "카테고리명을 입력하세요.",
+            confirmButtonColor: alertButtonColor,
+            customClass: {
+                container: 'my-swal'
+            }
+        }).then(() => setCustomCategory1Modal());
+        
+        return;
     }
 
     // 한글, 영문, 숫자만 사용
@@ -1421,24 +1574,45 @@ function setCustomCategory1Modal() {
 
     // 연속 공백 제한
     if (/\s{2,}/.test(customCate1Name)) {
-        alert("카테고리 이름에 연속된 공백을 포함할 수 없습니다.");
-
-        return setCustomCategory1Modal();
+        Swal.fire({
+            icon: "error",
+            title: "카테고리 이름에 연속된 공백을 포함할 수 없습니다.",
+            confirmButtonColor: alertButtonColor,
+            customClass: {
+                container: 'my-swal'
+            }
+        }).then(() => setCustomCategory1Modal());
+        
+        return;
     }
 
     // 중복 제한
-    const isDuplicate = [...$("#cate1NameModal option")].some(option => option.textContent === customCate1Name);
+    const isDuplicate = [...$("#cate1Name option")].some(option => option.textContent === customCate1Name);
     if (isDuplicate) {
-        alert("이미 존재하는 카테고리 이름입니다.");
+        Swal.fire({
+            icon: "error",
+            title: "이미 존재하는 카테고리 이름입니다.",
+            confirmButtonColor: alertButtonColor,
+            customClass: {
+                container: 'my-swal'
+            }
+        }).then(() => setCustomCategory1Modal());
         
-        return setCustomCategory1Modal();
+        return;
     }
 
     // 길이는 한글 기준 10자 이내(30BYTE)
     if (!regex.test(customCate1Name) || new Blob([customCate1Name]).size > 30) {
-        alert("카테고리 이름은 한글, 영문, 숫자만 포함하여 30Byte(한글 10자) 이내로 입력해야 합니다.");
+        Swal.fire({
+            icon: "error",
+            title: "카테고리 이름은 한글, 영문, 숫자만 포함하여 30Byte(한글 10자) 이내로 입력해야 합니다.",
+            confirmButtonColor: alertButtonColor,
+            customClass: {
+                container: 'my-swal'
+            }
+        }).then(() => setCustomCategory1Modal());
         
-        return setCustomCategory1Modal();
+        return;
     }
 
     $.ajax({
@@ -1460,7 +1634,7 @@ function setCustomCategory1Modal() {
                 etcOption.parentNode.insertBefore(newOption, etcOption);
                 newOption.selected = true;  // 새로 추가된 옵션을 선택 상태로 설정
             } else {
-                alert("'직접입력' 옵션이 찾아지지 않습니다.");
+                console.log("'직접입력' 옵션이 찾아지지 않습니다.");
             }
         },
         error: () => {
@@ -1472,21 +1646,36 @@ function setCustomCategory1Modal() {
 
 
 /** 모달 커스텀 소분류 카테고리 추가 */
-function setCustomCategory2Modal() {
-    // alert("모달용 커스텀 소분류");
+async function setCustomCategory2Modal() {
     let familyId = $('#familyId').val();
     let cate1Name = $('#cate1NameModal').val();
-    let customCate2Name = prompt("새로운 소분류명을 입력하세요:");
-    
-        // '취소' 버튼 클릭
-        if (customCate2Name === null) {
-            return;
+    const { value: customCate2Name } = await Swal.fire({
+        input: 'text',
+        inputLabel: '새로운 소분류명을 입력하세요:',
+        inputPlaceholder: '소분류명',
+        showCancelButton: true,
+        confirmButtonColor: confirmColor,
+        cancelButtonColor: cancelColor,
+        customClass: {
+            container: 'my-swal'
         }
+    });
+    
+    // 취소 버튼 클릭
+    if(!customCate2Name) return;
 
     // 미입력
-    if (customCate2Name === "") {
-        alert("카테고리명을 입력하세요.");
-        return setCustomCategory2Modal();
+    if (customCate2Name == "" || customCate2Name.length == 0) {
+        Swal.fire({
+            icon: "error",
+            title: "카테고리명을 입력하세요.",
+            confirmButtonColor: alertButtonColor,
+            customClass: {
+                container: 'my-swal'
+            }
+        }).then(() => setCustomCategory2Modal());
+        
+        return;
     }
 
     // 한글, 영문, 숫자만 사용
@@ -1494,24 +1683,45 @@ function setCustomCategory2Modal() {
 
     // 연속 공백 제한
     if (/\s{2,}/.test(customCate2Name)) {
-        alert("카테고리 이름에 연속된 공백을 포함할 수 없습니다.");
-
-        return setCustomCategory2Modal();
+        Swal.fire({
+            icon: "error",
+            title: "카테고리 이름에 연속된 공백을 포함할 수 없습니다.",
+            confirmButtonColor: alertButtonColor,
+            customClass: {
+                container: 'my-swal'
+            }
+        }).then(() => setCustomCategory2Modal());
+        
+        return;
     }
 
     // 중복 제한
-    const isDuplicate = [...$("#cate2NameModal option")].some(option => option.textContent === customCate2Name);
+    const isDuplicate = [...$("#cate2Name option")].some(option => option.textContent === customCate2Name);
     if (isDuplicate) {
-        alert("이미 존재하는 카테고리 이름입니다.");
+        Swal.fire({
+            icon: "error",
+            title: "이미 존재하는 카테고리 이름입니다.",
+            confirmButtonColor: alertButtonColor,
+            customClass: {
+                container: 'my-swal'
+            }
+        }).then(() => setCustomCategory2Modal());
         
-        return setCustomCategory2Modal();
+        return;
     }
 
     // 길이는 한글 기준 10자 이내(30BYTE)
     if (!regex.test(customCate2Name) || new Blob([customCate2Name]).size > 30) {
-        alert("카테고리 이름은 한글, 영문, 숫자만 포함하여 30Byte(한글 10자) 이내로 입력해야 합니다.");
+        Swal.fire({
+            icon: "error",
+            title: "카테고리 이름은 한글, 영문, 숫자만 포함하여 30Byte(한글 10자) 이내로 입력해야 합니다.",
+            confirmButtonColor: alertButtonColor,
+            customClass: {
+                container: 'my-swal'
+            }
+        }).then(() => setCustomCategory2Modal());
         
-        return setCustomCategory2Modal();
+        return;
     }
 
     $.ajax({
@@ -1534,7 +1744,7 @@ function setCustomCategory2Modal() {
 
                 newOption.selected = true;  // 새로 추가된 옵션을 선택 상태로 설정
             } else {
-                alert("'직접입력' 옵션이 찾아지지 않습니다.");
+                console.log("'직접입력' 옵션이 찾아지지 않습니다.");
             }
         },
         error: () => {
@@ -1582,8 +1792,7 @@ function selectConditionTrans() {
     if($("#transSearchCheckUserId").is(':checked')) {
         myTransOnly = true;
     }
-    // alert("incomeSelected" + incomeSelected + "expenseSelected" + expenseSelected);
-    
+
 
     /* 조건 맞춰서 서버에서 내역 새로 가져오기 */
     $.ajax({
@@ -1715,20 +1924,41 @@ function selectConditionTrans() {
 function parseBySms() {
     let smsMessage = $("#smsMessage").val();
 
+    if (!smsMessage || smsMessage.trim() === "") {
+        Swal.fire({
+            icon: "error",
+            title: "문자 메세지 인식 실패",
+            text: "문자 메세지를 입력해주세요.",
+            confirmButtonColor: "#71DD37",
+            customClass: {
+                 container: 'my-swal'
+            },
+        });
+        return;
+    }
+
     let dateRegex = /(\d{2}\/\d{2})/;
     let timeRegex = /(\d{2}:\d{2})/;
     let amountRegex = /(\d+,\d+)/;
     let payeeRegex = /원\s(.*?)\s잔액/;
 
-    let smsDate = smsMessage.match(dateRegex)[1];
-    let smsTime = smsMessage.match(timeRegex)[1];
-    let transAmount = smsMessage.match(amountRegex)[1];
-    let transPayee = smsMessage.match(payeeRegex)[1];
+    let smsDate = smsMessage.match(dateRegex) ? smsMessage.match(dateRegex)[1] : null;
+    let smsTime = smsMessage.match(timeRegex) ? smsMessage.match(timeRegex)[1] : null;
+    let transAmount = smsMessage.match(amountRegex) ? smsMessage.match(amountRegex)[1] : null;
+    let transPayee = smsMessage.match(payeeRegex) ? smsMessage.match(payeeRegex)[1] : null;
 
-    console.log("거래일자: " + smsDate);
-    console.log("거래시간: " + smsTime);
-    console.log("거래금액: " + transAmount);
-    console.log("거래처: " + transPayee);
+    if (!smsDate || !smsTime || !transAmount || !transPayee) {
+        Swal.fire({
+            icon: "error",
+            title: "문자 메세지 인식 실패",
+            text: "주어진 메세지에서 내역을 읽어낼 수 없습니다. 내역을 직접 입력하세요.",
+            confirmButtonColor: "#71DD37",
+            customClass: {
+                 container: 'my-swal'
+            },
+        });
+        return;
+    }
 
     // 거래일자 포맷 맞추기 
     let transDate = convertSmsDateFormat(smsDate, smsTime);
@@ -1851,7 +2081,14 @@ function initSmsModal() {
 function submitReceiptImg() {
     let fileInput = $('#receiptUpload').get(0); // jQuery에서 DOM 객체 가져오기
     if (!fileInput.files || !fileInput.files.length) {
-        alert('영수증 사진을 첨부하세요.');
+        Swal.fire({
+            icon: "error",
+            title: "영수증 사진을 첨부하세요.",
+            confirmButtonColor: '#71DD37',
+            customClass: {
+                container: 'my-swal'
+            }
+          });
         return;
     }
 
@@ -1867,7 +2104,7 @@ function submitReceiptImg() {
         handleOcrResult(data);
     })
     .catch(error => {
-        console.error('Error:', error);
+        console.error('영수증 인식 실패:', error);
     });
 }
 

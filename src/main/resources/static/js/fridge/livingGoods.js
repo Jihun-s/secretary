@@ -49,7 +49,15 @@ $(document).ready(function () {
                 contentType: 'application/json',
                 success: function (response) {
                     if (response === -1) {
-                        alert('미리 지정된 카테고리는 추가할 수 없습니다.');
+                        Swal.fire({
+                            title: '오류',
+                            text: '미리 지정된 카테고리는 추가할 수 없습니다.',
+                            icon: 'error',
+                            confirmButtonText: '확인',
+                            customClass: {
+                                confirmButton: 'btn btn-primary', // 부트스트랩 'btn-primary' 스타일 적용
+                            }
+                        });
                     } else if (response > 0) {
                         // 예를 들어, 서버에서 추가된 카테고리의 ID를 반환한다고 가정
                         $('#itemCategory').append(
@@ -59,7 +67,15 @@ $(document).ready(function () {
                         $('#addCategoryBtn').hide();
                         $('button[type="submit"]').prop('disabled', false); // Submit 버튼 활성화
                     } else {
-                        alert('카테고리 추가에 실패했습니다.');
+                        Swal.fire({
+                            title: '오류',
+                            text: '카테고리 추가에 실패했습니다.',
+                            icon: 'error',
+                            confirmButtonText: '확인',
+                            customClass: {
+                                confirmButton: 'btn btn-primary', // 부트스트랩 'btn-primary' 스타일 적용
+                            }
+                        });
                     }
                 },
                 error: function (error) {
@@ -67,7 +83,16 @@ $(document).ready(function () {
                 },
             });
         } else {
-            alert('이미 존재하는 카테고리입니다.');
+            Swal.fire({
+                title: '오류',
+                text: '이미 존재하는 카테고리입니다.',
+                icon: 'error',
+                confirmButtonText: '확인',
+                customClass: {
+                    confirmButton: 'btn btn-primary', // 부트스트랩 'btn-primary' 스타일 적용
+                }
+            });
+            
         }
     });
 

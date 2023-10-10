@@ -19,6 +19,10 @@
     <title>일정 :: 메인</title>
 
     <meta name="description" content="" />
+    
+    <!-- SweetAlert2 -->
+	  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.31/dist/sweetalert2.all.min.js"></script>
+	  <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.31/dist/sweetalert2.min.css" rel="stylesheet">	   
 
     <!-- Favicon -->
     <link
@@ -74,6 +78,13 @@
 
       body {
         font-family: 'NanumSquareNeo-Variable', sans-serif;
+      }
+    </style>
+
+    <!-- 모달 위에 Swal -->
+    <style>
+      .my-swal {
+          z-index: 1100 !important;
       }
     </style>
 

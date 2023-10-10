@@ -6,106 +6,98 @@
   <head>
     <title>그래프 연습하기</title>
 
-    <!-- Core CSS -->
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.31/dist/sweetalert2.all.min.js"></script>
     <link
+      href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.31/dist/sweetalert2.min.css"
       rel="stylesheet"
-      th:href="@{/assets/vendor/css/core.css}"
-      class="template-customizer-core-css"
-    />
-    <link
-      rel="stylesheet"
-      th:href="@{/assets/vendor/css/theme-default.css}"
-      class="template-customizer-theme-css"
-    />
-    <link rel="stylesheet" th:href="@{/assets/css/demo.css}" />
-
-    <!-- Vendors CSS -->
-    <link
-      rel="stylesheet"
-      th:href="@{/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css}"
     />
 
-    <link
-      rel="stylesheet"
-      th:href="@{/assets/vendor/libs/apex-charts/apex-charts.css}"
-    />
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
 
-    <script th:src="@{/js/jquery-3.7.0.js}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script th:src="@{/js/cashbook/cashbookChart.js}"></script>
-    <script th:src="@{/js/cashbook/statistic.js}"></script>
-    <script th:src="@{/js/cashbook}"></script>
+    <script>
+      $(document).ready(function () {
+        // Alert 핸들러
+        $("#alertStart1, #alertStart2, #alertStart3").click(function () {
+          console.log("나여깄어");
+          Swal.fire({
+            icon: "error",
+            title: "내역 수정 실패",
+            text: "다른 가족이 작성한 내역은 수정할 수 없습니다.",
+            confirmButtonColor: "#71DD37",
+          });
+        });
+
+        // Confirm 핸들러
+        $("#confirmStart1, #confirmStart2, #confirmStart3").click(function () {
+          Swal.fire({
+            title: "정말로 그렇게 하시겠습니까?",
+            text: "다시 되돌릴 수 없습니다. 신중하세요.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "승인",
+            cancelButtonText: "취소",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              Swal.fire("승인이 완료되었습니다.", "화끈하시네요~!", "success");
+            }
+          });
+        });
+
+        // Prompt 핸들러
+        $("#promptStart").click(async function () {
+          const { value: getName } = await Swal.fire({
+            title: "당신의 이름을 입력하세요.",
+            text: "그냥 예시일 뿐이니 정보유출 같은건 없습니다.",
+            input: "text",
+            inputPlaceholder: "이름을 입력..",
+          });
+
+          if (getName) {
+            Swal.fire(`: ${getName}`); // 입력한 것 그대로
+          } else {
+            Swal.fire("쳇"); // 비어있을 때
+          }
+        });
+
+        // Toast 핸들러
+        $("#toastStart").click(function () {
+          const Toast = Swal.mixin({
+            toast: true,
+            position: "center",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.addEventListener("mouseenter", Swal.stopTimer);
+              toast.addEventListener("mouseleave", Swal.resumeTimer);
+            },
+          });
+
+          Toast.fire({
+            icon: "success",
+            title: "toast 알림이 정상적으로 실행 되었습니다.",
+          });
+        });
+      });
+    </script>
   </head>
   <body>
-    <a href="javascript:mostCate2();">클릭해보렴</a>
-
-    <div
-      class="card overflow-hidden mb-4"
-      style="
-        position: relative;
-        text-align: center;
-        width: 500px;
-        overflow-x: auto;
-      "
-    >
-      <div class="card-body ps ps--active-x" id="vertical-example">
-        <h5 class="card-header">DIV 타이틀</h5>
-        <p>1행</p>
-        <p>2행</p>
-        <p>3행</p>
-        <p>4행</p>
-        <p>5행</p>
-        <p>6행</p>
-        <p>1행</p>
-        <p>2행</p>
-        <p>3행</p>
-        <p>4행</p>
-        <p>5행</p>
-        <p>6행</p>
-        <p>1행</p>
-        <p>2행</p>
-        <p>3행</p>
-        <p>4행</p>
-        <p>5행</p>
-        <p>
-          6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행6행
-        </p>
-        <div class="ps__rail-x" style="left: 0px; bottom: 0px">
-          <div
-            class="ps__thumb-x"
-            tabindex="0"
-            style="top: 0px; height: 232px; right: 0px"
-          ></div>
-        </div> 
-        <div class="ps__rail-y" style="top: 0px; height: 232px; right: 0px">
-          <div
-            class="ps__thumb-y"
-            tabindex="0"
-            style="top: 0px; height: 37px"
-          ></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Core JS -->
-    <!-- build:js assets/vendor/js/core.js -->
-    <script th:src="@{/assets/vendor/libs/jquery/jquery.js}"></script>
-    <script th:src="@{/assets/vendor/libs/popper/popper.js}"></script>
-    <script th:src="@{/assets/vendor/js/bootstrap.js}"></script>
-    <script
-      th:src="@{/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js}"
-    ></script>
-
-    <script th:src="@{/assets/vendor/js/menu.js}"></script>
-    <!-- endbuild -->
-
-    <!-- Vendors JS -->
-    <script th:src="@{/assets/vendor/libs/apex-charts/apexcharts.js}"></script>
-
-    <!-- Main JS -->
-    <script th:src="@{/assets/js/main.js}"></script>
-
-    <!-- Page JS -->
-    <script th:src="@{/assets/js/dashboards-analytics.js}"></script>
+    <h5 class="card-header">DIV 타이틀</h5>
+    <p>1행</p>
+    <p>2행</p>
+    <p>3행</p>
+    <button id="alertStart1">눌러봐</button>
+    <button id="alertStart2">나두</button>
+    <button id="alertStart3">나두눌러봐</button>
+    <br />
+    <button id="confirmStart1">컨펌이다</button>
+    <button id="confirmStart2">컨펌이야</button>
+    <button id="confirmStart3">컨펌</button>
+    <br />
+    <button id="promptStart">프롬프트</button>
+    <input id="toastStart" type="button" value="Toast 실행하기" />
   </body>
 </html>

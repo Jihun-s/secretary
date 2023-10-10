@@ -158,7 +158,6 @@
                         data-bs-target="#alertPillCloset-modal"
                         aria-controls="alertPillCloset-modal"
                         aria-selected="false"
-                        onclick="closetPilsuAlert();"
                       >
                         <i class="tf-icons bx bx-closet"></i> 세탁물
                       </button>
@@ -207,8 +206,17 @@
                       id="alertPillCloset-modal"
                       role="tabpanel"
                     >
-                      <div id="alertContent" class="alertContent">
-                        표시할 세탁물 알림이 없습니다.
+                      <div>
+							<span class="curDate"></span>
+                            <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" style="border: none; flex-wrap : wrap;">
+                             <figure>
+				             <figcapton>&nbsp;&nbsp;<strong>세탁물 게이지</strong></figcapton>
+				              <a th:href="@{/closet/laundryPage}">
+				               <div class="progress" style="width:23rem; height:1.7rem;" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true" title="" data-bs-original-title="<i class='bx bx-bell bx-xs' ></i> <span>세탁바구니 보러가기</span>"></div>
+				                </a>
+				                </figure>
+				               <div class="laundryCntDetail"></div>
+                            </div>                
                       </div>
                     </div>
 

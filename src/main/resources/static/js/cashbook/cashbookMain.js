@@ -75,8 +75,6 @@ function setCurDate() {
 
     let curDateTime = `${curYear}-${curMonth}-${curDate} ${curHour}:${curMin}:00`;
 
-    // alert(curYear + ' ' + curMonth + ' ' + curDate + ' ' + curDateTime);
-
     $('#curDateTime').val(curDateTime);
     $('#curYear').val(curYear);
     $('#curMonth').val(curMonth);
@@ -136,7 +134,6 @@ function init() {
             curYear: curYear, curMonth: curMonth, curDate: curDate },
         dataType: 'JSON',
         success: (data) => {
-            //  alert('init 결과:' + JSON.stringify(data));
             if(data.budgetExist == 1) {
                 // 예산 다 썼음 
                 if(data.remainingAmount <= 0) {
@@ -198,7 +195,7 @@ function initSetBudgetModal() {
         dataType: 'JSON',
         success: (data) => {
             if (data && typeof data === 'object') {
-                $('.budgetAvg').html(data.budgetAvg ? data.budgetAvg.toLocaleString('en-US') : '0');
+                $('.budgetAvg').html(data.budgetAvg ? Math.round(data.budgetAvg).toLocaleString('en-US') : '0');
                 $('.budgetAmountX').html(data.budgetAmountX ? data.budgetAmountX.toLocaleString('en-US') : '0');
                 $('.budgetAmountXx').html(data.budgetAmountXx ? data.budgetAmountXx.toLocaleString('en-US') : '0');
                 $('.budgetAmountXxx').html(data.budgetAmountXxx ? data.budgetAmountXxx.toLocaleString('en-US') : '0');
@@ -456,6 +453,27 @@ function updateBudgetAjax() {
         type: 'POST',
         data: { budgetAmount: budgetAmount },
         success: () => {
+            ///// 토스트 /////
+            const Toast = Swal.mixin({
+                toast: true,
+                position: "center",
+                showConfirmButton: false,
+                timer: 1500,
+                timerProgressBar: true,
+                customClass: {
+                    container: 'my-swal'
+                },
+                didOpen: (toast) => {
+                toast.addEventListener("mouseenter", Swal.stopTimer);
+                toast.addEventListener("mouseleave", Swal.resumeTimer);
+                },
+            });
+
+            Toast.fire({
+                icon: "success",
+                title: "예산을 수정했습니다.",
+            });
+            
             location.reload();
         },
         error: () => {
@@ -476,87 +494,136 @@ function updateBudgetAjax() {
 
 
 
-/** 모달 예산 삭제 */
-function deleteBudgetModal() {
-    deleteBudgetAjax();
-    $('#ModalDeleteBudget').modal('hide');
-}
+/** 예산 삭제 */
+function deleteBudget() {
+    Swal.fire({
+      title: '예산을 삭제하시겠습니까?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: '삭제',
+      cancelButtonText: '취소',
+      confirmButtonColor: '#71DD37',
+      cancelButtonColor: '#8592A3'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        let curYear = $('#curYear').val();
+        let curMonth = $('#curMonth').val();
+  
+        $.ajax({
+          url: '/secretary/cashbook/budget/deleteBudget',
+          type: 'POST',
+          data: { curYear: curYear, curMonth: curMonth },
+          success: () => {
+            ///// 토스트 /////
+            const Toast = Swal.mixin({
+                toast: true,
+                position: "center",
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.addEventListener("mouseenter", Swal.stopTimer);
+                    toast.addEventListener("mouseleave", Swal.resumeTimer);
+                },
+            });
 
-/** 예산 삭제 Ajax */
-function deleteBudgetAjax() {
-    let curYear = $('#curYear').val();
-    let curMonth = $('#curMonth').val();
+            Toast.fire({
+                icon: "success",
+                title: "예산을 삭제했습니다.",
+            });
 
-    $.ajax({
-        url: '/secretary/cashbook/budget/deleteBudget',
-        type: 'POST',
-        data: { curYear: curYear, curMonth: curMonth },
-        success: () => {
-            alert("예산을 삭제했습니다.");
             location.reload();
-        },
-        error: () => {
+          },
+          error: () => {
+            Swal.fire({
+              icon: 'error',
+              title: '예산 삭제에 실패했습니다.'
+            });
             console.log('예산 삭제 서버 전송 실패');
-        }
+          }
+        });
+      }
     });
-}
+  }
+  
 
 
 /** 일정 삭제 */
 function deleteSch() {
     let schId = $('#schId').val();
-    // console.log("삭제할 일정의 schId는 " + schId);
-    
-    if(confirm("일정을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.")) {
-      $.ajax({
-        url: '/secretary/schedule/deleteSch',
-        type: 'POST',
-        data: { schId: schId },
-        dataType: 'TEXT',
-        success: (data) => {
-          if(data == 1) {
-            alert('일정을 삭제했습니다.');
-          } else {
-            alert('일정을 삭제할 수 없습니다.');
-          }
-    
-          location.reload();
-        },
-        error: (e) => {
+      
+    Swal.fire({
+      title: '일정을 삭제하시겠습니까?',
+      text: '이 작업은 되돌릴 수 없습니다.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: '삭제',
+      cancelButtonText: '취소',
+      confirmButtonColor: '#71DD37',
+      cancelButtonColor: '#8592A3'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        $.ajax({
+          url: '/secretary/schedule/deleteSch',
+          type: 'POST',
+          data: { schId: schId },
+          dataType: 'TEXT',
+          success: (data) => {
+            const icon = data == 1 ? 'success' : 'error';
+            const message = data == 1 ? '일정을 삭제했습니다.' : '일정을 삭제할 수 없습니다.';
+  
+            Swal.fire({
+              icon: icon,
+              title: message
+            }).then(() => {
+              location.reload();
+            });
+          },
+          error: (e) => {
             console.log('일정 삭제 전송 실패');
-        //   alert(JSON.stringify(e));
-        }
-      });
-    }
+          }
+        });
+      }
+    });
   }
   
-
   /** 일정 삭제 매개변수 있음 */
   function deleteSch(schId) {
-    console.log("삭제할 일정의 schId는 " + schId);
-    
-    if(confirm("일정을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.")) {
-      $.ajax({
-        url: '/secretary/schedule/deleteSch',
-        type: 'POST',
-        data: { schId: schId },
-        dataType: 'TEXT',
-        success: (data) => {
-          if(data == 1) {
-            alert('일정을 삭제했습니다.');
-          } else {
-            alert('일정을 삭제할 수 없습니다.');
-          }
-    
-          location.reload();
-        },
-        error: (e) => {
+    Swal.fire({
+      title: '일정을 삭제하시겠습니까?',
+      text: '이 작업은 되돌릴 수 없습니다.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: '삭제',
+      cancelButtonText: '취소',
+      confirmButtonColor: '#71DD37',
+      cancelButtonColor: '#8592A3'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        $.ajax({
+          url: '/secretary/schedule/deleteSch',
+          type: 'POST',
+          data: { schId: schId },
+          dataType: 'TEXT',
+          success: (data) => {
+            const icon = data == 1 ? 'success' : 'error';
+            const message = data == 1 ? '일정을 삭제했습니다.' : '일정을 삭제할 수 없습니다.';
+  
+            Swal.fire({
+              icon: icon,
+              title: message
+            }).then(() => {
+              location.reload();
+            });
+          },
+          error: (e) => {
             console.log('일정 삭제 전송 실패');
-        //   alert(JSON.stringify(e));
-        }
-      });
-    }
+          }
+        });
+      }
+    });
   }
+  
 
 
 
@@ -597,9 +664,6 @@ function curPreInExSum() {
             let curMonthData = data.find(item => item.chMonth == curMonth && item.chYear == curYear);
             let preMonthData = data.find(item => item.chMonth == curMonth - 1 && item.chYear == curYear);
 
-            // alert(curMonthData.totalMonthExpense);
-            // alert(preMonthData.totalMonthExpense);
-            
             // 데이터 확인
             if (!curMonthData || !preMonthData) {
                 if (!curMonthData) {
@@ -614,13 +678,10 @@ function curPreInExSum() {
             // 지출 비교
             if (curMonthData.totalMonthExpense > preMonthData.totalMonthExpense) {
                 $('#expenseSumArrow').html('↑');
-                // alert('지출 더 커요');
             } else if (curMonthData.totalMonthExpense === preMonthData.totalMonthExpense) {
                 $('#expenseSumArrow').html('＝');
-                // alert('지출 같아요');
             } else {
                 $('#expenseSumArrow').html('↓');
-                // alert('지출 더 작아요');
             }
 
             // 수입 비교

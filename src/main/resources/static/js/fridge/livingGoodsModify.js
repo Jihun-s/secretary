@@ -104,7 +104,15 @@ $(document).on('click', '.confirm-edit', function () {
     // Default 카테고리와 중복되는지 확인
     const DEFAULT_CATEGORIES = ['욕실용품', '주방용품', '청소용품', '세탁용품', '일반물품'];
     if (DEFAULT_CATEGORIES.includes(newCategoryName)) {
-        alert('The name conflicts with a default category. Please choose another name.');
+        Swal.fire({
+            title: '오류',
+            text: '기본 카테고리와 이름이 일치합니다. 다른 이름을 사용해주세요.',
+            icon: 'error',
+            confirmButtonText: '확인',
+            customClass: {
+                confirmButton: 'btn btn-primary', // 부트스트랩 'btn-primary' 스타일 적용
+            }
+        });
         return;
     }
 
@@ -119,10 +127,17 @@ $(document).on('click', '.confirm-edit', function () {
         contentType: 'application/json',
         success: function (isDuplicated) {
             if (isDuplicated) {
-                alert('이미 존재하는 카테고리 이름입니다.');
+                Swal.fire({
+                    title: '오류',
+                    text: '이미 존재하는 카테고리 이름입니다.',
+                    icon: 'error',
+                    confirmButtonText: '확인',
+                    customClass: {
+                        confirmButton: 'btn btn-primary', // 부트스트랩 'btn-primary' 스타일 적용
+                    }
+                });
                 return;
             }
-
             // 해당 카테고리를 사용하는 아이템의 수를 확인
             $.ajax({
                 url: 'livingCategories/countItemsUsingCategory',
@@ -133,11 +148,25 @@ $(document).on('click', '.confirm-edit', function () {
                 }),
                 contentType: 'application/json',
                 success: function (count) {
-                    const isConfirmed = confirm(`총 ${count} 개의 물건이 해당 카테고리 명을 사용중입니다. 일괄 변경하시겠습니까?`);
-                    if (isConfirmed) {
-                        updateCategory(originalCategoryName, newCategoryName);
-                    }
+                    Swal.fire({
+                        title: '확인',
+                        text: `총 ${count} 개의 물건이 해당 카테고리 명을 사용중입니다. 일괄 변경하시겠습니까?`,
+                        icon: 'warning',
+                        iconColor: '#696cff',
+                        showCancelButton: true,
+                        confirmButtonText: '예, 변경합니다!',
+                        cancelButtonText: '취소',
+                        customClass: {
+                            confirmButton: 'btn btn-primary', // 부트스트랩 'btn-primary' 스타일 적용
+                            cancelButton: 'btn btn-secondary'  // 부트스트랩 'btn-secondary' 스타일 적용
+                        }
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            updateCategory(originalCategoryName, newCategoryName);
+                        }
+                    });
                 },
+                
                 error: function (e) {
                     // Handle error here
                 },
@@ -159,7 +188,15 @@ function updateCategory(originalName, newName) {
             newName: newName,
         },
         success: function () {
-            alert('카테고리가 성공적으로 수정되었습니다.');
+            Swal.fire({
+                title: '성공',
+                text: '카테고리가 성공적으로 수정되었습니다.',
+                icon: 'success',
+                confirmButtonText: '확인',
+                customClass: {
+                    confirmButton: 'btn btn-primary', // 부트스트랩 'btn-primary' 스타일 적용
+                }
+            });
             location.reload();
         },
         error: function (e) {
@@ -190,16 +227,35 @@ $(document).on('click', '.modal-category-deleteIcon', function () {
         }),
         contentType: 'application/json',
         success: function (count) {
-            const isConfirmed = confirm(
-                `총 ${count}개의 생활용품이 '${categoryToDelete}' 카테고리 명을 사용중입니다. 모든 생활용품을 '일반용품' 카테고리로 일괄 변경하시겠습니까?`
-            );
-
-            if (isConfirmed) {
-                deleteCategory(categoryToDelete);
-            }
+            Swal.fire({
+                title: '확인',
+                text: `총 ${count}개의 생활용품이 '${categoryToDelete}' 카테고리 명을 사용중입니다. 모든 생활용품을 '일반용품' 카테고리로 일괄 변경하시겠습니까?`,
+                icon: 'warning',
+                iconColor: '#696cff',
+                showCancelButton: true,
+                confirmButtonText: '예, 변경합니다!',
+                cancelButtonText: '취소',
+                customClass: {
+                    confirmButton: 'btn btn-primary', // 부트스트랩 'btn-primary' 스타일 적용
+                    cancelButton: 'btn btn-secondary'  // 부트스트랩 'btn-secondary' 스타일 적용
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    deleteCategory(categoryToDelete);
+                }
+            });
         },
+        
         error: function () {
-            alert('생활용품 수 확인에 실패하였습니다.');
+            Swal.fire({
+                title: '오류',
+                text: '생활용품 수 확인에 실패하였습니다.',
+                icon: 'error',
+                confirmButtonText: '확인',
+                customClass: {
+                    confirmButton: 'btn btn-primary', // 부트스트랩 'btn-primary' 스타일 적용
+                }
+            });
         }
     });
 });
@@ -212,11 +268,27 @@ function deleteCategory(categoryName) {
             itemCategory: categoryName,
         },
         success: function () {
-            alert('카테고리가 성공적으로 삭제되었습니다.');
+            Swal.fire({
+                title: '성공',
+                text: '카테고리가 성공적으로 삭제되었습니다.',
+                icon: 'success',
+                confirmButtonText: '확인',
+                customClass: {
+                    confirmButton: 'btn btn-primary', // 부트스트랩 'btn-primary' 스타일 적용
+                }
+            });
             location.reload(); // 페이지 새로고침
         },
         error: function () {
-            alert('카테고리 삭제에 실패하였습니다.');
+            Swal.fire({
+                title: '오류',
+                text: '카테고리 삭제에 실패하였습니다.',
+                icon: 'error',
+                confirmButtonText: '확인',
+                customClass: {
+                    confirmButton: 'btn btn-primary', // 부트스트랩 'btn-primary' 스타일 적용
+                }
+            });
         }
     });
 }
@@ -232,22 +304,37 @@ function setExistingImageInEditMode(existingImageSrc) {
     $(document).on('click', '.itemDeleteIcon', function (e) {
         e.stopImmediatePropagation();
         const itemId = $(this).data('item-id');
-        if (confirm('정말로 이 물품 아이템을 삭제하시겠습니까?')) {
-            $.ajax({
-                url: '/secretary/livingGoods/delete/' + itemId,
-                type: 'POST',
-                success: function (response) {
-                    if (response === 'success') {
-                        $('[data-item-id="' + itemId + '"]').remove();
-                    } else {
-                        console.error('Failed to delete the item.');
-                    }
-                },
-                error: function (error) {
-                    console.error(error);
-                },
-            });
-        }
+        Swal.fire({
+            title: '확인',
+            text: '정말로 이 물품 아이템을 삭제하시겠습니까?',
+            icon: 'warning',
+            iconColor: '#696cff',
+            showCancelButton: true,
+            confirmButtonText: '예, 삭제합니다!',
+            cancelButtonText: '취소',
+            customClass: {
+                confirmButton: 'btn btn-primary', // 부트스트랩 'btn-primary' 스타일 적용
+                cancelButton: 'btn btn-secondary'  // 부트스트랩 'btn-secondary' 스타일 적용
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '/secretary/livingGoods/delete/' + itemId,
+                    type: 'POST',
+                    success: function (response) {
+                        if (response === 'success') {
+                            $('[data-item-id="' + itemId + '"]').remove();
+                        } else {
+                            console.error('Failed to delete the item.');
+                        }
+                    },
+                    error: function (error) {
+                        console.error(error);
+                    },
+                });
+            }
+        });
+        
         e.stopPropagation(); // 이벤트 전파 중단
     });
 
@@ -303,51 +390,88 @@ function updateItemQuantity(itemId, newQuantity) {
     }
 }
 
-//소비 버튼 클릭 이벤트
+// 소비 버튼 클릭 이벤트
 $(document).on('click', '.consume-btn', function () {
     const itemId = $(this).data('item-id');
     const maxQuantity = $(this).data('item-quantity');
     const itemName = $(this).data('item-name');
     const itemCategory = $(this).data('item-category');
 
-    const responseFromPrompt = prompt(`소비할 수량을 입력하세요 (재고: ${maxQuantity})`);
-    
-    if (responseFromPrompt === null) {
-        return;
-    }
-    
-    const quantityToConsume = parseInt(responseFromPrompt);
+    Swal.fire({
+        title: '수량 입력',
+        text: `소비할 수량을 입력하세요 (재고: ${maxQuantity})`,
+        input: 'number',
+        inputAttributes: {
+            min: 1,
+            max: maxQuantity
+        },
+        icon: 'info',
+        showCancelButton: true,
+        confirmButtonText: '확인',
+        cancelButtonText: '취소',
+        customClass: {
+            confirmButton: 'btn btn-primary',
+            cancelButton: 'btn btn-secondary'
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            const quantityToConsume = parseInt(result.value);
 
-    if (quantityToConsume > 0 && quantityToConsume <= maxQuantity) {
-        $.ajax({
-            url: '/secretary/livingUsed/consumeItem',
-            type: 'POST',
-            data: JSON.stringify({
-                itemId: itemId,
-                itemQuantity: quantityToConsume,
-                itemName: itemName,
-                itemCategory: itemCategory,
-            }),
-            contentType: 'application/json',
-            success: function (response) {
-                alert('소비 처리가 완료되었습니다.');
-                $('#itemModal').modal('hide');
-
-                const newQuantity = maxQuantity - quantityToConsume;
-                updateItemQuantity(itemId, newQuantity);
-
-                refreshConsumptionHistory();
-                loadData();
-            },
-            error: function (error) {
-                console.log('Error consuming item:', error);
-                alert('소비 처리에 실패하였습니다.');
-            },
-        });
-    } else {
-        alert('올바른 수량을 입력하세요.');
-    }
+            if (quantityToConsume > 0 && quantityToConsume <= maxQuantity) {
+                $.ajax({
+                    url: '/secretary/livingUsed/consumeItem',
+                    type: 'POST',
+                    data: JSON.stringify({
+                        itemId: itemId,
+                        itemQuantity: quantityToConsume,
+                        itemName: itemName,
+                        itemCategory: itemCategory,
+                    }),
+                    contentType: 'application/json',
+                    success: function (response) {
+                        Swal.fire({
+                            title: '성공',
+                            text: '소비 처리가 완료되었습니다.',
+                            icon: 'success',
+                            confirmButtonText: '확인',
+                            customClass: {
+                                confirmButton: 'btn btn-primary',
+                            }
+                        });
+                        $('#itemModal').modal('hide');
+                        const newQuantity = maxQuantity - quantityToConsume;
+                        updateItemQuantity(itemId, newQuantity);
+                        refreshConsumptionHistory();
+                        loadData();
+                    },
+                    error: function (error) {
+                        console.log('Error consuming item:', error);
+                        Swal.fire({
+                            title: '오류',
+                            text: '소비 처리에 실패하였습니다.',
+                            icon: 'error',
+                            confirmButtonText: '확인',
+                            customClass: {
+                                confirmButton: 'btn btn-primary',
+                            }
+                        });
+                    },
+                });
+            } else {
+                Swal.fire({
+                    title: '오류',
+                    text: '올바른 수량을 입력하세요.',
+                    icon: 'error',
+                    confirmButtonText: '확인',
+                    customClass: {
+                        confirmButton: 'btn btn-primary',
+                    }
+                });
+            }
+        }
+    });
 });
+
 
 // 소비 이력 갱신 함수
 function refreshConsumptionHistory() {
@@ -373,41 +497,103 @@ function refreshConsumptionHistory() {
 //소비 이력 각각 삭제
 $(document).on('click', '.delete-consumption-text', function () {
     const consumptionId = $(this).data('consumption-id');
-    if (confirm('정말 이 소비 이력을 삭제하시겠습니까?')) {
-        // 서버에 소비 이력 삭제 요청
-        $.ajax({
-            url: '/secretary/livingUsed/deleteConsumptionHistory',
-            type: 'POST',
-            data: { livingUsedId: consumptionId },
-            success: function (response) {
-                alert('소비 이력이 삭제되었습니다.');
-                refreshConsumptionHistory();
-            },
-            error: function (error) {
-                console.log('Error deleting consumption:', error);
-                alert('소비 이력 삭제에 실패하였습니다.');
-            },
-        });
-    }
+    Swal.fire({
+        title: '확인',
+        text: '정말 이 소비 이력을 삭제하시겠습니까?',
+        icon: 'warning',
+        iconColor: '#696cff',
+        showCancelButton: true,
+        confirmButtonText: '예, 삭제합니다!',
+        cancelButtonText: '취소',
+        customClass: {
+            confirmButton: 'btn btn-primary', // 부트스트랩 'btn-primary' 스타일 적용
+            cancelButton: 'btn btn-secondary'  // 부트스트랩 'btn-secondary' 스타일 적용
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // 서버에 소비 이력 삭제 요청
+            $.ajax({
+                url: '/secretary/livingUsed/deleteConsumptionHistory',
+                type: 'POST',
+                data: { livingUsedId: consumptionId },
+                success: function (response) {
+                    Swal.fire({
+                        title: '성공',
+                        text: '소비 이력이 삭제되었습니다.',
+                        icon: 'success',
+                        confirmButtonText: '확인',
+                        customClass: {
+                            confirmButton: 'btn btn-primary', // 부트스트랩 'btn-primary' 스타일 적용
+                        }
+                    });
+                    refreshConsumptionHistory();
+                },
+                error: function (error) {
+                    console.log('Error deleting consumption:', error);
+                    Swal.fire({
+                        title: '오류',
+                        text: '소비 이력 삭제에 실패하였습니다.',
+                        icon: 'error',
+                        confirmButtonText: '확인',
+                        customClass: {
+                            confirmButton: 'btn btn-primary', // 부트스트랩 'btn-primary' 스타일 적용
+                        }
+                    });
+                },
+            });
+        }
+    });
+    
 });
 
 //소비 이력 전체 삭제
 $(document).on('click', '.delete-all-consumption-text', function () {
-    if (confirm('정말 모든 소비 이력을 삭제하시겠습니까?')) {
-        // 서버에 전체 소비 이력 삭제 요청
-        $.ajax({
-            url: '/secretary/livingUsed/deleteAllConsumptionHistory',
-            type: 'POST',
-            success: function (response) {
-                alert('모든 소비 이력이 삭제되었습니다.');
-                refreshConsumptionHistory();
-            },
-            error: function (error) {
-                console.log('Error deleting all consumptions:', error);
-                alert('모든 소비 이력 삭제에 실패하였습니다.');
-            },
-        });
-    }
+    Swal.fire({
+        title: '확인',
+        text: '정말 모든 소비 이력을 삭제하시겠습니까?',
+        icon: 'warning',
+        iconColor: '#696cff',
+        showCancelButton: true,
+        confirmButtonText: '예, 삭제합니다!',
+        cancelButtonText: '취소',
+        customClass: {
+            confirmButton: 'btn btn-primary', // 부트스트랩 'btn-primary' 스타일 적용
+            cancelButton: 'btn btn-secondary'  // 부트스트랩 'btn-secondary' 스타일 적용
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // 서버에 전체 소비 이력 삭제 요청
+            $.ajax({
+                url: '/secretary/livingUsed/deleteAllConsumptionHistory',
+                type: 'POST',
+                success: function (response) {
+                    Swal.fire({
+                        title: '성공',
+                        text: '모든 소비 이력이 삭제되었습니다.',
+                        icon: 'success',
+                        confirmButtonText: '확인',
+                        customClass: {
+                            confirmButton: 'btn btn-primary', // 부트스트랩 'btn-primary' 스타일 적용
+                        }
+                    });
+                    refreshConsumptionHistory();
+                },
+                error: function (error) {
+                    console.log('Error deleting all consumptions:', error);
+                    Swal.fire({
+                        title: '오류',
+                        text: '모든 소비 이력 삭제에 실패하였습니다.',
+                        icon: 'error',
+                        confirmButtonText: '확인',
+                        customClass: {
+                            confirmButton: 'btn btn-primary', // 부트스트랩 'btn-primary' 스타일 적용
+                        }
+                    });
+                },
+            });
+        }
+    });
+    
 });
 
 

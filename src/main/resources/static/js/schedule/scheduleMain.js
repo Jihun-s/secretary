@@ -106,7 +106,6 @@ $(document).ready(function () {
         },
         error: (e) => {
           console.log('일정 가져오기 실패');
-          // alert(JSON.stringify(e));
         }
       });
     },
@@ -122,9 +121,6 @@ $(document).ready(function () {
     // 이벤트 클릭 -> Detail 모달 실행
     eventClick: (data) => {
       let schObj = data.event.extendedProps;
-      // alert(JSON.stringify(data.event));
-      // {"allDay":false,"title":"현대카드 대금 인출","start":"2023-09-13T00:00:00+09:00","id":"1",
-      // "extendedProps":{"allday":true,"schId":1,"schContent":"현대카드 대금 인출","schStart":"2023-09-13 00:00:00","schEnd":"2023-09-13 00:00:00","schAllday":true,"schType":"가계부","schCate":"지출","schLevel":2}}
 
       // 수정전송버튼, 수정취소버튼 숨기기
       $('#schUpdateBt, #schCancelBt').hide();
@@ -406,7 +402,6 @@ function openDetailModal(schId) {
       $('#schDetailModal').modal('show');
     },
     error: (e) => {
-      // alert(JSON.stringify(e));
       console.log('일정 하나 불러오기 전송 실패');
     }
   });
@@ -420,64 +415,163 @@ function openDetailModal(schId) {
 function deleteSch1() {
   let schId = $('#schId').val();
   let schContent = $('#schContent').val();
-  // console.log("삭제할 일정의 schId는 " + schId);
-  // console.log("삭제할 일정의 schContent는 " + schContent);
   
-  if(confirm("일정을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.")) {
-    $.ajax({
-      url: '/secretary/schedule/deleteSch',
-      type: 'POST',
-      data: { schId: schId },
-      dataType: 'TEXT',
-      success: (data) => {
-        if(data == 1) {
-          alert('일정을 삭제했습니다.');
-        } else {
-          alert('일정을 삭제할 수 없습니다.');
+  Swal.fire({
+    title: '일정을 삭제하시겠습니까?',
+    text: '이 작업은 되돌릴 수 없습니다.',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: '삭제',
+    cancelButtonText: '취소',
+    confirmButtonColor: '#71DD37',
+    cancelButtonColor: '#8592A3',
+    customClass: {
+      container: 'my-swal'
+    }
+  }).then((result) => {
+    if (result.isConfirmed) {
+      $.ajax({
+        url: '/secretary/schedule/deleteSch',
+        type: 'POST',
+        data: { schId: schId },
+        dataType: 'TEXT',
+        success: (data) => {
+          if(data == 1) {
+            ///// 토스트 /////
+            const Toast = Swal.mixin({
+              toast: true,
+              position: "center",
+              showConfirmButton: false,
+              timer: 3000,
+              timerProgressBar: true,
+              didOpen: (toast) => {
+                  toast.addEventListener("mouseenter", Swal.stopTimer);
+                  toast.addEventListener("mouseleave", Swal.resumeTimer);
+              },
+            });
+
+            Toast.fire({
+                icon: "success",
+                title: "일정을 삭제했습니다.",
+                customClass: {
+                  container: 'my-swal'
+                }
+            });
+          } else {
+            ///// 토스트 /////
+            const Toast = Swal.mixin({
+              toast: true,
+              position: "center",
+              showConfirmButton: false,
+              timer: 3000,
+              timerProgressBar: true,
+              didOpen: (toast) => {
+                  toast.addEventListener("mouseenter", Swal.stopTimer);
+                  toast.addEventListener("mouseleave", Swal.resumeTimer);
+              },
+            });
+
+            Toast.fire({
+                icon: "error",
+                title: "일정을 삭제할 수 없습니다.",
+                customClass: {
+                  container: 'my-swal'
+                }
+            });
+          }
+    
+          location.reload();
+        },
+        error: (e) => {
+          console.log('일정 삭제 전송 실패');
         }
-  
-        location.reload();
-      },
-      error: (e) => {
-        console.log('일정 삭제 전송 실패');
-        // alert(JSON.stringify(e));
-      }
-    });
-  }
+      });
+    }
+  });
 }
 
 /** 일정 삭제 매개변수 있음 */
 function deleteSch(schId) {
-  // console.log("삭제할 일정의 schId는 " + schId);
   
-  if(confirm("일정을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.")) {
-    $.ajax({
-      url: '/secretary/schedule/deleteSch',
-      type: 'POST',
-      data: { schId: schId },
-      dataType: 'TEXT',
-      success: (data) => {
-        if(data == 1) {
-          alert('일정을 삭제했습니다.');
-        } else {
-          alert('일정을 삭제할 수 없습니다.');
+  Swal.fire({
+    title: '일정을 삭제하시겠습니까?',
+    text: '이 작업은 되돌릴 수 없습니다.',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: '삭제',
+    cancelButtonText: '취소',
+    confirmButtonColor: '#71DD37',
+    cancelButtonColor: '#8592A3',
+    customClass: {
+      container: 'my-swal'
+    }
+  }).then((result) => {
+    if (result.isConfirmed) {
+      $.ajax({
+        url: '/secretary/schedule/deleteSch',
+        type: 'POST',
+        data: { schId: schId },
+        dataType: 'TEXT',
+        success: (data) => {
+          if(data == 1) {
+            ///// 토스트 /////
+            const Toast = Swal.mixin({
+              toast: true,
+              position: "center",
+              showConfirmButton: false,
+              timer: 3000,
+              timerProgressBar: true,
+              didOpen: (toast) => {
+                  toast.addEventListener("mouseenter", Swal.stopTimer);
+                  toast.addEventListener("mouseleave", Swal.resumeTimer);
+              },
+            });
+
+            Toast.fire({
+                icon: "success",
+                title: "일정을 삭제했습니다.",
+                customClass: {
+                  container: 'my-swal'
+                }
+            });
+          } else {
+            ///// 토스트 /////
+            const Toast = Swal.mixin({
+              toast: true,
+              position: "center",
+              showConfirmButton: false,
+              timer: 3000,
+              timerProgressBar: true,
+              didOpen: (toast) => {
+                  toast.addEventListener("mouseenter", Swal.stopTimer);
+                  toast.addEventListener("mouseleave", Swal.resumeTimer);
+              },
+            });
+
+            Toast.fire({
+                icon: "error",
+                title: "일정을 삭제할 수 없습니다.",
+                customClass: {
+                  container: 'my-swal'
+                }
+            });
+          }
+    
+          location.reload();
+        },
+        error: (e) => {
+          console.log('일정 삭제 전송 실패');
         }
-  
-        location.reload();
-      },
-      error: (e) => {
-        console.log('일정 삭제 전송 실패');
-        // alert(JSON.stringify(e));
-      }
-    });
-  }
+      });
+    }
+  });
 }
+
 
 /** 일정 수정 */
 function updateSch() {
 
   let isValid = validateUpdateSch();
-  // console.log("수정해도 될까요:" + isValid.toString());
 
   if(isValid) {
     let schId = $('#schId').val();
@@ -504,15 +598,52 @@ function updateSch() {
       dataType: 'TEXT',
       success: (data) => {
         if(data == 1) {
-          alert('일정을 수정했습니다.');
+          ///// 토스트 /////
+          const Toast = Swal.mixin({
+            toast: true,
+            position: "center",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.addEventListener("mouseenter", Swal.stopTimer);
+                toast.addEventListener("mouseleave", Swal.resumeTimer);
+            },
+          });
+
+          Toast.fire({
+              icon: "success",
+              title: "일정을 수정했습니다.",
+              customClass: {
+                container: 'my-swal'
+              }
+          });
         } else {
-          alert('일정을 수정할 수 없습니다.');
+          ///// 토스트 /////
+          const Toast = Swal.mixin({
+            toast: true,
+            position: "center",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.addEventListener("mouseenter", Swal.stopTimer);
+                toast.addEventListener("mouseleave", Swal.resumeTimer);
+            },
+          });
+
+          Toast.fire({
+              icon: "error",
+              title: "일정을 수정할 수 없습니다.",
+              customClass: {
+                container: 'my-swal'
+              }
+          });
         }
         location.reload();
       },
       error: (e) => {
         console.log('일정 수정 전송 실패');
-        // alert(JSON.stringify(e));
       }
     });
   }
@@ -619,12 +750,30 @@ function validateSchContentInput() {
   }
 
   if(byteSize == 0) {
-    alert("일정명을 입력하세요.");
+    Swal.fire({
+      icon: "error",
+      title: "일정 입력 실패",
+      text: "일정명을 입력하세요.",
+      confirmButtonColor: "#71DD37",
+      customClass: {
+        container: 'my-swal'
+      }
+    });
+
     return false;
   }
 
   if (byteSize > 50) {
-      alert("일정명은 50byte(한글 15글자)를 넘을 수 없습니다.");
+      Swal.fire({
+        icon: "error",
+        title: "일정 입력 실패",
+        text: "일정명은 50byte(한글 15글자)를 넘을 수 없습니다.",
+        confirmButtonColor: "#71DD37",
+        customClass: {
+          container: 'my-swal'
+        }
+      });
+      
       return false;
   }
   return true;
@@ -636,7 +785,16 @@ function validateDatesInput() {
   let endDate = new Date($('#schEndInput').val());
 
   if (startDate > endDate) {
-      alert("종료일이 시작일보다 이전 날짜일 수 없습니다.");
+    Swal.fire({
+      icon: "error",
+      title: "일정 입력 실패",
+      text: "종료일이 시작일보다 이전 날짜일 수 없습니다.",
+      confirmButtonColor: "#71DD37",
+      customClass: {
+        container: 'my-swal'
+      }
+    });
+
       return false;
   }
   return true;
@@ -646,8 +804,17 @@ function validateDatesInput() {
 function validateSchTypeInput() {
   let schType = $('#schTypeSelectInput').val();
   if (schType === "") {
-      alert("유형을 선택하세요");
-      return false;
+    Swal.fire({
+      icon: "error",
+      title: "일정 입력 실패",
+      text: "일정의 유형을 선택하세요.",
+      confirmButtonColor: "#71DD37",
+      customClass: {
+        container: 'my-swal'
+      }
+    });
+
+    return false;
   }
 
   return true;
@@ -657,8 +824,17 @@ function validateSchTypeInput() {
 function validateSchCateInput() {
   let schCate = $('#schCateSelectInput').val();
   if (schCate === "") {
-      alert("카테고리를 선택하세요");
-      return false;
+    Swal.fire({
+      icon: "error",
+      title: "일정 입력 실패",
+      text: "일정의 카테고리를 선택하세요.",
+      confirmButtonColor: "#71DD37",
+      customClass: {
+        container: 'my-swal'
+      }
+    });
+    
+    return false;
   }
 
   return true;
@@ -689,13 +865,31 @@ function validateSchContent() {
   }
 
   if(byteSize == 0) {
-    alert("일정명을 입력하세요.");
+    Swal.fire({
+      icon: "error",
+      title: "일정 수정 실패",
+      text: "일정명을 입력하세요.",
+      confirmButtonColor: "#71DD37",
+      customClass: {
+        container: 'my-swal'
+      }
+    });
+
     return false;
   }
 
   if (byteSize > 50) {
-      alert("일정명은 50byte(한글 15글자)를 넘을 수 없습니다.");
-      return false;
+    Swal.fire({
+      icon: "error",
+      title: "일정 수정 실패",
+      text: "일정명은 50byte(한글 15글자)를 넘을 수 없습니다.",
+      confirmButtonColor: "#71DD37",
+      customClass: {
+        container: 'my-swal'
+      }
+    });
+
+    return false;
   }
   return true;
 }
@@ -706,8 +900,17 @@ function validateDates() {
   let endDate = new Date($('#schEnd').val());
 
   if (startDate > endDate) {
-      alert("종료일이 시작일보다 이전 날짜일 수 없습니다.");
-      return false;
+    Swal.fire({
+      icon: "error",
+      title: "일정 수정 실패",
+      text: "종료일이 시작일보다 이전 날짜일 수 없습니다.",
+      confirmButtonColor: "#71DD37",
+      customClass: {
+        container: 'my-swal'
+      }
+    });
+
+    return false;
   }
   return true;
 }
@@ -716,8 +919,17 @@ function validateDates() {
 function validateSchType() {
   let schType = $('#schTypeSelect').val();
   if (schType === "") {
-      alert("유형을 선택하세요");
-      return false;
+    Swal.fire({
+      icon: "error",
+      title: "일정 수정 실패",
+      text: "일정의 유형을 선택하세요.",
+      confirmButtonColor: "#71DD37",
+      customClass: {
+        container: 'my-swal'
+      }
+    });
+
+    return false;
   }
 
   return true;
@@ -727,8 +939,17 @@ function validateSchType() {
 function validateSchCate() {
   let schCate = $('#schCateSelect').val();
   if (schCate === "") {
-      alert("카테고리를 선택하세요");
-      return false;
+    Swal.fire({
+      icon: "error",
+      title: "일정 수정 실패",
+      text: "일정의 카테고리를 선택하세요.",
+      confirmButtonColor: "#71DD37",
+      customClass: {
+        container: 'my-swal'
+      }
+    });
+
+    return false;
   }
 
   return true;
