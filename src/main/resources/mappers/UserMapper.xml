@@ -96,16 +96,21 @@
 	<select id="getLogData" resultType="AllLog">
 	SELECT LOG_time, user_id, log_action, log_message
     FROM secretary_alllog
+    order by log_time desc
 	</select>
 	
 	<!-- 로그인보드 -->
 	<select id="getLoginData" resultType="Log">
-	select login, logout, user_id, log_message
-	FROM secretary_logstat
-	</select>
+  SELECT login, logout, user_id, log_message
+  FROM secretary_logstat
+  WHERE login >= TO_DATE('2000-01-01', 'YYYY-MM-DD')
+     OR logout >= TO_DATE('2000-01-01', 'YYYY-MM-DD')
+  ORDER BY log_id DESC
+</select>
+
 	
 	<!-- 특정유저 활동량 조회 -->
-    <select id="getUserLoginData" parameterType="User" resultType="Log">
+    <select id="getUserLoginData" parameterType="String" resultType="Log">
     SELECT TO_NUMBER(TO_CHAR(LOGIN, 'HH24')) AS loginHour, COUNT(*) AS loginCount
     FROM secretary_logstat
     WHERE TO_CHAR(LOGIN, 'YYYY-MM-DD') BETWEEN TO_CHAR(sysdate - 7, 'YYYY-MM-DD') AND TO_CHAR(sysdate, 'YYYY-MM-DD')
@@ -121,4 +126,11 @@
     WHERE user_id = #{userId}
     GROUP BY log_type
     </select>
+    
+    <!-- 특정 유저 로그 보드 -->
+	<select id="getUserLogData" parameterType="String" resultType="AllLog">
+	SELECT LOG_time, user_id, log_type, log_message, log_id
+    FROM secretary_alllog
+    WHERE user_id = #{userId}
+	</select>
 </mapper>

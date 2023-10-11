@@ -163,12 +163,12 @@
          data:{ userId: userId},
          dataType: 'json',
          success: function (actRateData) {
-             console.log('actRate data:', actRateData);
+             //console.log('actRate data:', actRateData);
              
              const labels = actRateData.map(entry => entry.logType);
              const counts = actRateData.map(entry => entry.actionCount);
-             console.log('Labels:', labels);
-             console.log('Counts:', counts);
+             //console.log('Labels:', labels);
+             //console.log('Counts:', counts);
              drawActRateChart(labels, counts);
          },
          error: function (error) {
@@ -185,7 +185,7 @@
          datasets: [
              {
                  data: counts,
-                 backgroundColor: ['#36a2eb', '#ff6384', '#ffcd56', '#4bc0c0'],
+                 backgroundColor: ['#3498db', '#e74c3c', '#f39c12', '#2ecc71']
              },
          ],
      };
@@ -234,7 +234,47 @@
 
  } 
  <!------------------------------------------------------------------------------------------------>
+ let logTable = null;
+
+ function updateLogTable(logData) {
+   const logTableBody = document.querySelector('#logTable tbody');
+
+   // Clear the previous log entries
+   logTableBody.innerHTML = '';
+   
+   logData.sort((a, b) => new Date(b.logTime) - new Date(a.logTime));
+
+   // Add each log entry as a row in the table
+   for (let i = 0; i < Math.min(6, logData.length); i++) {
+    const log = logData[i];
+    const newRow = logTableBody.insertRow();
+    newRow.innerHTML = `
+      <td>${log.logTime}</td>
+      <td>${log.userId}</td>
+      <td>${log.logType}</td>
+      <td>${log.logMessage}</td>
+    `;
+  }
+ }
+
+ function fetchAndDisplayUserLogs(userId) {
+   $.ajax({
+     url: `userLogBoard`,
+     type: 'GET',
+     data: { userId: userId },
+     dataType: 'json',
+     success: function (userLogBoardData) {
+       console.log(`${userId} 사용자의 로그 데이터를 받았습니다:`, userLogBoardData);
+	  
+       updateLogTable(userLogBoardData);
+     },
+     error: function (error) {
+       console.error(`${userId} 사용자의 로그 데이터를 가져오는 중 오류가 발생했습니다:`, error);
+     }
+   });
+ }
  <!------------------------------------------------------------------------------------------------>
+
  <!------------------------------------------------------------------------------------------------>
  
   //페이지 로드시 그래프함수 호출
@@ -242,11 +282,13 @@ window.onload = function() {
 	const userId = document.getElementById('userId').value;
   fetchUserLoginDataAndDrawChart(userId);
   fetchActRateDataAndDrawChart(userId);
+  fetchAndDisplayUserLogs(userId)
   //주기적 업데이트
   setInterval(function() {
 	  fetchUserLoginDataAndDrawChart(userId);
 	  fetchActRateDataAndDrawChart(userId);
-  }, 50000);
+	  fetchAndDisplayUserLogs(userId)
+  }, 10000);
 };  
 </script>
 <!-- 코드 추가 완료 -->
@@ -470,14 +512,11 @@ window.onload = function() {
                     class="d-flex"
                     style="position: absolute; top: 0; left: 0; right: 0; z-index: 1"
                  >
-	                 <a th:href="@{/admin/editUser(userId=(${user.userId}))}">수정</a>
-	                   <button
-	                      class="btn btn-sm btn-primary flex-fill"
-	                      id="editButton"
-	                      type="button"
-	                   >
-	                   편집
-	                   </button>
+	                 <a th:href="@{/admin/editUser(userId=(${user.userId}))}" class="btn btn-sm btn-primary flex-fill">
+								  편집
+								</a>
+
+
                    
                  </div>
                    
@@ -564,22 +603,22 @@ window.onload = function() {
            <!-- 3열 -->
            <div class="col-lg-4 mb-4">
                 <div class="card">
-	                   
-	                <div class="card-body" style="position: relative; padding-top: 40px">
-	                     <!-- 내용 --> 
-	                      <canvas id="" width="100" height="50"></canvas>
-	                </div >
-                 
-                 </div >             
+				  <div class="card-body" style="position: relative; padding-top: 40px">
+				    <table id="logTable" class="table">
+				      <thead>
+				        <tr>
+				          <th>시간</th>
+				          <th>유저 </th>
+				          <th>분류</th>
+				          <th>메시지</th>
+				        </tr>
+				      </thead>
+				      <tbody></tbody>
+				    </table>
+				  </div>
+				</div>           
              
-                 <div class="card">
-	                   
-	                  <div class="card-body" style="position: relative; padding-top: 40px">
-	                     <!-- 내용 --> 
-	                     <canvas id="" width="100" height="50"></canvas>
-	                  </div >
                  
-                 </div >
             </div > 
             
       </div>

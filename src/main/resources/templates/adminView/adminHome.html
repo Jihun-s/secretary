@@ -417,61 +417,83 @@ function drawJoinChart(labels, counts) {
 }
 <!-- ------------------------------------------------------------------------------ -->
 <!--로그데이터 게시판 -->
+let logTable = null;
 //실시간으로 로그를 업데이트하는 함수
-function updateLogBoard(allLog) {
-const logBoard = document.getElementById('logBoard');
+function updateLogTable(allLog) {
+  const logTableBody = document.querySelector('#logTable tbody');
+	
+  //Clear the previous log entries
+  logTableBody.innerHTML = '';
+  
+//Check if allLog is a valid array
+  if (Array.isArray(allLog)) {
+    // Sort logs by logTime in descending order
+    allLog.sort((a, b) => new Date(b.logTime) - new Date(a.logTime));
 
-// 새로운 로그를 추가
-const logItem = document.createElement('li');
-logItem.textContent = `${allLog.logTime}: 유저 ${allLog.userId} - ${allLog.logAction} - ${allLog.logMessage}`;
-logBoard.prepend(logItem);  // 최신 로그를 맨 위에 추가
-
-// 로그가 10개 이상이면 가장 오래된 로그 하나를 삭제하여 최신 로그 유지
-if (logBoard.children.length > 7) {
- logBoard.removeChild(logBoard.lastChild);
+    // Add each log entry as a row in the table
+    for (let i = 0; i < Math.min(6, allLog.length); i++) {
+      const log = allLog[i];
+      const newRow = logTableBody.insertRow();
+      newRow.innerHTML = `
+        <td>${log.logTime}</td>
+        <td>${log.userId}</td>
+        <td>${log.logMessage}</td>
+      `;
+    }
+  }
 }
-}
 
-//AJAX를 사용하여 로그 데이터를 주기적으로 가져오고 업데이트
+// AJAX를 사용하여 로그 데이터를 주기적으로 가져오고 업데이트
 function fetchAndDisplayLogs() {
-$.ajax({
- url: 'logBoard',  
- type: 'GET',
- dataType: 'json',
- success: function (allLogData) {
-   console.log('Received log data:', allLogData);
+  $.ajax({
+    url: 'logBoard',
+    type: 'GET',
+    dataType: 'json',
+    success: function (allLogData) {
+      console.log('Received log data:', allLogData);
 
-   // 각 로그에 대해 게시판에 추가
-   for (const allLog of allLogData) {
-     updateLogBoard(allLog);
-   }
- },
- error: function (error) {
-   console.error('Error fetching log data:', error);
- }
-});
+      updateLogTable(allLogData);
+    },
+    error: function (error) {
+      console.error('Error fetching log data:', error);
+    }
+  });
 }
 <!-- ------------------------------------------------------------------------------------------------------------------------------------>
 <!--로그인 기록 게시판 -->
-function updateLoginBoard(loginData) {
+let loginTable = null;
+
+function updateLoginTable(loginData) {
     console.log('Updating login board with:', loginData);
-    const loginBoard = document.getElementById('loginBoard');
+    const loginTableBody = document.querySelector('#loginTable tbody');
+    
+    loginTableBody.innerHTML = '';
 
-    // 새로운 로그를 추가
-    const logItem = document.createElement('li');
-    if (loginData.login) {
-        logItem.textContent = `${loginData.login}: 유저 ${loginData.userId} - 로그인`;
-    } else if (loginData.logout) {
-        logItem.textContent = `${loginData.logout}: 유저 ${loginData.userId} - 로그아웃`;
+    for (let i = 0; i < Math.min(6, loginData.length); i++) {
+        const log = loginData[i];
+        const timestamp = log.login || log.logout; // Use login time if available, otherwise use logout time
+
+        const formattedTimestamp = formatTimestamp(timestamp);
+        
+        const newRow = loginTableBody.insertRow();
+        newRow.innerHTML = `
+            <td>${formattedTimestamp}</td>
+            <td>${log.userId}</td>
+            <td>${log.logMessage}</td>
+        `;
     }
+}
 
-    // 로그가 7개 이상이면 가장 오래된 로그 하나를 삭제하여 최신 로그 유지
-    if (loginBoard.children.length > 7) {
-        loginBoard.removeChild(loginBoard.lastChild);
-    }
+function formatTimestamp(timestamp) {
+    const date = new Date(timestamp);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const seconds = String(date.getSeconds()).padStart(2, '0');
 
-    // 로그 아이템을 로그 보드에 추가
-    loginBoard.prepend(logItem);
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 }
 
 
@@ -485,10 +507,7 @@ function updateLoginBoard(loginData) {
 	      
 	      console.log('Received allLoginData:', allLoginData);
 
-	      // 각 로그에 대해 게시판에 추가
-	      for (const loginData of allLoginData) {
-	        updateLoginBoard(loginData);
-	      }
+	      updateLoginTable(allLoginData);
 	    },
 	    error: function (error) {
 	      console.error('Error fetching log data:', error);
@@ -515,7 +534,7 @@ window.onload = function() {
         fetchJoinDataAndDrawChart();
         fetchAndDisplayLogs();
         fetchAndDisplayLogin();
-    }, 50000);
+    }, 10000);
 };
 </script>
 
@@ -673,7 +692,7 @@ window.onload = function() {
                   >
                     <div class="avatar avatar-online">
                       <img
-                        th:src="@{/images/profileimg/1.png}"
+                        th:src="@{/assets/img/avatars/1.png}"
                         alt
                         class="w-px-40 h-auto rounded-circle"
                       />
@@ -782,6 +801,7 @@ window.onload = function() {
     </div>
   </div>
 
+
   <!-- 2행 1열 -->
   <div class="col-lg-4 mb-4 col-md-6">
     <div class="card">
@@ -802,7 +822,7 @@ window.onload = function() {
         
         <div>
           <!-- 그래프를 출력할 공간 -->
-          <canvas id="hourlyChart" width="100" height="50"></canvas>
+          <canvas id="hourlyChart" width="100" height="100"></canvas>
         </div>
       </div>
     </div>
@@ -815,11 +835,13 @@ window.onload = function() {
         
         <div>
           <!-- 그래프를 출력할 공간 -->
-          <canvas id="boardChart" width="100" height="50"></canvas>
+          <canvas id="boardChart" width="100" height="100"></canvas>
         </div>
       </div>
     </div>
   </div>
+
+
 
   <!-- 3행 1열 -->
 <div class="col">   
@@ -837,10 +859,16 @@ window.onload = function() {
 <div class="col-lg-4 col-md-6 " >
   <div class="card">   
     <div class="card-body">
-      <h5 class="card-title">유저 활동 내역</h5>
-      <ul id="logBoard">
-        <!-- 로그 데이터 -->
-      </ul>      
+      <table id="logTable" class="table">
+		<thead>
+		   <tr>
+		      <th>시간</th>
+		      <th>유저 </th>
+		      <th>메시지</th>
+		   </tr>
+		</thead>
+		<tbody></tbody>
+	 </table>    
     </div>
   </div>
 </div>
@@ -848,10 +876,16 @@ window.onload = function() {
 <div class="col-lg-4  col-md-6 " >
   <div class="card">
     <div class="card-body">
-      <h5 class="card-title">로그인 내역</h5>
-      <ul id="loginBoard">
-        <!-- 로그인 데이터 -->
-      </ul>
+      <table id="loginTable" class="table">
+		<thead>
+		   <tr>
+		      <th>시간</th>
+		      <th>유저 </th>
+		      <th>메시지</th>
+		   </tr>
+		</thead>
+		<tbody></tbody>
+	 </table>    
     </div>
   </div>
 </div>

@@ -195,6 +195,12 @@ public class UserServiceImpl implements UserService {
 		return userMapper.getActRateData(userId);
 	}
 
+	@Override
+	public List<AllLog> getUserLogData(String userId) {
+		
+		return userMapper.getUserLogData(userId);
+	}
+
 	
 
 	

@@ -42,6 +42,8 @@ public interface UserService {
 	List<Log> getUserLoginData(String userId);
 	//특정 회원 컨텐츠별 이용률
 	List<AllLog> getActRateData(String userId);
+	//특정회원 로그보드
+	List<AllLog> getUserLogData(String userId);
 
 
 	

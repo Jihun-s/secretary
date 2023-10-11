@@ -69,7 +69,10 @@ public class AdminController {
 	    // 컨텐츠별 이용률
 	    List<AllLog> userLogData = userservice.getActRateData(userId);
 	    m.addAttribute("userLogData", userLogData);
-
+	    //유저 로그보드
+	    List<AllLog> userLogBoardData = userservice.getUserLogData(userId);
+	    m.addAttribute("userLogBoardData", userLogBoardData);
+	    
 	    return "adminView/readUser";
 	}
 
@@ -141,6 +144,13 @@ public class AdminController {
 		
 		return ResponseEntity.ok(result);
 	}
+	//유저 로그보드
+	@GetMapping("userLogBoard")
+	@ResponseBody
+	public ResponseEntity<List<AllLog>> userLogBoard(@RequestParam("userId") String userId) {
+		List<AllLog> result = userservice.getUserLogData(userId);
+		return ResponseEntity.ok(result);
+		}
 	//로그인보드
 	@GetMapping("loginBoard")
 	@ResponseBody
@@ -165,6 +175,7 @@ public class AdminController {
 		
 		return ResponseEntity.ok(result);
 	}
+	
 
 	
 }
